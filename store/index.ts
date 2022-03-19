@@ -3,5 +3,5 @@ export const state = () => ({
   // 浏览器ua信息
   ua: '',
   // 环境判断
-  env: {}
+  env: {},
 })

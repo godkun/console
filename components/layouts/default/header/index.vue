@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-const { useStore } = useNuxtApp();
-const store = useStore();
-function go() {
-  store.toogleCollpase()
-}
+  const { useStore } = useNuxtApp()
+  const store = useStore()
+  function go() {
+    store.toogleCollpase()
+  }
 </script>
 
 <style lang="less" scoped src="./index.less"></style>
