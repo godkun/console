@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     script: [],
   },
   css: ["element-plus/dist/index.css", "~/assets/less/main.less"],
+  buildModules: ["@pinia/nuxt"],
   vite: {
     plugins: [
       Components({

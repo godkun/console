@@ -2,7 +2,7 @@
   <div class="menu">
     <el-menu
       default-active="1"
-      :collapse="collapse"
+      :collapse="store.collapse"
     >
       <el-menu-item index="1">
         <el-icon><icon-menu /></el-icon>
@@ -21,8 +21,9 @@ import {
   Menu as IconMenu,
   Setting,
 } from '@element-plus/icons-vue'
-const collapse = useCollapse()
-console.log("🚀 ~ file: index.vue ~ line 25 ~ collapse", collapse)
+const { useStore } = useNuxtApp();
+const store = useStore();
+console.log("🚀 ~ file: index.vue ~ line 26 ~ collapse", store.collapse)
 </script>
 
 <style>

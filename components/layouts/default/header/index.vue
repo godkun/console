@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts" setup>
+const { useStore } = useNuxtApp();
+const store = useStore();
 function go() {
-  const collapse = useCollapse()
-  console.log("🚀 ~ file: index.vue ~ line 16 ~ go ~ collapse", collapse.value)
-  useCollapse(!collapse.value)
+  store.toogleCollpase()
 }
 </script>
 
