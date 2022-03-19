@@ -268,7 +268,7 @@
           eventObject: {
             click: () => window.open('https://github.com/monibuca')
           }
-        },
+        }
       ]
       const avatarOptions = [
         {

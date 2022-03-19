@@ -41,7 +41,7 @@
 
   const formValue = reactive({
     name: '',
-    email: '',
+    email: ''
   })
 
   function formSubmit() {

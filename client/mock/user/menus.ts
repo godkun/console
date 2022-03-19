@@ -18,24 +18,7 @@ const menusList = [
         meta: {
           title: '主控台',
         },
-      },
-      {
-        path: 'monitor',
-        name: 'dashboard_monitor',
-        component: '/dashboard/monitor/monitor',
-        meta: {
-          title: '监控页',
-        },
-      },
-      {
-        path: 'workplace',
-        name: 'dashboard_workplace',
-        component: '/dashboard/workplace/workplace',
-        meta: {
-          hidden: true,
-          title: '工作台',
-        },
-      },
+      }
     ],
   },
 ];

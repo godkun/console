@@ -73,13 +73,8 @@
   import { useProjectSettingStore } from '@/store/modules/projectSetting'
 
   const { getDarkTheme } = useDesignSetting()
-  const {
-    getNavMode,
-    getNavTheme,
-    getHeaderSetting,
-    getMenuSetting,
-    getMultiTabsSetting
-  } = useProjectSetting()
+  const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getMultiTabsSetting } =
+    useProjectSetting()
 
   const settingStore = useProjectSettingStore()
 
