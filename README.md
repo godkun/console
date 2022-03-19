@@ -1,29 +1,22 @@
-# Nuxt 3 Minimal Starter
+# M7S控制台
 
-We recommend to look at the [documentation](https://v3.nuxtjs.org).
+## 功能列表
 
-## Setup
+https://docs.qq.com/mind/DRVhpdUhRcFpqaGJm
 
-Make sure to install the dependencies
+## 本地启动
 
-```bash
-yarn install
-```
-
-## Development
-
-Start the development server on http://localhost:3000
-
-```bash
+yarn
 yarn dev
-```
 
-## Production
+## 任务分工
 
-Build the application for production:
+- 杨昆 登录注册 m7s实例列表
+- 万哥 实例配置 实例详情
+- 烫哥 服务端
 
-```bash
-yarn build
-```
+## 主要组件
 
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment).
+- nuxt3  https://v3.nuxtjs.org/
+- axios
+- element-plus

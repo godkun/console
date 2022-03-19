@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="20px" viewBox="0 0 18 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54 (76480) - https://sketchapp.com -->
+    <title>订单后台管理</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="画板" transform="translate(-253.000000, -116.000000)">
+            <g id="订单后台管理" transform="translate(250.000000, 114.000000)">
+                <rect id="矩形" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="24" height="24"></rect>
+                <rect id="矩形" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" x="4" y="3" width="16" height="18" rx="1"></rect>
+                <path d="M6.3737793,8.5 L17.3737793,8.5" id="路径-2" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M14,10.4892578 C15.1045695,10.4892578 16,9.59382731 16,8.48925781 C16,7.38468831 15.1045695,6.48925781 14,6.48925781 C12.8954305,6.48925781 12,7.38468831 12,8.48925781 C12,9.59382731 12.8954305,10.4892578 14,10.4892578 Z" id="椭圆形" fill="#FFFFFF"></path>
+                <path d="M6.3737793,15.0107422 L17.3737793,15.0107422" id="路径-2复制" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M10,17 C11.1045695,17 12,16.1045695 12,15 C12,13.8954305 11.1045695,13 10,13 C8.8954305,13 8,13.8954305 8,15 C8,16.1045695 8.8954305,17 10,17 Z" id="椭圆形复制-4" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>
