@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, CURRENT_USER } from '@/store/mutation-types'
 import { ResultEnum } from '@/enums/httpEnum'
 
 const Storage = createStorage({ storage: localStorage })
-import { getUserInfo, login } from '@/api/system/user'
+import { getUserInfo, login, register } from '@/api/system/user'
 import { storage } from '@/utils/Storage'
 
 export interface IUserState {
@@ -56,6 +56,23 @@ export const useUserStore = defineStore({
     },
     setUserInfo(info) {
       this.info = info
+    },
+    // 注册
+    async register(userInfo) {
+      try {
+        const response = await register(userInfo)
+        const { result, code } = response
+        if (code === ResultEnum.SUCCESS) {
+          const ex = 7 * 24 * 60 * 60 * 1000
+          storage.set(ACCESS_TOKEN, result.token, ex)
+          storage.set(CURRENT_USER, result, ex)
+          this.setToken(result.token)
+          this.setUserInfo(result)
+        }
+        return Promise.resolve(response)
+      } catch (e) {
+        return Promise.reject(e)
+      }
     },
     // 登录
     async login(userInfo) {

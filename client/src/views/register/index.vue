@@ -25,7 +25,7 @@
               </template>
             </n-input>
           </n-form-item>
-          <n-form-item path="username">
+          <n-form-item path="email">
             <n-input v-model:value="formInline.email" placeholder="请输入邮箱帐号">
               <template #prefix>
                 <n-icon size="18" color="#808695">
@@ -64,24 +64,23 @@
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
   import { ResultEnum } from '@/enums/httpEnum'
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5'
+  import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
 
   interface FormState {
     username: string
     password: string
+    email: string
   }
 
   const formRef = ref()
   const message = useMessage()
   const loading = ref(false)
-  const autoLogin = ref(true)
-  const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
+  const REGISTER_NAME = PageEnum.BASE_REGISTER_NAME
 
   const formInline = reactive({
-    username: 'admin',
-    password: '123456',
-    isCaptcha: true,
+    username: '',
+    password: '',
     email: ''
   })
 
@@ -100,22 +99,23 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { username, password } = formInline
-        message.loading('登录中...')
+        const { username, password, email } = formInline
+        message.loading('注册中...')
         loading.value = true
 
         const params: FormState = {
           username,
-          password
+          password,
+          email
         }
 
         try {
-          const { code, message: msg } = await userStore.login(params)
+          const { code, message: msg } = await userStore.register(params)
           message.destroyAll()
           if (code == ResultEnum.SUCCESS) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
-            message.success('登录成功，即将进入系统')
-            if (route.name === LOGIN_NAME) {
+            message.success('注册成功，即将进入系统')
+            if (route.name === REGISTER_NAME) {
               router.replace('/')
             } else router.replace(toPath)
           } else {
@@ -125,7 +125,7 @@
           loading.value = false
         }
       } else {
-        message.error('请填写完整信息，并且进行验证码校验')
+        message.error('请填写正确信息')
       }
     })
   }

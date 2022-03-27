@@ -23,6 +23,22 @@ export function getUserInfo() {
 }
 
 /**
+ * @description: 用户注册
+ */
+export function register(params) {
+  return http.request<BasicResponseModel>(
+    {
+      url: '/register',
+      method: 'POST',
+      params
+    },
+    {
+      isTransformResponse: false
+    }
+  )
+}
+
+/**
  * @description: 用户登录
  */
 export function login(params) {

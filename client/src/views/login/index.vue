@@ -16,8 +16,8 @@
           size="large"
           :model="formInline"
           :rules="rules">
-          <n-form-item path="username">
-            <n-input v-model:value="formInline.username" placeholder="请输入用户名">
+          <n-form-item path="email">
+            <n-input v-model:value="formInline.email" placeholder="请输入邮箱账号">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -43,9 +43,6 @@
               <div class="flex-initial">
                 <n-checkbox v-model:checked="autoLogin">自动登录</n-checkbox>
               </div>
-              <div class="flex-initial order-last">
-                <a href="javascript:">忘记密码</a>
-              </div>
             </div>
           </n-form-item>
           <n-form-item>
@@ -55,23 +52,6 @@
           </n-form-item>
           <n-form-item class="default-color">
             <div class="flex view-account-other">
-              <div class="flex-initial">
-                <span>其它登录方式</span>
-              </div>
-              <div class="flex-initial mx-2">
-                <a href="javascript:">
-                  <n-icon size="24" color="#2d8cf0">
-                    <LogoGithub />
-                  </n-icon>
-                </a>
-              </div>
-              <div class="flex-initial mx-2">
-                <a href="javascript:">
-                  <n-icon size="24" color="#2d8cf0">
-                    <LogoFacebook />
-                  </n-icon>
-                </a>
-              </div>
               <div class="flex-initial" style="margin-left: auto">
                 <a @click="register">注册账号</a>
               </div>
@@ -89,11 +69,11 @@
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
   import { ResultEnum } from '@/enums/httpEnum'
-  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5'
+  import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
 
   interface FormState {
-    username: string
+    email: string
     password: string
   }
 
@@ -104,13 +84,13 @@
   const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
 
   const formInline = reactive({
-    username: 'admin',
-    password: '123456',
+    email: '',
+    password: '',
     isCaptcha: true
   })
 
   const rules = {
-    username: { required: true, message: '请输入用户名', trigger: 'blur' },
+    email: { required: true, message: '请输入邮箱账号', trigger: 'blur' },
     password: { required: true, message: '请输入密码', trigger: 'blur' }
   }
 
@@ -123,12 +103,12 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { username, password } = formInline
+        const { email, password } = formInline
         message.loading('登录中...')
         loading.value = true
 
         const params: FormState = {
-          username,
+          email,
           password
         }
 
