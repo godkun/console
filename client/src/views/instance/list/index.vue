@@ -32,15 +32,15 @@
         label-placement="left"
         :label-width="80"
         class="py-4">
-        <n-form-item label="名称" path="name">
-          <n-input placeholder="请输入名称" v-model:value="formParams.name" />
+        <n-form-item label="链接" path="name">
+          <n-input placeholder="请输入链接" v-model:value="formParams.name" />
         </n-form-item>
-        <n-form-item label="地址" path="address">
+        <!-- <n-form-item label="地址" path="address">
           <n-input type="textarea" placeholder="请输入地址" v-model:value="formParams.address" />
-        </n-form-item>
-        <n-form-item label="日期" path="date">
+        </n-form-item> -->
+        <!-- <n-form-item label="日期" path="date">
           <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />
-        </n-form-item>
+        </n-form-item> -->
       </n-form>
 
       <template #action>
@@ -57,8 +57,7 @@
   import { h, reactive, ref } from 'vue'
   import { useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
-  import { useForm } from '@/components/Form/index'
-  import { getTableList } from '@/api/table/list'
+  import { getInstanceList } from '@/api/instance'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
   import { useRouter } from 'vue-router'
@@ -81,17 +80,6 @@
       message: '请选择日期'
     }
   }
-
-  const schemas = [
-    {
-      field: 'name',
-      component: 'NInput',
-      label: '名称',
-      componentProps: {
-        placeholder: '请输入名称'
-      }
-    }
-  ]
 
   const router = useRouter()
   const formRef: any = ref(null)
@@ -183,7 +171,7 @@
   }
 
   const loadDataTable = async (res) => {
-    return await getTableList({ ...formParams, ...params.value, ...res })
+    return await getInstanceList({ ...formParams, ...params.value, ...res })
   }
 
   function onCheckedRow(rowKeys) {
@@ -219,15 +207,6 @@
   function handleDelete(record: Recordable) {
     console.log('点击了删除', record)
     message.info('点击了删除')
-  }
-
-  function handleSubmit(values: Recordable) {
-    console.log(values)
-    reloadTable()
-  }
-
-  function handleReset(values: Recordable) {
-    console.log(values)
   }
 </script>
 

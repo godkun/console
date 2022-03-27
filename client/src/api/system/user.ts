@@ -75,7 +75,7 @@ export function changePassword(params, uid) {
  */
 export function logout(params) {
   return http.request({
-    url: '/login/logout',
+    url: '/logout',
     method: 'POST',
     params
   })

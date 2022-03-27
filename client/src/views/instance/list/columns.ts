@@ -1,6 +1,3 @@
-import { h } from 'vue'
-import { NAvatar } from 'naive-ui'
-
 export const columns = [
   {
     title: 'id',
@@ -12,26 +9,21 @@ export const columns = [
     key: 'name',
     width: 100
   },
-  // {
-  //   title: '头像',
-  //   key: 'avatar',
-  //   width: 100,
-  //   render(row) {
-  //     return h(NAvatar, {
-  //       size: 48,
-  //       src: row.avatar
-  //     })
-  //   }
-  // },
-  // {
-  //   title: '地址',
-  //   key: 'address',
-  //   auth: ['basic_list'], // 同时根据权限控制是否显示
-  //   ifShow: (_column) => {
-  //     return true // 根据业务控制是否显示
-  //   },
-  //   width: 150
-  // },
+  {
+    title: 'cpu',
+    key: 'cpu',
+    width: 100
+  },
+  {
+    title: '内存',
+    key: 'ram',
+    width: 100
+  },
+  {
+    title: '流数量',
+    key: 'streamNum',
+    width: 100
+  },
   {
     title: '创建时间',
     key: 'date',
