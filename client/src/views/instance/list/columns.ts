@@ -1,14 +1,14 @@
 export const columns = [
   {
-    title: 'id',
-    key: 'id',
-    width: 100
-  },
-  {
-    title: '名称',
+    title: '实例名称',
     key: 'name',
     width: 100
   },
+  // {
+  //   title: '链接',
+  //   key: 'url',
+  //   width: 100
+  // },
   {
     title: 'cpu',
     key: 'cpu',

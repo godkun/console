@@ -10,11 +10,20 @@ export function getInstanceList(params) {
   })
 }
 
-// 获取实例列表
+// 新增实例
 export function addInstance(params) {
   return http.request({
     url: '/instance/add',
     method: 'post',
+    params
+  })
+}
+
+// 删除实例
+export function delInstance(params) {
+  return http.request({
+    url: '/instance/del',
+    method: 'get',
     params
   })
 }

@@ -4,11 +4,11 @@ const instanceList = (pageSize) => {
   const result: any[] = []
   doCustomTimes(pageSize, () => {
     result.push({
-      id: '@integer(10,999999)',
+      name: '@cname()',
+      // url: '@url()',
       cpu: '@integer(1,10)',
       ram: '@integer(1,10)',
       streamNum: '@integer(1,10)',
-      name: '@cname()',
       date: `@date('yyyy-MM-dd')`
     })
   })

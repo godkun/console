@@ -24,7 +24,7 @@
       </template>
     </BasicTable>
 
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="新建">
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
       <n-form
         :model="formParams"
         :rules="rules"
@@ -32,14 +32,11 @@
         label-placement="left"
         :label-width="80"
         class="py-4">
-        <n-form-item label="链接" path="name">
-          <n-input placeholder="请输入链接" v-model:value="formParams.name" />
+        <n-form-item label="名称" path="name">
+          <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
         </n-form-item>
-        <!-- <n-form-item label="地址" path="address">
-          <n-input type="textarea" placeholder="请输入地址" v-model:value="formParams.address" />
-        </n-form-item> -->
-        <!-- <n-form-item label="日期" path="date">
-          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />
+        <!-- <n-form-item label="链接" path="url">
+          <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
         </n-form-item> -->
       </n-form>
 
@@ -55,33 +52,26 @@
 
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
-  import { useMessage } from 'naive-ui'
+  import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { getInstanceList } from '@/api/instance'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
-  import { useRouter } from 'vue-router'
 
   const rules = {
     name: {
       required: true,
       trigger: ['blur', 'input'],
       message: '请输入名称'
-    },
-    address: {
-      required: true,
-      trigger: ['blur', 'input'],
-      message: '请输入地址'
-    },
-    date: {
-      type: 'number',
-      required: true,
-      trigger: ['blur', 'change'],
-      message: '请选择日期'
     }
+    // address: {
+    //   url: true,
+    //   trigger: ['blur', 'input'],
+    //   message: '请输入地址'
+    // }
   }
 
-  const router = useRouter()
+  const dialog = useDialog()
   const formRef: any = ref(null)
   const message = useMessage()
   const actionRef = ref()
@@ -90,9 +80,9 @@
   const formBtnLoading = ref(false)
   const formParams = reactive({
     name: '',
-    address: '',
-    date: null
+    url: ''
   })
+  const modalTitle = ref('')
 
   const params = ref({
     pageSize: 5,
@@ -109,6 +99,21 @@
         style: 'button',
         actions: [
           {
+            label: '查看',
+            onClick: handleEdit.bind(null, record),
+            ifShow: () => {
+              return true
+            },
+            // auth: ['basic_list']
+          },
+          {
+            label: '编辑',
+            onClick: handleEdit.bind(null, record),
+            ifShow: () => {
+              return true
+            },
+          },
+          {
             label: '删除',
             icon: 'ic:outline-delete-outline',
             onClick: handleDelete.bind(null, record),
@@ -119,40 +124,24 @@
             // 根据权限控制是否显示: 有权限，会显示，支持多个
             // auth: ['basic_list']
           },
-          {
-            label: '编辑',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true
-            },
-            // auth: ['basic_list']
-          },
-          {
-            label: '查看',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true
-            },
-            // auth: ['basic_list']
-          }
         ],
-        dropDownActions: [
-          {
-            label: '启用',
-            key: 'enabled',
-            // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-            ifShow: () => {
-              return true
-            }
-          },
-          {
-            label: '禁用',
-            key: 'disabled',
-            ifShow: () => {
-              return true
-            }
-          }
-        ],
+        // dropDownActions: [
+        //   {
+        //     label: '启用',
+        //     key: 'enabled',
+        //     // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+        //     ifShow: () => {
+        //       return true
+        //     }
+        //   },
+        //   {
+        //     label: '禁用',
+        //     key: 'disabled',
+        //     ifShow: () => {
+        //       return true
+        //     }
+        //   }
+        // ],
         select: (key) => {
           message.info(`您点击了，${key} 按钮`)
         }
@@ -167,6 +156,9 @@
   // })
 
   function addTable() {
+    formParams.name = ''
+    formParams.url = ''
+    modalTitle.value = '新建实例'
     showModal.value = true
   }
 
@@ -200,13 +192,24 @@
   }
 
   function handleEdit(record: Recordable) {
-    console.log('点击了编辑', record)
-    router.push({ name: 'basic-info', params: { id: record.id } })
+    formParams.name = record.name
+    formParams.url = record.url
+    modalTitle.value = '编辑实例'
+    showModal.value = true
+    // router.push({ name: 'basic-info', params: { id: record.id } })
   }
 
   function handleDelete(record: Recordable) {
-    console.log('点击了删除', record)
-    message.info('点击了删除')
+    dialog.info({
+      title: '提示',
+      content: '您确定要删除此实例吗',
+      positiveText: '确定',
+      negativeText: '取消',
+      onPositiveClick: () => {
+        console.log(record)
+      },
+      onNegativeClick: () => {}
+    })
   }
 </script>
 
