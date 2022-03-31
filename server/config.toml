@@ -1,0 +1,4 @@
+[Mysql]
+server = "sh-cynosdbmysql-grp-kxt43lv6.sql.tencentcdb.com:28520"
+Username = "root"
+Password = "Monibuca@4"
