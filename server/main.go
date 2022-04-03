@@ -82,6 +82,7 @@ func main() {
 	util.Print("server is ", config.Server)
 
 	fmt.Println("start server at 9999")
+	http.HandleFunc("/register", register)
 	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("start server at 9999")
 		conn, _, _, err := ws.UpgradeHTTP(r, w)
@@ -104,4 +105,42 @@ func main() {
 		}()
 	})
 	log.Fatal(http.ListenAndServe(":9999", nil))
+}
+
+/**
+注册
+*/
+func register(w http.ResponseWriter, r *http.Request) {
+	CORS(w, r)
+	r.ParseForm()
+	userName := r.Form["username"]
+	fmt.Println("username is ", userName)
+	password := r.Form.Get("password")
+	mail := r.Form.Get("mail")
+	ret, _ := MysqlDb.Exec("insert INTO user(mail,username,password) values(?,?,?)", mail, userName, password)
+
+	//插入数据的主键id
+	lastInsertID, _ := ret.LastInsertId()
+	fmt.Println("LastInsertID:", lastInsertID)
+
+	//影响行数
+	rowsaffected, _ := ret.RowsAffected()
+	fmt.Println("RowsAffected:", rowsaffected)
+	if rowsaffected == 0 {
+		resultData := make(map[string]string)
+		resultData["code"] = "-1"
+		resultData["msg"] = "注册失败"
+		jsonData, _ := json.Marshal(resultData)
+		w.Write(jsonData)
+	}
+}
+
+func CORS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	origin := r.Header["Origin"]
+	if len(origin) == 0 {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+	} else {
+		w.Header().Set("Access-Control-Allow-Origin", origin[0])
+	}
 }
