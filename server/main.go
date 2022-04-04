@@ -111,26 +111,38 @@ func main() {
 注册
 */
 func register(w http.ResponseWriter, r *http.Request) {
+
+	resultData := make(map[string]string)
+	resultData["code"] = "-1"
+	resultData["msg"] = "注册失败"
+	jsonData, _ := json.Marshal(resultData)
+
 	CORS(w, r)
-	r.ParseForm()
-	userName := r.Form["username"]
-	fmt.Println("username is ", userName)
-	password := r.Form.Get("password")
-	mail := r.Form.Get("mail")
-	ret, _ := MysqlDb.Exec("insert INTO user(mail,username,password) values(?,?,?)", mail, userName, password)
-
-	//插入数据的主键id
-	lastInsertID, _ := ret.LastInsertId()
-	fmt.Println("LastInsertID:", lastInsertID)
-
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal("parse form error ", err)
+	}
+	// 初始化请求变量结构
+	formData := make(map[string]interface{})
+	// 调用json包的解析，解析请求body
+	json.NewDecoder(r.Body).Decode(&formData)
+	userName := formData["username"]
+	password := formData["password"]
+	mail := formData["mail"]
+	ret, err := MysqlDb.Exec("insert INTO user(mail,username,password,createtime) values(?,?,md5(?),now())", mail, userName, password)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(jsonData)
+		return
+	}
 	//影响行数
 	rowsaffected, _ := ret.RowsAffected()
 	fmt.Println("RowsAffected:", rowsaffected)
-	if rowsaffected == 0 {
+	if rowsaffected > 0 {
 		resultData := make(map[string]string)
-		resultData["code"] = "-1"
-		resultData["msg"] = "注册失败"
-		jsonData, _ := json.Marshal(resultData)
+		resultData["code"] = "0"
+		resultData["msg"] = "注册成功"
+		jsonData, _ = json.Marshal(resultData)
 		w.Write(jsonData)
 	}
 }
