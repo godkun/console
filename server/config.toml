@@ -2,3 +2,8 @@
 Server = "sh-cynosdbmysql-grp-kxt43lv6.sql.tencentcdb.com:28520"
 Username = "root"
 Password = "Monibuca#!4"
+[Mail]
+SMTPserver = "smtp.163.com"
+SMTPport = "25"
+SMTPusername = "pg830616@163.com"
+SMTPpassword = "1qaz2wsx3EDC"

@@ -10,9 +10,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
+	"github.com/jordan-wright/email"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/smtp"
 )
 
 var MysqlDb *sql.DB
@@ -20,14 +22,38 @@ var MysqlDbErr error
 
 var (
 	config = &struct {
-		Server   string
-		Username string
-		Password string
-		Database string
-		Charset  string
-	}{"127.0.0.1:3306", "root", "123456", "monibuca", "utf8"}
+		Server       string
+		Username     string
+		Password     string
+		Database     string
+		Charset      string
+		SMTPserver   string
+		SMTPport     string
+		SMTPusername string
+		SMTPpassword string
+	}{"127.0.0.1:3306", "root", "123456",
+		"monibuca", "utf8", "", "", "", ""}
 	ConfigRaw []byte
 )
+
+func sendEmail() {
+	//创建一个电子邮件
+	e := email.NewEmail()
+	//设置发送方邮件
+	e.From = "pg830616@163.com"
+	//设置接收方得邮件
+	e.To = []string{"pg@monibuca.com"}
+	//设置主题
+	e.Subject = "中国"
+	//设置文件发送内容
+	e.Text = []byte("北京是个好地方")
+	//设置服务器相关的配置
+	err := e.Send(config.SMTPserver+":"+config.SMTPport,
+		smtp.PlainAuth("", config.SMTPusername, config.SMTPpassword, config.SMTPserver))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func init() {
 
@@ -47,6 +73,12 @@ func init() {
 
 	if _, err = toml.Decode(string(ConfigRaw), &cg); err == nil {
 		if cfg, ok := cg["Mysql"]; ok {
+			b, _ := json.Marshal(cfg)
+			if err = json.Unmarshal(b, config); err != nil {
+				log.Println(err)
+			}
+		}
+		if cfg, ok := cg["Mail"]; ok {
 			b, _ := json.Marshal(cfg)
 			if err = json.Unmarshal(b, config); err != nil {
 				log.Println(err)
@@ -75,6 +107,7 @@ func init() {
 }
 
 func main() {
+	sendEmail()
 	defer MysqlDb.Close()
 	showProcessList := util.QueryAndParseRows(MysqlDb, "select * from user")
 	util.Print("多行数据-进程信息:%v\n", util.Data2Json(showProcessList))
