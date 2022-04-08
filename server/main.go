@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/tls"
 	"database/sql"
 	"encoding/json"
 	"flag"
@@ -11,11 +10,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
-	"github.com/jordan-wright/email"
 	"io/ioutil"
 	"log"
+	_ "net"
 	"net/http"
-	"net/smtp"
 )
 
 var MysqlDb *sql.DB
@@ -32,32 +30,11 @@ var (
 		SMTPport     string
 		SMTPusername string
 		SMTPpassword string
+		SMTPshowname string
 	}{"127.0.0.1:3306", "root", "123456",
-		"monibuca", "utf8", "", "", "", ""}
+		"monibuca", "utf8", "", "", "", "", ""}
 	ConfigRaw []byte
 )
-
-func sendEmail() {
-	//创建一个电子邮件
-	e := email.NewEmail()
-	//设置发送方邮件
-	e.From = "service@monibuca.com"
-	//设置接收方得邮件
-	e.To = []string{"pg@monibuca.com"}
-	//设置主题
-	e.Subject = "中国"
-	//设置文件发送内容
-	e.Text = []byte("北京是个好地方")
-	//设置服务器相关的配置
-	err := e.SendWithTLS(config.SMTPserver+":"+config.SMTPport,
-		smtp.PlainAuth("", config.SMTPusername, config.SMTPpassword, config.SMTPserver),
-		&tls.Config{
-			ServerName: config.SMTPserver,
-		})
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func init() {
 
@@ -111,7 +88,8 @@ func init() {
 }
 
 func main() {
-	sendEmail()
+	util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg@monibuca.com",
+		"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer MysqlDb.Close()
 	showProcessList := util.QueryAndParseRows(MysqlDb, "select * from user")
 	util.Print("多行数据-进程信息:%v\n", util.Data2Json(showProcessList))

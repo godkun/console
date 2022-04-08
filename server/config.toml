@@ -4,6 +4,7 @@ Username = "root"
 Password = "Monibuca#!4"
 [Mail]
 SMTPserver = "smtp.exmail.qq.com"
-SMTPport = "465"
+SMTPport = ":465"
 SMTPusername = "service@monibuca.com"
 SMTPpassword = "Gcgm35TT7nZ4HrT4"
+SMTPshowname = "m7s"
