@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"database/sql"
 	"encoding/json"
 	"flag"
@@ -40,7 +41,7 @@ func sendEmail() {
 	//创建一个电子邮件
 	e := email.NewEmail()
 	//设置发送方邮件
-	e.From = "pg830616@163.com"
+	e.From = "service@monibuca.com"
 	//设置接收方得邮件
 	e.To = []string{"pg@monibuca.com"}
 	//设置主题
@@ -48,8 +49,11 @@ func sendEmail() {
 	//设置文件发送内容
 	e.Text = []byte("北京是个好地方")
 	//设置服务器相关的配置
-	err := e.Send(config.SMTPserver+":"+config.SMTPport,
-		smtp.PlainAuth("", config.SMTPusername, config.SMTPpassword, config.SMTPserver))
+	err := e.SendWithTLS(config.SMTPserver+":"+config.SMTPport,
+		smtp.PlainAuth("", config.SMTPusername, config.SMTPpassword, config.SMTPserver),
+		&tls.Config{
+			ServerName: config.SMTPserver,
+		})
 	if err != nil {
 		log.Fatal(err)
 	}
