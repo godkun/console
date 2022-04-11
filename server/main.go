@@ -88,8 +88,8 @@ func init() {
 }
 
 func main() {
-	util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg@monibuca.com",
-		"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
+	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
+	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer MysqlDb.Close()
 	showProcessList := util.QueryAndParseRows(MysqlDb, "select * from user")
 	util.Print("多行数据-进程信息:%v\n", util.Data2Json(showProcessList))
