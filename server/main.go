@@ -133,17 +133,30 @@ func register(w http.ResponseWriter, r *http.Request) {
 	jsonData, _ := json.Marshal(resultData)
 
 	CORS(w, r)
-	err := r.ParseForm()
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal("parse form error ", err)
 	}
+	println("json:", string(body))
 	// 初始化请求变量结构
 	formData := make(map[string]interface{})
 	// 调用json包的解析，解析请求body
-	json.NewDecoder(r.Body).Decode(&formData)
+	if err = json.Unmarshal(body, &formData); err != nil {
+		fmt.Printf("Unmarshal err, %v\n", err)
+		return
+	}
+	fmt.Printf("%+v", formData)
 	userName := formData["username"]
 	password := formData["password"]
 	mail := formData["mail"]
+	fmt.Printf("username is %+v", userName)
+	fmt.Printf("password is %+v", password)
+	fmt.Printf("mail is %+v", mail)
+
+
+
+
+
 	ret, err := MysqlDb.Exec("insert INTO user(mail,username,password,createtime) values(?,?,md5(?),now())", mail, userName, password)
 	if err != nil {
 		fmt.Println(err)

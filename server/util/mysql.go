@@ -19,11 +19,11 @@ func QueryAndParse(Db *sql.DB, queryStr string) map[string]string {
 	//获取列名cols
 	cols, _ := rows.Columns()
 	if len(cols) > 0 {
-		buff := make([]interface{}, len(cols)) // 创建临时切片buff
-		data := make([][]byte, len(cols))      // 创建存储数据的字节切片2维数组data
-		dataKv := make(map[string]string, len(cols))  //创建dataKv, 键值对的map对象
+		buff := make([]interface{}, len(cols))       // 创建临时切片buff
+		data := make([][]byte, len(cols))            // 创建存储数据的字节切片2维数组data
+		dataKv := make(map[string]string, len(cols)) //创建dataKv, 键值对的map对象
 		for i, _ := range buff {
-			buff[i] = &data[i]  //将字节切片地址赋值给临时切片,这样data才是真正存放数据
+			buff[i] = &data[i] //将字节切片地址赋值给临时切片,这样data才是真正存放数据
 		}
 
 		for rows.Next() {
@@ -79,4 +79,28 @@ func Data2Json(anyData interface{}) string {
 		log.Printf("数据序列化为json出错:\n%s\n", err.Error())
 	}
 	return string(JsonByte)
+}
+
+/**
+查询count
+*/
+func QueryCountSql(MysqlDb *sql.DB, sql string, args ...any) (int, error) {
+	total := 0
+	totalRow, err := MysqlDb.Query(sql, args)
+	if err != nil {
+		fmt.Println("QueryCountSql error", err)
+		return total, err
+	}
+	for totalRow.Next() {
+		err := totalRow.Scan(
+			&total,
+		)
+		if err != nil {
+			fmt.Println("QueryCountSql scan row error", err)
+			continue
+		}
+	}
+	fmt.Println(total)
+	totalRow.Close()
+	return total, err
 }
