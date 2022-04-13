@@ -146,18 +146,28 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Printf("%+v", formData)
-	userName := formData["username"]
+	username := formData["username"]
 	password := formData["password"]
 	mail := formData["mail"]
-	fmt.Printf("username is %+v", userName)
+	fmt.Printf("username is %+v", username)
 	fmt.Printf("password is %+v", password)
 	fmt.Printf("mail is %+v", mail)
+	datacount, err := util.QueryCountSql(MysqlDb, "select * from user where mail=?", mail)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(jsonData)
+		return
+	}
+	if datacount > 0 { //有用户数据，不需要注册，直接登录
+		resultData["code"] = "2"
+		resultData["msg"] = "已注册，请直接登录"
+		jsonData, _ := json.Marshal(resultData)
+		w.Write(jsonData)
+	} else { //没有该邮箱，需要注册，新建一条注册码数据
+		
+	}
 
-
-
-
-
-	ret, err := MysqlDb.Exec("insert INTO user(mail,username,password,createtime) values(?,?,md5(?),now())", mail, userName, password)
+	ret, err := MysqlDb.Exec("insert INTO user(mail,username,password,createtime) values(?,?,md5(?),now())", mail, username, password)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(jsonData)
