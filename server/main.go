@@ -14,6 +14,7 @@ import (
 	"log"
 	_ "net"
 	"net/http"
+	"unsafe"
 )
 
 var MysqlDb *sql.DB
@@ -126,13 +127,10 @@ func main() {
 注册
 */
 func register(w http.ResponseWriter, r *http.Request) {
-
-	resultData := make(map[string]string)
-	resultData["code"] = "-1"
-	resultData["msg"] = "注册失败"
-	jsonData, _ := json.Marshal(resultData)
-
 	CORS(w, r)
+	resultData, _ := json.Marshal(*util.ErrDatabase)
+	w.Write(resultData)
+	return
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal("parse form error ", err)
@@ -143,6 +141,8 @@ func register(w http.ResponseWriter, r *http.Request) {
 	// 调用json包的解析，解析请求body
 	if err = json.Unmarshal(body, &formData); err != nil {
 		fmt.Printf("Unmarshal err, %v\n", err)
+		jsonData, _ := json.Marshal(util.ErrRequestParamError)
+		w.Write(jsonData)
 		return
 	}
 	fmt.Printf("%+v", formData)
@@ -155,22 +155,19 @@ func register(w http.ResponseWriter, r *http.Request) {
 	datacount, err := util.QueryCountSql(MysqlDb, "select * from user where mail=?", mail)
 	if err != nil {
 		fmt.Println(err)
-		w.Write(jsonData)
+		w.Write(*(*[]byte)(unsafe.Pointer(&util.ErrDatabase)))
 		return
 	}
 	if datacount > 0 { //有用户数据，不需要注册，直接登录
-		resultData["code"] = "2"
-		resultData["msg"] = "已注册，请直接登录"
-		jsonData, _ := json.Marshal(resultData)
-		w.Write(jsonData)
+		//w.Write(1)
 	} else { //没有该邮箱，需要注册，新建一条注册码数据
-		
+
 	}
 
 	ret, err := MysqlDb.Exec("insert INTO user(mail,username,password,createtime) values(?,?,md5(?),now())", mail, username, password)
 	if err != nil {
 		fmt.Println(err)
-		w.Write(jsonData)
+		//w.Write(jsonData)
 		return
 	}
 	//影响行数
@@ -180,7 +177,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		resultData := make(map[string]string)
 		resultData["code"] = "0"
 		resultData["msg"] = "注册成功"
-		jsonData, _ = json.Marshal(resultData)
+		jsonData, _ := json.Marshal(resultData)
 		w.Write(jsonData)
 	}
 }
