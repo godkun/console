@@ -98,7 +98,9 @@ func main() {
 	util.Print("server is ", config.Server)
 
 	fmt.Println("start server at 9999")
-	http.HandleFunc("/register", register)
+	http.HandleFunc("/api/user/register", register)
+	http.HandleFunc("/api/user/getVerifyCode", getVerifyCode)
+	http.HandleFunc("/api/user/login", login)
 	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("start server at 9999")
 		conn, _, _, err := ws.UpgradeHTTP(r, w)
@@ -124,47 +126,70 @@ func main() {
 }
 
 /**
+登录
+*/
+func login(writer http.ResponseWriter, request *http.Request) {
+
+}
+
+/**
+获取验证码
+*/
+func getVerifyCode(writer http.ResponseWriter, request *http.Request) {
+
+}
+
+/**
 注册
 */
 func register(w http.ResponseWriter, r *http.Request) {
 	CORS(w, r)
-	resultData, _ := json.Marshal(*util.ErrDatabase)
-	w.Write(resultData)
-	return
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal("parse form error ", err)
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
 	}
-	println("json:", string(body))
+	fmt.Println("json:", string(body))
 	// 初始化请求变量结构
 	formData := make(map[string]interface{})
 	// 调用json包的解析，解析请求body
 	if err = json.Unmarshal(body, &formData); err != nil {
 		fmt.Printf("Unmarshal err, %v\n", err)
-		jsonData, _ := json.Marshal(util.ErrRequestParamError)
-		w.Write(jsonData)
+		w.Write(util.ErrJson(util.ErrRequestParamError))
 		return
 	}
-	fmt.Printf("%+v", formData)
-	username := formData["username"]
-	password := formData["password"]
+	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
-	fmt.Printf("username is %+v", username)
-	fmt.Printf("password is %+v", password)
-	fmt.Printf("mail is %+v", mail)
+	password := formData["password"]
+	verifycode := formData["verifycode"]
 	datacount, err := util.QueryCountSql(MysqlDb, "select * from user where mail=?", mail)
 	if err != nil {
 		fmt.Println(err)
-		w.Write(*(*[]byte)(unsafe.Pointer(&util.ErrDatabase)))
+		w.Write(util.ErrJson(util.ErrDatabase))
 		return
 	}
 	if datacount > 0 { //有用户数据，不需要注册，直接登录
-		//w.Write(1)
+		w.Write(util.ErrJson(util.ErrUserHasRegister))
+		return
 	} else { //没有该邮箱，需要注册，新建一条注册码数据
-
+		ret, err := MysqlDb.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		} else {
+			rowsaffected, _ := ret.RowsAffected()
+			if rowsaffected > 0 {
+				w.Write(util.ErrJson(util.OK))
+				return
+			} else {
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+		}
 	}
 
-	ret, err := MysqlDb.Exec("insert INTO user(mail,username,password,createtime) values(?,?,md5(?),now())", mail, username, password)
 	if err != nil {
 		fmt.Println(err)
 		//w.Write(jsonData)
