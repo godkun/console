@@ -13,13 +13,14 @@ var (
 	// 系统错误, 前缀为 100
 	InternalServerError  = &Errno{Code: 10001, Msg: "内部服务器错误"}
 	ErrRequestParamError = &Errno{Code: 10002, Msg: "请求参数错误"}
+	ErrSendMailError = &Errno{Code: 10003, Msg: "发送邮件错误"}
 
 	// 数据库错误, 前缀为 201
 	ErrDatabase = &Errno{Code: 20100, Msg: "数据库错误"}
 	ErrFill     = &Errno{Code: 20101, Msg: "从数据库填充 struct 时发生错误"}
 
 	// 用户错误, 前缀是 202
-	ErrValidation   = &Errno{Code: 20201, Msg: "验证失败"}
+	ErrValidation   = &Errno{Code: 20201, Msg: "验证码校验失败"}
 	ErrTokenInvalid = &Errno{Code: 20202, Msg: "jwt 是无效的"}
 
 	// 用户错误, 前缀为 203

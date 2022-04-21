@@ -19,7 +19,7 @@ func dial(addr string) (*smtp.Client, error) {
 	return smtp.NewClient(conn, host)
 }
 
-//参考net/smtp的func SendMail()
+// SendMailUsingTLS 参考net/smtp的func SendMail()
 //使用net.Dial连接tls(ssl)端口时,smtp.NewClient()会卡住且不提示err
 //len(to)>1时,to[1]开始提示是密送
 func SendMailUsingTLS(server string, port string, from string, to string, body string, password string, username string, subject string) (err error) {

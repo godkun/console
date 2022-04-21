@@ -14,7 +14,6 @@ import (
 	"log"
 	_ "net"
 	"net/http"
-	"unsafe"
 )
 
 var MysqlDb *sql.DB
@@ -22,18 +21,19 @@ var MysqlDbErr error
 
 var (
 	config = &struct {
-		Server       string
-		Username     string
-		Password     string
-		Database     string
-		Charset      string
-		SMTPserver   string
-		SMTPport     string
-		SMTPusername string
-		SMTPpassword string
-		SMTPshowname string
+		Server            string
+		Username          string
+		Password          string
+		Database          string
+		Charset           string
+		SMTPserver        string
+		SMTPport          string
+		SMTPusername      string
+		SMTPpassword      string
+		SMTPshowname      string
+		Verifycodetimeout int
 	}{"127.0.0.1:3306", "root", "123456",
-		"monibuca", "utf8", "", "", "", "", ""}
+		"monibuca", "utf8", "", "", "", "", "", 300}
 	ConfigRaw []byte
 )
 
@@ -66,6 +66,12 @@ func init() {
 				log.Println(err)
 			}
 		}
+		if cfg, ok := cg["Options"]; ok {
+			b, _ := json.Marshal(cfg)
+			if err = json.Unmarshal(b, config); err != nil {
+				log.Println(err)
+			}
+		}
 	} else {
 		util.Print("decode config file error:", err)
 	}
@@ -76,7 +82,7 @@ func init() {
 	MysqlDb, err = sql.Open("mysql", dbDSN)
 	if err != nil {
 		//如果打开数据库错误，直接panic
-		panic(err)
+		log.Println(err)
 	}
 	//设置数据库最大连接数
 	MysqlDb.SetConnMaxLifetime(10)
@@ -84,7 +90,7 @@ func init() {
 	MysqlDb.SetMaxIdleConns(5)
 	//验证连接
 	if err := MysqlDb.Ping(); err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }
 
@@ -128,37 +134,61 @@ func main() {
 /**
 登录
 */
-func login(writer http.ResponseWriter, request *http.Request) {
-
+func login(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	mail := formData["mail"]
+	password := formData["password"]
+	datacount, err := util.QueryCountSql(MysqlDb, "select * from user where mail=? and password=md5(?)", mail, password)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	if datacount > 0 {
+		go func() {
+			util.QueryCountSql(MysqlDb, "update user set lastlogintime=now() where mail=?", mail)
+		}()
+		w.Write(util.ErrJson(util.OK))
+		return
+	}
 }
 
 /**
 获取验证码
 */
-func getVerifyCode(writer http.ResponseWriter, request *http.Request) {
-
+func getVerifyCode(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	mail := formData["mail"]
+	verifycode := util.RandNumStr(6)
+	err := util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), "hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
+	if err != nil {
+		log.Println("send mail err is ", err)
+		w.Write(util.ErrJson(util.ErrSendMailError))
+		return
+	}
+	result, err := MysqlDb.Exec("insert into verifycode(mail,verifycode,createtime) values(?,?,now())", mail, verifycode)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	} else {
+		rowsaffected, _ := result.RowsAffected()
+		if rowsaffected > 0 {
+			w.Write(util.ErrJson(util.OK))
+			return
+		} else {
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+	}
 }
 
 /**
 注册
 */
 func register(w http.ResponseWriter, r *http.Request) {
-	CORS(w, r)
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatal("parse form error ", err)
-		w.Write(util.ErrJson(util.ErrRequestParamError))
-		return
-	}
-	fmt.Println("json:", string(body))
-	// 初始化请求变量结构
-	formData := make(map[string]interface{})
-	// 调用json包的解析，解析请求body
-	if err = json.Unmarshal(body, &formData); err != nil {
-		fmt.Printf("Unmarshal err, %v\n", err)
-		w.Write(util.ErrJson(util.ErrRequestParamError))
-		return
-	}
+	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
 	password := formData["password"]
@@ -172,14 +202,26 @@ func register(w http.ResponseWriter, r *http.Request) {
 	if datacount > 0 { //有用户数据，不需要注册，直接登录
 		w.Write(util.ErrJson(util.ErrUserHasRegister))
 		return
-	} else { //没有该邮箱，需要注册，新建一条注册码数据
-		ret, err := MysqlDb.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
+	} else { //没有该邮箱，需要注册，先校验验证码，然后建立用户数据
+		ret, err := util.QueryCountSql(MysqlDb, "select * from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
+			" verifycode=? and mail=?", config.Verifycodetimeout, verifycode, mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+		if ret == 0 {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrValidation))
+			return
+		}
+		result, err := MysqlDb.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		} else {
-			rowsaffected, _ := ret.RowsAffected()
+			rowsaffected, _ := result.RowsAffected()
 			if rowsaffected > 0 {
 				w.Write(util.ErrJson(util.OK))
 				return
@@ -189,24 +231,9 @@ func register(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
-	if err != nil {
-		fmt.Println(err)
-		//w.Write(jsonData)
-		return
-	}
-	//影响行数
-	rowsaffected, _ := ret.RowsAffected()
-	fmt.Println("RowsAffected:", rowsaffected)
-	if rowsaffected > 0 {
-		resultData := make(map[string]string)
-		resultData["code"] = "0"
-		resultData["msg"] = "注册成功"
-		jsonData, _ := json.Marshal(resultData)
-		w.Write(jsonData)
-	}
 }
 
+// CORS 允许跨域调用/**
 func CORS(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	origin := r.Header["Origin"]
@@ -215,4 +242,27 @@ func CORS(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Header().Set("Access-Control-Allow-Origin", origin[0])
 	}
+}
+
+/**
+解析request数据，返回map
+*/
+func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData map[string]interface{}) {
+	CORS(w, r)
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal("parse form error ", err)
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
+	fmt.Println("json:", string(body))
+	// 初始化请求变量结构
+	// 调用json包的解析，解析请求body
+	if err = json.Unmarshal(body, &formData); err != nil {
+		fmt.Printf("Unmarshal err, %v\n", err)
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
+	fmt.Printf("formData is %+v", formData)
+	return formData
 }

@@ -1,3 +1,6 @@
+[Options]
+#验证码超时时间，单位为分钟数
+Verifycodetimeout = 5
 [Mysql]
 Server = "sh-cynosdbmysql-grp-kxt43lv6.sql.tencentcdb.com:28520"
 Username = "root"
