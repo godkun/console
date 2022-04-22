@@ -215,7 +215,14 @@ func register(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrValidation))
 			return
 		}
-		result, err := MysqlDb.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
+		tx, _ := MysqlDb.Begin()
+		if err != nil {
+			log.Fatalln(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+		defer clearTransaction(tx, w)
+		result, err := tx.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -223,13 +230,34 @@ func register(w http.ResponseWriter, r *http.Request) {
 		} else {
 			rowsaffected, _ := result.RowsAffected()
 			if rowsaffected > 0 {
-				w.Write(util.ErrJson(util.OK))
-				return
+				result, err = tx.Exec("delete from verifycode where mail=?", mail)
+				if err != nil {
+					w.Write(util.ErrJson(util.ErrDatabase))
+					return
+				}
+				rowsaffected, _ = result.RowsAffected()
+				if rowsaffected > 0 {
+					if err := tx.Commit(); err != nil {
+						log.Fatalln(err)
+						w.Write(util.ErrJson(util.ErrDatabase))
+						return
+					}
+					w.Write(util.ErrJson(util.OK))
+					return
+				}
 			} else {
 				w.Write(util.ErrJson(util.ErrDatabase))
 				return
 			}
 		}
+	}
+}
+
+func clearTransaction(tx *sql.Tx, w http.ResponseWriter) {
+	err := tx.Rollback()
+	if err != sql.ErrTxDone && err != nil {
+		log.Fatalln(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
 	}
 }
 
