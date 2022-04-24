@@ -5,6 +5,7 @@ Verifycodetimeout = 5
 Server = "sh-cynosdbmysql-grp-kxt43lv6.sql.tencentcdb.com:28520"
 Username = "root"
 Password = "Monibuca#!4"
+Database = "monibuca"
 [Mail]
 SMTPserver = "smtp.exmail.qq.com"
 SMTPport = ":465"

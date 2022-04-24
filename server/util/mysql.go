@@ -40,8 +40,8 @@ func QueryAndParse(Db *sql.DB, queryStr string) map[string]string {
 	}
 }
 
-func QueryAndParseRows(Db *sql.DB, queryStr string) []map[string]string {
-	rows, err := Db.Query(queryStr)
+func QueryAndParseJsonRows(Db *sql.DB, queryStr string, args ...any) []map[string]string {
+	rows, err := Db.Query(queryStr, args...)
 	defer rows.Close()
 	if err != nil {
 		fmt.Printf("查询出错:\nSQL:\n%s, 错误详情:%s\n", queryStr, err.Error())
@@ -86,7 +86,7 @@ func Data2Json(anyData interface{}) string {
 */
 func QueryCountSql(MysqlDb *sql.DB, sql string, args ...any) (int, error) {
 	total := 0
-	totalRow, err := MysqlDb.Query(sql, args)
+	totalRow, err := MysqlDb.Query(sql, args...)
 	if err != nil {
 		fmt.Println("QueryCountSql error", err)
 		return total, err

@@ -18,6 +18,7 @@ import (
 
 var MysqlDb *sql.DB
 var MysqlDbErr error
+var mailtxt string
 
 var (
 	config = &struct {
@@ -41,6 +42,14 @@ func init() {
 
 	var err error
 	addr := flag.String("c", "config.toml", "config file")
+
+	var mailtxtbyte []byte
+	if mailtxtbyte, err = ioutil.ReadFile("mailtxt"); err != nil {
+		util.Print("read config file error:", err)
+		return
+	}
+	mailtxt = string(mailtxtbyte)
+
 	flag.Parse()
 	if err := util.CreateShutdownScript(); err != nil {
 		util.Print("create shutdown script error:", err)
@@ -98,14 +107,14 @@ func main() {
 	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
 	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer MysqlDb.Close()
-	showProcessList := util.QueryAndParseRows(MysqlDb, "select * from user")
+	showProcessList := util.QueryAndParseJsonRows(MysqlDb, "select * from user")
 	util.Print("多行数据-进程信息:%v\n", util.Data2Json(showProcessList))
 
 	util.Print("server is ", config.Server)
 
 	fmt.Println("start server at 9999")
 	http.HandleFunc("/api/user/register", register)
-	http.HandleFunc("/api/user/getVerifyCode", getVerifyCode)
+	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", login)
 	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("start server at 9999")
@@ -139,17 +148,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
 	password := formData["password"]
-	datacount, err := util.QueryCountSql(MysqlDb, "select * from user where mail=? and password=md5(?)", mail, password)
-	if err != nil {
-		fmt.Println(err)
-		w.Write(util.ErrJson(util.ErrDatabase))
-		return
-	}
-	if datacount > 0 {
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from user where mail=? and password=md5(?)", mail, password)
+	if userData != nil {
+		fmt.Println("user data is %+v", userData)
 		go func() {
-			util.QueryCountSql(MysqlDb, "update user set lastlogintime=now() where mail=?", mail)
+			MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
 		}()
 		w.Write(util.ErrJson(util.OK))
+		return
+	} else {
+		w.Write(util.ErrJson(util.ErrUserNotFound))
 		return
 	}
 }
@@ -160,8 +168,32 @@ func login(w http.ResponseWriter, r *http.Request) {
 func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	mail := formData["mail"]
+	datacount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail = ?", mail.(string))
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	if datacount > 0 {
+		w.Write(util.ErrJson(util.ErrUserHasRegister))
+		return
+	}
+
+	datacount, err = util.QueryCountSql(MysqlDb, "select count(1) from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
+		"  mail=?", config.Verifycodetimeout, mail)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	if datacount > 0 {
+		w.Write(util.ErrJson(util.ErrUserHasVerifyCode))
+		return
+	}
+
 	verifycode := util.RandNumStr(6)
-	err := util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), "hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
+	mailBody := fmt.Sprintf(mailtxt, verifycode, config.Verifycodetimeout)
+	err = util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), mailBody, config.SMTPpassword, config.SMTPusername, "注册验证码")
 	if err != nil {
 		log.Println("send mail err is ", err)
 		w.Write(util.ErrJson(util.ErrSendMailError))
@@ -193,7 +225,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 	mail := formData["mail"]
 	password := formData["password"]
 	verifycode := formData["verifycode"]
-	datacount, err := util.QueryCountSql(MysqlDb, "select * from user where mail=?", mail)
+	datacount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail=?", mail)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -203,7 +235,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrUserHasRegister))
 		return
 	} else { //没有该邮箱，需要注册，先校验验证码，然后建立用户数据
-		ret, err := util.QueryCountSql(MysqlDb, "select * from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
+		ret, err := util.QueryCountSql(MysqlDb, "select count(1) from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
 			" verifycode=? and mail=?", config.Verifycodetimeout, verifycode, mail)
 		if err != nil {
 			fmt.Println(err)
