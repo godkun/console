@@ -36,8 +36,9 @@ var (
 		SMTPpassword      string
 		SMTPshowname      string
 		Verifycodetimeout int
+		ServerPort        string
 	}{"127.0.0.1:3306", "root", "123456",
-		"monibuca", "utf8", "", "", "", "", "", 300}
+		"monibuca", "utf8", "", "", "", "", "", 300, ":9999"}
 	ConfigRaw []byte
 )
 
@@ -108,25 +109,21 @@ func init() {
 
 const maxUploadSize = 2 * 1024 * 2014 // 2 MB
 const uploadPath = "./files"
+
 func main() {
 	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
 	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer MysqlDb.Close()
-	showProcessList := util.QueryAndParseJsonRows(MysqlDb, "select * from user")
-	util.Print("多行数据-进程信息:%v\n", util.Data2Json(showProcessList))
 
-	util.Print("server is ", config.Server)
-
-	fmt.Println("start server at 9999")
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	fmt.Println("start server at ", config.ServerPort)
+	http.Handle("/api/", http.StripPrefix("/api/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/api/user/register", register)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", login)
-	http.HandleFunc("/upload", uploadFileHandler())
+	http.HandleFunc("/api/upload", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
-	http.Handle("/files/", http.StripPrefix("/files", fs))
+	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
 	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("start server at 9999")
 		conn, _, _, err := ws.UpgradeHTTP(r, w)
 		if err != nil {
 			// handle error
@@ -146,7 +143,7 @@ func main() {
 			}
 		}()
 	})
-	log.Fatal(http.ListenAndServe(":9999", nil))
+	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
 
 func uploadFileHandler() http.HandlerFunc {
@@ -218,7 +215,6 @@ func renderError(w http.ResponseWriter, message string, statusCode int) {
 	w.WriteHeader(http.StatusBadRequest)
 	w.Write([]byte(message))
 }
-
 
 /**
 登录
