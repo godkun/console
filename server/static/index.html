@@ -41,7 +41,7 @@
         //执行实例
         var uploadInst = upload.render({
             elem: '#test1' //绑定元素
-            , url: '/api/upload' //上传接口
+            , url: '/api/uploadFile' //上传接口
             , done: function (res) {
                 if (res != null && res.code == 0) {
                     layer.msg('上传成功');

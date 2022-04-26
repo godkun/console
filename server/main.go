@@ -117,11 +117,11 @@ func main() {
 	defer MysqlDb.Close()
 
 	fmt.Println("start server at ", config.ServerPort)
-	http.Handle("/api/", http.StripPrefix("/api/", http.FileServer(http.Dir("./static"))))
+	http.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/api/user/register", register)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", login)
-	http.HandleFunc("/api/upload", uploadFileHandler())
+	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
 	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
