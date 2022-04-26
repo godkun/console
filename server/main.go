@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var MysqlDb *sql.DB
@@ -151,14 +152,15 @@ func uploadFileHandler() http.HandlerFunc {
 		CORS(w, r)
 		if err := r.ParseMultipartForm(maxUploadSize); err != nil {
 			fmt.Printf("Could not parse multipart form: %v\n", err)
-			renderError(w, "CANT_PARSE_FORM", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
-
 		// parse and validate file and post parameters
 		file, fileHeader, err := r.FormFile("file")
 		if err != nil {
-			renderError(w, "INVALID_FILE", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 		defer file.Close()
@@ -167,12 +169,14 @@ func uploadFileHandler() http.HandlerFunc {
 		fmt.Printf("File size (bytes): %v\n", fileSize)
 		// validate file size
 		if fileSize > maxUploadSize {
-			renderError(w, "FILE_TOO_BIG", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFileTooBigError))
 			return
 		}
 		fileBytes, err := ioutil.ReadAll(file)
 		if err != nil {
-			renderError(w, "INVALID_FILE", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 
@@ -184,27 +188,42 @@ func uploadFileHandler() http.HandlerFunc {
 		case "application/pdf":
 			break
 		default:
-			renderError(w, "INVALID_FILE_TYPE", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFileTypeError))
 			return
 		}
-		fileName := util.RandNumStr(12)
-		fileEndings, err := mime.ExtensionsByType(detectedFileType)
+		//fileName := util.RandNumStr(12)
+		fileName := "wxqrcode"
+		var suffix string
+		var newPath string
+		suffixArr := strings.Split(fileHeader.Filename, ".")
+		if len(suffixArr) > 0 {
+			suffix = "." + suffixArr[1]
+		} else {
+			fileEndings, _ := mime.ExtensionsByType(detectedFileType)
+			suffix = fileEndings[0]
+		}
 		if err != nil {
-			renderError(w, "CANT_READ_FILE_TYPE", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
-		newPath := filepath.Join(uploadPath, fileName+fileEndings[0])
+
+		newPath = filepath.Join(uploadPath, fileName+suffix)
+
 		fmt.Printf("FileType: %s, File: %s\n", detectedFileType, newPath)
 
 		// write file
 		newFile, err := os.Create(newPath)
 		if err != nil {
-			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 		defer newFile.Close() // idempotent, okay to call twice
 		if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
-			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 		w.Write(util.ErrJson(util.OK))

@@ -9,23 +9,48 @@
     <link rel="stylesheet" href="./static/build/layui.css" media="all">
 </head>
 <body>
-<button type="button" class="layui-btn" id="test1">
-    <i class="layui-icon">&#xe67c;</i>上传图片
-</button>
+<div class="layui-row">
+    <div class="layui-col-xs6">
+        <div class="grid-demo grid-demo-bg1">&nbsp;</div>
+    </div>
+    <div class="layui-col-xs6">
+        <div class="grid-demo">&nbsp;</div>
+    </div>
+</div>
+<div class="layui-row">
+    <div class="layui-col-xs12 layui-col-md8">
+        <div class="grid-demo grid-demo-bg1">&nbsp;</div>
+    </div>
+    <div class="layui-col-xs6 layui-col-md4">
+        <div class="grid-demo">
+            <button type="button" class="layui-btn" id="test1">
+                <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+        </div>
+    </div>
+    <div class="layui-col-xs6 layui-col-md12">
+        <div class="grid-demo grid-demo-bg2">&nbsp;</div>
+    </div>
+</div>
 
 <script src="./static/build/layui.js"></script>
 <script>
-    layui.use('upload', function(){
+    layui.use('upload', function () {
         var upload = layui.upload;
 
         //执行实例
         var uploadInst = upload.render({
             elem: '#test1' //绑定元素
-            ,url: '/api/upload' //上传接口
-            ,done: function(res){
+            , url: '/api/upload' //上传接口
+            , done: function (res) {
+                if (res != null && res.code == 0) {
+                    layer.msg('上传成功');
+                } else {
+                    layer.msg(res.msg);
+                }
                 //上传完毕回调
             }
-            ,error: function(){
+            , error: function () {
                 //请求异常回调
             }
         });
