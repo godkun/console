@@ -16,15 +16,6 @@
           size="large"
           :model="formInline"
           :rules="rules">
-          <n-form-item path="username">
-            <n-input v-model:value="formInline.username" placeholder="请输入用户名">
-              <template #prefix>
-                <n-icon size="18" color="#808695">
-                  <PersonOutline />
-                </n-icon>
-              </template>
-            </n-input>
-          </n-form-item>
           <n-form-item path="email">
             <n-input v-model:value="formInline.email" placeholder="请输入邮箱帐号">
               <template #prefix>
@@ -33,6 +24,16 @@
                 </n-icon>
               </template>
             </n-input>
+          </n-form-item>
+          <n-form-item path="verifycode">
+            <n-input v-model:value="formInline.verifycode" placeholder="请输入邮箱验证码">
+              <template #prefix>
+                <n-icon size="18" color="#808695">
+                  <PersonOutline />
+                </n-icon>
+              </template>
+            </n-input>
+            <n-button type="success" @click="sendCode">发送邮箱验证码</n-button>
           </n-form-item>
           <n-form-item path="password">
             <n-input
@@ -66,11 +67,12 @@
   import { ResultEnum } from '@/enums/httpEnum'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
+  import { getVerifyCode } from '@/api/system/user'
 
   interface FormState {
-    username: string
     password: string
     email: string
+    verifycode: string
   }
 
   const formRef = ref()
@@ -79,15 +81,15 @@
   const REGISTER_NAME = PageEnum.BASE_REGISTER_NAME
 
   const formInline = reactive({
-    username: '',
     password: '',
-    email: ''
+    email: '',
+    verifycode: ''
   })
 
   const rules = {
-    username: { required: true, message: '请输入用户名', trigger: 'blur' },
     email: { required: true, message: '请输入邮箱', trigger: 'blur' },
-    password: { required: true, message: '请输入密码', trigger: 'blur' }
+    password: { required: true, message: '请输入密码', trigger: 'blur' },
+    verifycode: { required: true, message: '请邮箱验证码', trigger: 'blur' }
   }
 
   const userStore = useUserStore()
@@ -99,12 +101,12 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { username, password, email } = formInline
+        const { verifycode, password, email } = formInline
         message.loading('注册中...')
         loading.value = true
 
         const params: FormState = {
-          username,
+          verifycode,
           password,
           email
         }
@@ -128,6 +130,19 @@
         message.error('请填写正确信息')
       }
     })
+  }
+
+  function sendCode() {
+      if (!formInline.email) {
+        message.info('请输入邮箱验证码')
+      } else {
+        const params = {
+          mail: formInline.email
+        }
+        getVerifyCode(params).then(() => {
+          message.info('验证码发送成功，请注意查收')
+        })
+      }
   }
 </script>
 

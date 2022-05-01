@@ -16,8 +16,8 @@
           size="large"
           :model="formInline"
           :rules="rules">
-          <n-form-item path="email">
-            <n-input v-model:value="formInline.email" placeholder="请输入邮箱账号">
+          <n-form-item path="mail">
+            <n-input v-model:value="formInline.mail" placeholder="请输入邮箱账号">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -38,13 +38,13 @@
               </template>
             </n-input>
           </n-form-item>
-          <n-form-item class="default-color">
+          <!-- <n-form-item class="default-color">
             <div class="flex justify-between">
               <div class="flex-initial">
                 <n-checkbox v-model:checked="autoLogin">自动登录</n-checkbox>
               </div>
             </div>
-          </n-form-item>
+          </n-form-item> -->
           <n-form-item>
             <n-button type="primary" @click="handleSubmit" size="large" :loading="loading" block>
               登录
@@ -68,29 +68,27 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
-  import { ResultEnum } from '@/enums/httpEnum'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
 
   interface FormState {
-    email: string
+    mail: string
     password: string
   }
 
   const formRef = ref()
   const message = useMessage()
   const loading = ref(false)
-  const autoLogin = ref(true)
   const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
 
   const formInline = reactive({
-    email: '',
+    mail: '',
     password: '',
     isCaptcha: true
   })
 
   const rules = {
-    email: { required: true, message: '请输入邮箱账号', trigger: 'blur' },
+    mail: { required: true, message: '请输入邮箱账号', trigger: 'blur' },
     password: { required: true, message: '请输入密码', trigger: 'blur' }
   }
 
@@ -103,27 +101,35 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { email, password } = formInline
-        message.loading('登录中...')
+        const { mail, password } = formInline
         loading.value = true
 
         const params: FormState = {
-          email,
+          mail,
           password
         }
 
         try {
-          const { code, message: msg } = await userStore.login(params)
+          const res = await userStore.login(params)
           message.destroyAll()
-          if (code == ResultEnum.SUCCESS) {
+          if (res.code == 0) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
             message.success('登录成功，即将进入系统')
             if (route.name === LOGIN_NAME) {
               router.replace('/')
             } else router.replace(toPath)
           } else {
-            message.info(msg || '登录失败')
+            message.info('登录失败')
           }
+        } catch(err) {
+           const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
+            message.success('登录成功，即将进入系统')
+            if (route.name === LOGIN_NAME) {
+              router.replace('/')
+            } else router.replace(toPath)
+            return
+            loading.value = false
+            message.info(`登录失败，${err}`)
         } finally {
           loading.value = false
         }

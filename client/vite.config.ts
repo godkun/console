@@ -4,7 +4,6 @@ import { resolve } from 'path';
 import { wrapperEnv } from './build/utils';
 import { createVitePlugins } from './build/vite/plugin';
 import { OUTPUT_DIR } from './build/constant';
-import { createProxy } from './build/vite/proxy';
 import pkg from './package.json';
 import { format } from 'date-fns';
 const { dependencies, devDependencies, name, version } = pkg;
@@ -22,7 +21,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd();
   const env = loadEnv(mode, root);
   const viteEnv = wrapperEnv(env);
-  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_GLOB_PROD_MOCK, VITE_PROXY } =
+  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_GLOB_PROD_MOCK } =
     viteEnv;
   const prodMock = VITE_GLOB_PROD_MOCK;
   const isBuild = command === 'build';
@@ -64,10 +63,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           changeOrigin: true
         }
       }
-    },
-    optimizeDeps: {
-      include: [],
-      exclude: ['vue-demi']
     },
     build: {
       target: 'es2015',

@@ -1,9 +1,9 @@
 // 实例管理接口
-import { http } from '@/utils/http/axios'
+import fetch from '../fetch'
 
 // 获取实例列表
 export function getInstanceList(params) {
-  return http.request({
+  return fetch({
     url: '/instance/list',
     method: 'get',
     params
@@ -12,7 +12,7 @@ export function getInstanceList(params) {
 
 // 新增实例
 export function addInstance(params) {
-  return http.request({
+  return fetch({
     url: '/instance/add',
     method: 'post',
     params
@@ -21,7 +21,7 @@ export function addInstance(params) {
 
 // 删除实例
 export function delInstance(params) {
-  return http.request({
+  return fetch({
     url: '/instance/del',
     method: 'get',
     params

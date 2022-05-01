@@ -1,10 +1,10 @@
-import { http } from '@/utils/http/axios'
+import fetch from '../fetch'
 
 /**
  * @description: 根据用户id获取用户菜单
  */
 export function adminMenus() {
-  return http.request({
+  return fetch({
     url: '/menus',
     method: 'GET'
   })
@@ -15,7 +15,7 @@ export function adminMenus() {
  * @param params
  */
 export function getMenuList(params?) {
-  return http.request({
+  return fetch({
     url: '/menu/list',
     method: 'GET',
     params

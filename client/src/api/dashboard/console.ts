@@ -1,8 +1,8 @@
-import { http } from '@/utils/http/axios'
+import fetch from '../fetch'
 
 //获取主控台信息
 export function getConsoleInfo() {
-  return http.request({
+  return fetch({
     url: '/dashboard/console',
     method: 'get'
   })

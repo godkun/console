@@ -2,10 +2,9 @@ import { defineStore } from 'pinia'
 import { createStorage } from '@/utils/Storage'
 import { store } from '@/store'
 import { ACCESS_TOKEN, CURRENT_USER } from '@/store/mutation-types'
-import { ResultEnum } from '@/enums/httpEnum'
 
 const Storage = createStorage({ storage: localStorage })
-import { getUserInfo, login, register } from '@/api/system/user'
+import { login, register } from '@/api/system/user'
 import { storage } from '@/utils/Storage'
 
 export interface IUserState {
@@ -61,14 +60,6 @@ export const useUserStore = defineStore({
     async register(userInfo) {
       try {
         const response = await register(userInfo)
-        const { result, code } = response
-        if (code === ResultEnum.SUCCESS) {
-          const ex = 7 * 24 * 60 * 60 * 1000
-          storage.set(ACCESS_TOKEN, result.token, ex)
-          storage.set(CURRENT_USER, result, ex)
-          this.setToken(result.token)
-          this.setUserInfo(result)
-        }
         return Promise.resolve(response)
       } catch (e) {
         return Promise.reject(e)
@@ -78,14 +69,6 @@ export const useUserStore = defineStore({
     async login(userInfo) {
       try {
         const response = await login(userInfo)
-        const { result, code } = response
-        if (code === ResultEnum.SUCCESS) {
-          const ex = 7 * 24 * 60 * 60 * 1000
-          storage.set(ACCESS_TOKEN, result.token, ex)
-          storage.set(CURRENT_USER, result, ex)
-          this.setToken(result.token)
-          this.setUserInfo(result)
-        }
         return Promise.resolve(response)
       } catch (e) {
         return Promise.reject(e)
@@ -116,22 +99,6 @@ export const useUserStore = defineStore({
         }
         that.setAvatar(result.avatar)
         resolve(res)
-        // getUserInfo()
-        //   .then((res) => {
-        //     const result = res
-        //     if (result.permissions && result.permissions.length) {
-        //       const permissionsList = result.permissions
-        //       that.setPermissions(permissionsList)
-        //       that.setUserInfo(result)
-        //     } else {
-        //       reject(new Error('getInfo: permissionsList must be a non-null array !'))
-        //     }
-        //     that.setAvatar(result.avatar)
-        //     resolve(res)
-        //   })
-        //   .catch((error) => {
-        //     reject(error)
-        //   })
       })
     },
 

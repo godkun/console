@@ -7,6 +7,7 @@ import type {
   PropType as VuePropType,
 } from 'vue';
 
+import * as axios from 'axios'
 declare global {
   const __APP_INFO__: {
     pkg: {
@@ -99,4 +100,10 @@ declare module 'vue' {
   export type JSXComponent<Props = any> =
     | { new (): ComponentPublicInstance<Props> }
     | FunctionalComponent<Props>;
+}
+
+declare module 'axios' {
+  interface AxiosInstance {
+    (config: AxiosRequestConfig): Promise<any>
+  }
 }
