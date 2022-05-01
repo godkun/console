@@ -33,43 +33,41 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       alias: [
         {
           find: /\/#\//,
-          replacement: pathResolve('types') + '/',
+          replacement: pathResolve('types') + '/'
         },
         {
           find: '@',
-          replacement: pathResolve('src') + '/',
-        },
+          replacement: pathResolve('src') + '/'
+        }
       ],
-      dedupe: ['vue'],
+      dedupe: ['vue']
     },
     plugins: createVitePlugins(viteEnv, isBuild, prodMock),
     define: {
-      __APP_INFO__: JSON.stringify(__APP_INFO__),
+      __APP_INFO__: JSON.stringify(__APP_INFO__)
     },
     css: {
       preprocessorOptions: {
         less: {
           modifyVars: {},
           javascriptEnabled: true,
-          additionalData: `@import "src/styles/var.less";`,
-        },
-      },
+          additionalData: `@import "src/styles/var.less";`
+        }
+      }
     },
     server: {
-      host: true,
-      port: VITE_PORT,
-      proxy: createProxy(VITE_PROXY),
-      // proxy: {
-      //     '/api': {
-      //         target: '',
-      //         changeOrigin: true,
-      //         rewrite: (path) => path.replace(/^\/api/, '/api/v1')
-      //     }
-      // }
+      host: 'monibuca.com',
+      port: 4000,
+      proxy: {
+        '/api': {
+          target: 'https://console.monibuca.com',
+          changeOrigin: true
+        }
+      }
     },
     optimizeDeps: {
       include: [],
-      exclude: ['vue-demi'],
+      exclude: ['vue-demi']
     },
     build: {
       target: 'es2015',
@@ -77,11 +75,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       terserOptions: {
         compress: {
           keep_infinity: true,
-          drop_console: VITE_DROP_CONSOLE,
-        },
+          drop_console: VITE_DROP_CONSOLE
+        }
       },
       brotliSize: false,
-      chunkSizeWarningLimit: 2000,
-    },
-  };
+      chunkSizeWarningLimit: 2000
+    }
+  }
 };

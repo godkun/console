@@ -28,7 +28,7 @@ export function getUserInfo() {
 export function register(params) {
   return http.request<BasicResponseModel>(
     {
-      url: '/register',
+      url: '/user/register',
       method: 'POST',
       params
     },
@@ -39,18 +39,35 @@ export function register(params) {
 }
 
 /**
- * @description: 用户登录
+ * @description: 发送验证码
  */
-export function login(params) {
+export function sendCode(params) {
   return http.request<BasicResponseModel>(
     {
-      url: '/login',
+      url: '/user/getVerifyCode',
       method: 'POST',
       params
     },
     {
       isTransformResponse: false
     }
+  )
+}
+
+
+/**
+ * @description: 用户登录
+ */
+export function login(params) {
+  return http.request<BasicResponseModel>(
+    {
+      url: '/user/login',
+      method: 'POST',
+      params
+    }
+    // {
+    //   isTransformResponse: false
+    // }
   )
 }
 

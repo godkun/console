@@ -6,3 +6,10 @@ Monibuca Console
 
 - pnpm i 
 - pnpm dev
+
+
+## 设置本地host
+
+```
+本机ip monibuca.com
+```
