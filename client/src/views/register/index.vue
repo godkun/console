@@ -33,7 +33,7 @@
                 </n-icon>
               </template>
             </n-input>
-            <n-button type="success" @click="sendCode">发送邮箱验证码</n-button>
+            <n-button type="success" @click="sendCode" :disabled="isDisabled">{{ btnText }}</n-button>
           </n-form-item>
           <n-form-item path="password">
             <n-input
@@ -74,6 +74,10 @@
     email: string
     verifycode: string
   }
+
+  const isDisabled = ref(false)
+  const btnText = ref('发送邮箱验证码')
+  const counter = ref(10)
 
   const formRef = ref()
   const message = useMessage()
@@ -141,6 +145,17 @@
         }
         getVerifyCode(params).then(() => {
           message.info('验证码发送成功，请注意查收')
+          const timer = setInterval(() => {
+            isDisabled.value = true
+            btnText.value = `(${counter.value}秒)后重新发送`
+            counter.value--
+            if (counter.value < 0) {
+              clearInterval(timer)
+              btnText.value = `发送邮箱验证码`
+              isDisabled.value = false
+              counter.value = 10
+            }
+          }, 1000)
         })
       }
   }
