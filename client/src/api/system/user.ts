@@ -16,7 +16,7 @@ export function register(data) {
  */
 export function getVerifyCode(data) {
   return fetch({
-    url: '/user/getVerifyCode',
+    url: '/user/getverifycode',
     method: 'POST',
     data
   })

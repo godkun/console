@@ -16,8 +16,8 @@
           size="large"
           :model="formInline"
           :rules="rules">
-          <n-form-item path="email">
-            <n-input v-model:value="formInline.email" placeholder="请输入邮箱帐号">
+          <n-form-item path="mail">
+            <n-input v-model:value="formInline.mail" placeholder="请输入邮箱帐号">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -72,7 +72,7 @@
 
   interface FormState {
     password: string
-    email: string
+    mail: string
     verifycode: string
   }
 
@@ -87,12 +87,12 @@
 
   const formInline = reactive({
     password: '',
-    email: '',
+    mail: '',
     verifycode: ''
   })
 
   const rules = {
-    email: { required: true, message: '请输入邮箱', trigger: 'blur' },
+    mail: { required: true, message: '请输入邮箱', trigger: 'blur' },
     password: { required: true, message: '请输入密码', trigger: 'blur' },
     verifycode: { required: true, message: '请邮箱验证码', trigger: 'blur' }
   }
@@ -106,14 +106,14 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { verifycode, password, email } = formInline
+        const { verifycode, password, mail } = formInline
         message.loading('注册中...')
         loading.value = true
 
         const params: FormState = {
           verifycode,
           password,
-          email
+          mail
         }
 
         try {
@@ -138,11 +138,11 @@
   }
 
   function sendCode() {
-    if (!formInline.email) {
+    if (!formInline.mail) {
       message.info('请输入邮箱验证码')
     } else {
       const params = {
-        mail: formInline.email
+        mail: formInline.mail
       }
       getVerifyCode(params).then(() => {
         message.info('验证码发送成功，请注意查收')
