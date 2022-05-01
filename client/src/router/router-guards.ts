@@ -7,8 +7,12 @@ import { ErrorPageRoute } from '@/router/base'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN
 
-const whitePathList = [LOGIN_PATH] // no redirect whitelist
+const whitePathList = [LOGIN_PATH]
 
+/**
+ * 创建路由守卫
+ * @param router 
+ */
 export function createRouterGuards(router: Router) {
   const userStore = useUserStoreWidthOut()
   const asyncRouteStore = useAsyncRouteStoreWidthOut()

@@ -3,16 +3,19 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { PageEnum } from '@/enums/pageEnum'
 import { createRouterGuards } from './router-guards'
 
+// 不需要手动引入，放在src/router/modules 内的文件会自动被加载
 const modules = import.meta.globEager('./modules/**/*.ts')
 
 const routeModuleList: RouteRecordRaw[] = []
 
+// 遍历路由文件，并将路由push到路由表中
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {}
   const modList = Array.isArray(mod) ? [...mod] : [mod]
   routeModuleList.push(...modList)
 })
 
+// 根据sort值，对路由表进行排序
 function sortRoute(a, b) {
   return (a.meta?.sort || 0) - (b.meta?.sort || 0)
 }
