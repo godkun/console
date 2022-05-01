@@ -8,8 +8,7 @@ import (
 	"gitee.com/console/server/util"
 	"github.com/BurntSushi/toml"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gobwas/ws"
-	"github.com/gobwas/ws/wsutil"
+	"golang.org/x/net/websocket"
 	"io/ioutil"
 	"log"
 	"mime"
@@ -125,27 +124,46 @@ func main() {
 	http.HandleFunc("/upload", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
-	http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("start server at 9999")
-		conn, _, _, err := ws.UpgradeHTTP(r, w)
-		if err != nil {
-			// handle error
-		}
-		go func() {
-			defer conn.Close()
+	//http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
+	//	fmt.Println("start server at 9999")
+	//	conn, _, _, err := ws.UpgradeHTTP(r, w)
+	//	if err != nil {
+	//		// handle error
+	//	}
+	//	go func() {
+	//		defer conn.Close()
+	//
+	//		for {
+	//			msg, op, err := wsutil.ReadClientData(conn)
+	//			fmt.Println("read msg is " + string(msg))
+	//			if err != nil {
+	//			}
+	//			err = wsutil.WriteServerMessage(conn, op, msg)
+	//			if err != nil {
+	//				// handle error
+	//			}
+	//		}
+	//	}()
+	//})
 
-			for {
-				msg, op, err := wsutil.ReadClientData(conn)
-				fmt.Println("read msg is " + string(msg))
-				if err != nil {
-				}
-				err = wsutil.WriteServerMessage(conn, op, msg)
-				if err != nil {
-					// handle error
-				}
+	http.Handle("/test", websocket.Handler(func(w *websocket.Conn) {
+		var error error
+		for {
+			//只支持string类型
+			var reply string
+			if error = websocket.Message.Receive(w, &reply); error != nil {
+				log.Println("websocket出现异常", error)
+				break
 			}
-		}()
-	})
+			fmt.Println("收到客户端消息:" + reply)
+			msg := reply + ", 我是服务端"
+			fmt.Println("发送客户端消息:" + msg)
+			if error = websocket.Message.Send(w, msg); error != nil {
+				log.Println("websocket出现异常", error)
+				break
+			}
+		}
+	}))
 	log.Fatal(http.ListenAndServe(":9999", nil))
 }
 
