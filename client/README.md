@@ -4,25 +4,12 @@ Monibuca Console
 
 ## 使用
 
-统一使用 yarn
+- pnpm i 
+- pnpm dev
 
-- 安装依赖
 
-```bash
-cd naive-ui-admin
-
-yarn install
+## 设置本地host
 
 ```
-
-- 运行
-
-```bash
-yarn dev
-```
-
-- 打包
-
-```bash
-yarn build
+本机ip monibuca.com
 ```

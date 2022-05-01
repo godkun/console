@@ -16,8 +16,8 @@
           size="large"
           :model="formInline"
           :rules="rules">
-          <n-form-item path="username">
-            <n-input v-model:value="formInline.username" placeholder="请输入用户名">
+          <n-form-item path="mail">
+            <n-input v-model:value="formInline.mail" placeholder="请输入邮箱帐号">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -25,14 +25,17 @@
               </template>
             </n-input>
           </n-form-item>
-          <n-form-item path="email">
-            <n-input v-model:value="formInline.email" placeholder="请输入邮箱帐号">
+          <n-form-item path="verifycode">
+            <n-input v-model:value="formInline.verifycode" placeholder="请输入邮箱验证码">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
                 </n-icon>
               </template>
             </n-input>
+            <n-button type="success" @click="sendCode" :disabled="isDisabled">{{
+              btnText
+            }}</n-button>
           </n-form-item>
           <n-form-item path="password">
             <n-input
@@ -63,15 +66,19 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
-  import { ResultEnum } from '@/enums/httpEnum'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
+  import { getVerifyCode } from '@/api/system/user'
 
   interface FormState {
-    username: string
     password: string
-    email: string
+    mail: string
+    verifycode: string
   }
+
+  const isDisabled = ref(false)
+  const btnText = ref('发送邮箱验证码')
+  const counter = ref(10)
 
   const formRef = ref()
   const message = useMessage()
@@ -79,15 +86,15 @@
   const REGISTER_NAME = PageEnum.BASE_REGISTER_NAME
 
   const formInline = reactive({
-    username: '',
     password: '',
-    email: ''
+    mail: '',
+    verifycode: ''
   })
 
   const rules = {
-    username: { required: true, message: '请输入用户名', trigger: 'blur' },
-    email: { required: true, message: '请输入邮箱', trigger: 'blur' },
-    password: { required: true, message: '请输入密码', trigger: 'blur' }
+    mail: { required: true, message: '请输入邮箱', trigger: 'blur' },
+    password: { required: true, message: '请输入密码', trigger: 'blur' },
+    verifycode: { required: true, message: '请邮箱验证码', trigger: 'blur' }
   }
 
   const userStore = useUserStore()
@@ -99,27 +106,27 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { username, password, email } = formInline
+        const { verifycode, password, mail } = formInline
         message.loading('注册中...')
         loading.value = true
 
         const params: FormState = {
-          username,
+          verifycode,
           password,
-          email
+          mail
         }
 
         try {
-          const { code, message: msg } = await userStore.register(params)
+          const res = await userStore.register(params)
           message.destroyAll()
-          if (code == ResultEnum.SUCCESS) {
+          if (res.code == 0) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
             message.success('注册成功，即将进入系统')
             if (route.name === REGISTER_NAME) {
               router.replace('/')
             } else router.replace(toPath)
           } else {
-            message.info(msg || '登录失败')
+            message.info(res.msg || '登录失败')
           }
         } finally {
           loading.value = false
@@ -128,6 +135,30 @@
         message.error('请填写正确信息')
       }
     })
+  }
+
+  function sendCode() {
+    if (!formInline.mail) {
+      message.info('请输入邮箱验证码')
+    } else {
+      const params = {
+        mail: formInline.mail
+      }
+      getVerifyCode(params).then(() => {
+        message.info('验证码发送成功，请注意查收')
+        const timer = setInterval(() => {
+          isDisabled.value = true
+          btnText.value = `(${counter.value}秒)后重新发送`
+          counter.value--
+          if (counter.value < 0) {
+            clearInterval(timer)
+            btnText.value = `发送邮箱验证码`
+            isDisabled.value = false
+            counter.value = 10
+          }
+        }, 1000)
+      })
+    }
   }
 </script>
 

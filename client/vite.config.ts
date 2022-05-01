@@ -1,87 +1,63 @@
-import type { UserConfig, ConfigEnv } from 'vite';
-import { loadEnv } from 'vite';
-import { resolve } from 'path';
-import { wrapperEnv } from './build/utils';
-import { createVitePlugins } from './build/vite/plugin';
-import { OUTPUT_DIR } from './build/constant';
-import { createProxy } from './build/vite/proxy';
-import pkg from './package.json';
-import { format } from 'date-fns';
-const { dependencies, devDependencies, name, version } = pkg;
-
-const __APP_INFO__ = {
-  pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-};
+import type { UserConfig } from 'vite'
+import { resolve } from 'path'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import Components from 'unplugin-vue-components/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 function pathResolve(dir: string) {
-  return resolve(process.cwd(), '.', dir);
+  return resolve(process.cwd(), '.', dir)
 }
 
-export default ({ command, mode }: ConfigEnv): UserConfig => {
-  const root = process.cwd();
-  const env = loadEnv(mode, root);
-  const viteEnv = wrapperEnv(env);
-  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_PORT, VITE_GLOB_PROD_MOCK, VITE_PROXY } =
-    viteEnv;
-  const prodMock = VITE_GLOB_PROD_MOCK;
-  const isBuild = command === 'build';
+export default (): UserConfig => {
   return {
-    base: VITE_PUBLIC_PATH,
-    esbuild: {},
+    base: '/',
     resolve: {
       alias: [
         {
           find: /\/#\//,
-          replacement: pathResolve('types') + '/',
+          replacement: pathResolve('types') + '/'
         },
         {
           find: '@',
-          replacement: pathResolve('src') + '/',
-        },
+          replacement: pathResolve('src') + '/'
+        }
       ],
-      dedupe: ['vue'],
-    },
-    plugins: createVitePlugins(viteEnv, isBuild, prodMock),
-    define: {
-      __APP_INFO__: JSON.stringify(__APP_INFO__),
+      dedupe: ['vue']
     },
     css: {
       preprocessorOptions: {
         less: {
           modifyVars: {},
           javascriptEnabled: true,
-          additionalData: `@import "src/styles/var.less";`,
-        },
-      },
+          additionalData: `@import "src/styles/var.less";`
+        }
+      }
     },
+    plugins: [
+      vue(),
+      vueJsx(),
+      // 按需引入 NaiveUi 且自动创建组件声明
+      Components({
+        dts: true,
+        resolvers: [NaiveUiResolver()]
+      })
+    ],
+    // 需要配置本地host
     server: {
-      host: true,
-      port: VITE_PORT,
-      proxy: createProxy(VITE_PROXY),
-      // proxy: {
-      //     '/api': {
-      //         target: '',
-      //         changeOrigin: true,
-      //         rewrite: (path) => path.replace(/^\/api/, '/api/v1')
-      //     }
-      // }
-    },
-    optimizeDeps: {
-      include: [],
-      exclude: ['vue-demi'],
+      host: 'monibuca.com',
+      port: 4000,
+      proxy: {
+        '/api': {
+          target: 'https://console.monibuca.com',
+          changeOrigin: true
+        }
+      }
     },
     build: {
       target: 'es2015',
-      outDir: OUTPUT_DIR,
-      terserOptions: {
-        compress: {
-          keep_infinity: true,
-          drop_console: VITE_DROP_CONSOLE,
-        },
-      },
-      brotliSize: false,
-      chunkSizeWarningLimit: 2000,
-    },
-  };
-};
+      outDir: 'dist',
+      chunkSizeWarningLimit: 2000
+    }
+  }
+}

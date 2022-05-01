@@ -1,3 +1,4 @@
+// 动画设置
 export const animates = [
   { value: 'zoom-fade', label: '渐变' },
   { value: 'zoom-out', label: '闪现' },

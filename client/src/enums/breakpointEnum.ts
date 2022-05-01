@@ -1,3 +1,5 @@
+// 分辨率尺寸
+
 export enum sizeEnum {
   XS = 'XS',
   SM = 'SM',

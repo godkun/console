@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var MysqlDb *sql.DB
@@ -35,8 +36,9 @@ var (
 		SMTPpassword      string
 		SMTPshowname      string
 		Verifycodetimeout int
+		ServerPort        string
 	}{"127.0.0.1:3306", "root", "123456",
-		"monibuca", "utf8", "", "", "", "", "", 300}
+		"monibuca", "utf8", "", "", "", "", "", 300, ":9999"}
 	ConfigRaw []byte
 )
 
@@ -107,21 +109,18 @@ func init() {
 
 const maxUploadSize = 2 * 1024 * 2014 // 2 MB
 const uploadPath = "./files"
+
 func main() {
 	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
 	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer MysqlDb.Close()
-	showProcessList := util.QueryAndParseJsonRows(MysqlDb, "select * from user")
-	util.Print("多行数据-进程信息:%v\n", util.Data2Json(showProcessList))
 
-	util.Print("server is ", config.Server)
-
-	fmt.Println("start server at 9999")
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	fmt.Println("start server at ", config.ServerPort)
+	http.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/api/user/register", register)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", login)
-	http.HandleFunc("/upload", uploadFileHandler())
+	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
 	//http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
@@ -145,7 +144,7 @@ func main() {
 	//		}
 	//	}()
 	//})
-
+	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
 	http.Handle("/test", websocket.Handler(func(w *websocket.Conn) {
 		var error error
 		for {
@@ -164,7 +163,7 @@ func main() {
 			}
 		}
 	}))
-	log.Fatal(http.ListenAndServe(":9999", nil))
+	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
 
 func uploadFileHandler() http.HandlerFunc {
@@ -172,14 +171,15 @@ func uploadFileHandler() http.HandlerFunc {
 		CORS(w, r)
 		if err := r.ParseMultipartForm(maxUploadSize); err != nil {
 			fmt.Printf("Could not parse multipart form: %v\n", err)
-			renderError(w, "CANT_PARSE_FORM", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
-
 		// parse and validate file and post parameters
 		file, fileHeader, err := r.FormFile("file")
 		if err != nil {
-			renderError(w, "INVALID_FILE", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 		defer file.Close()
@@ -188,12 +188,14 @@ func uploadFileHandler() http.HandlerFunc {
 		fmt.Printf("File size (bytes): %v\n", fileSize)
 		// validate file size
 		if fileSize > maxUploadSize {
-			renderError(w, "FILE_TOO_BIG", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFileTooBigError))
 			return
 		}
 		fileBytes, err := ioutil.ReadAll(file)
 		if err != nil {
-			renderError(w, "INVALID_FILE", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 
@@ -205,27 +207,42 @@ func uploadFileHandler() http.HandlerFunc {
 		case "application/pdf":
 			break
 		default:
-			renderError(w, "INVALID_FILE_TYPE", http.StatusBadRequest)
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write(util.ErrJson(util.ErrUploadFileTypeError))
 			return
 		}
-		fileName := util.RandNumStr(12)
-		fileEndings, err := mime.ExtensionsByType(detectedFileType)
+		//fileName := util.RandNumStr(12)
+		fileName := "wxqrcode"
+		var suffix string
+		var newPath string
+		suffixArr := strings.Split(fileHeader.Filename, ".")
+		if len(suffixArr) > 0 {
+			suffix = "." + suffixArr[1]
+		} else {
+			fileEndings, _ := mime.ExtensionsByType(detectedFileType)
+			suffix = fileEndings[0]
+		}
 		if err != nil {
-			renderError(w, "CANT_READ_FILE_TYPE", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
-		newPath := filepath.Join(uploadPath, fileName+fileEndings[0])
+
+		newPath = filepath.Join(uploadPath, fileName+suffix)
+
 		fmt.Printf("FileType: %s, File: %s\n", detectedFileType, newPath)
 
 		// write file
 		newFile, err := os.Create(newPath)
 		if err != nil {
-			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 		defer newFile.Close() // idempotent, okay to call twice
 		if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
-			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
 		w.Write(util.ErrJson(util.OK))
@@ -236,7 +253,6 @@ func renderError(w http.ResponseWriter, message string, statusCode int) {
 	w.WriteHeader(http.StatusBadRequest)
 	w.Write([]byte(message))
 }
-
 
 /**
 登录

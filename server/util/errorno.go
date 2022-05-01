@@ -14,6 +14,9 @@ var (
 	InternalServerError  = &Errno{Code: 10001, Msg: "内部服务器错误"}
 	ErrRequestParamError = &Errno{Code: 10002, Msg: "请求参数错误"}
 	ErrSendMailError = &Errno{Code: 10003, Msg: "发送邮件错误"}
+	ErrUploadFailedError = &Errno{Code: 10004, Msg: "上传文件失败"}
+	ErrUploadFileTooBigError = &Errno{Code: 10005, Msg: "上传文件过大"}
+	ErrUploadFileTypeError = &Errno{Code: 10006, Msg: "上传文件类型错误"}
 
 	// 数据库错误, 前缀为 201
 	ErrDatabase = &Errno{Code: 20100, Msg: "数据库错误"}
