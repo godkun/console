@@ -1,4 +1,4 @@
-import { resultSuccess } from '../_util';
+import { resultSuccess } from '../_util'
 
 const menuList = () => {
   const result: any[] = [
@@ -18,14 +18,14 @@ const menuList = () => {
           subtitle: 'console',
           openType: 1,
           auth: 'console',
-          path: '/dashboard/console',
+          path: '/dashboard/console'
         }
-      ],
+      ]
     }
-  ];
+  ]
 
-  return result;
-};
+  return result
+}
 
 export default [
   {
@@ -33,10 +33,10 @@ export default [
     timeout: 1000,
     method: 'get',
     response: () => {
-      const list = menuList();
+      const list = menuList()
       return resultSuccess({
-        list,
-      });
-    },
-  },
-];
+        list
+      })
+    }
+  }
+]

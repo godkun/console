@@ -1,33 +1,17 @@
-import type { UserConfig, ConfigEnv } from 'vite';
-import { loadEnv } from 'vite';
-import { resolve } from 'path';
-import { wrapperEnv } from './build/utils';
-import { createVitePlugins } from './build/vite/plugin';
-import { OUTPUT_DIR } from './build/constant';
-import pkg from './package.json';
-import { format } from 'date-fns';
-const { dependencies, devDependencies, name, version } = pkg;
-
-const __APP_INFO__ = {
-  pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-};
+import type { UserConfig } from 'vite'
+import { resolve } from 'path'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import Components from 'unplugin-vue-components/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 function pathResolve(dir: string) {
-  return resolve(process.cwd(), '.', dir);
+  return resolve(process.cwd(), '.', dir)
 }
 
-export default ({ command, mode }: ConfigEnv): UserConfig => {
-  const root = process.cwd();
-  const env = loadEnv(mode, root);
-  const viteEnv = wrapperEnv(env);
-  const { VITE_PUBLIC_PATH, VITE_DROP_CONSOLE, VITE_GLOB_PROD_MOCK } =
-    viteEnv;
-  const prodMock = VITE_GLOB_PROD_MOCK;
-  const isBuild = command === 'build';
+export default (): UserConfig => {
   return {
-    base: VITE_PUBLIC_PATH,
-    esbuild: {},
+    base: '/',
     resolve: {
       alias: [
         {
@@ -41,10 +25,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       ],
       dedupe: ['vue']
     },
-    plugins: createVitePlugins(viteEnv, isBuild, prodMock),
-    define: {
-      __APP_INFO__: JSON.stringify(__APP_INFO__)
-    },
     css: {
       preprocessorOptions: {
         less: {
@@ -54,6 +34,16 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       }
     },
+    plugins: [
+      vue(),
+      vueJsx(),
+      // 按需引入 NaiveUi 且自动创建组件声明
+      Components({
+        dts: true,
+        resolvers: [NaiveUiResolver()]
+      })
+    ],
+    // 需要配置本地host
     server: {
       host: 'monibuca.com',
       port: 4000,
@@ -66,15 +56,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
     build: {
       target: 'es2015',
-      outDir: OUTPUT_DIR,
-      terserOptions: {
-        compress: {
-          keep_infinity: true,
-          drop_console: VITE_DROP_CONSOLE
-        }
-      },
-      brotliSize: false,
+      outDir: 'dist',
       chunkSizeWarningLimit: 2000
     }
   }
-};
+}

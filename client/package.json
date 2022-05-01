@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "build typecheck": "vuedx-typecheck . && vite build",
     "deploy": "gh-pages -d dist",
-    "format": "prettier --write --loglevel warn \"src/**/*.{js,json,ts,tsx,css,less,vue,html}\""
+    "format": "prettier --write --loglevel warn \"./**/*.{js,json,ts,tsx,css,less,vue,html}\""
   },
   "dependencies": {
     "@vicons/antd": "^0.10.0",

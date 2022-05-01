@@ -1,9 +1,9 @@
-import Mock from 'mockjs';
-import { resultSuccess } from '../_util';
+import Mock from 'mockjs'
+import { resultSuccess } from '../_util'
 
-const Random = Mock.Random;
+const Random = Mock.Random
 
-const token = Random.string('upper', 32, 32);
+const token = Random.string('upper', 32, 32)
 
 const adminInfo = {
   userId: '1',
@@ -16,10 +16,10 @@ const adminInfo = {
   permissions: [
     {
       label: '主控台',
-      value: 'dashboard_console',
+      value: 'dashboard_console'
     }
-  ],
-};
+  ]
+}
 
 export default [
   {
@@ -27,15 +27,15 @@ export default [
     timeout: 1000,
     method: 'post',
     response: () => {
-      return resultSuccess({ token });
-    },
+      return resultSuccess({ token })
+    }
   },
   {
     url: '/api/admin_info',
     timeout: 1000,
     method: 'get',
     response: () => {
-      return resultSuccess(adminInfo);
-    },
-  },
-];
+      return resultSuccess(adminInfo)
+    }
+  }
+]

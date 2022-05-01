@@ -38,13 +38,6 @@
               </template>
             </n-input>
           </n-form-item>
-          <!-- <n-form-item class="default-color">
-            <div class="flex justify-between">
-              <div class="flex-initial">
-                <n-checkbox v-model:checked="autoLogin">自动登录</n-checkbox>
-              </div>
-            </div>
-          </n-form-item> -->
           <n-form-item>
             <n-button type="primary" @click="handleSubmit" size="large" :loading="loading" block>
               登录
@@ -121,15 +114,9 @@
           } else {
             message.info('登录失败')
           }
-        } catch(err) {
-           const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
-            message.success('登录成功，即将进入系统')
-            if (route.name === LOGIN_NAME) {
-              router.replace('/')
-            } else router.replace(toPath)
-            return
-            loading.value = false
-            message.info(`登录失败，${err}`)
+        } catch (err) {
+          loading.value = false
+          message.info(`登录失败，${err}`)
         } finally {
           loading.value = false
         }

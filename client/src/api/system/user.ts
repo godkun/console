@@ -22,7 +22,6 @@ export function getVerifyCode(data) {
   })
 }
 
-
 /**
  * @description: 用户登录
  */
