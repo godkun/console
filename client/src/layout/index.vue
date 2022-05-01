@@ -131,13 +131,6 @@
     return collapsed.value ? minMenuWidth : menuWidth
   })
 
-  // const getChangeStyle = computed(() => {
-  //   const { minMenuWidth, menuWidth } = unref(getMenuSetting);
-  //   return {
-  //     'padding-left': collapsed.value ? `${minMenuWidth}px` : `${menuWidth}px`,
-  //   };
-  // });
-
   const getMenuLocation = computed(() => {
     return 'left'
   })

@@ -66,7 +66,6 @@
   import { useRoute, useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
-  import { ResultEnum } from '@/enums/httpEnum'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
   import { getVerifyCode } from '@/api/system/user'
@@ -118,16 +117,16 @@
         }
 
         try {
-          const { code, message: msg } = await userStore.register(params)
+          const res = await userStore.register(params)
           message.destroyAll()
-          if (code == ResultEnum.SUCCESS) {
+          if (res.code == 0) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
             message.success('注册成功，即将进入系统')
             if (route.name === REGISTER_NAME) {
               router.replace('/')
             } else router.replace(toPath)
           } else {
-            message.info(msg || '登录失败')
+            message.info(res.msg || '登录失败')
           }
         } finally {
           loading.value = false

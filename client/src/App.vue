@@ -20,6 +20,7 @@
   const designStore = useDesignSettingStore()
 
   /**
+   * naive-ui 主题配置覆盖
    * @type import('naive-ui').GlobalThemeOverrides
    */
   const getThemeOverrides = computed(() => {

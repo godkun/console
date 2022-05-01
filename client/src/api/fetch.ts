@@ -1,5 +1,7 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 
+// axios 请求简单封装
+
 // 创建一个实例
 const service = axios.create({
   baseURL: '/api',
