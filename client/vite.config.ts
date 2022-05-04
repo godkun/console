@@ -11,7 +11,7 @@ function pathResolve(dir: string) {
 
 export default (): UserConfig => {
   return {
-    base: '/',
+    base: './',
     resolve: {
       alias: [
         {

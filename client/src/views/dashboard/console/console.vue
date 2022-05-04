@@ -1,5 +1,5 @@
 <template>
-  <div class="console">佛祖保佑🙏🏻 大盘数据</div>
+  <div class="console">hello world</div>
 </template>
 <script lang="ts" setup></script>
 
