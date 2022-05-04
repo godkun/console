@@ -120,6 +120,7 @@ func main() {
 	http.HandleFunc("/api/user/register", register)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", login)
+	http.HandleFunc("/api/instance/login", login)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
@@ -262,13 +263,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
 	password := formData["password"]
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from user where mail=? and password=md5(?)", mail, password)
-	if userData != nil {
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? and password=md5(?)", mail, password)
+	if userData != nil && len(userData) > 0 {
 		fmt.Println("user data is %+v", userData)
 		go func() {
 			MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
 		}()
-		w.Write(util.ErrJson(util.OK))
+		resultData := util.OK
+		userdataByte, _ := json.Marshal(userData[0])
+		json.Unmarshal(userdataByte, &resultData.Data)
+		w.Write(util.ErrJson(resultData))
 		return
 	} else {
 		w.Write(util.ErrJson(util.ErrUserNotFound))
