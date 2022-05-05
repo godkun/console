@@ -12,10 +12,10 @@ export enum PageEnum {
   REDIRECT_NAME = 'Redirect',
 
   // 首页
-  BASE_HOME = '/dashboard',
+  BASE_HOME = '/instance',
 
   //首页跳转默认路由
-  BASE_HOME_REDIRECT = '/dashboard/console',
+  BASE_HOME_REDIRECT = '/instance',
 
   // 错误
   ERROR_PAGE_NAME = 'ErrorPage'

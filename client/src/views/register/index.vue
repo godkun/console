@@ -120,6 +120,7 @@
           const res = await userStore.register(params)
           message.destroyAll()
           if (res.code == 0) {
+            localStorage.setItem('mail', mail)
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
             message.success('注册成功，即将进入系统')
             if (route.name === REGISTER_NAME) {

@@ -52,6 +52,7 @@
 
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
@@ -80,6 +81,9 @@
   const formRef: any = ref(null)
   const message = useMessage()
   const actionRef = ref()
+
+  const router = useRouter()
+  const route = useRoute()
 
   const showModal = ref(false)
   const formBtnLoading = ref(false)
@@ -161,6 +165,20 @@
   //   schemas
   // })
 
+  function checkLogin() {
+    const mail = localStorage.getItem('mail')
+    if (!mail) {
+      router
+        .replace({
+          name: 'Login',
+          query: {
+            redirect: route.fullPath
+          }
+        })
+        .finally(() => location.reload())
+    }
+  }
+  checkLogin()
   function addTable() {
     formParams.name = ''
     formParams.url = ''
