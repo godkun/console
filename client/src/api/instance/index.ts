@@ -2,28 +2,37 @@
 import fetch from '../fetch'
 
 // 获取实例列表
-export function getInstanceList(params) {
+export function getInstanceList(data) {
   return fetch({
     url: '/instance/list',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }
 
 // 新增实例
-export function addInstance(params) {
+export function addInstance(data) {
   return fetch({
     url: '/instance/add',
     method: 'post',
-    params
+    data
+  })
+}
+
+// 更新实例
+export function updateInstance(data) {
+  return fetch({
+    url: '/instance/update',
+    method: 'post',
+    data
   })
 }
 
 // 删除实例
-export function delInstance(params) {
+export function delInstance(data) {
   return fetch({
     url: '/instance/del',
-    method: 'get',
-    params
+    method: 'post',
+    data
   })
 }

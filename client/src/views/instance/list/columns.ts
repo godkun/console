@@ -1,27 +1,17 @@
 export const columns = [
   {
+    title: '实例id',
+    key: 'id',
+    width: 100
+  },
+  {
     title: '实例名称',
     key: 'name',
     width: 100
   },
-  // {
-  //   title: '链接',
-  //   key: 'url',
-  //   width: 100
-  // },
   {
-    title: 'cpu',
-    key: 'cpu',
-    width: 100
-  },
-  {
-    title: '内存',
-    key: 'ram',
-    width: 100
-  },
-  {
-    title: '流数量',
-    key: 'streamNum',
+    title: '实例秘钥',
+    key: 'secret',
     width: 100
   },
   {

@@ -54,9 +54,14 @@
   import { h, reactive, ref } from 'vue'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
-  import { getInstanceList } from '@/api/instance'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
+  import {
+    getInstanceList,
+    addInstance,
+    updateInstance,
+    delInstance
+  } from '@/api/instance'
 
   const rules = {
     name: {
@@ -84,9 +89,11 @@
   })
   const modalTitle = ref('')
 
-  const params = ref({
-    pageSize: 5,
-    name: 'xiaoMa'
+  const instance = ref({
+    id: '',
+    name: '',
+    mail: '',
+    secret: ''
   })
 
   const actionColumn = reactive({
@@ -98,16 +105,15 @@
       return h(TableAction as any, {
         style: 'button',
         actions: [
+          // {
+          //   label: '查看',
+          //   onClick: handleEdit.bind(null, record),
+          //   ifShow: () => {
+          //     return true
+          //   }
+          // },
           {
-            label: '查看',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true
-            }
-            // auth: ['basic_list']
-          },
-          {
-            label: '编辑',
+            label: '更新',
             onClick: handleEdit.bind(null, record),
             ifShow: () => {
               return true
@@ -163,7 +169,11 @@
   }
 
   const loadDataTable = async (res) => {
-    return await getInstanceList({ ...formParams, ...params.value, ...res })
+    const mail = localStorage.getItem('mail')
+    const pagesize = 0
+    const pageno = 0
+    const r =  await getInstanceList({ mail, pagesize, pageno })
+    return r.data
   }
 
   function onCheckedRow(rowKeys) {
@@ -179,11 +189,29 @@
     formBtnLoading.value = true
     formRef.value.validate((errors) => {
       if (!errors) {
-        message.success('新建成功')
-        setTimeout(() => {
-          showModal.value = false
-          reloadTable()
-        })
+        if (modalTitle.value == '新建实例') {
+          const name  = formParams.name
+          const mail  = localStorage.getItem('mail')
+          addInstance({name, mail }).then(() => {
+            message.success('新建成功')
+            setTimeout(() => {
+              showModal.value = false
+              reloadTable()
+            })
+          })
+        } else if (modalTitle.value == '更新实例') {
+            const name  = formParams.name
+            const mail  = localStorage.getItem('mail')
+            const id = instance.value.id
+            const secret = instance.value.secret
+            updateInstance({ name, mail, id, secret }).then(() => {
+              message.success('更新成功')
+              setTimeout(() => {
+                showModal.value = false
+                reloadTable()
+              })
+            })
+        }
       } else {
         message.error('请填写完整信息')
       }
@@ -194,9 +222,11 @@
   function handleEdit(record: Recordable) {
     formParams.name = record.name
     formParams.url = record.url
-    modalTitle.value = '编辑实例'
+    modalTitle.value = '更新实例'
     showModal.value = true
-    // router.push({ name: 'basic-info', params: { id: record.id } })
+    instance.value.id = record.id
+    instance.value.name = record.name
+    instance.value.mail = localStorage.getItem('mail') || '' 
   }
 
   function handleDelete(record: Recordable) {
@@ -206,7 +236,17 @@
       positiveText: '确定',
       negativeText: '取消',
       onPositiveClick: () => {
-        console.log(record)
+        delInstance({
+          mail: localStorage.getItem('mail'),
+          id: record.id
+        }).then(() => {
+          message.success('删除成功')
+          setTimeout(() => {
+            showModal.value = false
+            reloadTable()
+          })
+        })
+        // console.log(record)
       },
       onNegativeClick: () => {}
     })
