@@ -564,6 +564,10 @@ func CORS(w http.ResponseWriter, r *http.Request) {
 */
 func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData map[string]interface{}) {
 	CORS(w, r)
+	if r.Method != "POST" {
+		w.WriteHeader(405)
+		return
+	}
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal("parse form error ", err)
