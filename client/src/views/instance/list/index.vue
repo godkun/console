@@ -118,6 +118,7 @@
           // },
           {
             label: '更新',
+            type: 'primary',
             onClick: handleEdit.bind(null, record),
             ifShow: () => {
               return true
@@ -125,6 +126,7 @@
           },
           {
             label: '删除',
+            type: 'error',
             icon: 'ic:outline-delete-outline',
             onClick: handleDelete.bind(null, record),
             // 根据业务控制是否显示 isShow 和 auth 是并且关系

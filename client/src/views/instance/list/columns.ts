@@ -16,7 +16,7 @@ export const columns = [
   },
   {
     title: '创建时间',
-    key: 'date',
+    key: 'createtime',
     width: 100
   }
 ]
