@@ -117,10 +117,10 @@ func main() {
 
 	fmt.Println("start server at ", config.ServerPort)
 	http.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
-	http.HandleFunc("/api/user/register", register)
+	http.HandleFunc("/api/user/register", userRegister)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
-	http.HandleFunc("/api/user/login", login)
-	http.HandleFunc("/api/instance/login", login)
+	http.HandleFunc("/api/user/login", userLogin)
+	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
@@ -165,6 +165,36 @@ func main() {
 		}
 	}))
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+}
+
+/**
+新增实例
+*/
+func instanceAdd(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	mail := formData["mail"]
+	name := formData["name"]
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
+	if userData != nil && len(userData) > 0 {
+		result, err := MysqlDb.Exec("insert into instance (mail,name,createtime) values(?,?,now())", mail, name)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		} else {
+			rowsaffected, _ := result.RowsAffected()
+			if rowsaffected > 0 {
+				w.Write(util.ErrJson(util.OK))
+				return
+			} else {
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+		}
+	} else {
+		w.Write(util.ErrJson(util.ErrUserNotFound))
+	}
 }
 
 func uploadFileHandler() http.HandlerFunc {
@@ -258,7 +288,7 @@ func renderError(w http.ResponseWriter, message string, statusCode int) {
 /**
 登录
 */
-func login(w http.ResponseWriter, r *http.Request) {
+func userLogin(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
@@ -337,7 +367,7 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 /**
 注册
 */
-func register(w http.ResponseWriter, r *http.Request) {
+func userRegister(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
