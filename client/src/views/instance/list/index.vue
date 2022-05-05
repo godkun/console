@@ -175,7 +175,6 @@
             redirect: route.fullPath
           }
         })
-        .finally(() => location.reload())
     }
   }
   checkLogin()
