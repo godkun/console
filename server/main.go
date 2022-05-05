@@ -120,7 +120,10 @@ func main() {
 	http.HandleFunc("/api/user/register", userRegister)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", userLogin)
+	http.HandleFunc("/api/instance/list", instanceList)
 	http.HandleFunc("/api/instance/add", instanceAdd)
+	http.HandleFunc("/api/instance/del", instanceDel)
+	http.HandleFunc("/api/instance/update", instanceUpdate)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
@@ -165,6 +168,110 @@ func main() {
 		}
 	}))
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+}
+
+/**
+删除实例
+*/
+func instanceDel(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	mail := formData["mail"]
+	id := formData["id"]
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
+	if userData != nil && len(userData) > 0 {
+		result, err := MysqlDb.Exec("delete from instance where id=? and mail=? ", id, mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		} else {
+			rowsaffected, _ := result.RowsAffected()
+			if rowsaffected > 0 {
+				w.Write(util.ErrJson(util.OK))
+				return
+			} else {
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+		}
+	} else {
+		w.Write(util.ErrJson(util.ErrUserNotFound))
+	}
+}
+
+/**
+获取实例列表
+*/
+func instanceList(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	mail := formData["mail"]
+	pagesize := int(formData["pagesize"].(float64))
+	pageno := int(formData["pageno"].(float64))
+	if pagesize == 0 { //不分页，获取所有
+		instanceList := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=?  ", mail)
+		var resultDataMap = make(map[string]interface{})
+		resultDataMap["list"] = instanceList
+		resultDataMap["pagesize"] = pagesize
+		resultDataMap["pageno"] = pageno
+		resultDataMap["totalcount"] = len(instanceList)
+		resultDataMapByte, _ := json.Marshal(resultDataMap)
+		resultData := util.OK
+		json.Unmarshal(resultDataMapByte, &resultData.Data)
+		w.Write(util.ErrJson(resultData))
+		return
+	} else {
+		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where mail = ?", mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+		instanceList := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? limit ?,? ", mail, pagesize*(pageno-1), pagesize)
+		var resultDataMap = make(map[string]interface{})
+		resultDataMap["list"] = instanceList
+		resultDataMap["pagesize"] = pagesize
+		resultDataMap["pageno"] = pageno
+		resultDataMap["totalcount"] = totalcount
+		resultDataMapByte, _ := json.Marshal(resultDataMap)
+		resultData := util.OK
+		json.Unmarshal(resultDataMapByte, &resultData.Data)
+		w.Write(util.ErrJson(resultData))
+		return
+	}
+}
+
+/**
+更新实例
+*/
+func instanceUpdate(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	id := formData["id"]
+	mail := formData["mail"]
+	name := formData["name"]
+	secret := formData["secret"]
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
+	if userData != nil && len(userData) > 0 {
+		result, err := MysqlDb.Exec("update instance set name=?,secret=? where id=? and mail=? ", name, secret, id, mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		} else {
+			rowsaffected, _ := result.RowsAffected()
+			if rowsaffected > 0 {
+				w.Write(util.ErrJson(util.OK))
+				return
+			} else {
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+		}
+	} else {
+		w.Write(util.ErrJson(util.ErrUserNotFound))
+	}
 }
 
 /**
