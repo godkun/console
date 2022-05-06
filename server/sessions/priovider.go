@@ -74,8 +74,8 @@ func (fm *FromMemory) GCSession()  {
 		t := (v.(*SessionFromMemory).lastAccessedTime.Unix()) + (v.(*SessionFromMemory).maxAge)
 		if t < time.Now().Unix() {
 			fmt.Println("timeout------->", v)
+			delete(fm.sessions, k)
 		}
-		delete(fm.sessions, k)
 	}
 }
 
