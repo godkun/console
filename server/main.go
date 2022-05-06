@@ -23,7 +23,7 @@ import (
 var MysqlDb *sql.DB
 var MysqlDbErr error
 var mailtxt string
-var globalSession *sessions.Manager
+var sessionM *sessions.SessionManager
 
 var (
 	config = &struct {
@@ -45,8 +45,7 @@ var (
 )
 
 func init() {
-	globalSession, _ = sessions.NewManager("memory", "gosessionid", 3600)
-	go globalSession.SessionGC()
+	sessionM = sessions.NewSessionMange() //建议把这个放在你的公共区域，用的时候只调用一次就行了，初始化
 	var err error
 	addr := flag.String("c", "config.toml", "config file")
 
@@ -178,9 +177,9 @@ func main() {
 登出
 */
 func userLogout(w http.ResponseWriter, r *http.Request) {
-	sess := globalSession.SessionStart(w, r)
-	sess.Delete("mail")
-	globalSession.SessionDestroy(w, r)
+	sessionV := sessionM.BeginSession(w, r)
+	sessionV.Remove("mail")
+	sessionM.Destroy(w, r)
 	w.Write(util.ErrJson(util.OK()))
 	return
 }
@@ -189,8 +188,8 @@ func userLogout(w http.ResponseWriter, r *http.Request) {
 删除实例
 */
 func instanceDel(w http.ResponseWriter, r *http.Request) {
-	sess := globalSession.SessionStart(w, r)
-	mail := sess.Get("mail")
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
 	if mail == nil {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
@@ -224,8 +223,8 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 获取实例列表
 */
 func instanceList(w http.ResponseWriter, r *http.Request) {
-	sess := globalSession.SessionStart(w, r)
-	mail := sess.Get("mail")
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
 	if mail == nil {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
@@ -271,8 +270,8 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 更新实例
 */
 func instanceUpdate(w http.ResponseWriter, r *http.Request) {
-	sess := globalSession.SessionStart(w, r)
-	mail := sess.Get("mail")
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
 	if mail == nil {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
@@ -308,8 +307,8 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 新增实例
 */
 func instanceAdd(w http.ResponseWriter, r *http.Request) {
-	sess := globalSession.SessionStart(w, r)
-	mail := sess.Get("mail")
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
 	if mail == nil {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
@@ -441,8 +440,8 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 		go func() {
 			MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
 		}()
-		sess := globalSession.SessionStart(w, r)
-		sess.Set("mail", mail)
+		sessionV := sessionM.BeginSession(w, r)
+		sessionV.Set("mail", mail)
 		resultData := util.OK()
 		userdataByte, _ := json.Marshal(userData[0])
 		json.Unmarshal(userdataByte, &resultData.Data)
