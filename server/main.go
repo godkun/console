@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"gitee.com/console/server/sessions"
 	"gitee.com/console/server/util"
 	"github.com/BurntSushi/toml"
 	_ "github.com/go-sql-driver/mysql"
@@ -22,6 +23,7 @@ import (
 var MysqlDb *sql.DB
 var MysqlDbErr error
 var mailtxt string
+var sessionM *sessions.SessionManager
 
 var (
 	config = &struct {
@@ -43,7 +45,7 @@ var (
 )
 
 func init() {
-
+	sessionM = sessions.NewSessionMange() //建议把这个放在你的公共区域，用的时候只调用一次就行了，初始化
 	var err error
 	addr := flag.String("c", "config.toml", "config file")
 
@@ -120,6 +122,7 @@ func main() {
 	http.HandleFunc("/api/user/register", userRegister)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", userLogin)
+	http.HandleFunc("/api/user/logout", userLogout)
 	http.HandleFunc("/api/instance/list", instanceList)
 	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/instance/del", instanceDel)
@@ -171,12 +174,28 @@ func main() {
 }
 
 /**
+登出
+*/
+func userLogout(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	sessionV.Remove("mail")
+	sessionM.Destroy(w, r)
+	w.Write(util.ErrJson(util.OK()))
+	return
+}
+
+/**
 删除实例
 */
 func instanceDel(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
-	mail := formData["mail"]
 	id := formData["id"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
 	if userData != nil && len(userData) > 0 {
@@ -188,7 +207,7 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 		} else {
 			rowsaffected, _ := result.RowsAffected()
 			if rowsaffected > 0 {
-				w.Write(util.ErrJson(util.OK))
+				w.Write(util.ErrJson(util.OK()))
 				return
 			} else {
 				w.Write(util.ErrJson(util.ErrDatabase))
@@ -204,9 +223,14 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 获取实例列表
 */
 func instanceList(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
-	mail := formData["mail"]
 	pagesize := int(formData["pagesize"].(float64))
 	pageno := int(formData["pageno"].(float64))
 	if pagesize == 0 { //不分页，获取所有
@@ -217,7 +241,7 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		resultDataMap["pageno"] = pageno
 		resultDataMap["totalcount"] = len(instanceList)
 		resultDataMapByte, _ := json.Marshal(resultDataMap)
-		resultData := util.OK
+		resultData := util.OK()
 		json.Unmarshal(resultDataMapByte, &resultData.Data)
 		w.Write(util.ErrJson(resultData))
 		return
@@ -235,7 +259,7 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		resultDataMap["pageno"] = pageno
 		resultDataMap["totalcount"] = totalcount
 		resultDataMapByte, _ := json.Marshal(resultDataMap)
-		resultData := util.OK
+		resultData := util.OK()
 		json.Unmarshal(resultDataMapByte, &resultData.Data)
 		w.Write(util.ErrJson(resultData))
 		return
@@ -246,10 +270,15 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 更新实例
 */
 func instanceUpdate(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	id := formData["id"]
-	mail := formData["mail"]
 	name := formData["name"]
 	secret := formData["secret"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
@@ -262,7 +291,7 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 		} else {
 			rowsaffected, _ := result.RowsAffected()
 			if rowsaffected > 0 {
-				w.Write(util.ErrJson(util.OK))
+				w.Write(util.ErrJson(util.OK()))
 				return
 			} else {
 				w.Write(util.ErrJson(util.ErrDatabase))
@@ -278,9 +307,14 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 新增实例
 */
 func instanceAdd(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
-	mail := formData["mail"]
 	name := formData["name"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
@@ -292,7 +326,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 		} else {
 			rowsaffected, _ := result.RowsAffected()
 			if rowsaffected > 0 {
-				w.Write(util.ErrJson(util.OK))
+				w.Write(util.ErrJson(util.OK()))
 				return
 			} else {
 				w.Write(util.ErrJson(util.ErrDatabase))
@@ -383,7 +417,7 @@ func uploadFileHandler() http.HandlerFunc {
 			w.Write(util.ErrJson(util.ErrUploadFailedError))
 			return
 		}
-		w.Write(util.ErrJson(util.OK))
+		w.Write(util.ErrJson(util.OK()))
 	})
 }
 
@@ -406,7 +440,9 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 		go func() {
 			MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
 		}()
-		resultData := util.OK
+		sessionV := sessionM.BeginSession(w, r)
+		sessionV.Set("mail", mail)
+		resultData := util.OK()
 		userdataByte, _ := json.Marshal(userData[0])
 		json.Unmarshal(userdataByte, &resultData.Data)
 		w.Write(util.ErrJson(resultData))
@@ -462,7 +498,7 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 	} else {
 		rowsaffected, _ := result.RowsAffected()
 		if rowsaffected > 0 {
-			w.Write(util.ErrJson(util.OK))
+			w.Write(util.ErrJson(util.OK()))
 			return
 		} else {
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -529,7 +565,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 						w.Write(util.ErrJson(util.ErrDatabase))
 						return
 					}
-					w.Write(util.ErrJson(util.OK))
+					w.Write(util.ErrJson(util.OK()))
 					return
 				}
 			} else {

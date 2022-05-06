@@ -8,8 +8,12 @@ type Errno struct {
 	Data interface{} `json:"data"`
 }
 
+func OK() *Errno {
+	return &Errno{Code: 0, Msg: "OK", Data: ""}
+}
+
 var (
-	OK = &Errno{Code: 0, Msg: "OK", Data: ""}
+	//OK = &Errno{Code: 0, Msg: "OK", Data: ""}
 
 	// 系统错误, 前缀为 100
 	InternalServerError      = &Errno{Code: 10001, Msg: "内部服务器错误"}
@@ -31,7 +35,8 @@ var (
 	ErrUserNotFound      = &Errno{Code: 20301, Msg: "用户名或密码错误"}
 	ErrUserHasRegister   = &Errno{Code: 20302, Msg: "用户已注册"}
 	ErrUserRegister      = &Errno{Code: 20303, Msg: "用户注册失败"}
-	ErrUserHasVerifyCode = &Errno{Code: 20305, Msg: "已获取过验证码"}
+	ErrUserHasVerifyCode = &Errno{Code: 20304, Msg: "已获取过验证码"}
+	ErrUserNotLogin = &Errno{Code: 20305, Msg: "用户未登录"}
 )
 
 /**
