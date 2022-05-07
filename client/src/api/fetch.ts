@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+import router from '@/router'
 
 // axios 请求简单封装
 
@@ -24,6 +25,14 @@ service.interceptors.response.use(
   async (response: AxiosResponse) => {
     const res = response.data
     if (res.code !== 0) {
+      window.$message.error(res.msg)
+      if (res.code == 20305) {
+        setTimeout(() => {
+          router.replace({
+            name: 'Login'
+          })
+        }, 500)
+      }
       return Promise.reject(res.msg)
     } else {
       return res

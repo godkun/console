@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router, { setupRouter } from './router'
 import { setupStore } from '@/store'
-import { setupNaive, setupDirectives } from '@/plugins'
+import { setupNaive, setupDirectives, setupGlobalMethods } from '@/plugins'
 import { AppProvider } from '@/components/Application'
 
 async function bootstrap() {
@@ -21,7 +21,7 @@ async function bootstrap() {
   setupDirectives(app)
 
   // 注册全局方法，如：app.config.globalProperties.$message = message
-  //setupGlobalMethods(app);
+  setupGlobalMethods(app);
 
   // 挂载状态管理
   setupStore(app)

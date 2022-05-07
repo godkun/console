@@ -7,6 +7,8 @@ import type {
   PropType as VuePropType
 } from 'vue'
 
+import type { MessageApiInjection } from 'naive-ui/lib/message/src/MessageProvider'
+
 import * as axios from 'axios'
 declare global {
   const __APP_INFO__: {
@@ -93,6 +95,10 @@ declare global {
     interface IntrinsicAttributes {
       [elem: string]: any
     }
+  }
+
+  interface Window {
+     $message: MessageApiInjection
   }
 }
 

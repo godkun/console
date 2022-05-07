@@ -82,9 +82,6 @@
   const message = useMessage()
   const actionRef = ref()
 
-  const router = useRouter()
-  const route = useRoute()
-
   const showModal = ref(false)
   const formBtnLoading = ref(false)
   const formParams = reactive({
@@ -109,13 +106,6 @@
       return h(TableAction as any, {
         style: 'button',
         actions: [
-          // {
-          //   label: '查看',
-          //   onClick: handleEdit.bind(null, record),
-          //   ifShow: () => {
-          //     return true
-          //   }
-          // },
           {
             label: '更新',
             type: 'primary',
@@ -133,27 +123,8 @@
             ifShow: () => {
               return true
             }
-            // 根据权限控制是否显示: 有权限，会显示，支持多个
-            // auth: ['basic_list']
           }
         ],
-        // dropDownActions: [
-        //   {
-        //     label: '启用',
-        //     key: 'enabled',
-        //     // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-        //     ifShow: () => {
-        //       return true
-        //     }
-        //   },
-        //   {
-        //     label: '禁用',
-        //     key: 'disabled',
-        //     ifShow: () => {
-        //       return true
-        //     }
-        //   }
-        // ],
         select: (key) => {
           message.info(`您点击了，${key} 按钮`)
         }
@@ -161,25 +132,6 @@
     }
   })
 
-  // const [register, {}] = useForm({
-  //   gridProps: { cols: '1 s:1 m:2 l:3 xl:4 2xl:4' },
-  //   labelWidth: 80,
-  //   schemas
-  // })
-
-  function checkLogin() {
-    const mail = localStorage.getItem('mail')
-    if (!mail) {
-      router
-        .replace({
-          name: 'Login',
-          query: {
-            redirect: route.fullPath
-          }
-        })
-    }
-  }
-  checkLogin()
   function addTable() {
     formParams.name = ''
     formParams.url = ''
@@ -187,11 +139,10 @@
     showModal.value = true
   }
 
-  const loadDataTable = async (res) => {
-    const mail = localStorage.getItem('mail')
+  const loadDataTable = async () => {
     const pagesize = 0
     const pageno = 0
-    const r =  await getInstanceList({ mail, pagesize, pageno })
+    const r =  await getInstanceList({ pagesize, pageno })
     return r.data
   }
 
@@ -210,8 +161,7 @@
       if (!errors) {
         if (modalTitle.value == '新建实例') {
           const name  = formParams.name
-          const mail  = localStorage.getItem('mail')
-          addInstance({name, mail }).then(() => {
+          addInstance({name }).then(() => {
             message.success('新建成功')
             setTimeout(() => {
               showModal.value = false
@@ -220,10 +170,9 @@
           })
         } else if (modalTitle.value == '更新实例') {
             const name  = formParams.name
-            const mail  = localStorage.getItem('mail')
             const id = instance.value.id
             const secret = instance.value.secret
-            updateInstance({ name, mail, id, secret }).then(() => {
+            updateInstance({ name, id, secret }).then(() => {
               message.success('更新成功')
               setTimeout(() => {
                 showModal.value = false
@@ -256,7 +205,6 @@
       negativeText: '取消',
       onPositiveClick: () => {
         delInstance({
-          mail: localStorage.getItem('mail'),
           id: record.id
         }).then(() => {
           message.success('删除成功')
@@ -265,7 +213,6 @@
             reloadTable()
           })
         })
-        // console.log(record)
       },
       onNegativeClick: () => {}
     })
