@@ -78,7 +78,7 @@
 
   const isDisabled = ref(false)
   const btnText = ref('发送邮箱验证码')
-  const counter = ref(10)
+  const counter = ref(60)
 
   const formRef = ref()
   const message = useMessage()

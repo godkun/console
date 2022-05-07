@@ -111,12 +111,9 @@
             if (route.name === LOGIN_NAME) {
               router.replace('/')
             } else router.replace(toPath)
-          } else {
-            message.info('登录失败')
           }
         } catch (err) {
           loading.value = false
-          message.info(`登录失败，${err}`)
         } finally {
           loading.value = false
         }
