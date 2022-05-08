@@ -107,7 +107,7 @@
           message.destroyAll()
           if (res.code == 0) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
-            message.success('登录成功，即将进入系统')
+            message.success('登录成功')
             if (route.name === LOGIN_NAME) {
               router.replace('/')
             } else router.replace(toPath)
