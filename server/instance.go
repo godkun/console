@@ -16,7 +16,7 @@ type Instance struct {
 const DEFEALT_TIME = 1800
 
 //实例化
-func newInstance(name string, secret string) *Instance {
+func NewInstance(name string, secret string) *Instance {
 	return &Instance{
 		Name:   name,
 		Secret: secret,

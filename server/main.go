@@ -19,6 +19,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 )
 
 var MysqlDb *sql.DB
@@ -131,6 +132,7 @@ func main() {
 	http.HandleFunc("/api/instance/del", instanceDel)
 	http.HandleFunc("/api/instance/update", instanceUpdate)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
+	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
 	//http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
@@ -165,16 +167,67 @@ func main() {
 				break
 			}
 			fmt.Println("收到客户端消息:" + reply)
-
-			msg := reply + ", 我是服务端"
-			fmt.Println("发送客户端消息:" + msg)
-			if error = websocket.Message.Send(w, msg); error != nil {
-				log.Println("websocket出现异常", error)
-				break
+			replyJson := make(map[string]string)
+			json.Unmarshal([]byte(reply), &replyJson)
+			command := replyJson["command"]
+			switch command {
+			case "init":
+				secret := replyJson["secret"]
+				totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
+				if err != nil {
+					fmt.Println(err)
+					if error = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); error != nil {
+						log.Println("websocket出现异常", error)
+					}
+					break
+				}
+				if totalcount > 0 {
+					instance := NewInstance("", secret)
+					instance.lastAccessedTime = time.Now()
+					instance.W = w
+					instanceMap.Store(secret, instance)
+					if error = websocket.Message.Send(w, util.ErrJson(util.OK())); error != nil {
+						log.Println("websocket出现异常", error)
+					}
+					break
+				} else {
+					if error = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); error != nil {
+						log.Println("websocket出现异常", error)
+					}
+					break
+				}
 			}
+			//msg := reply + ", 我是服务端"
+			//fmt.Println("发送客户端消息:" + msg)
+			//if error = websocket.Message.Send(w, msg); error != nil {
+			//	log.Println("websocket出现异常", error)
+			//	break
+			//}
 		}
 	}))
+	http.HandleFunc("/api/instance/sendCommand", sendCommand)
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+}
+
+func sendCommand(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	secret := formData["secret"]
+	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ? and mail= ?", secret, mail)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+	}
+	if totalcount > 0 {
+		if v, ok := instanceMap.Load(secret); ok {
+			instance := v.(Instance)
+			if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
+				log.Println("websocket出现异常", error)
+			}
+		}
+	}
 }
 
 /**
