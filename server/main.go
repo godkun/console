@@ -132,7 +132,6 @@ func main() {
 	http.HandleFunc("/api/instance/del", instanceDel)
 	http.HandleFunc("/api/instance/update", instanceUpdate)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
-	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
 	//http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
