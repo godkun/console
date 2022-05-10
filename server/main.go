@@ -18,12 +18,15 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 var MysqlDb *sql.DB
 var MysqlDbErr error
 var mailtxt string
 var sessionM *sessions.SessionManager
+var instanceMap sync.Map
+var commandChannel = make(chan string, 10)
 
 var (
 	config = &struct {

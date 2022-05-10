@@ -32,7 +32,7 @@ func newSessionFromMemory() *SessionFromMemory {
 
 
 func (si *SessionFromMemory) Set(key, value interface{})  {
-	si.lock.Lock();
+	si.lock.Lock()
 	defer si.lock.Unlock()
 	si.data[key] = value
 }
