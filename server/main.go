@@ -195,7 +195,10 @@ func main() {
 					}
 					break
 				}
+			default:
+				break
 			}
+
 			//msg := reply + ", 我是服务端"
 			//fmt.Println("发送客户端消息:" + msg)
 			//if error = websocket.Message.Send(w, msg); error != nil {
