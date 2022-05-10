@@ -224,7 +224,9 @@ func sendCommand(w http.ResponseWriter, r *http.Request) {
 	}
 	if totalcount > 0 {
 		if v, ok := instanceMap.Load(secret); ok {
-			instance := v.(Instance)
+			instance := v.(*Instance)
+			instance.lastAccessedTime = time.Now()
+			instanceMap.Store(secret, &instance)
 			if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
 				log.Println("websocket出现异常", error)
 			}
