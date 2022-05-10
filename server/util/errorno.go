@@ -37,6 +37,7 @@ var (
 	ErrUserRegister      = &Errno{Code: 20303, Msg: "用户注册失败"}
 	ErrUserHasVerifyCode = &Errno{Code: 20304, Msg: "已获取过验证码"}
 	ErrUserNotLogin = &Errno{Code: 20305, Msg: "用户未登录"}
+	ErrUserNotRegister      = &Errno{Code: 20306, Msg: "用户未注册"}
 )
 
 /**

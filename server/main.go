@@ -162,6 +162,7 @@ func main() {
 				break
 			}
 			fmt.Println("收到客户端消息:" + reply)
+
 			msg := reply + ", 我是服务端"
 			fmt.Println("发送客户端消息:" + msg)
 			if error = websocket.Message.Send(w, msg); error != nil {
@@ -434,21 +435,27 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("formData is %+v", formData)
 	mail := formData["mail"]
 	password := formData["password"]
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? and password=md5(?)", mail, password)
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		fmt.Println("user data is %+v", userData)
-		go func() {
-			MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
-		}()
-		sessionV := sessionM.BeginSession(w, r)
-		sessionV.Set("mail", mail)
-		resultData := util.OK()
-		userdataByte, _ := json.Marshal(userData[0])
-		json.Unmarshal(userdataByte, &resultData.Data)
-		w.Write(util.ErrJson(resultData))
-		return
+		userData = util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? and password=md5(?)", mail, password)
+		if userData != nil && len(userData) > 0 {
+			fmt.Println("user data is %+v", userData)
+			go func() {
+				MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
+			}()
+			sessionV := sessionM.BeginSession(w, r)
+			sessionV.Set("mail", mail)
+			resultData := util.OK()
+			userdataByte, _ := json.Marshal(userData[0])
+			json.Unmarshal(userdataByte, &resultData.Data)
+			w.Write(util.ErrJson(resultData))
+			return
+		} else {
+			w.Write(util.ErrJson(util.ErrUserNotFound))
+			return
+		}
 	} else {
-		w.Write(util.ErrJson(util.ErrUserNotFound))
+		w.Write(util.ErrJson(util.ErrUserNotRegister))
 		return
 	}
 }
