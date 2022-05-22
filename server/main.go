@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -393,7 +394,7 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("formData is %+v", formData)
 	id := formData["id"]
 	name := formData["name"]
-	updatetimestamp := string(time.Now().UnixNano())
+	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
@@ -440,7 +441,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	name := formData["name"]
-	updatetimestamp := string(time.Now().UnixNano())
+	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
