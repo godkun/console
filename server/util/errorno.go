@@ -38,6 +38,8 @@ var (
 	ErrUserHasVerifyCode = &Errno{Code: 20304, Msg: "已获取过验证码"}
 	ErrUserNotLogin = &Errno{Code: 20305, Msg: "用户未登录"}
 	ErrUserNotRegister      = &Errno{Code: 20306, Msg: "用户未注册"}
+	ErrInstanceNameExist      = &Errno{Code: 20307, Msg: "实例名已存在"}
+	ErrOldPasswordWrong      = &Errno{Code: 20308, Msg: "旧密码错误"}
 )
 
 /**

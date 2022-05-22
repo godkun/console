@@ -43,8 +43,9 @@ var (
 		SMTPshowname      string
 		Verifycodetimeout int
 		ServerPort        string
+		Secret            string
 	}{"127.0.0.1:3306", "root", "123456",
-		"monibuca", "utf8", "", "", "", "", "", 300, ":9999"}
+		"monibuca", "utf8", "", "", "", "", "", 300, ":9999", "Monibuca#!4"}
 	ConfigRaw []byte
 )
 
@@ -127,6 +128,7 @@ func main() {
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", userLogin)
 	http.HandleFunc("/api/user/logout", userLogout)
+	http.HandleFunc("/api/user/resetpassword", resetPassword)
 	http.HandleFunc("/api/instance/list", instanceList)
 	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/instance/del", instanceDel)
@@ -209,6 +211,55 @@ func main() {
 	}))
 	http.HandleFunc("/api/instance/sendCommand", sendCommand)
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+
+}
+
+/**
+重置密码
+*/
+func resetPassword(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	password := formData["password"]
+	oldpassword := formData["oldpassword"]
+	if oldpassword == nil || len(oldpassword.(string)) == 0 || password == nil || len(password.(string)) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
+	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail=? and password=md5(?)", mail, oldpassword)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	if totalcount == 1 {
+		result, err := MysqlDb.Exec("update user set password=md5(?)  where mail=? ", password, mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		} else {
+			rowsaffected, _ := result.RowsAffected()
+			if rowsaffected > 0 {
+				w.Write(util.ErrJson(util.OK()))
+				return
+			} else {
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+		}
+	} else {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrOldPasswordWrong))
+		return
+	}
+
 }
 
 func sendCommand(w http.ResponseWriter, r *http.Request) {
@@ -221,6 +272,7 @@ func sendCommand(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
+		return
 	}
 	if totalcount > 0 {
 		if v, ok := instanceMap.Load(secret); ok {
@@ -341,10 +393,21 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("formData is %+v", formData)
 	id := formData["id"]
 	name := formData["name"]
-	secret := formData["secret"]
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
+	updatetimestamp := string(time.Now().UnixNano())
+	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		result, err := MysqlDb.Exec("update instance set name=?,secret=? where id=? and mail=? ", name, secret, id, mail)
+		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where name = ? and id != ? and mail=?", name, id, mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+		if totalcount > 0 {
+			w.Write(util.ErrJson(util.ErrInstanceNameExist))
+			return
+		}
+		result, err := MysqlDb.Exec("update instance set name=?,secret=md5(?),updatetimestamp=? where id=? and mail=? ", name, secret, updatetimestamp, id, mail)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -377,9 +440,21 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	name := formData["name"]
+	updatetimestamp := string(time.Now().UnixNano())
+	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		result, err := MysqlDb.Exec("insert into instance (mail,name,createtime) values(?,?,now())", mail, name)
+		instanceCount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where mail = ? and name = ?", mail, name)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+		if instanceCount > 0 {
+			w.Write(util.ErrJson(util.ErrInstanceNameExist))
+			return
+		}
+		result, err := MysqlDb.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,now(),md5(?),?)", mail, name, secret, updatetimestamp)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
