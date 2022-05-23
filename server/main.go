@@ -129,7 +129,7 @@ func main() {
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
 	http.HandleFunc("/api/user/login", userLogin)
 	http.HandleFunc("/api/user/logout", userLogout)
-	http.HandleFunc("/api/user/resetpassword", resetPassword)
+	http.HandleFunc("/api/user/changepassword", changePassword)
 	http.HandleFunc("/api/instance/list", instanceList)
 	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/instance/del", instanceDel)
@@ -216,9 +216,9 @@ func main() {
 }
 
 /**
-重置密码
+修改密码
 */
-func resetPassword(w http.ResponseWriter, r *http.Request) {
+func changePassword(w http.ResponseWriter, r *http.Request) {
 	sessionV := sessionM.BeginSession(w, r)
 	mail := sessionV.Get("mail")
 	if mail == nil {
