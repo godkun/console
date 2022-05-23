@@ -19,7 +19,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -28,7 +27,7 @@ var MysqlDbErr error
 var mailtxt string
 var resetpwdtxt string
 var sessionM *sessions.SessionManager
-var instanceMap sync.Map
+var instances = NewConcurInstances()
 var commandChannel = make(chan string, 10)
 
 var (
@@ -199,7 +198,7 @@ func main() {
 					instance := NewInstance("", secret)
 					instance.lastAccessedTime = time.Now()
 					instance.W = w
-					instanceMap.Store(secret, instance)
+					instances.Set(secret, instance)
 					if error = websocket.Message.Send(w, util.ErrJson(util.OK())); error != nil {
 						log.Println("websocket出现异常", error)
 					}
@@ -223,8 +222,31 @@ func main() {
 		}
 	}))
 	http.HandleFunc("/api/instance/sendCommand", sendCommand)
+	go func() {
+		clearTimeOutInstance()
+	}()
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 
+}
+
+/**
+清除超时实例
+*/
+func clearTimeOutInstance() {
+	if len(instances.Instances) == 0 {
+		return
+	}
+	for k, v := range instances.Instances {
+		t := v.lastAccessedTime.Unix() + v.maxAge
+		if t < time.Now().Unix() {
+			fmt.Println("timeout------->", v)
+			instances.Delete(k)
+		}
+	}
+	age2 := int(60 * time.Second)
+	time.AfterFunc(time.Duration(age2), func() {
+		clearTimeOutInstance()
+	})
 }
 
 /**
@@ -313,40 +335,31 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer clearTransaction(tx, w)
-	result, err := MysqlDb.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
+	_, err = tx.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
 		return
 	} else {
-		rowsaffected, _ := result.RowsAffected()
-		if rowsaffected > 0 {
-			result, err = tx.Exec("update user set password=md5(?) where mail=?", newpassword, mail)
-			if err != nil {
-				w.Write(util.ErrJson(util.ErrDatabase))
-				return
-			}
-			rowsaffected, _ = result.RowsAffected()
-			if rowsaffected > 0 {
-				if err := tx.Commit(); err != nil {
-					log.Fatalln(err)
-					w.Write(util.ErrJson(util.ErrDatabase))
-					return
-				}
-				resetPwdUrl := config.HostName + "/api/user/resetpwd?code=" + code
-				mailBody := fmt.Sprintf(resetpwdtxt, resetPwdUrl, newpassword)
-				err = util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), mailBody, config.SMTPpassword, config.SMTPusername, "重置密码")
-				if err != nil {
-					w.Write(util.ErrJson(util.ErrSendMailError))
-					return
-				}
-				w.Write(util.ErrJson(util.OK()))
-				return
-			}
-		} else {
+		_, err = tx.Exec("update user set password=md5(?) where mail=?", newpassword, mail)
+		if err != nil {
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		}
+		if err := tx.Commit(); err != nil {
+			log.Fatalln(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+		resetPwdUrl := config.HostName + "/api/user/resetpwd?code=" + code
+		mailBody := fmt.Sprintf(resetpwdtxt, resetPwdUrl, newpassword)
+		err = util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), mailBody, config.SMTPpassword, config.SMTPusername, "重置密码")
+		if err != nil {
+			w.Write(util.ErrJson(util.ErrSendMailError))
+			return
+		}
+		w.Write(util.ErrJson(util.OK()))
+		return
 	}
 }
 
@@ -411,13 +424,11 @@ func sendCommand(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if totalcount > 0 {
-		if v, ok := instanceMap.Load(secret); ok {
-			instance := v.(*Instance)
-			instance.lastAccessedTime = time.Now()
-			instanceMap.Store(secret, &instance)
-			if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
-				log.Println("websocket出现异常", error)
-			}
+		instance := instances.Get(secret.(string))
+		instance.lastAccessedTime = time.Now()
+		instances.Set(secret.(string), instance)
+		if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
+			log.Println("websocket出现异常", error)
 		}
 	}
 }
@@ -823,37 +834,28 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer clearTransaction(tx, w)
-		result, err := tx.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
+		_, err = tx.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		} else {
-			rowsaffected, err := result.RowsAffected()
 			if err != nil {
 				log.Fatalln(err)
 				return
 			}
-			if rowsaffected > 0 {
-				result, err = tx.Exec("delete from verifycode where mail=?", mail)
-				if err != nil {
-					w.Write(util.ErrJson(util.ErrDatabase))
-					return
-				}
-				rowsaffected, _ = result.RowsAffected()
-				if rowsaffected > 0 {
-					if err := tx.Commit(); err != nil {
-						log.Fatalln(err)
-						w.Write(util.ErrJson(util.ErrDatabase))
-						return
-					}
-					w.Write(util.ErrJson(util.OK()))
-					return
-				}
-			} else {
+			_, err = tx.Exec("delete from verifycode where mail=?", mail)
+			if err != nil {
 				w.Write(util.ErrJson(util.ErrDatabase))
 				return
 			}
+			if err := tx.Commit(); err != nil {
+				log.Fatalln(err)
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+			w.Write(util.ErrJson(util.OK()))
+			return
 		}
 	}
 }
