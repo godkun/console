@@ -257,7 +257,6 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 			_, err := result.RowsAffected()
 			if err != nil {
 				log.Fatalln(err)
-				tx.Rollback()
 				return
 			}
 			result, err = tx.Exec("delete from resetpwd where mail=?", mail)
@@ -267,12 +266,10 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 			}
 			if err != nil {
 				log.Fatalln(err)
-				tx.Rollback()
 				return
 			}
 			if err := tx.Commit(); err != nil {
 				log.Fatalln(err)
-				tx.Rollback()
 				w.Write([]byte("数据库错误2"))
 				return
 			}
@@ -835,7 +832,6 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 			rowsaffected, err := result.RowsAffected()
 			if err != nil {
 				log.Fatalln(err)
-				tx.Rollback()
 				return
 			}
 			if rowsaffected > 0 {
@@ -848,7 +844,6 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 				if rowsaffected > 0 {
 					if err := tx.Commit(); err != nil {
 						log.Fatalln(err)
-						tx.Rollback()
 						w.Write(util.ErrJson(util.ErrDatabase))
 						return
 					}
