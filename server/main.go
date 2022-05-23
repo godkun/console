@@ -254,28 +254,30 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		} else {
-			rowsaffected, _ := result.RowsAffected()
-			fmt.Printf("rowsaffected is %+v", rowsaffected)
-			if rowsaffected > 0 {
-				result, err = tx.Exec("delete from resetpwd where mail=?", mail)
-				if err != nil {
-					w.Write([]byte("数据库错误1"))
-					return
-				}
-				rowsaffected, _ = result.RowsAffected()
-				if rowsaffected > 0 {
-					if err := tx.Commit(); err != nil {
-						log.Fatalln(err)
-						w.Write([]byte("数据库错误2"))
-						return
-					}
-					w.Write([]byte("密码重置成功"))
-					return
-				}
-			} else {
-				w.Write([]byte("数据库错误3"))
+			_, err := result.RowsAffected()
+			if err != nil {
+				log.Fatalln(err)
+				tx.Rollback()
 				return
 			}
+			result, err = tx.Exec("delete from resetpwd where mail=?", mail)
+			if err != nil {
+				w.Write([]byte("数据库错误1"))
+				return
+			}
+			if err != nil {
+				log.Fatalln(err)
+				tx.Rollback()
+				return
+			}
+			if err := tx.Commit(); err != nil {
+				log.Fatalln(err)
+				tx.Rollback()
+				w.Write([]byte("数据库错误2"))
+				return
+			}
+			w.Write([]byte("密码重置成功"))
+			return
 		}
 	} else {
 		w.Write([]byte("密码重置链接已失效"))
@@ -830,7 +832,12 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		} else {
-			rowsaffected, _ := result.RowsAffected()
+			rowsaffected, err := result.RowsAffected()
+			if err != nil {
+				log.Fatalln(err)
+				tx.Rollback()
+				return
+			}
 			if rowsaffected > 0 {
 				result, err = tx.Exec("delete from verifycode where mail=?", mail)
 				if err != nil {
@@ -841,6 +848,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 				if rowsaffected > 0 {
 					if err := tx.Commit(); err != nil {
 						log.Fatalln(err)
+						tx.Rollback()
 						w.Write(util.ErrJson(util.ErrDatabase))
 						return
 					}
