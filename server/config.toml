@@ -3,6 +3,7 @@
 Verifycodetimeout = 5
 ServerPort = ":9999"
 Secret = "Monibuca#!4"
+HostName = "http://localhost:9999"
 [Mysql]
 Server = "sh-cynosdbmysql-grp-kxt43lv6.sql.tencentcdb.com:28520"
 Username = "root"

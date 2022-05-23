@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -25,4 +27,11 @@ func RandStr(n int, letter string) string {
 */
 func RandNumStr(n int) string {
 	return RandStr(n, numLetterString)
+}
+
+func MD5(v string)string{
+	d := []byte(v)
+	m := md5.New()
+	m.Write(d)
+	return hex.EncodeToString(m.Sum(nil))
 }

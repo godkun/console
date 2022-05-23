@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-func QueryAndParse(Db *sql.DB, queryStr string) map[string]string {
-	rows, err := Db.Query(queryStr)
+func QueryAndParse(Db *sql.DB, queryStr string, args ...any) map[string]string {
+	rows, err := Db.Query(queryStr, args...)
 	defer rows.Close()
 
 	if err != nil {

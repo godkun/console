@@ -26,6 +26,7 @@ import (
 var MysqlDb *sql.DB
 var MysqlDbErr error
 var mailtxt string
+var resetpwdtxt string
 var sessionM *sessions.SessionManager
 var instanceMap sync.Map
 var commandChannel = make(chan string, 10)
@@ -45,8 +46,10 @@ var (
 		Verifycodetimeout int
 		ServerPort        string
 		Secret            string
+		HostName          string
 	}{"127.0.0.1:3306", "root", "123456",
-		"monibuca", "utf8", "", "", "", "", "", 300, ":9999", "Monibuca#!4"}
+		"monibuca", "utf8", "", "", "", "",
+		"", 300, ":9999", "Monibuca#!4", "http://localhost/"}
 	ConfigRaw []byte
 )
 
@@ -56,11 +59,18 @@ func init() {
 	addr := flag.String("c", "config.toml", "config file")
 
 	var mailtxtbyte []byte
-	if mailtxtbyte, err = ioutil.ReadFile("mailtxt"); err != nil {
+	if mailtxtbyte, err = ioutil.ReadFile("registermailtxt"); err != nil {
 		util.Print("read config file error:", err)
 		return
 	}
 	mailtxt = string(mailtxtbyte)
+
+	var resetpwdtxtbyte []byte
+	if resetpwdtxtbyte, err = ioutil.ReadFile("resetpwdtxt"); err != nil {
+		util.Print("read config file error:", err)
+		return
+	}
+	resetpwdtxt = string(resetpwdtxtbyte)
 
 	flag.Parse()
 	if err := util.CreateShutdownScript(); err != nil {
@@ -130,6 +140,8 @@ func main() {
 	http.HandleFunc("/api/user/login", userLogin)
 	http.HandleFunc("/api/user/logout", userLogout)
 	http.HandleFunc("/api/user/changepassword", changePassword)
+	http.HandleFunc("/api/user/sendresetpwdmail", sendResetPwdMail)
+	http.HandleFunc("/api/user/resetpwd", resetPwd)
 	http.HandleFunc("/api/instance/list", instanceList)
 	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/instance/del", instanceDel)
@@ -213,6 +225,130 @@ func main() {
 	http.HandleFunc("/api/instance/sendCommand", sendCommand)
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 
+}
+
+/**
+重置密码链接
+*/
+func resetPwd(w http.ResponseWriter, r *http.Request) {
+	code := r.URL.Query().Get("code")
+	if code == "" {
+		w.Write([]byte("参数错误"))
+		return
+	}
+	pwddata := util.QueryAndParseJsonRows(MysqlDb, "select * from resetpwd where code=? ", code)
+	if pwddata != nil && len(pwddata) > 0 {
+		pwddata := pwddata[0]
+		newpassword := pwddata["password"]
+		mail := pwddata["mail"]
+		tx, err := MysqlDb.Begin()
+		if err != nil {
+			log.Fatalln(err)
+			w.Write([]byte("数据库错误"))
+			return
+		}
+		defer clearTransaction(tx, w)
+		result, err := tx.Exec("update user set password=? where mail=?", newpassword, mail)
+		if err != nil {
+			fmt.Println(err)
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		} else {
+			rowsaffected, _ := result.RowsAffected()
+			fmt.Printf("rowsaffected is %+v", rowsaffected)
+			if rowsaffected > 0 {
+				result, err = tx.Exec("delete from resetpwd where mail=?", mail)
+				if err != nil {
+					w.Write([]byte("数据库错误1"))
+					return
+				}
+				rowsaffected, _ = result.RowsAffected()
+				if rowsaffected > 0 {
+					if err := tx.Commit(); err != nil {
+						log.Fatalln(err)
+						w.Write([]byte("数据库错误2"))
+						return
+					}
+					w.Write([]byte("密码重置成功"))
+					return
+				}
+			} else {
+				w.Write([]byte("数据库错误3"))
+				return
+			}
+		}
+	} else {
+		w.Write([]byte("密码重置链接已失效"))
+		return
+	}
+}
+
+/**
+重置密码，忘记密码
+*/
+func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	mail := formData["mail"]
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
+	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail=?", mail)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	if totalcount != 1 {
+		w.Write(util.ErrJson(util.ErrUserNotRegister))
+		return
+	}
+	newpassword := util.RandNumStr(6)
+	code := util.MD5(config.Secret + mail.(string) + newpassword)
+
+	tx, err := MysqlDb.Begin()
+	if err != nil {
+		log.Fatalln(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	defer clearTransaction(tx, w)
+	result, err := MysqlDb.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	} else {
+		rowsaffected, _ := result.RowsAffected()
+		if rowsaffected > 0 {
+			result, err = tx.Exec("update user set password=md5(?) where mail=?", newpassword, mail)
+			if err != nil {
+				w.Write(util.ErrJson(util.ErrDatabase))
+				return
+			}
+			rowsaffected, _ = result.RowsAffected()
+			if rowsaffected > 0 {
+				if err := tx.Commit(); err != nil {
+					log.Fatalln(err)
+					w.Write(util.ErrJson(util.ErrDatabase))
+					return
+				}
+				resetPwdUrl := config.HostName + "/api/user/resetpwd?code=" + code
+				mailBody := fmt.Sprintf(resetpwdtxt, resetPwdUrl, newpassword)
+				err = util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), mailBody, config.SMTPpassword, config.SMTPusername, "重置密码")
+				if err != nil {
+					w.Write(util.ErrJson(util.ErrSendMailError))
+					return
+				}
+				w.Write(util.ErrJson(util.OK()))
+				return
+			}
+		} else {
+			w.Write(util.ErrJson(util.ErrDatabase))
+			return
+		}
+	}
 }
 
 /**
