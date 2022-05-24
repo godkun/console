@@ -170,7 +170,7 @@ func main() {
 	//	}()
 	//})
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
-	http.Handle("/test", websocket.Handler(func(w *websocket.Conn) {
+	http.Handle("/ws/init", websocket.Handler(func(w *websocket.Conn) {
 		var error error
 		for {
 			//只支持string类型
@@ -182,37 +182,30 @@ func main() {
 			fmt.Println("收到客户端消息:" + reply)
 			replyJson := make(map[string]string)
 			json.Unmarshal([]byte(reply), &replyJson)
-			command := replyJson["command"]
-			switch command {
-			case "init":
-				secret := replyJson["secret"]
-				totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
-				if err != nil {
-					fmt.Println(err)
-					if error = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); error != nil {
-						log.Println("websocket出现异常", error)
-					}
-					break
+			secret := replyJson["secret"]
+			totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
+			if err != nil {
+				fmt.Println(err)
+				if error = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); error != nil {
+					log.Println("websocket出现异常", error)
 				}
-				if totalcount > 0 {
-					instance := NewInstance("", secret)
-					instance.lastAccessedTime = time.Now()
-					instance.W = w
-					instances.Set(secret, instance)
-					if error = websocket.Message.Send(w, util.ErrJson(util.OK())); error != nil {
-						log.Println("websocket出现异常", error)
-					}
-					break
-				} else {
-					if error = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); error != nil {
-						log.Println("websocket出现异常", error)
-					}
-					break
-				}
-			default:
 				break
 			}
-
+			if totalcount > 0 {
+				instance := NewInstance("", secret)
+				instance.lastAccessedTime = time.Now()
+				instance.W = w
+				instances.Set(secret, instance)
+				if error = websocket.Message.Send(w, util.ErrJson(util.OK())); error != nil {
+					log.Println("websocket出现异常", error)
+				}
+				break
+			} else {
+				if error = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); error != nil {
+					log.Println("websocket出现异常", error)
+				}
+				break
+			}
 			//msg := reply + ", 我是服务端"
 			//fmt.Println("发送客户端消息:" + msg)
 			//if error = websocket.Message.Send(w, msg); error != nil {
