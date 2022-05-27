@@ -17,7 +17,7 @@
       <n-grid-item span="18">
         <n-card :bordered="false" size="small" :title="typeTitle" class="proCard">
           <BasicSetting v-if="type === 1" />
-          <SafetySetting v-if="type === 2" />
+          <!-- <SafetySetting v-if="type === 2" /> -->
         </n-card>
       </n-grid-item>
     </n-grid>
@@ -30,15 +30,15 @@
 
   const typeTabList = [
     {
-      name: '基本设置',
-      desc: '个人账户信息设置',
+      name: '修改密码',
+      // desc: '个人登录密码修改',
       key: 1
     },
-    {
-      name: '安全设置',
-      desc: '密码，邮箱等设置',
-      key: 2
-    }
+    // {
+    //   name: '安全设置',
+    //   desc: '密码，邮箱等设置',
+    //   key: 2
+    // }
   ]
 
   const type = ref(1)

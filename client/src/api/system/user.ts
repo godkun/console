@@ -32,3 +32,15 @@ export function login(data) {
     data
   })
 }
+
+
+/**
+ * @description: 用户登录
+ */
+export function changePassword(data) {
+  return fetch({
+    url: '/user/changepassword',
+    method: 'POST',
+    data
+  })
+}
