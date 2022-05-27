@@ -7,7 +7,6 @@
           <img src="~@/assets/images/logo.png" alt="" />
           <h2 class="title">Monibuca</h2>
         </div>
-        <div class="view-account-top-desc">流媒体在线管理</div>
       </div>
       <div class="view-account-form">
         <n-form
@@ -25,32 +24,12 @@
               </template>
             </n-input>
           </n-form-item>
-          <n-form-item path="password">
-            <n-input
-              v-model:value="formInline.password"
-              type="password"
-              showPasswordOn="click"
-              placeholder="请输入密码">
-              <template #prefix>
-                <n-icon size="18" color="#808695">
-                  <LockClosedOutline />
-                </n-icon>
-              </template>
-            </n-input>
-          </n-form-item>
           <n-form-item>
             <n-button type="primary" @click="handleSubmit" size="large" :loading="loading" block>
-              登录
+              重置密码
             </n-button>
           </n-form-item>
-          <n-form-item class="default-color">
-            <div class="flex view-account-other">
-              <div class="flex-initial" style="margin-left: auto">
-                <a @click="register">注册账号</a>
-                <a style="margin-left: 20px;" @click="resetPassword">忘记密码</a>
-              </div>
-            </div>
-          </n-form-item>
+        <div class="view-account-top-desc">点击重置密码后，请到绑定邮箱中查看重置密码，并点击链接进行激活</div>
         </n-form>
       </div>
     </div>
@@ -64,6 +43,7 @@
   import { useMessage } from 'naive-ui'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
   import { PageEnum } from '@/enums/pageEnum'
+  import { resetPassword } from '@/api/system/user'
 
   interface FormState {
     mail: string
@@ -76,14 +56,11 @@
   const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
 
   const formInline = reactive({
-    mail: '',
-    password: '',
-    isCaptcha: true
+    mail: ''
   })
 
   const rules = {
     mail: { required: true, message: '请输入邮箱账号', trigger: 'blur' },
-    password: { required: true, message: '请输入密码', trigger: 'blur' }
   }
 
   const userStore = useUserStore()
@@ -95,31 +72,15 @@
     e.preventDefault()
     formRef.value.validate(async (errors) => {
       if (!errors) {
-        const { mail, password } = formInline
-        loading.value = true
-
+        const { mail } = formInline
         const params: FormState = {
-          mail,
-          password
+          mail
         }
-
-        try {
-          const res = await userStore.login(params)
-          message.destroyAll()
-          if (res.code == 0) {
-            const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
-            message.success('登录成功')
-            if (route.name === LOGIN_NAME) {
-              router.replace('/')
-            } else router.replace(toPath)
-          }
-        } catch (err) {
-          loading.value = false
-        } finally {
-          loading.value = false
-        }
+        resetPassword(params).then(() => {
+          message.info('重置密码成功，请登录邮箱查看重置密码，并进行激活')
+        })
       } else {
-        message.error('请填写完整信息，并且进行验证码校验')
+        message.error('重置密码失败，请稍后再试')
       }
     })
   }
@@ -129,9 +90,9 @@
       name: 'Register'
     })
   }
-  function resetPassword() {
+  function find() {
     router.push({
-      name: 'Password'
+      name: 'FindPassword'
     })
   }
 </script>

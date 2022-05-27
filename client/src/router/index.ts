@@ -50,11 +50,20 @@ export const RegisterRoute: RouteRecordRaw = {
   }
 }
 
+export const ResetPasswordRoute: RouteRecordRaw = {
+  path: '/password',
+  name: 'Password',
+  component: () => import('@/views/password/index.vue'),
+  meta: {
+    title: '注册'
+  }
+}
+
 //需要验证权限
 export const asyncRoutes = [...routeModuleList]
 
 //普通路由 无需验证权限
-export const constantRouter: any[] = [RegisterRoute, LoginRoute, RootRoute, RedirectRoute]
+export const constantRouter: any[] = [ResetPasswordRoute, RegisterRoute, LoginRoute, RootRoute, RedirectRoute]
 
 const router = createRouter({
   history: createWebHashHistory(''),

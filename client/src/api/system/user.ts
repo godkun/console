@@ -44,3 +44,14 @@ export function changePassword(data) {
     data
   })
 }
+
+/**
+ * @description: 用户登录
+ */
+export function resetPassword(data) {
+  return fetch({
+    url: '/user/sendresetpwdmail',
+    method: 'POST',
+    data
+  })
+}
