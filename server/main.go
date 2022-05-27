@@ -321,38 +321,27 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 	newpassword := util.RandNumStr(6)
 	code := util.MD5(config.Secret + mail.(string) + newpassword)
 
-	tx, err := MysqlDb.Begin()
-	if err != nil {
-		log.Fatalln(err)
-		w.Write(util.ErrJson(util.ErrDatabase))
-		return
-	}
-	defer clearTransaction(tx, w)
-	_, err = tx.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
+	result, err := MysqlDb.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
 		return
 	} else {
-		_, err = tx.Exec("update user set password=md5(?) where mail=?", newpassword, mail)
-		if err != nil {
+		rowsaffected, _ := result.RowsAffected()
+		if rowsaffected > 0 {
+			resetPwdUrl := config.HostName + "/api/user/resetpwd?code=" + code
+			mailBody := fmt.Sprintf(resetpwdtxt, resetPwdUrl, newpassword)
+			err = util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), mailBody, config.SMTPpassword, config.SMTPusername, "重置密码")
+			if err != nil {
+				w.Write(util.ErrJson(util.ErrSendMailError))
+				return
+			}
+			w.Write(util.ErrJson(util.OK()))
+			return
+		} else {
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		}
-		if err := tx.Commit(); err != nil {
-			log.Fatalln(err)
-			w.Write(util.ErrJson(util.ErrDatabase))
-			return
-		}
-		resetPwdUrl := config.HostName + "/api/user/resetpwd?code=" + code
-		mailBody := fmt.Sprintf(resetpwdtxt, resetPwdUrl, newpassword)
-		err = util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, fmt.Sprintf("%v", mail), mailBody, config.SMTPpassword, config.SMTPusername, "重置密码")
-		if err != nil {
-			w.Write(util.ErrJson(util.ErrSendMailError))
-			return
-		}
-		w.Write(util.ErrJson(util.OK()))
-		return
 	}
 }
 
