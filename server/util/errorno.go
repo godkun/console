@@ -22,6 +22,7 @@ var (
 	ErrUploadFailedError     = &Errno{Code: 10004, Msg: "上传文件失败"}
 	ErrUploadFileTooBigError = &Errno{Code: 10005, Msg: "上传文件过大"}
 	ErrUploadFileTypeError   = &Errno{Code: 10006, Msg: "上传文件类型错误"}
+	ErrTimeOut   = &Errno{Code: 10007, Msg: "请求超时"}
 
 	// 数据库错误, 前缀为 201
 	ErrDatabase = &Errno{Code: 20100, Msg: "数据库错误"}

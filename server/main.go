@@ -29,6 +29,7 @@ var resetpwdtxt string
 var sessionM *sessions.SessionManager
 var instances = NewConcurInstances()
 var commandChannel = make(chan string, 10)
+var ch = make(chan string, 1)
 
 var (
 	config = &struct {
@@ -172,7 +173,6 @@ func main() {
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
 	http.Handle("/ws/init", websocket.Handler(func(w *websocket.Conn) {
 		var secret string
-		defer wsClose(w, secret)
 		var error error
 		for {
 			//只支持string类型
@@ -182,9 +182,10 @@ func main() {
 				break
 			}
 			fmt.Println("收到客户端消息:" + reply)
-			replyJson := make(map[string]string)
-			json.Unmarshal([]byte(reply), &replyJson)
-			secret = replyJson["secret"]
+			//replyJson := make(map[string]string)
+			//json.Unmarshal([]byte(reply), &replyJson)
+			//secret = replyJson["secret"]
+			secret := reply
 			totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
 			if err != nil {
 				fmt.Println(err)
@@ -202,6 +203,7 @@ func main() {
 					log.Println("websocket出现异常", error)
 					break
 				}
+				break
 			} else {
 				if error = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); error != nil {
 					log.Println("websocket出现异常", error)
@@ -215,8 +217,18 @@ func main() {
 			//	break
 			//}
 		}
+		defer wsClose(w, secret)
+		for {
+			var reply string
+			if error = websocket.Message.Receive(w, &reply); error != nil {
+				log.Println("websocket出现异常", error)
+				break
+			}
+			fmt.Println("收到客户端消息1111:" + reply)
+			ch <- reply
+		}
 	}))
-	http.HandleFunc("/api/instance/sendCommand", sendCommand)
+	//http.HandleFunc("/api/instance/sendCommand", sendCommand)
 	http.HandleFunc("/api/summary", summaryCommand)
 	go func() {
 		clearTimeOutInstance()
@@ -228,6 +240,10 @@ func main() {
 func summaryCommand(w http.ResponseWriter, r *http.Request) {
 	sessionV := sessionM.BeginSession(w, r)
 	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
 	secret := formData["secret"]
@@ -241,11 +257,22 @@ func summaryCommand(w http.ResponseWriter, r *http.Request) {
 		instance := instances.Get(secret.(string))
 		instance.lastAccessedTime = time.Now()
 		instances.Set(secret.(string), instance)
+		timer := time.NewTimer(time.Second * 5)
+		defer timer.Stop()
 		if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
 			log.Println("websocket出现异常", error)
 		}
 		for {
-
+			select {
+			case data := <-ch:
+				fmt.Println("get ch is " + data)
+				w.Write([]byte(data))
+				return
+			case <-timer.C:
+				fmt.Println("time out secret is " + secret.(string))
+				w.Write(util.ErrJson(util.ErrTimeOut))
+				return
+			}
 		}
 	}
 }
@@ -256,8 +283,10 @@ ws链接关闭时清理缓存
 func wsClose(w *websocket.Conn, secret string) {
 	fmt.Println("websocket is closes")
 	w.Close()
-	instances.Delete(secret)
-	fmt.Println("delete ws,secret is" + secret)
+	if len(secret) > 0 {
+		instances.Delete(secret)
+		fmt.Println("delete ws,secret is" + secret)
+	}
 }
 
 /**
