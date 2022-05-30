@@ -174,6 +174,7 @@ func main() {
 	http.Handle("/ws/init", websocket.Handler(func(w *websocket.Conn) {
 		var secret string
 		var error error
+		connect := false
 		for {
 			//只支持string类型
 			var reply string
@@ -203,6 +204,7 @@ func main() {
 					log.Println("websocket出现异常", error)
 					break
 				}
+				connect = true
 				break
 			} else {
 				if error = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); error != nil {
@@ -218,14 +220,16 @@ func main() {
 			//}
 		}
 		defer wsClose(w, secret)
-		for {
-			var reply string
-			if error = websocket.Message.Receive(w, &reply); error != nil {
-				log.Println("websocket出现异常", error)
-				break
+		if connect {
+			for {
+				var reply string
+				if error = websocket.Message.Receive(w, &reply); error != nil {
+					log.Println("websocket出现异常", error)
+					break
+				}
+				fmt.Println("收到客户端消息1111:" + reply)
+				ch <- reply
 			}
-			fmt.Println("收到客户端消息1111:" + reply)
-			ch <- reply
 		}
 	}))
 	//http.HandleFunc("/api/instance/sendCommand", sendCommand)
