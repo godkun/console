@@ -171,6 +171,8 @@ func main() {
 	//})
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
 	http.Handle("/ws/init", websocket.Handler(func(w *websocket.Conn) {
+		var secret string
+		defer wsClose(w, secret)
 		var error error
 		for {
 			//只支持string类型
@@ -182,7 +184,7 @@ func main() {
 			fmt.Println("收到客户端消息:" + reply)
 			replyJson := make(map[string]string)
 			json.Unmarshal([]byte(reply), &replyJson)
-			secret := replyJson["secret"]
+			secret = replyJson["secret"]
 			totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
 			if err != nil {
 				fmt.Println(err)
@@ -198,8 +200,8 @@ func main() {
 				instances.Set(secret, instance)
 				if error = websocket.Message.Send(w, util.ErrJson(util.OK())); error != nil {
 					log.Println("websocket出现异常", error)
+					break
 				}
-				break
 			} else {
 				if error = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); error != nil {
 					log.Println("websocket出现异常", error)
@@ -215,11 +217,47 @@ func main() {
 		}
 	}))
 	http.HandleFunc("/api/instance/sendCommand", sendCommand)
+	http.HandleFunc("/api/summary", summaryCommand)
 	go func() {
 		clearTimeOutInstance()
 	}()
 	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 
+}
+
+func summaryCommand(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	formData := getDataFromHttpRequest(w, r)
+	fmt.Printf("formData is %+v", formData)
+	secret := formData["secret"]
+	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ? and mail= ?", secret, mail)
+	if err != nil {
+		fmt.Println(err)
+		w.Write(util.ErrJson(util.ErrDatabase))
+		return
+	}
+	if totalcount > 0 {
+		instance := instances.Get(secret.(string))
+		instance.lastAccessedTime = time.Now()
+		instances.Set(secret.(string), instance)
+		if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
+			log.Println("websocket出现异常", error)
+		}
+		for {
+
+		}
+	}
+}
+
+/**
+ws链接关闭时清理缓存
+*/
+func wsClose(w *websocket.Conn, secret string) {
+	fmt.Println("websocket is closes")
+	w.Close()
+	instances.Delete(secret)
+	fmt.Println("delete ws,secret is" + secret)
 }
 
 /**
