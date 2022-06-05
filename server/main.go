@@ -171,7 +171,7 @@ func main() {
 	//	}()
 	//})
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
-	http.Handle("/ws/init", websocket.Handler(func(w *websocket.Conn) {
+	http.Handle("/ws/v1", websocket.Handler(func(w *websocket.Conn) {
 		var secret string
 		var error error
 		connect := false
