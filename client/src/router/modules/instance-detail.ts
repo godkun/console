@@ -18,44 +18,31 @@ const routeName = 'instance'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/instance',
-    name: routeName,
-    redirect: '/instance/list',
-    component: Layout,
-    meta: {
-      title: '实例管理',
-      icon: renderIcon(DashboardOutlined),
-      sort: 0
-    },
-    children: [
-      {
-        path: 'list',
-        name: `${routeName}_list`,
-        meta: {
-          title: '实例列表'
-        },
-        component: () => import('@/views/instance/list/index.vue')
-      }
-    ]
-  },
-  {
-    path: '/instance',
     name: 'list',
     redirect: '/instance/detail',
     component: Layout,
     meta: {
-      title: '实例管理',
+      title: '实例详情',
       icon: renderIcon(DashboardOutlined),
-      sort: 0
+      sort: 2
     },
     children: [
       {
-        path: 'detail',
-        name: `${routeName}_detail1`,
+        path: 'dashboard',
+        name: `${routeName}_dashboard`,
         meta: {
-          title: '实例详情'
+          title: '控制台'
         },
-        component: () => import('@/views/instance/detail/index.vue')
-      }
+        component: () => import('@/views/instance/detail/dashboard/index.vue')
+      },
+      {
+        path: 'stream/list',
+        name: `${routeName}_stream_list`,
+        meta: {
+          title: '流列表'
+        },
+        component: () => import('@/views/instance/detail/stream-list/index.vue')
+      } 
     ]
   }
 ]
