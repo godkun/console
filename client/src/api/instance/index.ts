@@ -37,6 +37,15 @@ export function delInstance(data) {
   })
 }
 
+// 获取实例详情
+export function getInstanceSummary(data) {
+  return fetch({
+    url: '/summary',
+    method: 'post',
+    data
+  })
+}
+
 const _prefix = '/api'
 
 export const v4 = {

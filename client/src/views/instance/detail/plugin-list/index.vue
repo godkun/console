@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRoute, useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
@@ -70,13 +70,17 @@
       trigger: ['blur', 'input'],
       message: '请输入名称'
     }
+    // address: {
+    //   url: true,
+    //   trigger: ['blur', 'input'],
+    //   message: '请输入地址'
+    // }
   }
 
   const dialog = useDialog()
   const formRef: any = ref(null)
   const message = useMessage()
   const actionRef = ref()
-  const router = useRouter()
 
   const showModal = ref(false)
   const formBtnLoading = ref(false)
@@ -103,7 +107,7 @@
         style: 'button',
         actions: [
           {
-            label: '更新',
+            label: '播放',
             type: 'primary',
             onClick: handleEdit.bind(null, record),
             ifShow: () => {
@@ -111,8 +115,8 @@
             }
           },
           {
-            label: '删除',
-            type: 'error',
+            label: '暂停录制',
+            type: 'primary',
             icon: 'ic:outline-delete-outline',
             onClick: handleDelete.bind(null, record),
             // 根据业务控制是否显示 isShow 和 auth 是并且关系
@@ -121,30 +125,10 @@
             }
           },
           {
-            label: '配置',
+            label: '录制',
             type: 'primary',
             icon: 'ic:outline-delete-outline',
-            onClick: handleInstanceConfig.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => {
-              return true
-            }
-          },
-          {
-            label: '流列表',
-            type: 'primary',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleInstanceDetail.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => {
-              return true
-            }
-          },
-          {
-            label: '插件列表',
-            type: 'primary',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleInstancePlugin.bind(null, record),
+            onClick: handleDelete.bind(null, record),
             // 根据业务控制是否显示 isShow 和 auth 是并且关系
             ifShow: () => {
               return true
@@ -221,41 +205,6 @@
     instance.value.id = record.id
     instance.value.name = record.name
     instance.value.mail = localStorage.getItem('mail') || '' 
-  }
-
-  // 跳转到实例详情
-  function handleInstanceDetail(record: Recordable) {
-    const secret = record.secret
-    router.push({
-      name: 'instance_stream_list',
-      params: {
-        secret
-      }
-    })
-  }
-
-  // 跳转到实例详情
-  function handleInstancePlugin(record: Recordable) {
-    console.log("🚀 ~ file: index.vue ~ line 240 ~ handleInstancePlugin ~ record", record)
-    const secret = record.secret
-    console.log("🚀 ~ file: index.vue ~ line 240 ~ handleInstancePlugin ~ secret", secret)
-    router.push({
-      name: 'instance_plugin_list',
-      query: {
-        secret
-      }
-    })
-  }
-
-  // 跳转到实例详情
-  function handleInstanceConfig(record: Recordable) {
-    const secret = record.secret
-    router.push({
-      name: 'instance_config',
-      params: {
-        secret
-      }
-    })
   }
 
   function handleDelete(record: Recordable) {

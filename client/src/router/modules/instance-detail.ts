@@ -24,6 +24,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '实例详情',
       icon: renderIcon(DashboardOutlined),
+      hidden: true,
       sort: 2
     },
     children: [
@@ -36,13 +37,29 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/dashboard/index.vue')
       },
       {
+        path: 'config',
+        name: `${routeName}_config`,
+        meta: {
+          title: '配置'
+        },
+        component: () => import('@/views/instance/detail/config/index.vue')
+      },
+      {
         path: 'stream/list',
         name: `${routeName}_stream_list`,
         meta: {
           title: '流列表'
         },
         component: () => import('@/views/instance/detail/stream-list/index.vue')
-      } 
+      },
+      {
+        path: 'plugin/list',
+        name: `${routeName}_plugin_list`,
+        meta: {
+          title: '插件列表'
+        },
+        component: () => import('@/views/instance/detail/plugin-list/index.vue')
+      }
     ]
   }
 ]

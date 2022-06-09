@@ -1,0 +1,30 @@
+{
+  "consoleurl": "wss://console.monibuca.com:8080",
+  "enableavcc": true,
+  "enableflv": true,
+  "enablertp": true,
+  "http": {
+    "certfile": "",
+    "cors": true,
+    "keyfile": "",
+    "listenaddr": ":8080",
+    "listenaddrtls": "",
+    "password": "",
+    "username": ""
+  },
+  "publish": {
+    "kickexist": false,
+    "pubaudio": true,
+    "publishtimeout": 10,
+    "pubvideo": true,
+    "waitclosetimeout": 0
+  },
+  "rtpreorder": false,
+  "secret": "",
+  "subscribe": {
+    "iframeonly": false,
+    "subaudio": true,
+    "subvideo": true,
+    "waittimeout": 10
+  }
+}
