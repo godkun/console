@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
@@ -63,6 +63,8 @@
     updateInstance,
     delInstance
   } from '@/api/instance'
+
+  const router = useRouter()
 
   const rules = {
     name: {
@@ -107,33 +109,15 @@
         style: 'button',
         actions: [
           {
-            label: '播放',
-            type: 'primary',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true
-            }
-          },
-          {
-            label: '暂停录制',
+            label: '配置',
             type: 'primary',
             icon: 'ic:outline-delete-outline',
-            onClick: handleDelete.bind(null, record),
+            onClick: handlePluginConfig.bind(null, record),
             // 根据业务控制是否显示 isShow 和 auth 是并且关系
             ifShow: () => {
               return true
             }
           },
-          {
-            label: '录制',
-            type: 'primary',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleDelete.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => {
-              return true
-            }
-          }
         ],
         select: (key) => {
           message.info(`您点击了，${key} 按钮`)
@@ -141,6 +125,17 @@
       })
     }
   })
+
+    // 跳转到实例详情
+  function handlePluginConfig(record: Recordable) {
+    const secret = record.secret
+    router.push({
+      name: 'config',
+      params: {
+        secret
+      }
+    })
+  }
 
   function addTable() {
     formParams.name = ''

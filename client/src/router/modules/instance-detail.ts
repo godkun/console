@@ -38,7 +38,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'config',
-        name: `${routeName}_config`,
+        name: `config`,
         meta: {
           title: '配置'
         },

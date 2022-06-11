@@ -251,7 +251,7 @@
   function handleInstanceConfig(record: Recordable) {
     const secret = record.secret
     router.push({
-      name: 'instance_config',
+      name: 'config',
       params: {
         secret
       }

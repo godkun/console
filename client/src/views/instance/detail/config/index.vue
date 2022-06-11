@@ -1,39 +1,62 @@
 <template>
-  <n-grid x-gap="12" :cols="2">
-    <n-gi>
-      <n-button type="primary" size="small" @click="edit">编辑</n-button>
-      <n-button type="primary" size="small" @click="saveConfigFile">保存</n-button>
-        <el-button type="primary" size="small" @click="noSaveConfigFile">不保存</el-button>
-    </n-gi>
-    <n-gi>
-      <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="jsonCode" />
-      <pre v-else class="pre">{{ jsonCode }}</pre>
-    </n-gi>
-  </n-grid>
+  <div class="page">
+    <n-grid x-gap="12" :cols="6">
+      <n-gi span="2">
+        <n-space class="action">
+          <n-button type="primary" @click="edit">编辑</n-button>
+          <n-button type="success" @click="saveConfigFile">保存</n-button>
+          <n-button type="primary" @click="noSaveConfigFile">不保存</n-button>
+        </n-space>
+      </n-gi>
+      <n-gi span="4">
+        <n-space>
+          <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="jsonCode" />
+          <pre v-else class="pre">{{ jsonCode }}</pre>
+        </n-space>
+      </n-gi>
+    </n-grid>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import json from './config.json'
-import JsonEditor from '@/components/editor/index.vue'
-const jsonCode = ref('')
-const isEdit = ref(false)
-jsonCode.value = JSON.stringify(json, null, 2)
-function edit() {
-  isEdit.value = true
-}
-function saveConfigFile() {
-  isEdit.value = true
-  console.log("🚀 ~ file: index.vue ~ line 22 ~ jsonCode.value", jsonCode.value)
-}
-function noSaveConfigFile() {
-  isEdit.value = true
-}
+  import { ref } from 'vue'
+  import json from './config.json'
+  import JsonEditor from '@/components/editor/index.vue'
+  const jsonCode = ref('')
+  const oldJsonCode = ref('')
+  const isEdit = ref(false)
+  jsonCode.value = JSON.stringify(json, null, 2)
+
+  function edit() {
+    isEdit.value = true
+    oldJsonCode.value = jsonCode.value
+  }
+
+  function saveConfigFile() {
+    isEdit.value = true
+  }
+
+  function noSaveConfigFile() {
+    jsonCode.value = oldJsonCode.value
+    isEdit.value = false
+  }
+
 </script>
 
 <style lang="less" scoped>
-  .jsonEditor {
-    width: 45vw;
-    height: 60vh;
+  .page {
+    position: relative;
+    .action {
+      position: sticky;
+      top: 120px;
+    }
+    .jsonEditor {
+      width: 55vw;
+      min-height: 80vh;
+    }
+    .pre {
+      width: 70vw;
+      height: 80vh;
+    }
   }
 </style>

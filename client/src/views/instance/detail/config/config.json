@@ -12,6 +12,15 @@
     "password": "",
     "username": ""
   },
+  "http1": {
+    "certfile": "",
+    "cors": true,
+    "keyfile": "",
+    "listenaddr": ":8080",
+    "listenaddrtls": "",
+    "password": "",
+    "username": ""
+  },
   "publish": {
     "kickexist": false,
     "pubaudio": true,
