@@ -24,7 +24,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   async (response: AxiosResponse) => {
     const res = response.data
-    if (res.code !== 0) {
+    if (!res.hasOwnProperty('code')) return res
+    else if (res.code !== 0) {
       window.$message.error(res.msg)
       if (res.code == 20305) {
         setTimeout(() => {

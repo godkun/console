@@ -38,18 +38,22 @@ export function delInstance(data) {
 }
 
 // 获取采样数据,包括 CPU、内存、网卡数据、以及流信息
-export function getInstanceSummary(data) {
+export function getInstanceSummary(params) {
   return fetch({
-    url: '/summary',
-    method: 'post',
-    data
+    url: 'http://mvmonibuca.com:8080/api/summary',
+    method: 'get',
+    params: {
+      ...params,
+      json: 1
+    }
   })
 }
 
 // 系统信息，包含版本号（Version）和启动时间（StartTime）两个字段
-export function sysInfo(data) {
+export function getSysInfo(data) {
   return fetch({
-    url: '/sysinfo',
+    url: 'http://mvmonibuca.com:8080/api/sysinfo',
+    // url: '/sysinfo',
     method: 'post',
     data
   })
@@ -76,7 +80,7 @@ export function stopStream(data) {
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
 export function getConfig(data) {
   return fetch({
-    url: '/getconfig',
+    url: 'http://mvmonibuca.com:8080/api/getconfig',
     method: 'post',
     data
   })

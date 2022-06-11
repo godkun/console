@@ -225,35 +225,34 @@
 
   // 跳转到实例详情
   function handleInstanceDetail(record: Recordable) {
-    const secret = record.secret
+    const id = record.id
     router.push({
       name: 'instance_stream_list',
       params: {
-        secret
+        id
       }
     })
   }
 
   // 跳转到实例详情
   function handleInstancePlugin(record: Recordable) {
-    console.log("🚀 ~ file: index.vue ~ line 240 ~ handleInstancePlugin ~ record", record)
-    const secret = record.secret
-    console.log("🚀 ~ file: index.vue ~ line 240 ~ handleInstancePlugin ~ secret", secret)
+    const id = record.id
     router.push({
       name: 'instance_plugin_list',
       query: {
-        secret
+        id
       }
     })
   }
 
   // 跳转到实例详情
   function handleInstanceConfig(record: Recordable) {
-    const secret = record.secret
+    const id = record.id
+    console.log("🚀 ~ file: index.vue ~ line 251 ~ handleInstanceConfig ~ secret", secret)
     router.push({
       name: 'config',
-      params: {
-        secret
+      query: {
+        id
       }
     })
   }

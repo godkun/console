@@ -21,11 +21,29 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import json from './config.json'
+  import { useRoute } from 'vue-router'
   import JsonEditor from '@/components/editor/index.vue'
+  import {
+    getConfig,
+    modifyConfig
+  } from '@/api/instance'
+
   const jsonCode = ref('')
   const oldJsonCode = ref('')
   const isEdit = ref(false)
-  jsonCode.value = JSON.stringify(json, null, 2)
+
+  const route = useRoute()
+  const { query } = route
+  
+  getConfig(
+    {
+      id: query.secret,
+      name: query.name
+    }
+  ).then(res => {
+    jsonCode.value = JSON.stringify(res, null, 2)
+  })
+
 
   function edit() {
     isEdit.value = true
@@ -33,7 +51,10 @@
   }
 
   function saveConfigFile() {
-    isEdit.value = true
+    isEdit.value = false
+    modifyConfig({
+      data: jsonCode.value
+    })
   }
 
   function noSaveConfigFile() {

@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
@@ -61,8 +61,13 @@
     getInstanceList,
     addInstance,
     updateInstance,
-    delInstance
+    delInstance,
+    getSysInfo,
+    getInstanceSummary
   } from '@/api/instance'
+
+  const route = useRoute()
+  const { query } = route
 
   const rules = {
     name: {
@@ -95,6 +100,13 @@
     name: '',
     mail: '',
     secret: ''
+  })
+
+  getSysInfo()
+  getInstanceSummary({
+    id: query.id
+  }).then(res => {
+    console.log('res---', res);
   })
 
   const actionColumn = reactive({
