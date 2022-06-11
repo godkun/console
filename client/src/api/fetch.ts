@@ -24,6 +24,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   async (response: AxiosResponse) => {
     const res = response.data
+    // adapter m7s engine api
     if (!res.hasOwnProperty('code')) return res
     else if (res.code !== 0) {
       window.$message.error(res.msg)

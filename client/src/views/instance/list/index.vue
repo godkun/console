@@ -103,6 +103,14 @@
         style: 'button',
         actions: [
           {
+            label: '控制台',
+            type: 'primary',
+            onClick: handleConsole.bind(null, record),
+            ifShow: () => {
+              return true
+            }
+          },
+          {
             label: '更新',
             type: 'primary',
             onClick: handleEdit.bind(null, record),
@@ -228,6 +236,17 @@
     const id = record.id
     router.push({
       name: 'instance_stream_list',
+      params: {
+        id
+      }
+    })
+  }
+
+    // 跳转到实例详情
+  function handleConsole(record: Recordable) {
+    const id = record.id
+    router.push({
+      name: 'instance_dashboard',
       params: {
         id
       }

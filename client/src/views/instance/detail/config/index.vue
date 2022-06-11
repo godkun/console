@@ -37,7 +37,7 @@
   
   getConfig(
     {
-      id: query.secret,
+      id: query.id,
       name: query.name
     }
   ).then(res => {

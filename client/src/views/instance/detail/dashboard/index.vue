@@ -2,7 +2,7 @@
   <div class="console">
     <n-grid x-gap="12" :cols="2">
       <n-gi>
-        <n-card content-style="padding: 0;" :bordered="false" title="cpu使用情况">
+        <n-card content-style="padding: 0;" :bordered="false" title="">
           <CPU />
         </n-card>
       </n-gi>

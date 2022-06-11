@@ -2,8 +2,9 @@
   <n-card :bordered="false" class="proCard">
     <BasicTable
       :columns="columns"
-      :request="loadDataTable"
+      :dataSource="pluginData"
       :row-key="(row) => row.id"
+      :pagination="false"
       ref="actionRef"
       :actionColumn="actionColumn"
       @update:checked-row-keys="onCheckedRow"
@@ -52,19 +53,21 @@
 
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
   import {
-    getInstanceList,
     addInstance,
     updateInstance,
-    delInstance
+    delInstance,
+    getInstancePlugin
   } from '@/api/instance'
 
   const router = useRouter()
+  const route = useRoute()
+  const { query } = route
 
   const rules = {
     name: {
@@ -91,6 +94,7 @@
     url: ''
   })
   const modalTitle = ref('')
+  const pluginData= ref([])
 
   const instance = ref({
     id: '',
@@ -128,11 +132,13 @@
 
     // 跳转到实例详情
   function handlePluginConfig(record: Recordable) {
-    const secret = record.secret
+    const id = query.id
+    const name = record.Name
     router.push({
       name: 'config',
-      params: {
-        secret
+      query: {
+        id,
+        name
       }
     })
   }
@@ -144,12 +150,13 @@
     showModal.value = true
   }
 
-  const loadDataTable = async () => {
-    const pagesize = 0
-    const pageno = 0
-    const r =  await getInstanceList({ pagesize, pageno })
-    return r.data
+  async function initPage() {
+    const r = await getInstancePlugin({
+      id: query.id
+    })
+    pluginData.value = Object.values(r)
   }
+  initPage()
 
   function onCheckedRow(rowKeys) {
     console.log(rowKeys)

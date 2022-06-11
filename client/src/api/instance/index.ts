@@ -78,11 +78,10 @@ export function stopStream(data) {
 }
 
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
-export function getConfig(data) {
+export function getConfig(params) {
   return fetch({
     url: 'http://mvmonibuca.com:8080/api/getconfig',
-    method: 'post',
-    data
+    params
   })
 }
 
@@ -108,7 +107,8 @@ export function modifyConfig(data) {
 // 获取实例所有插件
 export function getInstancePlugin(data) {
   return fetch({
-    url: '/plugins',
+    url: 'http://mvmonibuca.com:8080/api/plugins',
+    // url: '/plugins',
     method: 'get',
     data
   })

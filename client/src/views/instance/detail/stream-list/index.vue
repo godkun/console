@@ -102,12 +102,7 @@
     secret: ''
   })
 
-  getSysInfo()
-  getInstanceSummary({
-    id: query.id
-  }).then(res => {
-    console.log('res---', res);
-  })
+  // getSysInfo()
 
   const actionColumn = reactive({
     width: 220,
@@ -162,10 +157,10 @@
   }
 
   const loadDataTable = async () => {
-    const pagesize = 0
-    const pageno = 0
-    const r =  await getInstanceList({ pagesize, pageno })
-    return r.data
+    const r = await getInstanceSummary({
+      id: query.id
+    })
+    return r.Streams
   }
 
   function onCheckedRow(rowKeys) {
@@ -182,8 +177,8 @@
     formRef.value.validate((errors) => {
       if (!errors) {
         if (modalTitle.value == '新建实例') {
-          const name  = formParams.name
-          addInstance({name }).then(() => {
+          const name = formParams.name
+          addInstance({ name }).then(() => {
             message.success('新建成功')
             setTimeout(() => {
               showModal.value = false
@@ -191,16 +186,16 @@
             })
           })
         } else if (modalTitle.value == '更新实例') {
-            const name  = formParams.name
-            const id = instance.value.id
-            const secret = instance.value.secret
-            updateInstance({ name, id, secret }).then(() => {
-              message.success('更新成功')
-              setTimeout(() => {
-                showModal.value = false
-                reloadTable()
-              })
+          const name = formParams.name
+          const id = instance.value.id
+          const secret = instance.value.secret
+          updateInstance({ name, id, secret }).then(() => {
+            message.success('更新成功')
+            setTimeout(() => {
+              showModal.value = false
+              reloadTable()
             })
+          })
         }
       } else {
         message.error('请填写完整信息')
@@ -216,7 +211,7 @@
     showModal.value = true
     instance.value.id = record.id
     instance.value.name = record.name
-    instance.value.mail = localStorage.getItem('mail') || '' 
+    instance.value.mail = localStorage.getItem('mail') || ''
   }
 
   function handleDelete(record: Recordable) {

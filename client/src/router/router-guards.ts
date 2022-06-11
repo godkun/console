@@ -49,9 +49,11 @@ export function createRouterGuards(router: Router) {
     if (isErrorPage === -1) {
       router.addRoute(ErrorPageRoute as unknown as RouteRecordRaw)
     }
-
     asyncRouteStore.setDynamicAddedRoute(true)
-    next(to.path)
+    next({
+      path: to.path,
+      query: to.query
+    })
     Loading && Loading.finish()
   })
 
