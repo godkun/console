@@ -53,6 +53,10 @@
 
   function saveConfigFile() {
     isEdit.value = false
+    // const data = {
+    //   name: query.name,
+    //   ...jsonCode.value
+    // }
     modifyConfig(jsonCode.value).then(() => {
       message.success('配置保存成功')
     })
