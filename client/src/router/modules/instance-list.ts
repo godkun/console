@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'list',
         name: `${routeName}_list`,
         meta: {
-          title: '实例列表'
+          title: '控制台'
         },
         component: () => import('@/views/instance/list/index.vue')
       }

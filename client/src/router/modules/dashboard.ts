@@ -26,6 +26,7 @@ const routes: Array<RouteRecordRaw> = [
       icon: renderIcon(DashboardOutlined),
       permissions: ['dashboard_console', 'dashboard_console', 'dashboard_workplace'],
       sort: 0,
+      hidden: true
     },
     children: [
       {
@@ -35,21 +36,12 @@ const routes: Array<RouteRecordRaw> = [
           title: '主控台',
           permissions: ['dashboard_console'],
           affix: true,
+          hidden: true
         },
-        component: () => import('@/views/dashboard/console/console.vue'),
-      },
-      {
-        path: 'workplace',
-        name: `${routeName}_workplace`,
-        meta: {
-          title: '工作台',
-          keepAlive: true,
-          permissions: ['dashboard_workplace'],
-        },
-        component: () => import('@/views/dashboard/workplace/workplace.vue'),
-      },
-    ],
-  },
-];
+        component: () => import('@/views/dashboard/console/console.vue')
+      }
+    ]
+  }
+]
 
 export default routes;

@@ -24,7 +24,6 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '实例详情',
       icon: renderIcon(DashboardOutlined),
-      hidden: true,
       sort: 2
     },
     children: [
@@ -32,20 +31,21 @@ const routes: Array<RouteRecordRaw> = [
         path: 'dashboard',
         name: `${routeName}_dashboard`,
         meta: {
-          title: '控制台'
+          title: '监控'
         },
-        component: () => import('@/views/instance/detail/dashboard/index.vue')
+        component: () => import('@/views/instance/detail/dashboard/console/console.vue')
       },
       {
         path: 'config',
         name: `config`,
         meta: {
-          title: '配置'
+          title: '配置',
+          hidden: true
         },
         component: () => import('@/views/instance/detail/config/index.vue')
       },
       {
-        path: 'stream/list',
+        path: 'stream',
         name: `${routeName}_stream_list`,
         meta: {
           title: '流列表'
@@ -53,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/stream-list/index.vue')
       },
       {
-        path: 'plugin/list',
+        path: 'plugin',
         name: `${routeName}_plugin_list`,
         meta: {
           title: '插件列表'

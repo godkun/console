@@ -103,27 +103,9 @@
         style: 'button',
         actions: [
           {
-            label: '控制台',
+            label: '监控',
             type: 'primary',
             onClick: handleConsole.bind(null, record),
-            ifShow: () => {
-              return true
-            }
-          },
-          {
-            label: '更新',
-            type: 'primary',
-            onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true
-            }
-          },
-          {
-            label: '删除',
-            type: 'error',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleDelete.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
             ifShow: () => {
               return true
             }
@@ -153,6 +135,24 @@
             type: 'primary',
             icon: 'ic:outline-delete-outline',
             onClick: handleInstancePlugin.bind(null, record),
+            // 根据业务控制是否显示 isShow 和 auth 是并且关系
+            ifShow: () => {
+              return true
+            }
+          },
+          {
+            label: '更新',
+            type: 'primary',
+            onClick: handleEdit.bind(null, record),
+            ifShow: () => {
+              return true
+            }
+          },
+          {
+            label: '删除',
+            type: 'error',
+            icon: 'ic:outline-delete-outline',
+            onClick: handleDelete.bind(null, record),
             // 根据业务控制是否显示 isShow 和 auth 是并且关系
             ifShow: () => {
               return true
@@ -236,7 +236,7 @@
     const id = record.id
     router.push({
       name: 'instance_stream_list',
-      params: {
+      query: {
         id
       }
     })
@@ -247,7 +247,7 @@
     const id = record.id
     router.push({
       name: 'instance_dashboard',
-      params: {
+      query: {
         id
       }
     })
@@ -267,7 +267,6 @@
   // 跳转到实例详情
   function handleInstanceConfig(record: Recordable) {
     const id = record.id
-    console.log("🚀 ~ file: index.vue ~ line 251 ~ handleInstanceConfig ~ secret", secret)
     router.push({
       name: 'config',
       query: {

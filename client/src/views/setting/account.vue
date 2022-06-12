@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- <InstanceSelect @instanceChange="instanceChange" /> -->
+    <!-- <n-select placeholder="选择歌曲" :options="options" /> -->
     <n-grid :x-gap="24">
       <n-grid-item span="6">
         <n-card :bordered="false" size="small" class="proCard">
@@ -26,18 +28,11 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import BasicSetting from './BasicSetting.vue'
-
   const typeTabList = [
     {
       name: '修改密码',
-      // desc: '个人登录密码修改',
       key: 1
-    },
-    // {
-    //   name: '安全设置',
-    //   desc: '密码，邮箱等设置',
-    //   key: 2
-    // }
+    }
   ]
 
   const type = ref(1)
@@ -46,6 +41,9 @@
   function switchType(e) {
     type.value = e.key
     typeTitle.value = e.name
+  }
+  function instanceChange(d) {
+    console.log('d---', d)
   }
 </script>
 <style lang="less" scoped>

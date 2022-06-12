@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import json from './config.json'
+  import { useMessage } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import JsonEditor from '@/components/editor/index.vue'
   import {
@@ -31,6 +31,7 @@
   const jsonCode = ref('')
   const oldJsonCode = ref('')
   const isEdit = ref(false)
+  const message = useMessage()
 
   const route = useRoute()
   const { query } = route
@@ -52,8 +53,8 @@
 
   function saveConfigFile() {
     isEdit.value = false
-    modifyConfig({
-      data: jsonCode.value
+    modifyConfig(jsonCode.value).then(() => {
+      message.success('配置保存成功')
     })
   }
 

@@ -1,73 +1,81 @@
 <template>
-  <n-card :bordered="false" class="proCard">
-    <BasicTable
-      :columns="columns"
-      :request="loadDataTable"
-      :row-key="(row) => row.id"
-      ref="actionRef"
-      :actionColumn="actionColumn"
-      @update:checked-row-keys="onCheckedRow"
-      :scroll-x="1090">
-      <template #tableTitle>
-        <n-button type="primary" @click="addTable">
-          <template #icon>
-            <n-icon>
-              <PlusOutlined />
-            </n-icon>
-          </template>
-          新建
-        </n-button>
-      </template>
-
-      <template #toolbar>
-        <n-button type="primary" @click="reloadTable">刷新数据</n-button>
-      </template>
-    </BasicTable>
-
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
-      <n-form
-        :model="formParams"
-        :rules="rules"
-        ref="formRef"
-        label-placement="left"
-        :label-width="80"
-        class="py-4">
-        <n-form-item label="名称" path="name">
-          <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
-        </n-form-item>
-        <!-- <n-form-item label="链接" path="url">
-          <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
-        </n-form-item> -->
-      </n-form>
-
-      <template #action>
-        <n-space>
-          <n-button @click="() => (showModal = false)">取消</n-button>
-          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
-        </n-space>
-      </template>
-    </n-modal>
-  </n-card>
+  <div>
+    <InstanceSelect />
+    <n-card :bordered="false" class="proCard">
+      <BasicTable
+        :columns="columns"
+        :request="loadDataTable"
+        :row-key="(row) => row.id"
+        ref="actionRef"
+        :actionColumn="actionColumn"
+        @update:checked-row-keys="onCheckedRow"
+        :scroll-x="1090">
+        <template #tableTitle>
+          <n-gradient-text type="success">
+            流列表
+          </n-gradient-text>
+          <!-- <n-button type="primary" @click="addTable">
+            <template #icon>
+              <n-icon>
+                <PlusOutlined />
+              </n-icon>
+            </template>
+            新建
+          </n-button> -->
+        </template>
+  
+        <template #toolbar>
+          <n-button type="primary" @click="reloadTable">刷新数据</n-button>
+        </template>
+      </BasicTable>
+  
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
+        <n-form
+          :model="formParams"
+          :rules="rules"
+          ref="formRef"
+          label-placement="left"
+          :label-width="80"
+          class="py-4">
+          <n-form-item label="名称" path="name">
+            <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
+          </n-form-item>
+          <!-- <n-form-item label="链接" path="url">
+            <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
+          </n-form-item> -->
+        </n-form>
+  
+        <template #action>
+          <n-space>
+            <n-button @click="() => (showModal = false)">取消</n-button>
+            <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+          </n-space>
+        </template>
+      </n-modal>
+    </n-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
-  import { h, reactive, ref } from 'vue'
-  import { useRoute } from 'vue-router'
+  import { h, reactive, ref, unref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
   import {
-    getInstanceList,
     addInstance,
     updateInstance,
     delInstance,
-    getSysInfo,
     getInstanceSummary
   } from '@/api/instance'
 
   const route = useRoute()
+  const router = useRouter()
   const { query } = route
+
+  const id = ref('')
+  id.value = query.id as string
 
   const rules = {
     name: {
@@ -101,6 +109,19 @@
     mail: '',
     secret: ''
   })
+
+  function instanceChange(d) {
+    console.log("🚀 ~ file: index.vue ~ line 113 ~ instanceChange ~ window.location.search", route)
+    if (route.query.id == d) return
+    else {
+      router.push({
+        name: 'instance_stream_list',
+        query: {
+          id: d
+        }
+      })
+    }
+  }
 
   // getSysInfo()
 
@@ -158,7 +179,7 @@
 
   const loadDataTable = async () => {
     const r = await getInstanceSummary({
-      id: query.id
+      id: id.value
     })
     return r.Streams
   }
@@ -236,4 +257,8 @@
   }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.n-gradient-text {
+  font-size: 24px;
+}
+</style>

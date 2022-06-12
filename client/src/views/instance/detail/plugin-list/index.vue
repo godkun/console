@@ -1,54 +1,60 @@
 <template>
-  <n-card :bordered="false" class="proCard">
-    <BasicTable
-      :columns="columns"
-      :dataSource="pluginData"
-      :row-key="(row) => row.id"
-      :pagination="false"
-      ref="actionRef"
-      :actionColumn="actionColumn"
-      @update:checked-row-keys="onCheckedRow"
-      :scroll-x="1090">
-      <template #tableTitle>
-        <n-button type="primary" @click="addTable">
-          <template #icon>
-            <n-icon>
-              <PlusOutlined />
-            </n-icon>
-          </template>
-          新建
-        </n-button>
-      </template>
+  <div>
+    <InstanceSelect />
+    <n-card :bordered="false" class="proCard">
+      <BasicTable
+        :columns="columns"
+        :dataSource="pluginData"
+        :row-key="(row) => row.id"
+        :pagination="false"
+        ref="actionRef"
+        :actionColumn="actionColumn"
+        @update:checked-row-keys="onCheckedRow"
+        :scroll-x="1090">
+        <template #tableTitle>
+          <n-gradient-text type="success">
+            插件列表
+          </n-gradient-text>
+          <!-- <n-button type="primary" @click="addTable">
+            <template #icon>
+              <n-icon>
+                <PlusOutlined />
+              </n-icon>
+            </template>
+            新建
+          </n-button> -->
+        </template>
 
-      <template #toolbar>
-        <n-button type="primary" @click="reloadTable">刷新数据</n-button>
-      </template>
-    </BasicTable>
+        <template #toolbar>
+          <n-button type="primary" @click="reloadTable">刷新数据</n-button>
+        </template>
+      </BasicTable>
 
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
-      <n-form
-        :model="formParams"
-        :rules="rules"
-        ref="formRef"
-        label-placement="left"
-        :label-width="80"
-        class="py-4">
-        <n-form-item label="名称" path="name">
-          <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
-        </n-form-item>
-        <!-- <n-form-item label="链接" path="url">
-          <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
-        </n-form-item> -->
-      </n-form>
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
+        <n-form
+          :model="formParams"
+          :rules="rules"
+          ref="formRef"
+          label-placement="left"
+          :label-width="80"
+          class="py-4">
+          <n-form-item label="名称" path="name">
+            <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
+          </n-form-item>
+          <!-- <n-form-item label="链接" path="url">
+            <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
+          </n-form-item> -->
+        </n-form>
 
-      <template #action>
-        <n-space>
-          <n-button @click="() => (showModal = false)">取消</n-button>
-          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
-        </n-space>
-      </template>
-    </n-modal>
-  </n-card>
+        <template #action>
+          <n-space>
+            <n-button @click="() => (showModal = false)">取消</n-button>
+            <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+          </n-space>
+        </template>
+      </n-modal>
+    </n-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -57,7 +63,6 @@
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
-  import { PlusOutlined } from '@vicons/antd'
   import {
     addInstance,
     updateInstance,
@@ -75,11 +80,6 @@
       trigger: ['blur', 'input'],
       message: '请输入名称'
     }
-    // address: {
-    //   url: true,
-    //   trigger: ['blur', 'input'],
-    //   message: '请输入地址'
-    // }
   }
 
   const dialog = useDialog()
@@ -117,9 +117,14 @@
             type: 'primary',
             icon: 'ic:outline-delete-outline',
             onClick: handlePluginConfig.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
             ifShow: () => {
-              return true
+              for (let index = 0; index < pluginData.value.length; index++) {
+                const p = pluginData.value[index]
+                if(p.Name == record.Name) {
+                  if (!p.RawConfig) return false
+                  else return true
+                }
+              }
             }
           },
         ],
@@ -141,13 +146,6 @@
         name
       }
     })
-  }
-
-  function addTable() {
-    formParams.name = ''
-    formParams.url = ''
-    modalTitle.value = '新建实例'
-    showModal.value = true
   }
 
   async function initPage() {
@@ -231,4 +229,9 @@
   }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.n-gradient-text {
+  font-size: 24px;
+}
+</style>
+

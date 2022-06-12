@@ -63,12 +63,19 @@ export const ResetPasswordRoute: RouteRecordRaw = {
 export const asyncRoutes = [...routeModuleList]
 
 //普通路由 无需验证权限
-export const constantRouter: any[] = [ResetPasswordRoute, RegisterRoute, LoginRoute, RootRoute, RedirectRoute]
+export const constantRouter: any[] = [
+  ResetPasswordRoute,
+  RegisterRoute,
+  LoginRoute,
+  RootRoute,
+  RedirectRoute,
+  ...asyncRoutes
+]
 
 const router = createRouter({
   history: createWebHashHistory(''),
   routes: constantRouter,
-  strict: true,
+  // strict: true,
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 

@@ -1,6 +1,13 @@
 // 实例管理接口
 import fetch from '../fetch'
 
+// import { useRoute } from 'vue-router'
+// const route = useRoute()
+// const { query } = route
+const query = {
+  id: 1
+}
+
 // 获取实例列表
 export function getInstanceList(data) {
   return fetch({
@@ -38,10 +45,9 @@ export function delInstance(data) {
 }
 
 // 获取采样数据,包括 CPU、内存、网卡数据、以及流信息
-export function getInstanceSummary(params) {
+export function getInstanceSummary(params ={}) {
   return fetch({
     url: 'http://mvmonibuca.com:8080/api/summary',
-    method: 'get',
     params: {
       ...params,
       json: 1
@@ -50,30 +56,35 @@ export function getInstanceSummary(params) {
 }
 
 // 系统信息，包含版本号（Version）和启动时间（StartTime）两个字段
-export function getSysInfo(data) {
+export function getSysInfo() {
   return fetch({
     url: 'http://mvmonibuca.com:8080/api/sysinfo',
     // url: '/sysinfo',
-    method: 'post',
-    data
+    params: {
+      id: query.id
+    }
   })
 }
 
 // 获取流（live/test）的详细信息
-export function getStreamDetail(data) {
+export function getStreamDetail(params) {
   return fetch({
     url: '/stream',
-    method: 'post',
-    data
+    params: {
+      ...params,
+      id: query.id
+    }
   })
 }
 
-// 获取流（live/test）的详细信息
-export function stopStream(data) {
+// 停止流
+export function stopStream(params) {
   return fetch({
     url: '/stopstream',
-    method: 'post',
-    data
+    params: {
+      ...params,
+      id: query.id
+    }
   })
 }
 
@@ -81,7 +92,10 @@ export function stopStream(data) {
 export function getConfig(params) {
   return fetch({
     url: 'http://mvmonibuca.com:8080/api/getconfig',
-    params
+    params: {
+      ...params,
+      id: query.id
+    }
   })
 }
 
@@ -98,18 +112,20 @@ export function updateConfig(data) {
 // 修改的配置信息通过请求的 body（JSON 格式）提交
 export function modifyConfig(data) {
   return fetch({
-    url: '/modifyconfig',
+    url: 'http://mvmonibuca.com:8080/api/modifyconfig',
     method: 'post',
     data
   })
 }
 
 // 获取实例所有插件
-export function getInstancePlugin(data) {
+export function getInstancePlugin(params) {
   return fetch({
     url: 'http://mvmonibuca.com:8080/api/plugins',
     // url: '/plugins',
-    method: 'get',
-    data
+    params: {
+      ...params,
+      id: query.id
+    }
   })
 }
