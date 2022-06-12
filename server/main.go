@@ -288,7 +288,7 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 	id := formData["id"]
 	secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
 	if secretData != nil {
-		secret := secretData["id"]
+		secret := secretData["secret"]
 		if len(secret) > 0 {
 			instance := instances.Get(secret)
 			instance.lastAccessedTime = time.Now()
@@ -1028,10 +1028,10 @@ func CORS(w http.ResponseWriter, r *http.Request) {
 */
 func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData map[string]interface{}) {
 	CORS(w, r)
-	if r.Method != "POST" {
-		w.WriteHeader(405)
-		return
-	}
+	//if r.Method != "POST" {
+	//	w.WriteHeader(405)
+	//	return
+	//}
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal("parse form error ", err)
