@@ -42,6 +42,7 @@ var (
 	ErrInstanceNameExist      = &Errno{Code: 20307, Msg: "实例名已存在"}
 	ErrOldPasswordWrong      = &Errno{Code: 20308, Msg: "旧密码错误"}
 	ErrSecretWrong      = &Errno{Code: 20309, Msg: "密钥错误"}
+	ErrInstanceNotConnect      = &Errno{Code: 20310, Msg: "实例未与服务器连接"}
 )
 
 /**
