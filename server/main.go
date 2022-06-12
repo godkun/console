@@ -291,6 +291,10 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 		secret := secretData["secret"]
 		if len(secret) > 0 {
 			instance := instances.Get(secret)
+			if instance == nil {
+				w.Write(util.ErrJson(util.ErrInstanceNameExist))
+				return
+			}
 			instance.lastAccessedTime = time.Now()
 			instances.Set(secret, instance)
 			timer := time.NewTimer(time.Second * 5)
