@@ -292,7 +292,7 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 		if len(secret) > 0 {
 			instance := instances.Get(secret)
 			if instance == nil {
-				w.Write(util.ErrJson(util.ErrInstanceNameExist))
+				w.Write(util.ErrJson(util.ErrInstanceNotConnect))
 				return
 			}
 			instance.lastAccessedTime = time.Now()
