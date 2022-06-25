@@ -107,7 +107,7 @@
               <SettingOutlined />
             </n-icon>
           </template>
-          <span>项目配置</span>
+          <span>主题配置</span>
         </n-tooltip>
       </div>
     </div>

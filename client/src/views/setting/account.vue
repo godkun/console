@@ -36,7 +36,7 @@
   ]
 
   const type = ref(1)
-  const typeTitle = ref('基本设置')
+  const typeTitle = ref('修改密码')
 
   function switchType(e) {
     type.value = e.key

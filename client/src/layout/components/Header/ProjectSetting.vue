@@ -39,7 +39,7 @@
           </span>
         </div>
 
-        <n-divider title-placement="center">导航栏模式</n-divider>
+        <!-- <n-divider title-placement="center">导航栏模式</n-divider>
 
         <div class="drawer-setting-item align-items-top">
           <div class="drawer-setting-item-style align-items-top">
@@ -80,9 +80,9 @@
             </n-tooltip>
             <n-badge dot color="#19be6b" v-show="settingStore.navMode === 'horizontal-mix'" />
           </div>
-        </div>
+        </div> -->
 
-        <n-divider title-placement="center">导航栏风格</n-divider>
+        <!-- <n-divider title-placement="center">导航栏风格</n-divider>
 
         <div class="drawer-setting-item align-items-top">
           <div class="drawer-setting-item-style align-items-top">
@@ -123,8 +123,9 @@
             </n-tooltip>
             <n-badge dot color="#19be6b" v-if="settingStore.navTheme === 'header-dark'" />
           </div>
-        </div>
-        <n-divider title-placement="center">界面功能</n-divider>
+        </div> -->
+
+        <!-- <n-divider title-placement="center">界面功能</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">分割菜单</div>
@@ -147,9 +148,9 @@
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="settingStore.multiTabsSetting.fixed" />
           </div>
-        </div>
+        </div> -->
 
-        <n-divider title-placement="center">界面显示</n-divider>
+        <!-- <n-divider title-placement="center">界面显示</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">显示重载页面按钮</div>
@@ -177,9 +178,9 @@
           <div class="drawer-setting-item-action">
             <n-switch v-model:value="settingStore.multiTabsSetting.show" />
           </div>
-        </div>
+        </div> -->
 
-        <n-divider title-placement="center">动画</n-divider>
+        <!-- <n-divider title-placement="center">动画</n-divider>
 
         <div class="drawer-setting-item">
           <div class="drawer-setting-item-title">禁用动画</div>
@@ -199,7 +200,7 @@
           <n-alert type="warning" :showIcon="false">
             <p>{{ alertText }}</p>
           </n-alert>
-        </div>
+        </div> -->
       </div>
     </n-drawer-content>
   </n-drawer>
@@ -220,7 +221,7 @@
     props: {
       title: {
         type: String,
-        default: '项目配置'
+        default: '主题配置'
       },
       width: {
         type: Number,

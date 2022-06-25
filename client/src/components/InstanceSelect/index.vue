@@ -29,6 +29,14 @@
     const id = route.query.id as string
     if (id) value.value = id
     else value.value = options.value[0].value
+    localStorage.setItem('id', value.value)
+    console.log('🚀 ~ file: index.vue ~ line 32 ~ getInstanceList ~ value.value', value.value)
+    // router.push({
+    //   path: unref(route).path,
+    //   query: {
+    //     id: value.value
+    //   }
+    // })
   })
   function handleUpdateValue(value) {
     router.push({

@@ -8,11 +8,13 @@ function queryURLparamsRegEs6(url) {
       obj[arg[1]] = arg[2]
   })
   return obj
-
 }
 
 const href = window.location.href
 const query = queryURLparamsRegEs6(href)
+let id  = query.id
+if (!id) id = localStorage.getItem('id')
+
 
 // 获取实例列表
 export function getInstanceList(data) {
@@ -55,8 +57,11 @@ export function getInstanceSummary() {
   return fetch({
     url: '/summary',
     method: 'post',
+    headers: {
+      m7sId: id
+    },
     data: {
-      id: 63
+      id
     }
   })
 }
@@ -66,9 +71,9 @@ export function getSysInfo() {
   return fetch({
     url: '/sysinfo',
     method: 'post',
-    data: {
-      id: query.id
-    }
+    headers: {
+      m7sId: id
+    },
   })
 }
 
@@ -77,10 +82,10 @@ export function getStreamDetail(params) {
   return fetch({
     url: '/stream',
     method: 'post',
-    data: {
-      ...params,
-      id: query.id
-    }
+    headers: {
+      m7sId: id
+    },
+    data: params
   })
 }
 
@@ -89,10 +94,10 @@ export function stopStream(params) {
   return fetch({
     url: '/stopstream',
     method: 'post',
-    data: {
-      ...params,
-      id: query.id
-    }
+    headers: {
+      m7sId: id
+    },
+    data: params
   })
 }
 
@@ -101,10 +106,10 @@ export function getConfig(params) {
   return fetch({
     url: '/getconfig',
     method: 'post',
-    data: {
-      ...params,
-      id: query.id
-    }
+    headers: {
+      m7sId: id
+    },
+    data: params
   })
 }
 
@@ -119,10 +124,14 @@ export function updateConfig(data) {
 
 // 修改配置信息，可以加参数 name=xxx，代表修改 xxx 插件的配置信息（不加参数则修改全局配置信息）
 // 修改的配置信息通过请求的 body（JSON 格式）提交
-export function modifyConfig(data) {
+export function modifyConfig(data, name) {
   return fetch({
     url: '/modifyconfig',
     method: 'post',
+    headers: {
+      m7sId: id,
+      name
+    },
     data
   })
 }
@@ -132,9 +141,9 @@ export function getInstancePlugin(params) {
   return fetch({
     url: '/plugins',
     method: 'post',
-    data: {
-      ...params,
-      id: query.id
+    headers: {
+      m7sId: id
     }
+    // data: params
   })
 }

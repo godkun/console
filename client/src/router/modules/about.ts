@@ -12,7 +12,8 @@ const routes: Array<RouteRecordRaw> = [
       sort: 10,
       isRoot: true,
       activeMenu: 'about_index',
-      icon: renderIcon(ProjectOutlined)
+      icon: renderIcon(ProjectOutlined),
+      hidden: true
     },
     children: [
       {
@@ -21,7 +22,8 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '关于',
           extra: renderNew(),
-          activeMenu: 'about_index'
+          activeMenu: 'about_index',
+          hidden: true
         },
         component: () => import('@/views/about/index.vue')
       }
