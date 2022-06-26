@@ -340,17 +340,20 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 				}
 				break
 			case "/api/getconfig":
-				if error := websocket.Message.Send(instance.W, "/api/getconfig?json=1\n"); error != nil {
+				name := r.URL.Query().Get("name")
+				if error := websocket.Message.Send(instance.W, "/api/getconfig?name="+name+"\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
 			case "/api/modifyconfig":
-				if error := websocket.Message.Send(instance.W, "/api/modifyconfig?json=1\n"); error != nil {
+				name := r.URL.Query().Get("name")
+				if error := websocket.Message.Send(instance.W, "/api/modifyconfig?name="+name+"\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
 			case "/api/updateconfig":
-				if error := websocket.Message.Send(instance.W, "/api/updateconfig?json=1\n"); error != nil {
+				name := r.URL.Query().Get("name")
+				if error := websocket.Message.Send(instance.W, "/api/updateconfig?name="+name+"\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
