@@ -78,14 +78,15 @@ export function getSysInfo() {
 }
 
 // 获取流（live/test）的详细信息
-export function getStreamDetail(params) {
+export function getStreamDetail(streamPath) {
   return fetch({
     url: '/stream',
     method: 'post',
     headers: {
-      m7sId: id
-    },
-    data: params
+      m7sId: id,
+      streamPath
+    }
+    // data: params
   })
 }
 
