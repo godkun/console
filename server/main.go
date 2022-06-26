@@ -284,8 +284,9 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
-	id := formData["id"]
+	fmt.Printf("formData is %+v\n", formData)
+	id := r.Header["M7sid"][0]
+	fmt.Printf("m7sid is %+v\n", id)
 	secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
 	if secretData != nil {
 		secret := secretData["secret"]
@@ -339,17 +340,20 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 				}
 				break
 			case "/api/getconfig":
-				if error := websocket.Message.Send(instance.W, "/api/getconfig?json=1\n"); error != nil {
+				name := r.URL.Query().Get("name")
+				if error := websocket.Message.Send(instance.W, "/api/getconfig?name="+name+"\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
 			case "/api/modifyconfig":
-				if error := websocket.Message.Send(instance.W, "/api/modifyconfig?json=1\n"); error != nil {
+				name := r.URL.Query().Get("name")
+				if error := websocket.Message.Send(instance.W, "/api/modifyconfig?name="+name+"\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
 			case "/api/updateconfig":
-				if error := websocket.Message.Send(instance.W, "/api/updateconfig?json=1\n"); error != nil {
+				name := r.URL.Query().Get("name")
+				if error := websocket.Message.Send(instance.W, "/api/updateconfig?name="+name+"\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
@@ -468,7 +472,7 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 */
 func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	mail := formData["mail"]
 	if mail == nil {
 		w.Write(util.ErrJson(util.ErrRequestParamError))
@@ -522,7 +526,7 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	password := formData["password"]
 	oldpassword := formData["oldpassword"]
 	if oldpassword == nil || len(oldpassword.(string)) == 0 || password == nil || len(password.(string)) == 0 {
@@ -563,7 +567,7 @@ func sendCommand(w http.ResponseWriter, r *http.Request) {
 	sessionV := sessionM.BeginSession(w, r)
 	mail := sessionV.Get("mail")
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	secret := formData["secret"]
 	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ? and mail= ?", secret, mail)
 	if err != nil {
@@ -603,7 +607,7 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	id := formData["id"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
 	if userData != nil && len(userData) > 0 {
@@ -638,7 +642,7 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	pagesize := int(formData["pagesize"].(float64))
 	pageno := int(formData["pageno"].(float64))
 	if pagesize == 0 { //不分页，获取所有
@@ -685,7 +689,7 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	id := formData["id"]
 	name := formData["name"]
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
@@ -733,7 +737,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	name := formData["name"]
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
@@ -862,7 +866,7 @@ func renderError(w http.ResponseWriter, message string, statusCode int) {
 */
 func userLogin(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	mail := formData["mail"]
 	password := formData["password"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
@@ -949,7 +953,7 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 */
 func userRegister(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	mail := formData["mail"]
 	password := formData["password"]
 	verifycode := formData["verifycode"]
@@ -1037,19 +1041,21 @@ func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData ma
 	//	return
 	//}
 	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatal("parse form error ", err)
-		w.Write(util.ErrJson(util.ErrRequestParamError))
-		return
+	if len(body) > 0 {
+		if err != nil {
+			log.Fatal("parse form error ", err)
+			w.Write(util.ErrJson(util.ErrRequestParamError))
+			return
+		}
+		fmt.Println("json:", string(body))
+		// 初始化请求变量结构
+		// 调用json包的解析，解析请求body
+		if err = json.Unmarshal(body, &formData); err != nil {
+			fmt.Printf("Unmarshal err, %v\n", err)
+			w.Write(util.ErrJson(util.ErrRequestParamError))
+			return
+		}
 	}
-	fmt.Println("json:", string(body))
-	// 初始化请求变量结构
-	// 调用json包的解析，解析请求body
-	if err = json.Unmarshal(body, &formData); err != nil {
-		fmt.Printf("Unmarshal err, %v\n", err)
-		w.Write(util.ErrJson(util.ErrRequestParamError))
-		return
-	}
-	fmt.Printf("formData is %+v", formData)
+	fmt.Printf("formData is %+v\n", formData)
 	return formData
 }
