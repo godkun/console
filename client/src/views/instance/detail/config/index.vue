@@ -36,12 +36,7 @@
   const route = useRoute()
   const { query } = route
   
-  getConfig(
-    {
-      id: query.id,
-      name: query.name
-    }
-  ).then(res => {
+  getConfig(query.name).then(res => {
     jsonCode.value = JSON.stringify(res, null, 2)
   })
 

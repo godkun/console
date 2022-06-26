@@ -59,9 +59,6 @@ export function getInstanceSummary() {
     method: 'post',
     headers: {
       m7sId: id
-    },
-    data: {
-      id
     }
   })
 }
@@ -80,13 +77,11 @@ export function getSysInfo() {
 // 获取流（live/test）的详细信息
 export function getStreamDetail(streamPath) {
   return fetch({
-    url: '/stream',
+    url: `/stream?streamPath=${streamPath}`,
     method: 'post',
     headers: {
-      m7sId: id,
-      streamPath
+      m7sId: id
     }
-    // data: params
   })
 }
 
@@ -103,14 +98,13 @@ export function stopStream(params) {
 }
 
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
-export function getConfig(params) {
+export function getConfig(name) {
   return fetch({
-    url: '/getconfig',
+    url: name ? `/getconfig?name=${name}` : `/getconfig`,
     method: 'post',
     headers: {
       m7sId: id
-    },
-    data: params
+    }
   })
 }
 
@@ -127,11 +121,10 @@ export function updateConfig(data) {
 // 修改的配置信息通过请求的 body（JSON 格式）提交
 export function modifyConfig(data, name) {
   return fetch({
-    url: '/modifyconfig',
+    url: name ? `/modifyconfig?name=${name}` : `/modifyconfig`,
     method: 'post',
     headers: {
-      m7sId: id,
-      name
+      m7sId: id
     },
     data
   })
@@ -145,6 +138,5 @@ export function getInstancePlugin(params) {
     headers: {
       m7sId: id
     }
-    // data: params
   })
 }

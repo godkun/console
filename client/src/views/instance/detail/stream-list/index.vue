@@ -4,7 +4,7 @@
     <n-card :bordered="false" class="proCard">
       <BasicTable
         :columns="columns"
-        :dataSource="steam"
+        :dataSource="streamData"
         :row-key="(row) => row.id"
         ref="actionRef"
         :actionColumn="actionColumn"
@@ -60,7 +60,6 @@
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
-  import { PlusOutlined } from '@vicons/antd'
   import { addInstance, updateInstance, delInstance, getInstanceSummary, getStreamDetail } from '@/api/instance'
 
   const route = useRoute()
@@ -102,6 +101,8 @@
     mail: '',
     secret: ''
   })
+
+  const streamData= ref([])
 
   function instanceChange(d) {
     console.log('🚀 ~ file: index.vue ~ line 113 ~ instanceChange ~ window.location.search', route)
@@ -178,19 +179,25 @@
     showModal.value = true
   }
 
+  async function initPage() {
+    const r = await getInstanceSummary()
+    streamData.value = r.Streams
+  }
+  initPage()
   const loadDataTable = async () => {
     const r = await getInstanceSummary()
-    return [
-      {
-        Path: 'live/test',
-        State: 1,
-        Subscribers: 1,
-        Tracks: ['aac', 'h264'],
-        StartTime: -62135596800,
-        Type: 'RTMPReceiver',
-        BPS: 520930
-      }
-    ]
+    console.log("🚀 ~ file: index.vue ~ line 183 ~ loadDataTable ~ r", r)
+    // return [
+    //   {
+    //     Path: 'live/test',
+    //     State: 1,
+    //     Subscribers: 1,
+    //     Tracks: ['aac', 'h264'],
+    //     StartTime: -62135596800,
+    //     Type: 'RTMPReceiver',
+    //     BPS: 520930
+    //   }
+    // ]
     return r.Streams
   }
 
@@ -322,7 +329,7 @@
       dialog.info({
         showIcon: false,
         title: '流详情',
-        content: res.data,
+        content: JSON.stringify(res),
         style: {
           width: '50vw',
         },

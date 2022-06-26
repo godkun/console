@@ -12,22 +12,40 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/frame/docs',
     component: Layout,
     meta: {
-      title: '外部页面',
+      title: '帮助文档',
       sort: 8,
-      icon: renderIcon(DesktopOutline),
+      icon: renderIcon(DesktopOutline)
     },
     children: [
       {
         path: 'docs',
         name: 'frame-docs',
         meta: {
-          title: '帮助文档',
-          frameSrc: 'https://m7s.live/guide/introduction.html',
+          title: '后台教程',
+          frameSrc: 'https://m7s.live/guide/introduction.html'
         },
-        component: IFrame,
+        component: IFrame
+      },
+      {
+        path: 'docs',
+        name: 'frame-m7s',
+        meta: {
+          title: 'Monibuca文档',
+          frameSrc: 'https://m7s.live/guide/introduction.html'
+        },
+        component: IFrame
+      },
+      {
+        path: 'docs',
+        name: 'frame-jessibuca',
+        meta: {
+          title: 'jessibuca文档',
+          frameSrc: 'https://jessibuca.com/'
+        },
+        component: IFrame
       }
-    ],
-  },
-];
+    ]
+  }
+]
 
 export default routes;
