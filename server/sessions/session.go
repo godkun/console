@@ -20,7 +20,7 @@ type SessionFromMemory struct {
 	data map[interface{}]interface{}   //主数据
 }
 
-const DEFEALT_TIME  = 1800
+const DEFEALT_TIME  = 180000
 
 //实例化
 func newSessionFromMemory() *SessionFromMemory {
