@@ -285,7 +285,8 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v", formData)
-	id := formData["id"]
+	id := r.Header["M7sid"][0]
+	fmt.Printf("m7sid is %+v", id)
 	secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
 	if secretData != nil {
 		secret := secretData["secret"]
