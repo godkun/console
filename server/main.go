@@ -349,6 +349,7 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 				name := r.URL.Query().Get("name")
 				body, _ := ioutil.ReadAll(r.Body)
 				fmt.Printf("body is %+v\n", string(body))
+				fmt.Printf("name is %+v\n", name)
 				if error := websocket.Message.Send(instance.W, "/api/modifyconfig?name="+name+"\n"+string(body)); error != nil {
 					log.Println("websocket出现异常", error)
 				}
