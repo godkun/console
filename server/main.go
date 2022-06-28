@@ -283,8 +283,8 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
 	}
-	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v\n", formData)
+	//formData := getDataFromHttpRequest(w, r)
+	//fmt.Printf("formData is %+v\n", formData)
 	id := r.Header["M7sid"][0]
 	fmt.Printf("m7sid is %+v\n", id)
 	secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
