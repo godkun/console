@@ -342,22 +342,40 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 				break
 			case "/api/getconfig":
 				name := r.URL.Query().Get("name")
-				if error := websocket.Message.Send(instance.W, "/api/getconfig?name="+name+"\n"); error != nil {
+				url := "/api/getconfig"
+				if name != "" {
+					url += "?name=" + name + "\n"
+				} else {
+					url += "\n"
+				}
+				if error := websocket.Message.Send(instance.W, url); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
 			case "/api/modifyconfig":
 				name := r.URL.Query().Get("name")
+				url := "/api/modifyconfig"
+				if name != "" {
+					url += "?name=" + name + "\n"
+				} else {
+					url += "\n"
+				}
 				body, _ := ioutil.ReadAll(r.Body)
 				fmt.Printf("body is %+v\n", string(body))
 				fmt.Printf("name is %+v\n", name)
-				if error := websocket.Message.Send(instance.W, "/api/modifyconfig?name="+name+"\n"+string(body)); error != nil {
+				if error := websocket.Message.Send(instance.W, url+string(body)); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
 			case "/api/updateconfig":
 				name := r.URL.Query().Get("name")
-				if error := websocket.Message.Send(instance.W, "/api/updateconfig?name="+name+"\n"); error != nil {
+				url := "/api/updateconfig"
+				if name != "" {
+					url += "?name=" + name + "\n"
+				} else {
+					url += "\n"
+				}
+				if error := websocket.Message.Send(instance.W, url); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
