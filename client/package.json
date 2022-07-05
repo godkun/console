@@ -70,5 +70,8 @@
     "vite-plugin-mock": "^2.9.6",
     "vite-plugin-style-import": "^1.4.1",
     "zx": "^6.1.0"
+  },
+  "volta": {
+    "node": "16.15.1"
   }
 }
