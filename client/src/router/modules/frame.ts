@@ -9,7 +9,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/frame',
     name: 'Frame',
-    redirect: '/frame/docs',
+    redirect: '/frame/m7s',
     component: Layout,
     meta: {
       title: '帮助文档',
@@ -17,17 +17,17 @@ const routes: Array<RouteRecordRaw> = [
       icon: renderIcon(DesktopOutline)
     },
     children: [
+      // {
+      //   path: 'docs',
+      //   name: 'frame-docs',
+      //   meta: {
+      //     title: '后台教程',
+      //     frameSrc: 'https://m7s.live/guide/introduction.html'
+      //   },
+      //   component: IFrame
+      // },
       {
-        path: 'docs',
-        name: 'frame-docs',
-        meta: {
-          title: '后台教程',
-          frameSrc: 'https://m7s.live/guide/introduction.html'
-        },
-        component: IFrame
-      },
-      {
-        path: 'docs',
+        path: 'm7s',
         name: 'frame-m7s',
         meta: {
           title: 'Monibuca文档',
@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
         component: IFrame
       },
       {
-        path: 'docs',
+        path: 'jessibuca',
         name: 'frame-jessibuca',
         meta: {
           title: 'jessibuca文档',
