@@ -58,7 +58,7 @@ export function getInstanceSummary() {
     url: '/summary',
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     }
   })
 }
@@ -69,7 +69,7 @@ export function getSysInfo() {
     url: '/sysinfo',
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     },
   })
 }
@@ -80,7 +80,7 @@ export function getStreamDetail(streamPath) {
     url: `/stream?streamPath=${streamPath}`,
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     }
   })
 }
@@ -91,7 +91,7 @@ export function stopStream(params) {
     url: '/stopstream',
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     },
     data: params
   })
@@ -103,7 +103,7 @@ export function getConfig(name) {
     url: name ? `/getconfig?name=${name}` : `/getconfig`,
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     }
   })
 }
@@ -124,7 +124,7 @@ export function modifyConfig(data, name) {
     url: name ? `/modifyconfig?name=${name}` : `/modifyconfig`,
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     },
     data
   })
@@ -136,7 +136,7 @@ export function getInstancePlugin(params) {
     url: '/plugins',
     method: 'post',
     headers: {
-      m7sId: id
+      m7sid: id
     }
   })
 }
