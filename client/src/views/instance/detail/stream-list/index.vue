@@ -1,6 +1,9 @@
 <template>
   <div>
-    <InstanceSelect />
+    <div class="top">
+      <InstanceSelect />
+      <Interval @interval-change="intervalChange" />
+    </div>
     <n-card :bordered="false" class="proCard">
       <BasicTable
         :columns="columns"
@@ -179,11 +182,25 @@
     showModal.value = true
   }
 
+  let timer
+
   async function initPage() {
-    const r = await getInstanceSummary()
-    streamData.value = r.Streams
+    let interval = localStorage.getItem('interval')
+    if (interval) {
+      timer = setInterval(async () => {
+        const r = await getInstanceSummary()
+        streamData.value = r.Streams
+      }, Number(interval) * 1000)
+    } else {
+      const r = await getInstanceSummary()
+      streamData.value = r.Streams
+    }
   }
   initPage()
+  function intervalChange() {
+    clearInterval(timer)
+    initPage()
+  }
   const loadDataTable = async () => {
     const r = await getInstanceSummary()
     console.log("🚀 ~ file: index.vue ~ line 183 ~ loadDataTable ~ r", r)
@@ -278,6 +295,7 @@
   }
 
   function reloadTable() {
+    console.log(8888);
     actionRef.value.reload()
   }
 
@@ -325,18 +343,27 @@
   }
 
   function handleDetail(record: Recordable) {
-    getStreamDetail(record.Path).then(res => {
-      dialog.info({
-        showIcon: false,
-        title: '流详情',
-        content: JSON.stringify(res),
-        style: {
-          width: '50vw',
-        },
-        positiveText: '确定'
+    const id = record.id
+    const path = record.Path
+    router.push({
+      name: 'instance_stream_detail',
+      query: {
+        id,
+        path
+      }
     })
-      console.log('res----', res)
-    })
+    // getStreamDetail(record.Path).then(res => {
+    //   dialog.info({
+    //     showIcon: false,
+    //     title: '流详情',
+    //     content: JSON.stringify(res),
+    //     style: {
+    //       width: '50vw',
+    //     },
+    //     positiveText: '确定'
+    // })
+    //   console.log('res----', res)
+    // })
   }
 
   function handleDelete(record: Recordable) {
@@ -362,6 +389,9 @@
 </script>
 
 <style lang="less" scoped>
+  .top {
+    display: flex;
+  }
   .n-gradient-text {
     font-size: 24px;
   }

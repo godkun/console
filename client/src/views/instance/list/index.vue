@@ -1,4 +1,5 @@
 <template>
+  <Interval @interval-change="intervalChange" />
   <n-card :bordered="false" class="proCard">
     <BasicTable
       :columns="columns"
@@ -184,8 +185,22 @@
     console.log(rowKeys)
   }
 
+  let timer
+
+  function intervalChange() {
+    clearInterval(timer)
+    reloadTable()
+  }
+
   function reloadTable() {
-    actionRef.value.reload()
+    let interval = localStorage.getItem('interval')
+    if (interval) {
+      timer = setInterval(async () => {
+        actionRef.value.reload()
+      }, Number(interval) * 1000)
+    } else {
+      actionRef.value.reload()
+    }
   }
 
   function confirmForm(e) {

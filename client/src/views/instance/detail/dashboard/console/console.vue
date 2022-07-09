@@ -1,6 +1,9 @@
 <template>
   <div class="console">
-    <InstanceSelect />
+    <div class="top">
+      <InstanceSelect />
+      <Interval @interval-change="intervalChange" />
+    </div>
     <!--数据卡片-->
     <n-grid cols="1 s:2 m:3 l:4 xl:4 2xl:4" responsive="screen" :x-gap="12" :y-gap="8">
       <n-grid-item>
@@ -131,6 +134,56 @@
     list.value = s.data.list;
     loading.value = false;
   });
+
+
+
+
+  let timer
+  async function initPage() {
+    let interval = localStorage.getItem('interval')
+    if (interval) {
+      timer = setInterval(async () => {
+        const pagesize = 0
+        const pageno = 0
+        const s =  await getInstanceList({ pagesize, pageno })
+        const r = await getInstanceSummary()
+        const info = await getSysInfo()
+        StartTime.value = info.StartTime
+        Version.value = info.Version
+        summary.value = r
+        CPUUsage.value = r.CPUUsage.toFixed(2) + '%';
+        HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%';
+        MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%';
+        NetWork.value = r.NetWork
+        list.value = s.data.list;
+        loading.value = false;
+      }, Number(interval) * 1000)
+    } else {
+      const pagesize = 0
+      const pageno = 0
+      const s =  await getInstanceList({ pagesize, pageno })
+      const r = await getInstanceSummary()
+      const info = await getSysInfo()
+      StartTime.value = info.StartTime
+      Version.value = info.Version
+      summary.value = r
+      CPUUsage.value = r.CPUUsage.toFixed(2) + '%';
+      HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%';
+      MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%';
+      NetWork.value = r.NetWork
+      list.value = s.data.list;
+      loading.value = false;
+    }
+  }
+  initPage()
+  function intervalChange() {
+    clearInterval(timer)
+    initPage()
+  }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.top {
+  display: flex;
+}
+</style>

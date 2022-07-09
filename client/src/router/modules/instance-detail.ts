@@ -53,6 +53,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/stream-list/index.vue')
       },
       {
+        path: 'streamDetail',
+        name: `${routeName}_stream_detail`,
+        meta: {
+          title: '流详情'
+        },
+        component: () => import('@/views/instance/detail/stream-detail/index.vue')
+      },
+      {
         path: 'plugin',
         name: `${routeName}_plugin_list`,
         meta: {
