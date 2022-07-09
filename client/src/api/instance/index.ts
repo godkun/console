@@ -51,14 +51,40 @@ export function getInstanceSummary() {
   const href = window.location.href
   const query = queryURLparamsRegEs6(href)
   let id = query.id
-  if (!id) id = localStorage.getItem('id')
-  return fetch({
-    url: '/summary',
-    method: 'post',
-    headers: {
-      m7sid: id
+  if (!id) {
+    id = localStorage.getItem('id')
+    if (!id) {
+      const pagesize = 0
+      const pageno = 0
+      getInstanceList({ pagesize, pageno }).then((res) => {
+        id = res.data.list[0].id
+        console.log("🚀 ~ file: index.ts ~ line 62 ~ getInstanceList ~ id", id)
+        return fetch({
+          url: '/summary',
+          method: 'post',
+          headers: {
+            m7sid: id
+          }
+        })
+      })
+    } else {
+      return fetch({
+        url: '/summary',
+        method: 'post',
+        headers: {
+          m7sid: id
+        }
+      })
     }
-  })
+  } else {
+    return fetch({
+      url: '/summary',
+      method: 'post',
+      headers: {
+        m7sid: id
+      }
+    })
+  }
 }
 
 // 系统信息，包含版本号（Version）和启动时间（StartTime）两个字段

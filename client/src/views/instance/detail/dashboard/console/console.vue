@@ -66,12 +66,39 @@
         </NCard>
       </n-grid-item>
     </n-grid>
-    <VisiTab />
+    <div class="mt-4">
+    <NRow :gutter="24">
+      <NCol :span="24">
+        <n-card content-style="padding: 0;" :bordered="false">
+          <n-tabs type="line" size="large" :tabs-padding="20" pane-style="padding: 20px;">
+            <!-- <n-tab-pane name="cpu使用情况">
+              <CPU />
+            </n-tab-pane>
+            <n-tab-pane name="内存使用">
+              <CPU />
+            </n-tab-pane>
+            <n-tab-pane name="存储使用">
+              <HardDisk />
+            </n-tab-pane> -->
+            <n-tab-pane name="网络" class="pane">
+              <n-card :title="item.Name" v-for="item in NetWork">
+                <div>Receive: {{item.Receive}}</div>
+                <div>Sent: {{item.Sent}}</div>
+                <div>ReceiveSpeed: {{item.ReceiveSpeed}}</div>
+                <div>SentSpeed: {{item.SentSpeed}}</div>
+              </n-card>
+              <!-- <NetWork /> -->
+            </n-tab-pane>
+          </n-tabs>
+        </n-card>
+      </NCol>
+    </NRow>
+  </div>
+    <!-- <VisiTab /> -->
   </div>
 </template>
 <script lang="ts" setup>
   import { ref, onMounted, reactive, onUnmounted } from 'vue';
-  import VisiTab from './components/VisiTab.vue';
   import router from '@/router';
   import {
     getInstanceSummary,
@@ -87,6 +114,7 @@
   const list = ref([]);
   const summary = ref({})
   const NetWork = ref([])
+  const net = ref([])
 
   // 图标列表
   const iconList = [
@@ -117,8 +145,7 @@
     })
   }
 
-  let timer
-  async function initPage() {
+  onMounted(async () => {
     const pagesize = 0
     const pageno = 0
     const s =  await getInstanceList({ pagesize, pageno })
@@ -130,11 +157,12 @@
     CPUUsage.value = r.CPUUsage.toFixed(2) + '%';
     HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%';
     MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%';
-    NetWork.value = r.NetWork
+    NetWork.value = r.NetWork.filter(item => item.Receive != 0 && item.Sent != 0)
     list.value = s.data.list;
     loading.value = false;
-  }
-  initPage()
+  })
+
+  let timer
   function intervalChange() {
     clearInterval(timer)
      let interval = localStorage.getItem('interval')
@@ -151,7 +179,7 @@
         CPUUsage.value = r.CPUUsage.toFixed(2) + '%';
         HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%';
         MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%';
-        NetWork.value = r.NetWork
+        NetWork.value = r.NetWork.filter(item => item.Receive != 0 && item.Sent != 0)
         list.value = s.data.list;
         loading.value = false;
       }, Number(interval) * 1000)
@@ -164,6 +192,9 @@
 
 <style lang="less" scoped>
 .top {
+  display: flex;
+}
+.pane {
   display: flex;
 }
 </style>
