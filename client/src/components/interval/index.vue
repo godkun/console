@@ -14,7 +14,10 @@
   let interval = localStorage.getItem('interval')
   let value
   if (interval) value = ref(Number(interval))
-  else value = ref(5)
+  else {
+    value = ref(5)
+    localStorage.setItem('interval', '5')
+  }
   const options = ref([
     {
       label: '1s',
@@ -33,6 +36,7 @@
       value: 10
     }
   ])
+  emit("interval-change", value)
   function handleUpdateValue(value) {
     localStorage.setItem('interval', value)
     emit("interval-change", value)
