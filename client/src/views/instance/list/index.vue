@@ -1,58 +1,60 @@
 <template>
-  <Interval @interval-change="intervalChange" />
-  <n-card :bordered="false" class="proCard">
-    <BasicTable
-      :columns="columns"
-      :request="loadDataTable"
-      :row-key="(row) => row.id"
-      ref="actionRef"
-      :actionColumn="actionColumn"
-      @update:checked-row-keys="onCheckedRow"
-      :scroll-x="1090">
-      <template #tableTitle>
-        <n-button type="primary" @click="addTable">
-          <template #icon>
-            <n-icon>
-              <PlusOutlined />
-            </n-icon>
-          </template>
-          新建
-        </n-button>
-      </template>
-
-      <template #toolbar>
-        <n-button type="primary" @click="reloadTable">刷新数据</n-button>
-      </template>
-    </BasicTable>
-
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
-      <n-form
-        :model="formParams"
-        :rules="rules"
-        ref="formRef"
-        label-placement="left"
-        :label-width="80"
-        class="py-4">
-        <n-form-item label="名称" path="name">
-          <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
-        </n-form-item>
-        <!-- <n-form-item label="链接" path="url">
-          <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
-        </n-form-item> -->
-      </n-form>
-
-      <template #action>
-        <n-space>
-          <n-button @click="() => (showModal = false)">取消</n-button>
-          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
-        </n-space>
-      </template>
-    </n-modal>
-  </n-card>
+  <div>
+    <Interval @interval-change="intervalChange" />
+    <n-card :bordered="false" class="proCard">
+      <BasicTable
+        :columns="columns"
+        :dataSource="instanceData"
+        :row-key="(row) => row.id"
+        ref="actionRef"
+        :actionColumn="actionColumn"
+        @update:checked-row-keys="onCheckedRow"
+        :scroll-x="1090">
+        <template #tableTitle>
+          <n-button type="primary" @click="addTable">
+            <template #icon>
+              <n-icon>
+                <PlusOutlined />
+              </n-icon>
+            </template>
+            新建
+          </n-button>
+        </template>
+  
+        <template #toolbar>
+          <n-button type="primary" @click="reloadTable">刷新数据</n-button>
+        </template>
+      </BasicTable>
+  
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
+        <n-form
+          :model="formParams"
+          :rules="rules"
+          ref="formRef"
+          label-placement="left"
+          :label-width="80"
+          class="py-4">
+          <n-form-item label="名称" path="name">
+            <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
+          </n-form-item>
+          <!-- <n-form-item label="链接" path="url">
+            <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
+          </n-form-item> -->
+        </n-form>
+  
+        <template #action>
+          <n-space>
+            <n-button @click="() => (showModal = false)">取消</n-button>
+            <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+          </n-space>
+        </template>
+      </n-modal>
+    </n-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
-  import { h, reactive, ref } from 'vue'
+  import { h, reactive, ref, onUnmounted } from 'vue'
   import { useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
@@ -93,6 +95,8 @@
     mail: '',
     secret: ''
   })
+
+  const instanceData = ref([])
 
   const actionColumn = reactive({
     width: 220,
@@ -174,33 +178,31 @@
     showModal.value = true
   }
 
-  const loadDataTable = async () => {
+  let timer
+
+  async function initPage() {
     const pagesize = 0
     const pageno = 0
-    const r =  await getInstanceList({ pagesize, pageno })
-    return r.data
+    const r = await getInstanceList({ pagesize, pageno })
+    instanceData.value = r.data.list
+  }
+  initPage()
+
+  function intervalChange() {
+    const pagesize = 0
+    const pageno = 0
+    clearInterval(timer)
+    let interval = localStorage.getItem('interval')
+    if (interval) {
+      timer = setInterval(async () => {
+        const r = await getInstanceList({ pagesize, pageno })
+        instanceData.value = r.data.list
+      }, Number(interval) * 1000)
+    }
   }
 
   function onCheckedRow(rowKeys) {
     console.log(rowKeys)
-  }
-
-  let timer
-
-  function intervalChange() {
-    clearInterval(timer)
-    reloadTable()
-  }
-
-  function reloadTable() {
-    let interval = localStorage.getItem('interval')
-    if (interval) {
-      timer = setInterval(async () => {
-        actionRef.value.reload()
-      }, Number(interval) * 1000)
-    } else {
-      actionRef.value.reload()
-    }
   }
 
   function confirmForm(e) {
@@ -310,6 +312,9 @@
       onNegativeClick: () => {}
     })
   }
+  onUnmounted(() => {
+    clearInterval(timer)
+  })
 </script>
 
 <style lang="less" scoped></style>

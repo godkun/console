@@ -15,14 +15,6 @@
         :scroll-x="1090">
         <template #tableTitle>
           <n-gradient-text type="success"> 流列表 </n-gradient-text>
-          <!-- <n-button type="primary" @click="addTable">
-            <template #icon>
-              <n-icon>
-                <PlusOutlined />
-              </n-icon>
-            </template>
-            新建
-          </n-button> -->
         </template>
 
         <template #toolbar>
@@ -58,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { h, reactive, ref, unref } from 'vue'
+  import { h, reactive, ref, unref, onUnmounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
@@ -185,21 +177,19 @@
   let timer
 
   async function initPage() {
+    const r = await getInstanceSummary()
+    streamData.value = r.Streams
+  }
+  initPage()
+  function intervalChange() {
+    clearInterval(timer)
     let interval = localStorage.getItem('interval')
     if (interval) {
       timer = setInterval(async () => {
         const r = await getInstanceSummary()
         streamData.value = r.Streams
       }, Number(interval) * 1000)
-    } else {
-      const r = await getInstanceSummary()
-      streamData.value = r.Streams
     }
-  }
-  initPage()
-  function intervalChange() {
-    clearInterval(timer)
-    initPage()
   }
   const loadDataTable = async () => {
     const r = await getInstanceSummary()
@@ -365,6 +355,10 @@
     //   console.log('res----', res)
     // })
   }
+
+  onUnmounted(() => {
+    clearInterval(timer)
+  })
 
   function handleDelete(record: Recordable) {
     dialog.info({

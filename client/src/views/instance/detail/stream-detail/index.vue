@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, onUnmounted} from 'vue'
   import { useMessage } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import JsonEditor from '@/components/editor/index.vue'
@@ -37,24 +37,26 @@
   let timer
 
   async function initPage() {
-    let interval = localStorage.getItem('interval')
-    if (interval) {
-      timer = setInterval(async () => {
-        const res = await getStreamDetail(query.path)
-        jsonCode.value = JSON.stringify(res, null, 2)
-      }, Number(interval) * 1000)
-    } else {
-      const r = await getInstanceSummary()
-      streamData.value = r.Streams
-    }
+    const res = await getStreamDetail(query.path)
+    jsonCode.value = JSON.stringify(res, null, 2)
   }
   
   initPage()
 
   function intervalChange() {
     clearInterval(timer)
-    initPage()
+    let interval = localStorage.getItem('interval')
+    if (interval) {
+      timer = setInterval(async () => {
+        const res = await getStreamDetail(query.path)
+        jsonCode.value = JSON.stringify(res, null, 2)
+      }, Number(interval) * 1000)
+    }
   }
+
+  onUnmounted(() => {
+    clearInterval(timer)
+  })
 
 </script>
 

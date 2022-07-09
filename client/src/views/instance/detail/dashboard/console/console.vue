@@ -70,9 +70,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted, reactive } from 'vue';
+  import { ref, onMounted, reactive, onUnmounted } from 'vue';
   import VisiTab from './components/VisiTab.vue';
-  import { CountTo } from '@/components/CountTo/index';
   import router from '@/router';
   import {
     getInstanceSummary,
@@ -118,7 +117,8 @@
     })
   }
 
-  onMounted(async () => {
+  let timer
+  async function initPage() {
     const pagesize = 0
     const pageno = 0
     const s =  await getInstanceList({ pagesize, pageno })
@@ -133,14 +133,11 @@
     NetWork.value = r.NetWork
     list.value = s.data.list;
     loading.value = false;
-  });
-
-
-
-
-  let timer
-  async function initPage() {
-    let interval = localStorage.getItem('interval')
+  }
+  initPage()
+  function intervalChange() {
+    clearInterval(timer)
+     let interval = localStorage.getItem('interval')
     if (interval) {
       timer = setInterval(async () => {
         const pagesize = 0
@@ -158,28 +155,11 @@
         list.value = s.data.list;
         loading.value = false;
       }, Number(interval) * 1000)
-    } else {
-      const pagesize = 0
-      const pageno = 0
-      const s =  await getInstanceList({ pagesize, pageno })
-      const r = await getInstanceSummary()
-      const info = await getSysInfo()
-      StartTime.value = info.StartTime
-      Version.value = info.Version
-      summary.value = r
-      CPUUsage.value = r.CPUUsage.toFixed(2) + '%';
-      HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%';
-      MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%';
-      NetWork.value = r.NetWork
-      list.value = s.data.list;
-      loading.value = false;
     }
   }
-  initPage()
-  function intervalChange() {
+  onUnmounted(() => {
     clearInterval(timer)
-    initPage()
-  }
+  })
 </script>
 
 <style lang="less" scoped>
