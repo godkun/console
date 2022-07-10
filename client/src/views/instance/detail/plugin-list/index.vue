@@ -26,7 +26,7 @@
         </template>
 
         <template #toolbar>
-          <n-button type="primary" @click="reloadTable">刷新数据</n-button>
+          <n-button type="primary" @click="reloadTable">刷新</n-button>
         </template>
       </BasicTable>
 
