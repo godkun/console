@@ -90,7 +90,7 @@ func NewSessionMange() *SessionManager {
 	SessionManager := &SessionManager{
 		cookieName: "lz_cookie",
 		storage:    newFromMemory(),
-		maxAge:     1800,
+		maxAge:     180000,
 	}
 
 	go SessionManager.GC()
