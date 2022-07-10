@@ -23,7 +23,7 @@
       <slot name="toolbar"></slot>
 
       <!--刷新-->
-      <n-tooltip trigger="hover">
+      <!-- <n-tooltip trigger="hover">
         <template #trigger>
           <div class="table-toolbar-right-icon" @click="reload">
             <n-icon size="18">
@@ -32,7 +32,7 @@
           </div>
         </template>
         <span>刷新</span>
-      </n-tooltip>
+      </n-tooltip> -->
 
       <!--密度-->
       <n-tooltip trigger="hover">

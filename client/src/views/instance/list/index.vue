@@ -21,9 +21,9 @@
           </n-button>
         </template>
   
-        <template #toolbar>
+        <!-- <template #toolbar>
           <n-button type="primary" @click="reloadTable">刷新数据</n-button>
-        </template>
+        </template> -->
       </BasicTable>
   
       <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
