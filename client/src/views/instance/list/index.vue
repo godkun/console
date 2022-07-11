@@ -1,6 +1,7 @@
 <template>
   <div>
     <Interval @interval-change="intervalChange" />
+    <div @click="jumpTest">test</div>
     <n-card :bordered="false" class="proCard">
       <BasicTable
         :columns="columns"
@@ -255,6 +256,15 @@
       name: 'instance_stream_list',
       query: {
         id
+      }
+    })
+  }
+
+  function jumpTest() {
+     router.push({
+      name: 'stream-play',
+      query: {
+        frameSrc: 'https://m7s.live/guide/introduction.html?s=1'
       }
     })
   }

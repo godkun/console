@@ -17,15 +17,6 @@ const routes: Array<RouteRecordRaw> = [
       icon: renderIcon(DesktopOutline)
     },
     children: [
-      // {
-      //   path: 'docs',
-      //   name: 'frame-docs',
-      //   meta: {
-      //     title: '后台教程',
-      //     frameSrc: 'https://m7s.live/guide/introduction.html'
-      //   },
-      //   component: IFrame
-      // },
       {
         path: 'm7s',
         name: 'frame-m7s',
@@ -41,6 +32,15 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: 'jessibuca文档',
           frameSrc: 'https://jessibuca.com/'
+        },
+        component: IFrame
+      },
+      {
+        path: 'play',
+        name: 'stream-play',
+        meta: {
+          title: '流播放'
+          // frameSrc: 'https://m7s.live/guide/introduction.html'
         },
         component: IFrame
       }
