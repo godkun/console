@@ -205,6 +205,11 @@ func main() {
 					break
 				}
 				connect = true
+				go func() {
+					MysqlDb.Exec("update instance set RemoteIP=?  where secret=? ", w.RemoteAddr().String(), secret)
+				}()
+
+				w.RemoteAddr()
 				break
 			} else {
 				if error = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); error != nil {
@@ -245,7 +250,6 @@ func main() {
 		clearTimeOutInstance()
 	}()
 	log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
-
 }
 
 func updateconfigCommand(w http.ResponseWriter, r *http.Request) {
@@ -409,6 +413,9 @@ func wsClose(w *websocket.Conn, secret string) {
 	fmt.Println("websocket is closes")
 	w.Close()
 	if len(secret) > 0 {
+		go func() {
+			MysqlDb.Exec("update instance set RemoteIP=''  where secret=? ", secret)
+		}()
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
 	}
