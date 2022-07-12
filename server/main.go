@@ -175,6 +175,7 @@ func main() {
 		var secret string
 		var error error
 		connect := false
+		fmt.Println("客户端获取到的ip为:" + w.RemoteAddr().String())
 		for {
 			//只支持string类型
 			var reply string
@@ -208,8 +209,6 @@ func main() {
 				go func() {
 					MysqlDb.Exec("update instance set RemoteIP=?  where secret=? ", w.RemoteAddr().String(), secret)
 				}()
-
-				w.RemoteAddr()
 				break
 			} else {
 				if error = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); error != nil {
@@ -249,7 +248,8 @@ func main() {
 	go func() {
 		clearTimeOutInstance()
 	}()
-	log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
+	//log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
+	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
 
 func updateconfigCommand(w http.ResponseWriter, r *http.Request) {
