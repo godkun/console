@@ -175,7 +175,7 @@ func main() {
 		var secret string
 		var error error
 		connect := false
-		fmt.Println("客户端获取到的ip为:" + w.RemoteAddr().String())
+		fmt.Println("客户端获取到的ip为:" + w.Request().RemoteAddr)
 		for {
 			//只支持string类型
 			var reply string
