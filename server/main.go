@@ -248,8 +248,8 @@ func main() {
 	go func() {
 		clearTimeOutInstance()
 	}()
-	//log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
-	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+	log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
+	//log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
 
 func updateconfigCommand(w http.ResponseWriter, r *http.Request) {
