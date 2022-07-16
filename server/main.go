@@ -207,7 +207,7 @@ func main() {
 				}
 				connect = true
 				go func() {
-					MysqlDb.Exec("update instance set RemoteIP=?  where secret=? ", w.RemoteAddr().String(), secret)
+					MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", w.Request().RemoteAddr, secret)
 				}()
 				break
 			} else {
@@ -414,7 +414,7 @@ func wsClose(w *websocket.Conn, secret string) {
 	w.Close()
 	if len(secret) > 0 {
 		go func() {
-			MysqlDb.Exec("update instance set RemoteIP=''  where secret=? ", secret)
+			MysqlDb.Exec("update instance set online='0'  where secret=? ", secret)
 		}()
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
