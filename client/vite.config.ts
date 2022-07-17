@@ -45,7 +45,7 @@ export default (): UserConfig => {
     ],
     // 需要配置本地host
     server: {
-      host: 'mvmonibuca.com',
+      host: 'monibuca.com',
       port: 4000,
       proxy: {
         '/api': {

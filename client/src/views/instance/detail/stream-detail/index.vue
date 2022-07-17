@@ -3,77 +3,159 @@
     <Interval @interval-change="intervalChange" />
     <div class="page">
       <n-grid x-gap="12" :cols="6">
+        <n-gi span="6">
+          <n-statistic label="流标识" :value="data.Path">
+            <!-- <template #prefix>
+              <n-icon> </n-icon>
+            </template>
+            <template #suffix>
+              / 100
+            </template> -->
+          </n-statistic>
+        </n-gi>
+        <n-gi span="1">
+          <n-statistic label="流状态" :value='["⌛等待发布者", "🟢发布中", "🟡等待关闭", "🔴已关闭"][data.State]'></n-statistic>
+        </n-gi>
         <n-gi span="2">
-          <n-space class="action"></n-space>
+          <n-statistic label="发布类型" :value="data.Publisher?.Type"></n-statistic>
         </n-gi>
-        <n-gi span="4">
-          <n-space>
-            <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="jsonCode" />
-            <pre v-else class="pre">{{ jsonCode }}</pre>
-          </n-space>
+        <n-gi span="2">
+          <n-statistic label="发布时间" :value="data.Publisher?.StartTime"></n-statistic>
         </n-gi>
+        <n-gi span="1">
+          <n-statistic label="订阅者总数" :value="data.Subscribers?.length || 0"></n-statistic>
+        </n-gi>
+        <template v-for="(track,i) in data.Tracks">
+          <n-gi span="6">
+            <div style="margin: 20px;">-轨道{{i}}详情-</div>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="轨道名称" :value="track.Name"></n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="BPS" :value="BPSStr(track.BPS)"></n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="FPS" :value="track.FPS"></n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="裸数据长度" :value="track.RawSize + ' byte'"></n-statistic>
+          </n-gi>
+          <n-gi span="2">
+            <n-statistic label="裸数据前10字节"
+              :value="track.RawPart.map(x => x.toString(16).toUpperCase().padStart(2, '0')).join(',')">
+            </n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic v-if="track.SPSInfo" label="分辨率" :value="track.SPSInfo.Width + 'x' + track.SPSInfo.Height">
+            </n-statistic>
+            <n-statistic v-else label="通道数" :value="track.Channels">
+            </n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic v-if="track.GOP" label="GOP" :value="track.GOP">
+            </n-statistic>
+            <n-statistic v-else label="位深度" :value="track.SampleSize">
+            </n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="累计帧数" :value="track.MoveCount"></n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="时间戳" :value="track.LastValue.AbsTime"></n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="PTS" :value="track.LastValue.PTS"></n-statistic>
+          </n-gi>
+          <n-gi span="1">
+            <n-statistic label="DTS" :value="track.LastValue.DTS"></n-statistic>
+          </n-gi>
+        </template>
       </n-grid>
     </div>
+    <pre class="pre">{{ jsonCode }}</pre>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { ref, onUnmounted} from 'vue'
-  import { useMessage } from 'naive-ui'
-  import { useRoute } from 'vue-router'
-  import JsonEditor from '@/components/editor/index.vue'
-  import {
-    getStreamDetail
-  } from '@/api/instance'
+import { ref, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
+import {
+  getStreamDetail
+} from '@/api/instance';
+import { computed } from '@vue/reactivity';
+interface StreamDetail {
+  Path: string;
+  StartTime: string;
+  State: number;
+  Publisher?: {
+    Type: string;
+    StartTime: string;
+  };
+  Tracks: {
+    Name: string; BPS: number; FPS: number; RawPart: number[]; RawSize: number;
+    Channels: number; SampleSize: number;
+    GOP?: number; SPSInfo?: { Width: number; Height: number; };
+    MoveCount: number;
+  }[];
+  Subscribers: { Type: string; StartTime: string; }[];
+  LastValue: {
+    PTS: number; DTS: number; AbsTime: number;
+  };
+}
+function BPSStr(bps: number) {
+  bps = bps << 3;
+  if (bps > 1024 * 1024) return (bps / 1024 / 1024).toFixed(2) + ' mb/s';
+  if (bps > 1024) return (bps / 1024).toFixed(2) + ' kb/s';
+  return (bps).toString() + ' b/s';
+}
+const jsonCode = computed(() => {
+  return JSON.stringify(data.value, null, 2);
+});
+const route = useRoute();
+const { query } = route;
+const data = ref({} as StreamDetail);
+let timer;
 
-  const jsonCode = ref('')
-  const oldJsonCode = ref('')
-  const isEdit = ref(false)
-  const message = useMessage()
+async function initPage() {
+  data.value = await getStreamDetail(query.path);
+}
 
-  const route = useRoute()
-  const { query } = route
+initPage();
 
-  let timer
-
-  async function initPage() {
-    const res = await getStreamDetail(query.path)
-    jsonCode.value = JSON.stringify(res, null, 2)
+function intervalChange() {
+  clearInterval(timer);
+  let interval = localStorage.getItem('interval');
+  if (interval) {
+    timer = setInterval(async () => {
+      data.value = await getStreamDetail(query.path);
+    }, Number(interval) * 1000);
   }
-  
-  initPage()
+}
 
-  function intervalChange() {
-    clearInterval(timer)
-    let interval = localStorage.getItem('interval')
-    if (interval) {
-      timer = setInterval(async () => {
-        const res = await getStreamDetail(query.path)
-        jsonCode.value = JSON.stringify(res, null, 2)
-      }, Number(interval) * 1000)
-    }
-  }
-
-  onUnmounted(() => {
-    clearInterval(timer)
-  })
+onUnmounted(() => {
+  clearInterval(timer);
+});
 
 </script>
 
 <style lang="less" scoped>
-  .page {
-    position: relative;
-    .action {
-      position: sticky;
-      top: 120px;
-    }
-    .jsonEditor {
-      width: 55vw;
-      min-height: 80vh;
-    }
-    .pre {
-      width: 70vw;
-      height: 80vh;
-    }
+.page {
+  position: relative;
+
+  .action {
+    position: sticky;
+    top: 120px;
   }
+
+  .jsonEditor {
+    width: 55vw;
+    min-height: 80vh;
+  }
+
+  .pre {
+    width: 70vw;
+    height: 80vh;
+  }
+}
 </style>

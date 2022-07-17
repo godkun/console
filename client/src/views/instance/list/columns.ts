@@ -1,3 +1,5 @@
+import { NTag } from "naive-ui";
+import { h } from 'vue';
 export const columns = [
   {
     title: '实例id',
@@ -22,6 +24,21 @@ export const columns = [
   {
     title: '是否在线',
     key: 'online',
-    width: 100
+    width: 100,
+    render(row) {
+      return h(
+        NTag,
+        {
+          style: {
+            marginRight: '6px'
+          },
+          type: row.online == 1 ? 'success' : "error",
+          bordered: false
+        },
+        {
+          default: () => row.online == 1 ? '在线' : "离线"
+        }
+      );
+    }
   }
-]
+];
