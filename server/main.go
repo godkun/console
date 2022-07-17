@@ -176,7 +176,6 @@ func main() {
 		var error error
 		connect := false
 		fmt.Println("客户端获取到的ip为:" + w.Request().RemoteAddr)
-		defer wsClose(w, secret)
 		for {
 			//只支持string类型
 			var reply string
@@ -188,7 +187,7 @@ func main() {
 			//replyJson := make(map[string]string)
 			//json.Unmarshal([]byte(reply), &replyJson)
 			//secret = replyJson["secret"]
-			secret := reply
+			secret = reply
 			totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
 			if err != nil {
 				fmt.Println(err)
@@ -229,6 +228,7 @@ func main() {
 			//	break
 			//}
 		}
+		defer wsClose(w, secret)
 		if connect {
 			for {
 				var reply string
@@ -253,8 +253,8 @@ func main() {
 	go func() {
 		clearTimeOutInstance()
 	}()
-	log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
-	//log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+	//log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
+	log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
 
 func updateconfigCommand(w http.ResponseWriter, r *http.Request) {
@@ -415,14 +415,17 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 ws链接关闭时清理缓存
 */
 func wsClose(w *websocket.Conn, secret string) {
-	fmt.Println("websocket is closes")
+	fmt.Println("nothing")
 	if len(secret) > 0 {
 		go func() {
 			MysqlDb.Exec("update instance set online='0'  where secret=? ", secret)
 		}()
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
+	}else {
+		fmt.Println("into else")
 	}
+	fmt.Println("websocket is closes 1111,secret is " + secret)
 	w.Close()
 }
 
