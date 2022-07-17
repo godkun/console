@@ -176,6 +176,7 @@ func main() {
 		var error error
 		connect := false
 		fmt.Println("客户端获取到的ip为:" + w.Request().RemoteAddr)
+		defer wsClose(w, secret)
 		for {
 			//只支持string类型
 			var reply string
@@ -207,7 +208,12 @@ func main() {
 				}
 				connect = true
 				go func() {
-					MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", w.Request().RemoteAddr, secret)
+					remoteIP, _, found := strings.Cut(w.Request().RemoteAddr, ":")
+					if found {
+						MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
+					} else {
+						MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", w.Request().RemoteAddr, secret)
+					}
 				}()
 				break
 			} else {
@@ -223,7 +229,6 @@ func main() {
 			//	break
 			//}
 		}
-		defer wsClose(w, secret)
 		if connect {
 			for {
 				var reply string
