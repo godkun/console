@@ -416,7 +416,6 @@ ws链接关闭时清理缓存
 */
 func wsClose(w *websocket.Conn, secret string) {
 	fmt.Println("websocket is closes")
-	w.Close()
 	if len(secret) > 0 {
 		go func() {
 			MysqlDb.Exec("update instance set online='0'  where secret=? ", secret)
@@ -424,6 +423,7 @@ func wsClose(w *websocket.Conn, secret string) {
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
 	}
+	w.Close()
 }
 
 /**
