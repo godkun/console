@@ -2,17 +2,17 @@ export const columns = [
   {
     title: 'StreamPath',
     key: 'Path',
-    width: 150
+    width: 100
   },
   {
     title: '类型',
     key: 'Type',
-    width: 150
+    width: 50
   },
   {
     title: '订阅者',
     key: 'Subscribers',
-    width: 100
+    width: 50
   },
   {
     title: '开始时间',

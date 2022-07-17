@@ -7,6 +7,7 @@
         :columns="columns"
         :dataSource="instanceData"
         :row-key="(row) => row.id"
+        :pagination="false"
         ref="actionRef"
         :actionColumn="actionColumn"
         @update:checked-row-keys="onCheckedRow"
@@ -185,6 +186,10 @@
     const pagesize = 0
     const pageno = 0
     const r = await getInstanceList({ pagesize, pageno })
+    r.data.list.forEach(item => {
+      if (item.online == 1) item.online = '在线'
+      else item.online = '不在线'
+    })
     instanceData.value = r.data.list
   }
   initPage()
@@ -197,6 +202,10 @@
     if (interval) {
       timer = setInterval(async () => {
         const r = await getInstanceList({ pagesize, pageno })
+        r.data.list.forEach(item => {
+          if (item.online == 1) item.online = '在线'
+          else item.online = '不在线'
+        })
         instanceData.value = r.data.list
       }, Number(interval) * 1000)
     }

@@ -12,13 +12,14 @@
   import { ref, unref } from 'vue';
   import { useRoute, useRouter } from 'vue-router'
   import { getInstanceList } from '@/api/instance'
-  // const emit = defineEmits(['instanceChange'])
+  const emit = defineEmits(['changeIp'])
   const options = ref([])
   const router = useRouter()
   const route = useRoute()
   const value = ref('')
   const pagesize = 0
   const pageno = 0
+  const instanceData = ref([])
   getInstanceList({ pagesize, pageno }).then(res => {
     options.value = res.data.list.map(item => {
       return {
@@ -26,12 +27,17 @@
         value: item.id
       }
     })
+    instanceData.value = res.data.list
     const id = route.query.id as string
     if (id) value.value = id
     else value.value = options.value[0].value
     localStorage.setItem('id', value.value)
+    let remoteIp = res.data.list.find(item => item.id == value.value).RemoteIP
+    emit('changeIp', remoteIp)
   })
   function handleUpdateValue(value) {
+    let remoteIp = instanceData.value.find(item => item.id == value).RemoteIP
+    emit('changeIp', remoteIp)
     router.push({
       path: unref(route).path,
       query: {

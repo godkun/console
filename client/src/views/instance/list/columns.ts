@@ -18,5 +18,10 @@ export const columns = [
     title: '创建时间',
     key: 'createtime',
     width: 100
+  },
+  {
+    title: '是否在线',
+    key: 'online',
+    width: 100
   }
 ]
