@@ -187,7 +187,7 @@ func main() {
 			//replyJson := make(map[string]string)
 			//json.Unmarshal([]byte(reply), &replyJson)
 			//secret = replyJson["secret"]
-			secret := reply
+			secret = reply
 			totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
 			if err != nil {
 				fmt.Println(err)
@@ -207,7 +207,12 @@ func main() {
 				}
 				connect = true
 				go func() {
-					MysqlDb.Exec("update instance set RemoteIP=?  where secret=? ", w.RemoteAddr().String(), secret)
+					remoteIP, _, found := strings.Cut(w.Request().RemoteAddr, ":")
+					if found {
+						MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
+					} else {
+						MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", w.Request().RemoteAddr, secret)
+					}
 				}()
 				break
 			} else {
@@ -410,15 +415,18 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 ws链接关闭时清理缓存
 */
 func wsClose(w *websocket.Conn, secret string) {
-	fmt.Println("websocket is closes")
-	w.Close()
+	fmt.Println("nothing")
 	if len(secret) > 0 {
 		go func() {
-			MysqlDb.Exec("update instance set RemoteIP=''  where secret=? ", secret)
+			MysqlDb.Exec("update instance set online='0'  where secret=? ", secret)
 		}()
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
+	}else {
+		fmt.Println("into else")
 	}
+	fmt.Println("websocket is closes 1111,secret is " + secret)
+	w.Close()
 }
 
 /**
