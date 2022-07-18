@@ -87,7 +87,7 @@ const instance = ref({
 const instanceData = ref([]);
 
 const actionColumn = reactive({
-  width: 220,
+  // width: 320,
   title: '操作',
   key: 'action',
   fixed: 'right',
