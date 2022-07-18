@@ -1,7 +1,6 @@
 <template>
   <div>
     <Interval @interval-change="intervalChange" />
-    <div @click="jumpTest">test</div>
     <n-card :bordered="false" class="proCard">
       <BasicTable :columns="columns" :dataSource="instanceData" :row-key="(row) => row.id" :pagination="false"
         ref="actionRef" :actionColumn="actionColumn" @update:checked-row-keys="onCheckedRow" :scroll-x="1090">
