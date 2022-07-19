@@ -34,15 +34,6 @@ const routes: Array<RouteRecordRaw> = [
           frameSrc: 'https://jessibuca.com/'
         },
         component: IFrame
-      },
-      {
-        path: 'play',
-        name: 'stream-play',
-        meta: {
-          title: '流播放'
-          // frameSrc: 'https://m7s.live/guide/introduction.html'
-        },
-        component: IFrame
       }
     ]
   }
