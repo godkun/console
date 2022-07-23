@@ -1,5 +1,5 @@
 {
-  "name": "Monibuca",
+  "name": "m7s-console",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -40,7 +40,8 @@
     "vue-core-video-player": "^0.2.0",
     "vue-router": "^4.0.12",
     "vue-types": "^4.1.1",
-    "vuedraggable": "^4.1.0"
+    "vuedraggable": "^4.1.0",
+    "webrtc-internals": "^0.0.8"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",

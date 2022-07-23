@@ -25,9 +25,9 @@
         <n-gi span="1">
           <n-statistic label="订阅者总数" :value="data.Subscribers?.length || 0"></n-statistic>
         </n-gi>
-        <template v-for="(track,i) in data.Tracks">
+        <template v-for="(track, i) in data.Tracks">
           <n-gi span="6">
-            <div style="margin: 20px;">-轨道{{i}}详情-</div>
+            <div style="margin: 20px;">-轨道{{ i }}详情-</div>
           </n-gi>
           <n-gi span="1">
             <n-statistic label="轨道名称" :value="track.Name"></n-statistic>
@@ -70,6 +70,12 @@
           <n-gi span="1">
             <n-statistic label="DTS" :value="track.LastValue.DTS"></n-statistic>
           </n-gi>
+          <n-gi span="2">
+            <canvas :id="'bps' + track.Name"></canvas>
+          </n-gi>
+          <n-gi span="2">
+            <canvas :id="'fps' + track.Name"></canvas>
+          </n-gi>
         </template>
       </n-grid>
     </div>
@@ -78,12 +84,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onUnmounted } from 'vue';
+import { ref, onUnmounted, nextTick, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import {
   getStreamDetail
 } from '@/api/instance';
-import { computed } from '@vue/reactivity';
+import { TimelineDataSeries, TimelineGraphView } from 'webrtc-internals';
+interface TimelineData {
+  Timestamp: string;
+  Value: number;
+}
 interface StreamDetail {
   Path: string;
   StartTime: string;
@@ -94,14 +104,16 @@ interface StreamDetail {
   };
   Tracks: {
     Name: string; BPS: number; FPS: number; RawPart: number[]; RawSize: number;
+    BPSs: TimelineData[],
+    FPSs: TimelineData[],
     Channels: number; SampleSize: number;
     GOP?: number; SPSInfo?: { Width: number; Height: number; };
     MoveCount: number;
+    LastValue: {
+      PTS: number; DTS: number; AbsTime: number;
+    };
   }[];
   Subscribers: { Type: string; StartTime: string; }[];
-  LastValue: {
-    PTS: number; DTS: number; AbsTime: number;
-  };
 }
 function BPSStr(bps: number) {
   bps = bps << 3;
@@ -116,9 +128,41 @@ const route = useRoute();
 const { query } = route;
 const data = ref({} as StreamDetail);
 let timer;
-
+let gvs: { [key: string]: { bps: TimelineGraphView, fps: TimelineGraphView, bpsds: TimelineDataSeries, fpsds: TimelineDataSeries; }; } = {};
 async function initPage() {
   data.value = await getStreamDetail(query.path);
+  data.value.Tracks.forEach(t => {
+    if (!gvs[t.Name]) {
+      nextTick(() => {
+        const g = gvs[t.Name] = {
+          bps: new TimelineGraphView(document.getElementById(`bps${t.Name}`) as HTMLCanvasElement),
+          fps: new TimelineGraphView(document.getElementById(`fps${t.Name}`) as HTMLCanvasElement),
+          bpsds: new TimelineDataSeries(),
+          fpsds: new TimelineDataSeries(),
+        };
+        g.bps.addDataSeries(g.bpsds);
+        g.fps.addDataSeries(g.fpsds);
+        t.BPSs.forEach(x => {
+          g.bpsds.addPoint(+new Date(x.Timestamp), x.Value);
+        });
+        t.FPSs.forEach(x => {
+          g.fpsds.addPoint(+new Date(x.Timestamp), x.Value);
+        });
+        g.bps.updateEndDate();
+        g.fps.updateEndDate();
+      });
+    } else {
+      t.BPSs.forEach(x => {
+        gvs[t.Name].bpsds.addPoint(+new Date(x.Timestamp), x.Value);
+      });
+      t.FPSs.forEach(x => {
+        gvs[t.Name].fpsds.addPoint(+new Date(x.Timestamp), x.Value);
+      });
+      gvs[t.Name].bps.updateEndDate();
+      gvs[t.Name].fps.updateEndDate();
+    }
+  });
+
 }
 
 initPage();
@@ -127,15 +171,11 @@ function intervalChange() {
   clearInterval(timer);
   let interval = localStorage.getItem('interval');
   if (interval) {
-    timer = setInterval(async () => {
-      data.value = await getStreamDetail(query.path);
-    }, Number(interval) * 1000);
+    timer = setInterval(initPage, Number(interval) * 1000);
   }
 }
 
-onUnmounted(() => {
-  clearInterval(timer);
-});
+onUnmounted(() => clearInterval(timer));
 
 </script>
 
