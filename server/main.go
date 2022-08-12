@@ -250,11 +250,16 @@ func main() {
 	http.HandleFunc("/api/getconfig", getconfigCommand)
 	http.HandleFunc("/api/modifyconfig", modifyconfigCommand)
 	http.HandleFunc("/api/updateconfig", updateconfigCommand)
+	http.HandleFunc("/gb28181/api/list", gb28181listComman)
 	go func() {
 		clearTimeOutInstance()
 	}()
 	log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
 	//log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+}
+
+func gb28181listComman(w http.ResponseWriter, r *http.Request) {
+	execCommand(w, r, "/gb28181/api/list")
 }
 
 func updateconfigCommand(w http.ResponseWriter, r *http.Request) {
@@ -388,6 +393,11 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 					log.Println("websocket出现异常", error)
 				}
 				break
+			case "/gb28181/api/list":
+				if error := websocket.Message.Send(instance.W, "/gb28181/api/list=1\n"); error != nil {
+					log.Println("websocket出现异常", error)
+				}
+				break
 			default:
 				w.Write(util.ErrJson(util.ErrRequestParamError))
 				return
@@ -422,7 +432,7 @@ func wsClose(w *websocket.Conn, secret string) {
 		}()
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
-	}else {
+	} else {
 		fmt.Println("into else")
 	}
 	fmt.Println("websocket is closes 1111,secret is " + secret)
