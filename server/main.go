@@ -394,7 +394,7 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 				}
 				break
 			case "/gb28181/api/list":
-				if error := websocket.Message.Send(instance.W, "/gb28181/api/list=1\n"); error != nil {
+				if error := websocket.Message.Send(instance.W, "/gb28181/api/list?json=1\n"); error != nil {
 					log.Println("websocket出现异常", error)
 				}
 				break
