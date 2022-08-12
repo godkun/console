@@ -250,7 +250,7 @@ func main() {
 	http.HandleFunc("/api/getconfig", getconfigCommand)
 	http.HandleFunc("/api/modifyconfig", modifyconfigCommand)
 	http.HandleFunc("/api/updateconfig", updateconfigCommand)
-	http.HandleFunc("/gb28181/api/list", gb28181listComman)
+	http.HandleFunc("/api/gb28181/api/list", gb28181listCommand)
 	go func() {
 		clearTimeOutInstance()
 	}()
@@ -258,7 +258,7 @@ func main() {
 	//log.Fatal(http.ListenAndServe(config.ServerPort, nil))
 }
 
-func gb28181listComman(w http.ResponseWriter, r *http.Request) {
+func gb28181listCommand(w http.ResponseWriter, r *http.Request) {
 	execCommand(w, r, "/gb28181/api/list")
 }
 
