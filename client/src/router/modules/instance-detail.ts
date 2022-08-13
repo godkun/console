@@ -67,6 +67,14 @@ const routes: Array<RouteRecordRaw> = [
           title: '插件列表'
         },
         component: () => import('@/views/instance/detail/plugin-list/index.vue')
+      },
+      {
+        path: 'gb28181',
+        name: `gb28181`,
+        meta: {
+          title: 'gb28181'
+        },
+        component: () => import('@/views/instance/detail/gb28181/index.vue')
       }
     ]
   }

@@ -188,3 +188,19 @@ export function getInstancePlugin(params) {
     }
   })
 }
+
+
+export function getInstanceGB(params) {
+  const href = window.location.href
+  const query = queryURLparamsRegEs6(href)
+  let id = query.id
+  if (!id) id = localStorage.getItem('id')
+  return fetch({
+    url: '/gb28181/api/list',
+    method: 'post',
+    headers: {
+      m7sid: id
+    }
+  })
+}
+

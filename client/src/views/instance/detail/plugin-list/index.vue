@@ -12,9 +12,7 @@
         @update:checked-row-keys="onCheckedRow"
         :scroll-x="1090">
         <template #tableTitle>
-          <n-gradient-text type="success">
-            插件列表
-          </n-gradient-text>
+          <n-gradient-text type="success"> 插件列表 </n-gradient-text>
           <!-- <n-button type="primary" @click="addTable">
             <template #icon>
               <n-icon>
@@ -23,10 +21,6 @@
             </template>
             新建
           </n-button> -->
-        </template>
-
-        <template #toolbar>
-          <n-button type="primary" @click="reloadTable">刷新</n-button>
         </template>
       </BasicTable>
 
@@ -94,7 +88,7 @@
     url: ''
   })
   const modalTitle = ref('')
-  const pluginData= ref([])
+  const pluginData = ref([])
 
   const instance = ref({
     id: '',
@@ -120,13 +114,21 @@
             ifShow: () => {
               for (let index = 0; index < pluginData.value.length; index++) {
                 const p = pluginData.value[index]
-                if(p.Name == record.Name) {
+                if (p.Name == record.Name) {
                   if (!p.RawConfig) return false
                   else return true
                 }
               }
             }
           },
+          {
+            label: '详情',
+            type: 'primary',
+            onClick: handleDetail.bind(null, record),
+            ifShow: () => {
+              if (record.Name == 'GB28181') return true
+            }
+          }
         ],
         select: (key) => {
           message.info(`您点击了，${key} 按钮`)
@@ -135,7 +137,20 @@
     }
   })
 
-    // 跳转到实例详情
+  function handleDetail(record: Recordable) {
+    const id = record.id
+    console.log(1111, record.Name)
+    if (record.Name == 'GB28181') {
+      router.push({
+        name: 'gb28181',
+        query: {
+          id
+        }
+      })
+    }
+  }
+
+  // 跳转到实例详情
   function handlePluginConfig(record: Recordable) {
     const id = query.id
     const name = record.Name
@@ -170,8 +185,8 @@
     formRef.value.validate((errors) => {
       if (!errors) {
         if (modalTitle.value == '新建实例') {
-          const name  = formParams.name
-          addInstance({name }).then(() => {
+          const name = formParams.name
+          addInstance({ name }).then(() => {
             message.success('新建成功')
             setTimeout(() => {
               showModal.value = false
@@ -179,16 +194,16 @@
             })
           })
         } else if (modalTitle.value == '更新实例') {
-            const name  = formParams.name
-            const id = instance.value.id
-            const secret = instance.value.secret
-            updateInstance({ name, id, secret }).then(() => {
-              message.success('更新成功')
-              setTimeout(() => {
-                showModal.value = false
-                reloadTable()
-              })
+          const name = formParams.name
+          const id = instance.value.id
+          const secret = instance.value.secret
+          updateInstance({ name, id, secret }).then(() => {
+            message.success('更新成功')
+            setTimeout(() => {
+              showModal.value = false
+              reloadTable()
             })
+          })
         }
       } else {
         message.error('请填写完整信息')
@@ -204,7 +219,7 @@
     showModal.value = true
     instance.value.id = record.id
     instance.value.name = record.name
-    instance.value.mail = localStorage.getItem('mail') || '' 
+    instance.value.mail = localStorage.getItem('mail') || ''
   }
 
   function handleDelete(record: Recordable) {
@@ -230,8 +245,7 @@
 </script>
 
 <style lang="less" scoped>
-.n-gradient-text {
-  font-size: 24px;
-}
+  .n-gradient-text {
+    font-size: 24px;
+  }
 </style>
-

@@ -52,6 +52,10 @@ export default (): UserConfig => {
           target: 'https://console.monibuca.com',
           changeOrigin: true
         }
+        // '/api/gb28181': {
+        //   target: 'https://console.monibuca.com',
+        //   changeOrigin: true
+        // }
       }
     },
     build: {
