@@ -50,10 +50,10 @@
   let timer
 
   async function initPage() {
-    // const r = await getInstanceGB({
-    //   id: query.id
-    // })
-    const r = [{
+    const r = await getInstanceGB({
+      id: query.id
+    })
+    const s = [{
       ID: 123243,
       Name: '',
       Manufacturer: 1323,
