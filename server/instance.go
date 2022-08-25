@@ -12,6 +12,7 @@ type Instance struct {
 	W                *websocket.Conn
 	lastAccessedTime time.Time
 	maxAge           int64
+	Ch               chan string
 }
 
 const DEFEALT_TIME = 1800
@@ -22,18 +23,19 @@ func NewInstance(name string, secret string) *Instance {
 		Name:   name,
 		Secret: secret,
 		maxAge: DEFEALT_TIME,
+		Ch:     make(chan string, 1),
 	}
 }
 
 type ConcurInstances struct {
 	Instances map[string]*Instance
-	Lock        *sync.RWMutex
+	Lock      *sync.RWMutex
 }
 
 func NewConcurInstances() *ConcurInstances {
 	return &ConcurInstances{
 		Instances: make(map[string]*Instance),
-		Lock:        &sync.RWMutex{},
+		Lock:      &sync.RWMutex{},
 	}
 }
 

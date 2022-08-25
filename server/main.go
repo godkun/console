@@ -237,7 +237,13 @@ func main() {
 					break
 				}
 				fmt.Println("收到客户端消息1111:" + reply)
-				ch <- reply
+				instance := instances.Get(secret)
+				if instance == nil {
+					w.Write(util.ErrJson(util.ErrInstanceNotConnect))
+					return
+				}
+				instance.Ch <- reply
+				//ch <- reply
 			}
 		}
 	}))
@@ -404,7 +410,7 @@ func execCommand(w http.ResponseWriter, r *http.Request, command string) {
 			}
 			for {
 				select {
-				case data := <-ch:
+				case data := <-instance.Ch:
 					fmt.Println("get ch is " + data)
 					w.Write([]byte(data))
 					return
