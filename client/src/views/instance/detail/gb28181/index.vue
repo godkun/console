@@ -2,7 +2,7 @@
   <div>
     <div class="top">
       <InstanceSelect @changeIp="changeIp" />
-      <Interval @interval-change="intervalChange" />
+      <Interval @tick="tick" />
     </div>
     <n-card :bordered="false" class="proCard">
       <BasicTable
@@ -25,7 +25,6 @@
 <script lang="ts" setup>
   import { h, reactive, ref, onUnmounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable } from '@/components/Table'
   import { columns } from './columns'
   import { getInstanceGB } from '@/api/instance'
@@ -47,48 +46,10 @@
     remoteIp.value = ip
   }
 
-  let timer
-
-  async function initPage() {
-    const r = await getInstanceGB({
-      id: query.id
-    })
-    const s = [{
-      ID: 123243,
-      Name: '',
-      Manufacturer: 1323,
-      Model: '',
-      Owner: '',
-      RegisterTime: new Date(),
-      Status: 'ONLINE',
-      NetAddr: '180.109.36.24:5060',
-      UpdateTIme: new Date(),
-      Channels: [
-        {
-          DeviceID: '342443242424242',
-          ParentID: '7428357289375982',
-          Name: 'dsfsfg'
-        }
-      ]
-    }]
-    streamData.value = r
-  }
-  initPage()
-  function intervalChange() {
-    clearInterval(timer)
-    let interval = localStorage.getItem('interval')
-    if (interval) {
-      timer = setInterval(async () => {
-        const r = await getInstanceGB({ id: query.id })
-        streamData.value = r.Streams
-      }, Number(interval) * 1000)
-    }
-  }
-
-  onUnmounted(() => {
-    clearInterval(timer)
-  })
-
+async function tick(){
+  const r = await getInstanceGB()
+  streamData.value = r.Streams
+}
 </script>
 
 <style lang="less" scoped>

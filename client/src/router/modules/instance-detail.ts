@@ -69,6 +69,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/plugin-list/index.vue')
       },
       {
+        path: 'pull',
+        name: `pull`,
+        meta: {
+          title: '导入远端流'
+        },
+        component: () => import('@/views/instance/detail/pull/index.vue')
+      },
+      {
         path: 'gb28181',
         name: `gb28181`,
         meta: {

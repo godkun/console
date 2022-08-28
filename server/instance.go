@@ -1,18 +1,24 @@
 package main
 
 import (
-	"golang.org/x/net/websocket"
+	"net/http"
 	"sync"
 	"time"
-)
 
+	"golang.org/x/net/websocket"
+)
+type IncomingRequest struct {
+	W http.ResponseWriter
+	R *http.Request
+	sync.WaitGroup
+}
 type Instance struct {
 	Name             string `json:"name"`
 	Secret           string `json:"secret"`
 	W                *websocket.Conn
 	lastAccessedTime time.Time
 	maxAge           int64
-	Ch               chan string
+	Ch               chan *IncomingRequest
 }
 
 const DEFEALT_TIME = 1800
@@ -23,25 +29,24 @@ func NewInstance(name string, secret string) *Instance {
 		Name:   name,
 		Secret: secret,
 		maxAge: DEFEALT_TIME,
-		Ch:     make(chan string, 1),
+		Ch:     make(chan *IncomingRequest, 10),
 	}
 }
 
 type ConcurInstances struct {
 	Instances map[string]*Instance
-	Lock      *sync.RWMutex
+	sync.RWMutex
 }
 
 func NewConcurInstances() *ConcurInstances {
 	return &ConcurInstances{
 		Instances: make(map[string]*Instance),
-		Lock:      &sync.RWMutex{},
 	}
 }
 
-func (c ConcurInstances) Get(k string) *Instance {
-	c.Lock.RLock()
-	defer c.Lock.RUnlock()
+func (c *ConcurInstances) Get(k string) *Instance {
+	c.RLock()
+	defer c.RUnlock()
 	if data, ok := c.Instances[k]; ok {
 		return data
 	} else {
@@ -49,14 +54,14 @@ func (c ConcurInstances) Get(k string) *Instance {
 	}
 }
 
-func (c ConcurInstances) Set(k string, v *Instance) {
-	c.Lock.Lock()
-	defer c.Lock.Unlock()
+func (c *ConcurInstances) Set(k string, v *Instance) {
+	c.Lock()
+	defer c.Unlock()
 	c.Instances[k] = v
 }
 
-func (c ConcurInstances) Delete(k string) {
-	c.Lock.Lock()
-	defer c.Lock.Unlock()
+func (c *ConcurInstances) Delete(k string) {
+	c.Lock()
+	defer c.Unlock()
 	delete(c.Instances, k)
 }

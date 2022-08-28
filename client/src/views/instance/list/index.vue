@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Interval @interval-change="intervalChange" />
+    <Interval @tick="tick" />
     <n-card :bordered="false" class="proCard">
       <BasicTable :columns="columns" :dataSource="instanceData" :row-key="(row) => row.id" :pagination="false"
         ref="actionRef" :actionColumn="actionColumn" @update:checked-row-keys="onCheckedRow" :scroll-x="1090">
@@ -158,27 +158,11 @@ function addTable() {
   showModal.value = true;
 }
 
-let timer;
-
-async function initPage() {
+async function tick() {
   const pagesize = 0;
   const pageno = 0;
   const r = await getInstanceList({ pagesize, pageno });
   instanceData.value = r.data.list;
-}
-initPage();
-
-function intervalChange() {
-  const pagesize = 0;
-  const pageno = 0;
-  clearInterval(timer);
-  let interval = localStorage.getItem('interval');
-  if (interval) {
-    timer = setInterval(async () => {
-      const r = await getInstanceList({ pagesize, pageno });
-      instanceData.value = r.data.list;
-    }, Number(interval) * 1000);
-  }
 }
 
 function onCheckedRow(rowKeys) {
@@ -301,9 +285,6 @@ function handleDelete(record: Recordable) {
     onNegativeClick: () => { }
   });
 }
-onUnmounted(() => {
-  clearInterval(timer);
-});
 </script>
 
 <style lang="less" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Interval @interval-change="intervalChange" />
+    <Interval @tick="tick" />
     <div class="page">
       <n-grid x-gap="12" :cols="6">
         <n-gi span="6">
@@ -127,9 +127,8 @@ const jsonCode = computed(() => {
 const route = useRoute();
 const { query } = route;
 const data = ref({} as StreamDetail);
-let timer;
 let gvs: { [key: string]: { bps: TimelineGraphView, fps: TimelineGraphView, bpsds: TimelineDataSeries, fpsds: TimelineDataSeries; }; } = {};
-async function initPage() {
+async function tick() {
   data.value = await getStreamDetail(query.path);
   data.value.Tracks.forEach(t => {
     if (!gvs[t.Name]) {
@@ -164,18 +163,6 @@ async function initPage() {
   });
 
 }
-
-initPage();
-
-function intervalChange() {
-  clearInterval(timer);
-  let interval = localStorage.getItem('interval');
-  if (interval) {
-    timer = setInterval(initPage, Number(interval) * 1000);
-  }
-}
-
-onUnmounted(() => clearInterval(timer));
 
 </script>
 

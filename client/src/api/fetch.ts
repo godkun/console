@@ -5,7 +5,6 @@ import router from '@/router'
 
 // 创建一个实例
 const service = axios.create({
-  baseURL: '/api',
   timeout: 4000,
   withCredentials: false
 })
