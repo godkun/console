@@ -13,12 +13,8 @@
 import { ref, defineEmits, onMounted, onUnmounted } from 'vue';
 const emit = defineEmits(['interval-change', 'tick']);
 let interval = localStorage.getItem('interval');
-let value;
-if (interval) value = ref(Number(interval));
-else {
-  value = ref(5);
-  localStorage.setItem('interval', '5');
-}
+const value = ref(Number(interval) || 5);
+
 const options = ref([
   {
     label: '1s',
@@ -37,12 +33,11 @@ const options = ref([
     value: 10
   }
 ]);
-emit("interval-change", value);
 let timer: ReturnType<typeof setInterval>;
-let clear = () => clearInterval(timer)
+let clear = () => clearInterval(timer);
 onMounted(() => {
-  emit('tick');
-  timer = setInterval(() => emit('tick'), value * 1000);
+  handleUpdateValue(value.value)
+  emit('tick')
   onUnmounted(clear);
 });
 function handleUpdateValue(value) {

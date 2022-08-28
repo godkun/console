@@ -49,7 +49,7 @@ export default (): UserConfig => {
       port: 4000,
       proxy: {
         '/api': {
-          target: 'https://console.monibuca.com',
+          target: 'https://console.monibuca.com:9999',
           changeOrigin: true
         }
         // '/api/gb28181': {

@@ -5,7 +5,7 @@ import fetch from '../fetch'
  */
 export function register(data) {
   return fetch({
-    url: '/user/register',
+    url: '/api/user/register',
     method: 'POST',
     data
   })
@@ -16,7 +16,7 @@ export function register(data) {
  */
 export function getVerifyCode(data) {
   return fetch({
-    url: '/user/getverifycode',
+    url: '/api/user/getverifycode',
     method: 'POST',
     data
   })
@@ -27,7 +27,7 @@ export function getVerifyCode(data) {
  */
 export function login(data) {
   return fetch({
-    url: '/user/login',
+    url: '/api/user/login',
     method: 'POST',
     data
   })

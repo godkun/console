@@ -5,7 +5,7 @@ import fetch from '../fetch'
  */
 export function getRoleList() {
   return fetch({
-    url: '/role/list',
+    url: '/api/role/list',
     method: 'GET'
   })
 }

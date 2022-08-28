@@ -5,7 +5,7 @@ import fetch from '../fetch'
  */
 export function adminMenus() {
   return fetch({
-    url: '/menus',
+    url: '/api/menus',
     method: 'GET'
   })
 }
@@ -16,7 +16,7 @@ export function adminMenus() {
  */
 export function getMenuList(params?) {
   return fetch({
-    url: '/menu/list',
+    url: '/api/menu/list',
     method: 'GET',
     params
   })

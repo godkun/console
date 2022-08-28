@@ -47,6 +47,10 @@ const showModal = ref(false);
 const rules = {
   target: {
     required: true, message: '请输入远端流地址', trigger: 'blur', validator(rule: FormItemRule, target: string) {
+      if (!target) {
+        rule.message = '请输入远端流地址';
+        return false;
+      }
       if (target.startsWith("rtsp")) {
         return true;
       } else if (target.startsWith("rtmp")) {
@@ -56,18 +60,26 @@ const rules = {
       } else if (target.startsWith("http")) {
         return true;
       } else {
-        return Error("only support rtsp,rtmp,hls,hdl");
+        rule.message = "only support rtsp,rtmp,hls,hdl";
+        return false;
       }
     }
   },
   streamPath: {
     required: true, message: '请输入StreamPath', trigger: 'blur', validator(rule: FormItemRule, value: string) {
-      if (value.split("/").length == 0) {
-        return Error("StreamPath必须包含/");
+      if (!value) {
+        rule.message = '请输入StreamPath';
+        return false;
+      }
+      if (value.split("/").length == 1) {
+        rule.message = "StreamPath必须包含/";
+        return false;
       } else if (value.startsWith('/')) {
-        return Error("StreamPath开头不能包含/");
+        rule.message = "StreamPath开头不能包含/";
+        return false;
       } else if (value.endsWith('/')) {
-        return Error("StreamPath结尾不能包含/");
+        rule.message = "StreamPath结尾不能包含/";
+        return false;
       } else {
         return true;
       }

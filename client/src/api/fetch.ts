@@ -1,5 +1,5 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
-import router from '@/router'
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import router from '@/router';
 
 // axios 请求简单封装
 
@@ -7,41 +7,40 @@ import router from '@/router'
 const service = axios.create({
   timeout: 4000,
   withCredentials: false
-})
+});
 
 // 请求拦截
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    return config
+    return config;
   },
   (error: any) => {
-    Promise.reject(error)
+    Promise.reject(error);
   }
-)
+);
 
 // 响应拦截
 service.interceptors.response.use(
   async (response: AxiosResponse) => {
-    const res = response.data
+    const res = response.data;
     // adapter m7s engine api
-    if (!res.hasOwnProperty('code')) return res
-    else if (res.code !== 0) {
-      window.$message.error(res.msg)
+    if (res && 'code' in res && res?.code !== 0) {
+      window.$message.error(res.msg);
       if (res.code == 20305) {
         setTimeout(() => {
           router.replace({
             name: 'Login'
-          })
-        }, 500)
+          });
+        }, 500);
       }
-      return Promise.reject(res.msg)
+      return Promise.reject(res.msg);
     } else {
-      return res
+      return res;
     }
   },
   (error: any) => {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
-export default service
+export default service;
