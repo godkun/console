@@ -4,7 +4,7 @@ import { store } from '@/store'
 import { ACCESS_TOKEN, CURRENT_USER } from '@/store/mutation-types'
 
 const Storage = createStorage({ storage: localStorage })
-import { login, register } from '@/api/system/user'
+import { login, register, logout } from '@/api/system/user'
 import { storage } from '@/utils/Storage'
 
 export interface IUserState {
@@ -104,6 +104,7 @@ export const useUserStore = defineStore({
 
     // 登出
     async logout() {
+      await logout()
       this.setPermissions([])
       this.setUserInfo('')
       storage.remove(ACCESS_TOKEN)

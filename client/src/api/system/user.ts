@@ -33,6 +33,16 @@ export function login(data) {
   })
 }
 
+/**
+ * @description: 用户登录
+ */
+export function logout() {
+  return fetch({
+    url: '/api/user/logout',
+    method: 'POST'
+  })
+}
+
 
 /**
  * @description: 用户登录
