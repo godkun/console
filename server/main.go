@@ -176,7 +176,8 @@ func main() {
 		var secret string
 		var err error
 		connect := false
-		fmt.Println("客户端获取到的ip为:" + w.Request().RemoteAddr)
+		remoteAddr := w.Request().RemoteAddr
+		fmt.Println("客户端获取到的ip为:" + remoteAddr)
 		for {
 			//只支持string类型
 			var reply string
@@ -207,14 +208,8 @@ func main() {
 					break
 				}
 				connect = true
-				go func() {
-					remoteIP, _, found := strings.Cut(w.Request().RemoteAddr, ":")
-					if found {
-						MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
-					} else {
-						MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", w.Request().RemoteAddr, secret)
-					}
-				}()
+				remoteIP, _, _ := strings.Cut(remoteAddr, ":")
+				go MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
 				break
 			} else {
 				if err = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); err != nil {
@@ -235,10 +230,22 @@ func main() {
 			w.Write(util.ErrJson(util.ErrInstanceNotConnect))
 			return
 		}
+		delay := time.NewTimer(time.Second)
+		defer delay.Stop()
 		for connect {
+			delay.Reset(time.Second)
 			select {
-			case <-w.Request().Context().Done():
-				return
+			case <-delay.C:
+				if err = websocket.Message.Send(instance.W, "/api/sysinfo\n"); err != nil {
+					log.Println("websocket出现异常", err)
+					return
+				} else {
+					var reply string
+					if err = websocket.Message.Receive(w, &reply); err != nil {
+						log.Println("websocket出现异常", err)
+						return
+					}
+				}
 			case rw := <-instance.Ch:
 				body, _ := ioutil.ReadAll(rw.R.Body)
 				if len(body) > 0 {
@@ -246,10 +253,12 @@ func main() {
 				}
 				if err = websocket.Message.Send(instance.W, rw.R.RequestURI+"\n"+string(body)); err != nil {
 					log.Println("websocket出现异常", err)
+					connect = false
 				} else {
 					var reply string
 					if err = websocket.Message.Receive(w, &reply); err != nil {
 						log.Println("websocket出现异常", err)
+						connect = false
 					} else if rw.R.Context().Err() == nil {
 						rw.W.Write([]byte(reply))
 					}
