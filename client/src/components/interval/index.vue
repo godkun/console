@@ -61,7 +61,7 @@ function handleUpdateValue(value) {
   }
 
   .select {
-    width: 300px;
+    width: 100px;
     color: #000;
   }
 }

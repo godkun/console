@@ -8,7 +8,10 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
 }
-
+const serverProxy = {
+  target: 'https://console.monibuca.com:9999',
+  changeOrigin: true
+}
 export default (): UserConfig => {
   return {
     base: './',
@@ -45,17 +48,15 @@ export default (): UserConfig => {
     ],
     // 需要配置本地host
     server: {
-      host: 'monibuca.com',
+      host: 'local.monibuca.com',
       port: 4000,
       proxy: {
-        '/api': {
-          target: 'https://console.monibuca.com:9999',
-          changeOrigin: true
-        }
-        // '/api/gb28181': {
-        //   target: 'https://console.monibuca.com',
-        //   changeOrigin: true
-        // }
+        '/api': serverProxy,
+        '/gb28181': serverProxy,
+        '/rtsp': serverProxy,
+        '/hdl': serverProxy,
+        '/rtmp': serverProxy,
+        '/hls': serverProxy,
       }
     },
     build: {

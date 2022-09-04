@@ -102,7 +102,7 @@ export function getStreamDetail(streamPath) {
 // 停止流
 export function stopStream(streamPath) {
   return fetch({
-    url:`/api/closestream?streamPath=${streamPath}`,
+    url: `/api/closestream?streamPath=${streamPath}`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()
@@ -113,7 +113,7 @@ export function stopStream(streamPath) {
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
 export function getConfig(name) {
   return fetch({
-    url: name ? `/api/getconfig?name=${name}` : `/getconfig`,
+    url: name ? `/api/getconfig?name=${name}` : `/api/getconfig`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()
@@ -163,6 +163,15 @@ export function getInstanceGB() {
     }
   });
 }
+export function gb28181Invite(id: string, channel: string, startTime?: number, endTime?: number) {
+  return fetch({
+    url: `/gb28181/api/invite?id=${id}&channel=${channel}${startTime ? "&startTime=" + startTime : ""}${endTime ? "&endTime=" + endTime : ""}`,
+    method: 'post',
+    headers: {
+      m7sid: getInstanceId()
+    }
+  });
+}
 
 export function getInstancePullList() {
   return fetch({
@@ -184,9 +193,9 @@ export function getInstancePushList() {
   });
 }
 
-export function pullStream(type: "rtsp" | 'rtmp' | 'hls' | 'hdl', streamPath: string, url: string) {
+export function pullStream(type: "rtsp" | 'rtmp' | 'hls' | 'hdl', streamPath: string, url: string, save: boolean = false) {
   return fetch({
-    url: `/${type}/api/pull?streamPath=${streamPath}&target=${encodeURI(url)}`,
+    url: `/${type}/api/pull?streamPath=${streamPath}&target=${encodeURI(url)}${save ? "&save=1" : ""}`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()
@@ -194,8 +203,8 @@ export function pullStream(type: "rtsp" | 'rtmp' | 'hls' | 'hdl', streamPath: st
   });
 }
 
-export function stopPush(){
- 
+export function stopPush() {
+
 }
 export function pushStream(type: "rtsp" | 'rtmp', streamPath: string, url: string) {
   return fetch({

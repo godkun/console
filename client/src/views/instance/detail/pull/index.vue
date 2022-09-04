@@ -3,7 +3,6 @@
     <div class="top">
       <InstanceSelect />
       <Interval @tick="tick" />
-      <n-button @click="showModal = true">添加拉流</n-button>
     </div>
     <n-card :bordered="false" class="proCard">
       <BasicTable class="table" :row-class-name="'row'" :columns="columns" :dataSource="pulllist" :pagination="false"
@@ -11,26 +10,33 @@
         <template #tableTitle>
           <n-gradient-text type="success"> 远端拉流列表 </n-gradient-text>
         </template>
+        <template #toolbar>
+          <n-button @click="showModal = true" type="primary" round>添加拉流</n-button>
+        </template>
       </BasicTable>
     </n-card>
-  </div>
-  <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="从远端服务器导入流">
-    <n-form :model="formParams" :rules="rules" ref="formRef" label-placement="left" :label-width="80" class="py-4">
-      <n-form-item label="远端流地址" path="target">
-        <n-input placeholder="请输入远端流的地址" v-model:value="formParams.target" />
-      </n-form-item>
-      <n-form-item label="StreamPath" path="streamPath">
-        <n-input placeholder="请输入StreamPath" v-model:value="formParams.streamPath" />
-      </n-form-item>
-    </n-form>
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="从远端服务器导入流">
+      <n-form :model="formParams" :rules="rules" ref="formRef" label-placement="left" :label-width="80" class="py-4">
+        <n-form-item label="远端流地址" path="target">
+          <n-input placeholder="请输入远端流的地址" v-model:value="formParams.target" />
+        </n-form-item>
+        <n-form-item label="StreamPath" path="streamPath">
+          <n-input placeholder="请输入StreamPath" v-model:value="formParams.streamPath" />
+        </n-form-item>
+        <n-form-item label="重启后恢复" path="save">
+          <n-switch v-model:value="formParams.save" />
+        </n-form-item>
+      </n-form>
 
-    <template #action>
-      <n-space>
-        <n-button @click="() => (showModal = false)">取消</n-button>
-        <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
-      </n-space>
-    </template>
-  </n-modal>
+      <template #action>
+        <n-space>
+          <n-button @click="() => (showModal = false)">取消</n-button>
+          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+        </n-space>
+      </template>
+    </n-modal>
+  </div>
+
 </template>
 
 <script lang="ts" setup>
@@ -40,7 +46,7 @@ import { getInstancePullList, stopStream, pullStream } from '@/api/instance';
 import { ref, reactive, h, toRaw } from 'vue';
 import { FormItemRule, useMessage } from 'naive-ui';
 const msg = useMessage();
-const formParams = reactive({ target: "", streamPath: "" });
+const formParams = reactive({ target: "", streamPath: "", save: false });
 const formBtnLoading = ref(false);
 const pulllist = ref([]);
 const showModal = ref(false);
@@ -129,6 +135,7 @@ const actionColumn = reactive({
   title: '操作',
   key: 'action',
   fixed: 'right',
+  width: 100,
   render(record) {
     return h(TableAction as any, {
       style: 'button',

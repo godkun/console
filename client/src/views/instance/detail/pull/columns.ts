@@ -4,7 +4,7 @@ export const columns = [
   {
     title: '开始时间',
     key: 'StartTime',
-    width: 100,
+    width: 160,
     render(row) {
       return h(NTime, row.StartTime);
     }
@@ -12,6 +12,7 @@ export const columns = [
   {
     title: '类型',
     key: 'Type',
+    width: 100,
   },
   {
     title: '拉流地址',

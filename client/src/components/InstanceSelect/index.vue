@@ -25,14 +25,15 @@ getInstanceList({ pagesize, pageno }).then(res => {
   options.value = res.data.list.map(item => {
     return {
       label: item.id,
+      disabled: item.online != 1,
       value: item
     };
   });
   if (!localStorage.getItem('id')) {
     localStorage.setItem('id', options.value[0].label);
   }
-  const v = res.data.list.find(item => item.id == localStorage.getItem('id'))
-  value.value = v
+  const v = res.data.list.find(item => item.id == localStorage.getItem('id'));
+  value.value = v;
   const remoteIp = v.RemoteIP;
   emit('changeIp', remoteIp);
 });
@@ -66,7 +67,7 @@ function handleUpdateValue(value) {
   }
 
   .select {
-    width: 300px;
+    width: 100px;
     color: #000;
   }
 }

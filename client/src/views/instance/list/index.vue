@@ -178,10 +178,10 @@ function confirmForm(e) {
         const name = formParams.name;
         addInstance({ name }).then(() => {
           message.success('新建成功');
-          setTimeout(() => {
-            showModal.value = false;
-            reloadTable();
-          });
+          // setTimeout(() => {
+          //   showModal.value = false;
+          //   reloadTable();
+          // });
         });
       } else if (modalTitle.value == '更新实例') {
         const name = formParams.name;
@@ -189,10 +189,10 @@ function confirmForm(e) {
         const secret = instance.value.secret;
         updateInstance({ name, id, secret }).then(() => {
           message.success('更新成功');
-          setTimeout(() => {
-            showModal.value = false;
-            reloadTable();
-          });
+          // setTimeout(() => {
+          //   showModal.value = false;
+          //   reloadTable();
+          // });
         });
       }
     } else {
@@ -276,10 +276,10 @@ function handleDelete(record: Recordable) {
         id: record.id
       }).then(() => {
         message.success('删除成功');
-        setTimeout(() => {
-          showModal.value = false;
-          reloadTable();
-        });
+        // setTimeout(() => {
+        //   showModal.value = false;
+        //   reloadTable();
+        // });
       });
     },
     onNegativeClick: () => { }

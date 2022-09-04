@@ -24,7 +24,7 @@ service.interceptors.response.use(
   async (response: AxiosResponse) => {
     const res = response.data;
     // adapter m7s engine api
-    if (res && 'code' in res && res?.code !== 0) {
+    if (res && typeof res?.code == "number" && res?.code !== 0) {
       window.$message.error(res.msg);
       if (res.code == 20305) {
         setTimeout(() => {

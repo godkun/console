@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { h, reactive, ref, unref, onUnmounted } from 'vue';
+import { h, reactive, ref, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { BasicTable, TableAction } from '@/components/Table';
 import { columns } from './columns';
