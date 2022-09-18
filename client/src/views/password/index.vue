@@ -29,7 +29,9 @@
               重置密码
             </n-button>
           </n-form-item>
-        <div class="view-account-top-desc">点击重置密码后，请到绑定邮箱中查看重置密码，并点击链接进行激活</div>
+          <div class="view-account-top-desc">
+            点击重置密码后，请到绑定邮箱中查看重置密码，并点击链接进行激活
+          </div>
         </n-form>
       </div>
     </div>
@@ -60,7 +62,7 @@
   })
 
   const rules = {
-    mail: { required: true, message: '请输入邮箱账号', trigger: 'blur' },
+    mail: { required: true, message: '请输入邮箱账号', trigger: 'blur' }
   }
 
   const userStore = useUserStore()

@@ -1,9 +1,9 @@
-import { RouteRecordRaw } from 'vue-router';
-import { Layout } from '@/router/constant';
-import { DashboardOutlined } from '@vicons/antd';
-import { renderIcon } from '@/utils/index';
+import { RouteRecordRaw } from 'vue-router'
+import { Layout } from '@/router/constant'
+import { DashboardOutlined } from '@vicons/antd'
+import { renderIcon } from '@/utils/index'
 
-const routeName = 'dashboard';
+const routeName = 'dashboard'
 
 /**
  * @param name 路由名称, 必须设置,且不能重名
@@ -44,4 +44,4 @@ const routes: Array<RouteRecordRaw> = [
   }
 ]
 
-export default routes;
+export default routes

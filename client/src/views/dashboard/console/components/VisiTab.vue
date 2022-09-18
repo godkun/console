@@ -23,15 +23,15 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import CPU from './CPU.vue';
-  import HardDisk from './HardDisk.vue';
-  import NetWork from './NetWork.vue';
+  import { defineComponent } from 'vue'
+  import CPU from './CPU.vue'
+  import HardDisk from './HardDisk.vue'
+  import NetWork from './NetWork.vue'
 
   export default defineComponent({
     components: { CPU, HardDisk, NetWork },
     setup() {
-      return {};
-    },
-  });
+      return {}
+    }
+  })
 </script>

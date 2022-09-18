@@ -1,17 +1,17 @@
 // 实例管理接口
-import fetch from '../fetch';
+import fetch from '../fetch'
 
 function queryURLparamsRegEs6(url) {
-  let obj: Record<string, string | null> = {};
-  let reg = /([^?=&]+)=([^?=&]+)/g;
+  let obj: Record<string, string | null> = {}
+  let reg = /([^?=&]+)=([^?=&]+)/g
   url.replace(reg, (...arg) => {
-    obj[arg[1]] = arg[2];
-  });
-  return obj;
+    obj[arg[1]] = arg[2]
+  })
+  return obj
 }
 function getInstanceId() {
-  const query = queryURLparamsRegEs6(window.location.href);
-  return query.id || localStorage.getItem('id');
+  const query = queryURLparamsRegEs6(window.location.href)
+  return query.id || localStorage.getItem('id')
 }
 // 获取实例列表
 export function getInstanceList(data) {
@@ -19,7 +19,7 @@ export function getInstanceList(data) {
     url: '/api/instance/list',
     method: 'post',
     data
-  });
+  })
 }
 
 // 新增实例
@@ -28,7 +28,7 @@ export function addInstance(data) {
     url: '/api/instance/add',
     method: 'post',
     data
-  });
+  })
 }
 
 // 更新实例
@@ -37,7 +37,7 @@ export function updateInstance(data) {
     url: '/api/instance/update',
     method: 'post',
     data
-  });
+  })
 }
 
 // 删除实例
@@ -46,26 +46,26 @@ export function delInstance(data) {
     url: '/api/instance/del',
     method: 'post',
     data
-  });
+  })
 }
 
 // 获取采样数据,包括 CPU、内存、网卡数据、以及流信息
 export function getInstanceSummary() {
-  let id = getInstanceId();
+  let id = getInstanceId()
   if (!id) {
-    const pagesize = 0;
-    const pageno = 0;
+    const pagesize = 0
+    const pageno = 0
     getInstanceList({ pagesize, pageno }).then((res) => {
-      id = res.data.list[0].id;
-      console.log("🚀 ~ file: index.ts ~ line 62 ~ getInstanceList ~ id", id);
+      id = res.data.list[0].id
+      console.log('🚀 ~ file: index.ts ~ line 62 ~ getInstanceList ~ id', id)
       return fetch({
         url: '/api/summary?json=1',
         method: 'post',
         headers: {
           m7sid: id
         }
-      });
-    });
+      })
+    })
   } else {
     return fetch({
       url: '/api/summary?json=1',
@@ -73,7 +73,7 @@ export function getInstanceSummary() {
       headers: {
         m7sid: id
       }
-    });
+    })
   }
 }
 
@@ -84,8 +84,8 @@ export function getSysInfo() {
     method: 'post',
     headers: {
       m7sid: getInstanceId()
-    },
-  });
+    }
+  })
 }
 
 // 获取流（live/test）的详细信息
@@ -96,7 +96,7 @@ export function getStreamDetail(streamPath) {
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
 // 停止流
@@ -106,8 +106,8 @@ export function stopStream(streamPath) {
     method: 'post',
     headers: {
       m7sid: getInstanceId()
-    },
-  });
+    }
+  })
 }
 
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
@@ -118,7 +118,7 @@ export function getConfig(name) {
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
 // 热更新配置信息，可以加参数 name=xxx，代表热更新 xxx 插件的配置信息（不加参数则热更新全局配置信息）
@@ -127,7 +127,7 @@ export function updateConfig(data) {
     url: '/api/updateconfig',
     method: 'post',
     data
-  });
+  })
 }
 
 // 修改配置信息，可以加参数 name=xxx，代表修改 xxx 插件的配置信息（不加参数则修改全局配置信息）
@@ -140,7 +140,7 @@ export function modifyConfig(data, name) {
       m7sid: getInstanceId()
     },
     data
-  });
+  })
 }
 
 // 获取实例所有插件
@@ -151,7 +151,7 @@ export function getInstancePlugin(params) {
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
 export function getInstanceGB() {
@@ -161,16 +161,18 @@ export function getInstanceGB() {
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 export function gb28181Invite(id: string, channel: string, startTime?: number, endTime?: number) {
   return fetch({
-    url: `/gb28181/api/invite?id=${id}&channel=${channel}${startTime ? "&startTime=" + startTime : ""}${endTime ? "&endTime=" + endTime : ""}`,
+    url: `/gb28181/api/invite?id=${id}&channel=${channel}${
+      startTime ? '&startTime=' + startTime : ''
+    }${endTime ? '&endTime=' + endTime : ''}`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
 export function getInstancePullList() {
@@ -180,7 +182,7 @@ export function getInstancePullList() {
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
 export function getInstancePushList() {
@@ -190,28 +192,33 @@ export function getInstancePushList() {
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
-export function pullStream(type: "rtsp" | 'rtmp' | 'hls' | 'hdl', streamPath: string, url: string, save: boolean = false) {
+export function pullStream(
+  type: 'rtsp' | 'rtmp' | 'hls' | 'hdl',
+  streamPath: string,
+  url: string,
+  save: boolean = false
+) {
   return fetch({
-    url: `/${type}/api/pull?streamPath=${streamPath}&target=${encodeURI(url)}${save ? "&save=1" : ""}`,
+    url: `/${type}/api/pull?streamPath=${streamPath}&target=${encodeURI(url)}${
+      save ? '&save=1' : ''
+    }`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }
 
-export function stopPush() {
-
-}
-export function pushStream(type: "rtsp" | 'rtmp', streamPath: string, url: string) {
+export function stopPush() {}
+export function pushStream(type: 'rtsp' | 'rtmp', streamPath: string, url: string) {
   return fetch({
     url: `/${type}/api/push?streamPath=${streamPath}&target=${encodeURI(url)}`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()
     }
-  });
+  })
 }

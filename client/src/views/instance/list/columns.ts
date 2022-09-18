@@ -1,5 +1,5 @@
-import { NTag } from "naive-ui";
-import { h } from 'vue';
+import { NTag } from 'naive-ui'
+import { h } from 'vue'
 export const columns = [
   {
     title: '实例id',

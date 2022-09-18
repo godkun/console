@@ -119,7 +119,7 @@
 
       // 点击菜单
       function clickMenuItem(key: string) {
-        console.log("🚀 ~ file: index.vue ~ line 122 ~ clickMenuItem ~ key", key)
+        console.log('🚀 ~ file: index.vue ~ line 122 ~ clickMenuItem ~ key', key)
         if (/http(s)?:/.test(key)) {
           window.open(key)
         } else {

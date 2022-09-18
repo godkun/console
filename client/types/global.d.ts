@@ -98,7 +98,7 @@ declare global {
   }
 
   interface Window {
-     $message: MessageApiInjection
+    $message: MessageApiInjection
   }
 }
 

@@ -56,7 +56,7 @@ export default (): UserConfig => {
         '/rtsp': serverProxy,
         '/hdl': serverProxy,
         '/rtmp': serverProxy,
-        '/hls': serverProxy,
+        '/hls': serverProxy
       }
     },
     build: {

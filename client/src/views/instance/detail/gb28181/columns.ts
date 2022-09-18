@@ -1,7 +1,7 @@
-import { h } from 'vue';
-import { NTime, NButton } from 'naive-ui';
-import { BasicTable } from '@/components/Table';
-import { gb28181Invite } from '@/api/instance';
+import { h } from 'vue'
+import { NTime, NButton } from 'naive-ui'
+import { BasicTable } from '@/components/Table'
+import { gb28181Invite } from '@/api/instance'
 const channelsColumns = [
   {
     title: '通道编号',
@@ -11,11 +11,20 @@ const channelsColumns = [
   {
     title: '拉流状态',
     render(row) {
-      return row.LivePublisher ? h('text', "🟢") : h(NButton, {
-        tertiary: true, circle: true, type: "primary", onClick: () => {
-          gb28181Invite(row.ParentID, row.DeviceID);
-        }
-      }, "▶️");
+      return row.LivePublisher
+        ? h('text', '🟢')
+        : h(
+            NButton,
+            {
+              tertiary: true,
+              circle: true,
+              type: 'primary',
+              onClick: () => {
+                gb28181Invite(row.ParentID, row.DeviceID)
+              }
+            },
+            '▶️'
+          )
     },
     width: 50
   },
@@ -50,22 +59,28 @@ const channelsColumns = [
     width: 120
   },
   {
-    title:'经度',
+    title: '经度',
     key: 'Longitude',
     width: 50
   },
   {
-    title:'纬度',
+    title: '纬度',
     key: 'Latitude',
     width: 50
   }
-];
+]
 export const columns = [
   {
     type: 'expand',
     expandable: (rowData) => rowData.Channels.length > 0,
     renderExpand: (rowData) => {
-      return h(BasicTable, { pagination: false, dataSource: rowData.Channels, columns: channelsColumns, title: "通道", titleTooltip: rowData.ID });
+      return h(BasicTable, {
+        pagination: false,
+        dataSource: rowData.Channels,
+        columns: channelsColumns,
+        title: '通道',
+        titleTooltip: rowData.ID
+      })
     }
   },
   {
@@ -103,7 +118,7 @@ export const columns = [
     key: 'RegisterTime',
     width: 130,
     render(row) {
-      return h(NTime, row.RegisterTime);
+      return h(NTime, row.RegisterTime)
     }
   },
   {
@@ -111,7 +126,7 @@ export const columns = [
     key: 'UpdateTIme',
     width: 130,
     render(row) {
-      return h(NTime, row.UpdateTIme);
+      return h(NTime, row.UpdateTIme)
     }
   },
 
@@ -126,7 +141,7 @@ export const columns = [
     key: 'Channels',
     width: 70,
     render(row) {
-      return h('text', row.Channels.length);
+      return h('text', row.Channels.length)
     }
   }
-];
+]

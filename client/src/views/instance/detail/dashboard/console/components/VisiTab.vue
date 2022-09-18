@@ -15,10 +15,10 @@
             </n-tab-pane> -->
             <n-tab-pane name="网络" class="pane">
               <n-card :title="item.Name" v-for="item in net">
-                <div>Receive: {{item.Receive}}</div>
-                <div>Sent: {{item.Sent}}</div>
-                <div>ReceiveSpeed: {{item.ReceiveSpeed}}</div>
-                <div>SentSpeed: {{item.SentSpeed}}</div>
+                <div>Receive: {{ item.Receive }}</div>
+                <div>Sent: {{ item.Sent }}</div>
+                <div>ReceiveSpeed: {{ item.ReceiveSpeed }}</div>
+                <div>SentSpeed: {{ item.SentSpeed }}</div>
               </n-card>
               <!-- <NetWork /> -->
             </n-tab-pane>
@@ -29,13 +29,11 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
-  import CPU from './CPU.vue';
-  import HardDisk from './HardDisk.vue';
-  import NetWork from './NetWork.vue';
-  import {
-    getInstanceSummary
-  } from '@/api/instance'
+  import { defineComponent, onMounted, ref } from 'vue'
+  import CPU from './CPU.vue'
+  import HardDisk from './HardDisk.vue'
+  import NetWork from './NetWork.vue'
+  import { getInstanceSummary } from '@/api/instance'
   export default defineComponent({
     components: { CPU, HardDisk, NetWork },
     setup() {
@@ -43,17 +41,17 @@
       onMounted(async () => {
         const r = await getInstanceSummary()
         const f = r.NetWork
-        net.value = f.filter(item => item.Receive != 0 && item.Sent != 0)
+        net.value = f.filter((item) => item.Receive != 0 && item.Sent != 0)
       })
       return {
         net
       }
     }
-  });
+  })
 </script>
 
 <style lang="less">
-.pane {
-  display: flex;
-}
+  .pane {
+    display: flex;
+  }
 </style>

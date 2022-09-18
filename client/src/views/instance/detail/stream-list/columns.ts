@@ -1,4 +1,4 @@
-import { h } from 'vue';
+import { h } from 'vue'
 export const columns = [
   {
     title: 'StreamPath',
@@ -25,14 +25,14 @@ export const columns = [
     key: 'BPS',
     width: 100,
     render(row) {
-      let bps = row.BPS << 3;
+      let bps = row.BPS << 3
       if (bps > 1024 * 1024) {
-        return h('text', (bps / 1024 / 1024).toFixed(2) + ' mb/s');
+        return h('text', (bps / 1024 / 1024).toFixed(2) + ' mb/s')
       }
       if (bps > 1024) {
-        return h('text', (bps / 1024).toFixed(2) + ' kb/s');
+        return h('text', (bps / 1024).toFixed(2) + ' kb/s')
       }
-      return h('text', bps + ' b/s');
+      return h('text', bps + ' b/s')
     }
   }
   // {
@@ -70,4 +70,4 @@ export const columns = [
   //   key: 'BPS',
   //   width: 100
   // },
-];
+]

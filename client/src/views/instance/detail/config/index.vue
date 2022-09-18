@@ -23,10 +23,7 @@
   import { useMessage } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import JsonEditor from '@/components/editor/index.vue'
-  import {
-    getConfig,
-    modifyConfig
-  } from '@/api/instance'
+  import { getConfig, modifyConfig } from '@/api/instance'
 
   const jsonCode = ref('')
   const oldJsonCode = ref('')
@@ -35,11 +32,10 @@
 
   const route = useRoute()
   const { query } = route
-  
-  getConfig(query.name).then(res => {
+
+  getConfig(query.name).then((res) => {
     jsonCode.value = JSON.stringify(res, null, 2)
   })
-
 
   function edit() {
     isEdit.value = true
@@ -57,7 +53,6 @@
     jsonCode.value = oldJsonCode.value
     isEdit.value = false
   }
-
 </script>
 
 <style lang="less" scoped>

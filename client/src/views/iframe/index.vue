@@ -6,43 +6,43 @@
   </n-spin>
 </template>
 <script lang="ts" setup>
-  import { ref, unref, onMounted, nextTick } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { ref, unref, onMounted, nextTick } from 'vue'
+  import { useRoute } from 'vue-router'
 
-  const currentRoute = useRoute();
-  const loading = ref(false);
-  const frameRef = ref<HTMLFrameElement | null>(null);
-  const frameSrc = ref<string>('');
+  const currentRoute = useRoute()
+  const loading = ref(false)
+  const frameRef = ref<HTMLFrameElement | null>(null)
+  const frameSrc = ref<string>('')
 
   if (unref(currentRoute.meta)?.frameSrc) {
-    frameSrc.value = unref(currentRoute.meta)?.frameSrc as string;
+    frameSrc.value = unref(currentRoute.meta)?.frameSrc as string
   }
 
   function hideLoading() {
-    loading.value = false;
+    loading.value = false
   }
 
   function init() {
     nextTick(() => {
-      const iframe = unref(frameRef);
-      if (!iframe) return;
-      const _frame = iframe as any;
+      const iframe = unref(frameRef)
+      if (!iframe) return
+      const _frame = iframe as any
       if (_frame.attachEvent) {
         _frame.attachEvent('onload', () => {
-          hideLoading();
-        });
+          hideLoading()
+        })
       } else {
         iframe.onload = () => {
-          hideLoading();
-        };
+          hideLoading()
+        }
       }
-    });
+    })
   }
 
   onMounted(() => {
-    loading.value = true;
-    init();
-  });
+    loading.value = true
+    init()
+  })
 </script>
 
 <style lang="less" scoped>

@@ -7,8 +7,7 @@
           title="实例"
           :segmented="{ content: true, footer: true }"
           size="small"
-          :bordered="false"
-        >
+          :bordered="false">
           <template #header-extra>
             <!-- <n-tag type="success">日</n-tag> -->
           </template>
@@ -23,8 +22,7 @@
           title="cpu使用情况"
           :segmented="{ content: true, footer: true }"
           size="small"
-          :bordered="false"
-        >
+          :bordered="false">
           <div class="py-1 px-1 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
             <div v-else class="text-3xl">{{ CPUUsage }}</div>
@@ -36,8 +34,7 @@
           title="内存使用"
           :segmented="{ content: true, footer: true }"
           size="small"
-          :bordered="false"
-        >
+          :bordered="false">
           <div class="py-1 px-1 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
             <div v-else class="text-3xl">{{ MemoryUsage }}</div>
@@ -49,8 +46,7 @@
           title="硬盘使用"
           :segmented="{ content: true, footer: true }"
           size="small"
-          :bordered="false"
-        >
+          :bordered="false">
           <div class="py-1 px-1 flex justify-between">
             <n-skeleton v-if="loading" :width="100" size="medium" />
             <div v-else class="text-3xl">{{ HardDiskUsage }}</div>
@@ -58,7 +54,7 @@
         </NCard>
       </n-grid-item>
     </n-grid>
-    
+
     <!--导航卡片-->
     <div class="mt-4">
       <n-grid cols="1 s:2 m:3 l:8 xl:8 2xl:8" responsive="screen" :x-gap="16" :y-gap="8">
@@ -74,9 +70,9 @@
                     </n-icon>
                   </span>
                 </p>
-                <p class="flex justify-center"
-                  ><span>{{ item.title }}</span></p
-                >
+                <p class="flex justify-center">
+                  <span>{{ item.title }}</span>
+                </p>
               </div>
             </template>
           </NCard>
@@ -89,21 +85,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
-  import VisiTab from './components/VisiTab.vue';
-  import { CountTo } from '@/components/CountTo/index';
-  import router from '@/router';
-  import {
-    getInstanceSummary,
-    getInstanceList
-  } from '@/api/instance'
+  import { ref, onMounted } from 'vue'
+  import VisiTab from './components/VisiTab.vue'
+  import { CountTo } from '@/components/CountTo/index'
+  import router from '@/router'
+  import { getInstanceSummary, getInstanceList } from '@/api/instance'
 
-  import {
-    UnorderedListOutlined
-  } from '@vicons/antd';
+  import { UnorderedListOutlined } from '@vicons/antd'
 
-  const loading = ref(true);
-  const list = ref([]);
+  const loading = ref(true)
+  const list = ref([])
   const summary = ref({})
 
   // 图标列表
@@ -114,7 +105,7 @@
       title: '实例列表',
       color: '#69c0ff'
     }
-  ];
+  ]
 
   const CPUUsage = ref('')
   const HardDiskUsage = ref('')
@@ -135,15 +126,15 @@
   onMounted(async () => {
     const pagesize = 0
     const pageno = 0
-    const s =  await getInstanceList({ pagesize, pageno })
+    const s = await getInstanceList({ pagesize, pageno })
     const r = await getInstanceSummary({ pagesize, pageno })
     summary.value = r
-    CPUUsage.value = r.CPUUsage.toFixed(2) + '%';
-    HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%';
-    MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%';
-    list.value = s.data.list;
-    loading.value = false;
-  });
+    CPUUsage.value = r.CPUUsage.toFixed(2) + '%'
+    HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%'
+    MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%'
+    list.value = s.data.list
+    loading.value = false
+  })
 </script>
 
 <style lang="less" scoped></style>

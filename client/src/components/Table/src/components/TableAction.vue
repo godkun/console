@@ -10,7 +10,12 @@
         :options="getDropdownList"
         @select="select">
         <slot name="more"></slot>
-        <n-button v-bind="getMoreProps" class="mx-2" v-if="!$slots.more" icon-placement="right" type="primary">
+        <n-button
+          v-bind="getMoreProps"
+          class="mx-2"
+          v-if="!$slots.more"
+          icon-placement="right"
+          type="primary">
           <div class="flex items-center">
             <span>播放</span>
             <n-icon size="14" class="ml-1">

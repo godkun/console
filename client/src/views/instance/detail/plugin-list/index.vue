@@ -57,12 +57,7 @@
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
-  import {
-    addInstance,
-    updateInstance,
-    delInstance,
-    getInstancePlugin
-  } from '@/api/instance'
+  import { addInstance, updateInstance, delInstance, getInstancePlugin } from '@/api/instance'
 
   const router = useRouter()
   const route = useRoute()

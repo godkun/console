@@ -54,7 +54,10 @@ export function createRouterGuards(router: Router) {
     document.title = (to?.meta?.title as string) || document.title
     if (to.name == 'stream-play') {
       to.meta.frameSrc = to.query.frameSrc
-      console.log("🚀 ~ file: router-guards.ts ~ line 59 ~ router.afterEach ~ to.params.frameSrc", to.query.frameSrc)
+      console.log(
+        '🚀 ~ file: router-guards.ts ~ line 59 ~ router.afterEach ~ to.params.frameSrc',
+        to.query.frameSrc
+      )
     }
     const Loading = window['$loading'] || null
     Loading && Loading.finish()

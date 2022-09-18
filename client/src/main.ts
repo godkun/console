@@ -21,7 +21,7 @@ async function bootstrap() {
   setupDirectives(app)
 
   // 注册全局方法，如：app.config.globalProperties.$message = message
-  setupGlobalMethods(app);
+  setupGlobalMethods(app)
 
   // 挂载状态管理
   setupStore(app)
