@@ -83,7 +83,7 @@ const router = useRouter();
 const route = useRoute();
 
 const handleSubmit = (e) => {
-  e.preventDefault();
+  e?.preventDefault();
   formRef.value.validate(async (errors) => {
     if (!errors) {
       const { mail, password } = formInline;
@@ -125,6 +125,15 @@ function resetPassword() {
     name: 'Password'
   });
 }
+
+document.onkeydown = function(e) {
+    let key = window.event.keyCode;  
+    //事件中keycode=13为回车事件
+    if (key == 13) {
+      handleSubmit()
+    }
+}
+
 </script>
 
 <style lang="less" scoped>
