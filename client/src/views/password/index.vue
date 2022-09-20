@@ -40,22 +40,18 @@
 
 <script lang="ts" setup>
   import { reactive, ref } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
-  import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
-  import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
-  import { PageEnum } from '@/enums/pageEnum'
+  import { PersonOutline } from '@vicons/ionicons5'
   import { resetPassword } from '@/api/system/user'
 
   interface FormState {
     mail: string
-    password: string
+    password?: string
   }
 
   const formRef = ref()
   const message = useMessage()
   const loading = ref(false)
-  const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
 
   const formInline = reactive({
     mail: ''
@@ -64,11 +60,6 @@
   const rules = {
     mail: { required: true, message: '请输入邮箱账号', trigger: 'blur' }
   }
-
-  const userStore = useUserStore()
-
-  const router = useRouter()
-  const route = useRoute()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -84,17 +75,6 @@
       } else {
         message.error('重置密码失败，请稍后再试')
       }
-    })
-  }
-
-  function register() {
-    router.push({
-      name: 'Register'
-    })
-  }
-  function find() {
-    router.push({
-      name: 'FindPassword'
     })
   }
 </script>

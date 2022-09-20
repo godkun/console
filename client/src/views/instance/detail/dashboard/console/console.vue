@@ -94,11 +94,8 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref, onMounted, reactive, onUnmounted } from 'vue'
-  import router from '@/router'
+  import { ref } from 'vue'
   import { getInstanceSummary, getInstanceList, getSysInfo } from '@/api/instance'
-
-  import { UnorderedListOutlined } from '@vicons/antd'
 
   const loading = ref(true)
   const list = ref([])
@@ -106,36 +103,13 @@
   const NetWork = ref<
     { Name: string; Receive: string; Sent: string; ReceiveSpeed: string; SentSpeed: string }[]
   >([])
-  const net = ref([])
-
-  // 图标列表
-  const iconList = [
-    {
-      icon: UnorderedListOutlined,
-      size: '32',
-      title: '实例列表',
-      color: '#69c0ff'
-    }
-  ]
 
   const CPUUsage = ref('')
   const HardDiskUsage = ref('')
   const MemoryUsage = ref('')
-  const info = ref({})
   const Version = ref('')
   const StartTime = ref('')
 
-  function deal(item) {
-    const { title } = item
-    if (title == '实例列表') {
-      goList()
-    }
-  }
-  function goList() {
-    router.push({
-      name: 'instance_list'
-    })
-  }
   function BPSStr(bps: number) {
     if (bps > 1024 * 1024) return (bps / 1024 / 1024).toFixed(2) + ' mb/s'
     if (bps > 1024) return (bps / 1024).toFixed(2) + ' kb/s'

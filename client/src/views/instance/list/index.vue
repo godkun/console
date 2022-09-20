@@ -21,10 +21,6 @@
             新建
           </n-button>
         </template>
-
-        <!-- <template #toolbar>
-          <n-button type="primary" @click="reloadTable">刷新数据</n-button>
-        </template> -->
       </BasicTable>
 
       <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
@@ -38,9 +34,6 @@
           <n-form-item label="名称" path="name">
             <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
           </n-form-item>
-          <!-- <n-form-item label="链接" path="url">
-            <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
-          </n-form-item> -->
         </n-form>
 
         <template #action>
@@ -55,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { h, reactive, ref, onUnmounted } from 'vue'
+  import { h, reactive, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
@@ -186,10 +179,6 @@
           const name = formParams.name
           addInstance({ name }).then(() => {
             message.success('新建成功')
-            // setTimeout(() => {
-            //   showModal.value = false;
-            //   reloadTable();
-            // });
           })
         } else if (modalTitle.value == '更新实例') {
           const name = formParams.name
@@ -197,10 +186,6 @@
           const secret = instance.value.secret
           updateInstance({ name, id, secret }).then(() => {
             message.success('更新成功')
-            // setTimeout(() => {
-            //   showModal.value = false;
-            //   reloadTable();
-            // });
           })
         }
       } else {
@@ -227,15 +212,6 @@
       name: 'instance_stream_list',
       query: {
         id
-      }
-    })
-  }
-
-  function jumpTest() {
-    router.push({
-      name: 'stream-play',
-      query: {
-        frameSrc: 'https://m7s.live/guide/introduction.html?s=1'
       }
     })
   }
@@ -284,10 +260,6 @@
           id: record.id
         }).then(() => {
           message.success('删除成功')
-          // setTimeout(() => {
-          //   showModal.value = false;
-          //   reloadTable();
-          // });
         })
       },
       onNegativeClick: () => {}

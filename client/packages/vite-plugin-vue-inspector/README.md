@@ -1,0 +1,1 @@
+# @console/vite-plugin-vue-inspector

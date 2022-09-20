@@ -247,7 +247,7 @@
         const { bottomIncludeBody } = getViewportOffset(headEl)
         const headerH = 64
         let paginationH = 2
-        let marginH = 24
+        const marginH = 24
         if (!isBoolean(pagination)) {
           paginationEl = tableEl.querySelector('.n-data-table__pagination') as HTMLElement
           if (paginationEl) {

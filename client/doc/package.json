@@ -1,0 +1,26 @@
+{
+  "name": "@console/doc",
+  "version": "1.0.0",
+  "description": "init a vitepress project with pnpm",
+  "scripts": {
+    "dev": "vitepress dev doc --port 5200 --watch",
+    "build": "vitepress build doc"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@types/react",
+        "react",
+        "react-dom",
+        "@algolia/client-search"
+      ]
+    }
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "ISC",
+  "devDependencies": {
+    "vitepress": "1.0.0-alpha.4",
+    "vue": "^3.2.37"
+  }
+}

@@ -69,7 +69,7 @@
       })
 
       const getSelectedKeys = computed(() => {
-        let location = props.location
+        const location = props.location
         return location === 'left' || (location === 'header' && unref(navMode) === 'horizontal')
           ? unref(selectedKeys)
           : unref(headerMenuSelectKey)

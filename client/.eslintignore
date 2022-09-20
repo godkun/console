@@ -1,1 +1,13 @@
-/src
+*.sh
+node_modules
+*.md
+*.woff
+*.ttf
+.vscode
+.idea
+dist
+/public
+.husky
+.local
+components.d.ts
+components.d.ts

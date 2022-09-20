@@ -16,9 +16,6 @@
         <template #tableTitle>
           <n-gradient-text type="success"> 流列表 </n-gradient-text>
         </template>
-        <!-- <template #toolbar>
-          <n-button type="primary" @click="reloadTable">刷新数据</n-button>
-        </template> -->
       </BasicTable>
     </n-card>
   </div>
@@ -126,14 +123,14 @@
     const { listenaddr, listenaddrtls } = config.http
     // http公网
     if (key == '1') {
-      let ip = publicaddr ? publicaddr : remoteIp.value
+      const ip = publicaddr ? publicaddr : remoteIp.value
       window.open(`http://${ip}${listenaddr}/preview/${path}`, '_blank')
       // http局域网
     } else if (key == '2') {
       window.open(`http://${localIp}${listenaddr}/preview/${path}`, '_blank')
       // https公网
     } else if (key == '3') {
-      let ip = publicaddrtls ? publicaddrtls : remoteIp.value
+      const ip = publicaddrtls ? publicaddrtls : remoteIp.value
       window.open(`https://${ip}${listenaddrtls}/preview/${path}`, 'target')
       // https局域网
     } else if (key == '4') {

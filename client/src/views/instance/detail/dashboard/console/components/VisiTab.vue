@@ -4,17 +4,8 @@
       <NCol :span="24">
         <n-card content-style="padding: 0;" :bordered="false">
           <n-tabs type="line" size="large" :tabs-padding="20" pane-style="padding: 20px;">
-            <!-- <n-tab-pane name="cpu使用情况">
-              <CPU />
-            </n-tab-pane>
-            <n-tab-pane name="内存使用">
-              <CPU />
-            </n-tab-pane>
-            <n-tab-pane name="存储使用">
-              <HardDisk />
-            </n-tab-pane> -->
             <n-tab-pane name="网络" class="pane">
-              <n-card :title="item.Name" v-for="item in net">
+              <n-card :title="item.Name" v-for="(item, index) in net" :key="index">
                 <div>Receive: {{ item.Receive }}</div>
                 <div>Sent: {{ item.Sent }}</div>
                 <div>ReceiveSpeed: {{ item.ReceiveSpeed }}</div>

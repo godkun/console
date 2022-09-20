@@ -13,7 +13,7 @@
 <script lang="ts" setup>
   import { ref, defineEmits, onMounted, onUnmounted } from 'vue'
   const emit = defineEmits(['interval-change', 'tick'])
-  let interval = localStorage.getItem('interval')
+  const interval = localStorage.getItem('interval')
   const value = ref(Number(interval) || 5)
 
   const options = ref([
@@ -35,7 +35,7 @@
     }
   ])
   let timer: ReturnType<typeof setInterval>
-  let clear = () => clearInterval(timer)
+  const clear = () => clearInterval(timer)
   onMounted(() => {
     handleUpdateValue(value.value)
     emit('tick')

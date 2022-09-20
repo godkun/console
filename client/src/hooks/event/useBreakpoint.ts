@@ -64,9 +64,9 @@ export function createBreakpointListen(fn?: (opt: CreateCallbackParams) => void)
   })
 
   getWindowWidth()
-  globalScreenRef = computed(() => unref(screenRef))
-  globalWidthRef = computed((): number => screenMap.get(unref(screenRef)!)!)
-  globalRealWidthRef = computed((): number => unref(realWidthRef))
+  globalScreenRef.value = computed(() => unref(screenRef))
+  globalWidthRef.value = computed((): number => screenMap.get(unref(screenRef)!)!)
+  globalRealWidthRef.value = computed((): number => unref(realWidthRef))
 
   function resizeFn() {
     fn?.({

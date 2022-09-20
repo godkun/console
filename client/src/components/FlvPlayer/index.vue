@@ -33,12 +33,12 @@
   // flv播放
   function flvStart() {
     // @ts-ignore
-    let player = instance.$options.player
+    const player = instance.$options.player
     player && player.play()
   }
   function flvPause() {
     // @ts-ignore
-    let player = instance.$options.player
+    const player = instance.$options.player
     player && player.pause()
   }
   function flvLoadMds(mediaDataSource) {

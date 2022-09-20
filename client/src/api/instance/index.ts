@@ -2,8 +2,8 @@
 import fetch from '../fetch'
 
 function queryURLparamsRegEs6(url) {
-  let obj: Record<string, string | null> = {}
-  let reg = /([^?=&]+)=([^?=&]+)/g
+  const obj: Record<string, string | null> = {}
+  const reg = /([^?=&]+)=([^?=&]+)/g
   url.replace(reg, (...arg) => {
     obj[arg[1]] = arg[2]
   })
@@ -199,7 +199,7 @@ export function pullStream(
   type: 'rtsp' | 'rtmp' | 'hls' | 'hdl',
   streamPath: string,
   url: string,
-  save: boolean = false
+  save = false
 ) {
   return fetch({
     url: `/${type}/api/pull?streamPath=${streamPath}&target=${encodeURI(url)}${

@@ -25,7 +25,7 @@ export const columns = [
     key: 'BPS',
     width: 100,
     render(row) {
-      let bps = row.BPS << 3
+      const bps = row.BPS << 3
       if (bps > 1024 * 1024) {
         return h('text', (bps / 1024 / 1024).toFixed(2) + ' mb/s')
       }

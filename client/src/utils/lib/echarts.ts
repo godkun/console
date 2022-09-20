@@ -1,53 +1,26 @@
 import * as echarts from 'echarts/core'
 
-import {
-  BarChart,
-  LineChart,
-  PieChart,
-  MapChart,
-  PictorialBarChart,
-  RadarChart
-} from 'echarts/charts'
+import { BarChart, LineChart } from 'echarts/charts'
 
 import {
   TitleComponent,
+  // 组件类型的定义后缀都为 ComponentOption
   TooltipComponent,
   GridComponent,
-  PolarComponent,
-  AriaComponent,
-  ParallelComponent,
-  LegendComponent,
-  RadarComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-  VisualMapComponent,
-  TimelineComponent,
-  CalendarComponent
+  // 数据集组件
+  DatasetComponent,
+  // 内置数据转换器组件 (filter, sort)
+  TransformComponent
 } from 'echarts/components'
 
-import { SVGRenderer } from 'echarts/renderers'
-
 echarts.use([
-  LegendComponent,
   TitleComponent,
   TooltipComponent,
   GridComponent,
-  PolarComponent,
-  AriaComponent,
-  ParallelComponent,
+  DatasetComponent,
+  TransformComponent,
   BarChart,
-  LineChart,
-  PieChart,
-  MapChart,
-  RadarChart,
-  SVGRenderer,
-  PictorialBarChart,
-  RadarComponent,
-  ToolboxComponent,
-  DataZoomComponent,
-  VisualMapComponent,
-  TimelineComponent,
-  CalendarComponent
+  LineChart
 ])
 
 export default echarts

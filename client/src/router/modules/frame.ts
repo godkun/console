@@ -19,6 +19,15 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'm7s',
+        name: 'console-doc',
+        meta: {
+          title: 'console管理器文档',
+          frameSrc: 'http://localhost:5200/'
+        },
+        component: IFrame
+      },
+      {
+        path: 'm7s',
         name: 'frame-m7s',
         meta: {
           title: 'Monibuca文档',

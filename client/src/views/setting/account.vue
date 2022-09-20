@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- <InstanceSelect @instanceChange="instanceChange" /> -->
-    <!-- <n-select placeholder="选择歌曲" :options="options" /> -->
     <n-grid :x-gap="24">
       <n-grid-item span="6">
         <n-card :bordered="false" size="small" class="proCard">
@@ -19,7 +17,6 @@
       <n-grid-item span="18">
         <n-card :bordered="false" size="small" :title="typeTitle" class="proCard">
           <BasicSetting v-if="type === 1" />
-          <!-- <SafetySetting v-if="type === 2" /> -->
         </n-card>
       </n-grid-item>
     </n-grid>
@@ -41,9 +38,6 @@
   function switchType(e) {
     type.value = e.key
     typeTitle.value = e.name
-  }
-  function instanceChange(d) {
-    console.log('d---', d)
   }
 </script>
 <style lang="less" scoped>

@@ -1,0 +1,22 @@
+[35m@console/vite-plugin-vue-inspector:build[0m: cache hit, replaying output [2mf9c6cf1c7b81baf8[0m
+[35m@console/vite-plugin-vue-inspector:build: [0m
+[35m@console/vite-plugin-vue-inspector:build: [0m> @console/vite-plugin-vue-inspector@1.1.3 build /Users/godkun/Desktop/m7s/console/client/packages/vite-plugin-vue-inspector
+[35m@console/vite-plugin-vue-inspector:build: [0m> tsup src/index.ts --format cjs,esm --dts && pnpm run copy-overlay
+[35m@console/vite-plugin-vue-inspector:build: [0m
+[35m@console/vite-plugin-vue-inspector:build: [0mCLI Building entry: src/index.ts
+[35m@console/vite-plugin-vue-inspector:build: [0mCLI Using tsconfig: tsconfig.json
+[35m@console/vite-plugin-vue-inspector:build: [0mCLI tsup v5.12.9
+[35m@console/vite-plugin-vue-inspector:build: [0mCLI Target: node12
+[35m@console/vite-plugin-vue-inspector:build: [0mCJS Build start
+[35m@console/vite-plugin-vue-inspector:build: [0mESM Build start
+[35m@console/vite-plugin-vue-inspector:build: [0mCJS ⚡️ Build success in 69ms
+[35m@console/vite-plugin-vue-inspector:build: [0mESM ⚡️ Build success in 47ms
+[35m@console/vite-plugin-vue-inspector:build: [0mCJS dist/index.js 26.78 KB
+[35m@console/vite-plugin-vue-inspector:build: [0mESM dist/index.mjs 24.37 KB
+[35m@console/vite-plugin-vue-inspector:build: [0mDTS Build start
+[35m@console/vite-plugin-vue-inspector:build: [0mDTS ⚡️ Build success in 2593ms
+[35m@console/vite-plugin-vue-inspector:build: [0mDTS dist/index.d.ts 1.48 KB
+[35m@console/vite-plugin-vue-inspector:build: [0m
+[35m@console/vite-plugin-vue-inspector:build: [0m> @console/vite-plugin-vue-inspector@1.1.3 copy-overlay /Users/godkun/Desktop/m7s/console/client/packages/vite-plugin-vue-inspector
+[35m@console/vite-plugin-vue-inspector:build: [0m> esno scripts/copy-overlay.ts
+[35m@console/vite-plugin-vue-inspector:build: [0m

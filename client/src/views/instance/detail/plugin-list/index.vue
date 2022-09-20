@@ -13,14 +13,6 @@
         :scroll-x="1090">
         <template #tableTitle>
           <n-gradient-text type="success"> 插件列表 </n-gradient-text>
-          <!-- <n-button type="primary" @click="addTable">
-            <template #icon>
-              <n-icon>
-                <PlusOutlined />
-              </n-icon>
-            </template>
-            新建
-          </n-button> -->
         </template>
       </BasicTable>
 
@@ -35,9 +27,6 @@
           <n-form-item label="名称" path="name">
             <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
           </n-form-item>
-          <!-- <n-form-item label="链接" path="url">
-            <n-input placeholder="请输入实例链接" v-model:value="formParams.url" />
-          </n-form-item> -->
         </n-form>
 
         <template #action>
@@ -54,10 +43,10 @@
 <script lang="ts" setup>
   import { h, reactive, ref } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
-  import { useDialog, useMessage } from 'naive-ui'
+  import { useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
   import { columns } from './columns'
-  import { addInstance, updateInstance, delInstance, getInstancePlugin } from '@/api/instance'
+  import { addInstance, updateInstance, getInstancePlugin } from '@/api/instance'
 
   const router = useRouter()
   const route = useRoute()
@@ -71,7 +60,6 @@
     }
   }
 
-  const dialog = useDialog()
   const formRef: any = ref(null)
   const message = useMessage()
   const actionRef = ref()
@@ -204,37 +192,6 @@
         message.error('请填写完整信息')
       }
       formBtnLoading.value = false
-    })
-  }
-
-  function handleEdit(record: Recordable) {
-    formParams.name = record.name
-    formParams.url = record.url
-    modalTitle.value = '更新实例'
-    showModal.value = true
-    instance.value.id = record.id
-    instance.value.name = record.name
-    instance.value.mail = localStorage.getItem('mail') || ''
-  }
-
-  function handleDelete(record: Recordable) {
-    dialog.info({
-      title: '提示',
-      content: '您确定要删除此实例吗',
-      positiveText: '确定',
-      negativeText: '取消',
-      onPositiveClick: () => {
-        delInstance({
-          id: record.id
-        }).then(() => {
-          message.success('删除成功')
-          setTimeout(() => {
-            showModal.value = false
-            reloadTable()
-          })
-        })
-      },
-      onNegativeClick: () => {}
     })
   }
 </script>

@@ -179,7 +179,7 @@
         const navMode = unref(getNavMode)
         const { minMenuWidth, menuWidth }: any = unref(getMenuSetting)
         const { fixed }: any = unref(getMultiTabsSetting)
-        let lenNum =
+        const lenNum =
           navMode === 'horizontal' || !isMixMenuNoneSub.value
             ? '0px'
             : collapsed
@@ -252,7 +252,7 @@
 
       //监听滚动条
       function onScroll(e) {
-        let scrollTop =
+        const scrollTop =
           e.target.scrollTop ||
           document.documentElement.scrollTop ||
           window.pageYOffset ||
@@ -436,7 +436,7 @@
         if (containerWidth < navWidth) {
           state.scrollable = true
           if (autoScroll) {
-            let tagList = navScroll.value.querySelectorAll('.tabs-card-scroll-item') || []
+            const tagList = navScroll.value.querySelectorAll('.tabs-card-scroll-item') || []
             ;[...tagList].forEach((tag: HTMLElement) => {
               // fix SyntaxError
               if (tag.id === `tag${state.activeKey.split('/').join('\/')}`) {

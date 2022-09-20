@@ -63,7 +63,7 @@ export const store = defineStore('app', {
       summaryES = fetchSummary()
       summaryES.onmessage = (evt) => {
         if (!evt.data) return
-        let summary = JSON.parse(evt.data)
+        const summary = JSON.parse(evt.data)
         summary.Address = location.hostname
         if (!summary.Streams) summary.Streams = []
         summary.Streams.sort((a, b) => (a.StreamPath > b.StreamPath ? 1 : -1))
@@ -79,7 +79,7 @@ export const store = defineStore('app', {
       gb28181ES = fetchGb28181()
       gb28181ES.onmessage = (evt) => {
         if (!evt.data) return
-        let Gb28181List = JSON.parse(evt.data)
+        const Gb28181List = JSON.parse(evt.data)
         if (!Array.isArray(Gb28181List)) {
           return
         }

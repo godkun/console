@@ -4,78 +4,67 @@
     <div class="page">
       <n-grid x-gap="12" :cols="6">
         <n-gi span="6">
-          <n-statistic label="流标识" :value="data.Path">
-            <!-- <template #prefix>
-              <n-icon> </n-icon>
-            </template>
-            <template #suffix>
-              / 100
-            </template> -->
-          </n-statistic>
+          <n-statistic label="流标识" :value="data.Path" />
         </n-gi>
         <n-gi span="1">
           <n-statistic
             label="流状态"
-            :value="
-              ['⌛等待发布者', '🟢发布中', '🟡等待关闭', '🔴已关闭'][data.State]
-            "></n-statistic>
+            :value="['⌛等待发布者', '🟢发布中', '🟡等待关闭', '🔴已关闭'][data.State]" />
         </n-gi>
         <n-gi span="2">
-          <n-statistic label="发布类型" :value="data.Publisher?.Type"></n-statistic>
+          <n-statistic label="发布类型" :value="data.Publisher?.Type" />
         </n-gi>
         <n-gi span="2">
-          <n-statistic label="发布时间" :value="data.Publisher?.StartTime"></n-statistic>
+          <n-statistic label="发布时间" :value="data.Publisher?.StartTime" />
         </n-gi>
         <n-gi span="1">
-          <n-statistic label="订阅者总数" :value="data.Subscribers?.length || 0"></n-statistic>
+          <n-statistic label="订阅者总数" :value="data.Subscribers?.length || 0" />
         </n-gi>
-        <template v-for="(track, i) in data.Tracks">
+        <template v-for="(track, i) in data.Tracks" :key="i">
           <n-gi span="6">
             <div style="margin: 20px">-轨道{{ i }}详情-</div>
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="轨道名称" :value="track.Name"></n-statistic>
+            <n-statistic label="轨道名称" :value="track.Name" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="BPS" :value="BPSStr(track.BPS)"></n-statistic>
+            <n-statistic label="BPS" :value="BPSStr(track.BPS)" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="FPS" :value="track.FPS"></n-statistic>
+            <n-statistic label="FPS" :value="track.FPS" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="裸数据长度" :value="track.RawSize + ' byte'"></n-statistic>
+            <n-statistic label="裸数据长度" :value="track.RawSize + ' byte'" />
           </n-gi>
           <n-gi span="2">
             <n-statistic
               label="裸数据前10字节"
               :value="
                 track.RawPart.map((x) => x.toString(16).toUpperCase().padStart(2, '0')).join(',')
-              ">
-            </n-statistic>
+              " />
           </n-gi>
           <n-gi span="1">
             <n-statistic
               v-if="track.SPSInfo"
               label="分辨率"
-              :value="track.SPSInfo.Width + 'x' + track.SPSInfo.Height">
-            </n-statistic>
-            <n-statistic v-else label="通道数" :value="track.Channels"> </n-statistic>
+              :value="track.SPSInfo.Width + 'x' + track.SPSInfo.Height" />
+            <n-statistic v-else label="通道数" :value="track.Channels" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic v-if="track.GOP" label="GOP" :value="track.GOP"> </n-statistic>
-            <n-statistic v-else label="位深度" :value="track.SampleSize"> </n-statistic>
+            <n-statistic v-if="track.GOP" label="GOP" :value="track.GOP" />
+            <n-statistic v-else label="位深度" :value="track.SampleSize" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="累计帧数" :value="track.MoveCount"></n-statistic>
+            <n-statistic label="累计帧数" :value="track.MoveCount" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="时间戳" :value="track.LastValue.AbsTime"></n-statistic>
+            <n-statistic label="时间戳" :value="track.LastValue.AbsTime" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="PTS" :value="track.LastValue.PTS"></n-statistic>
+            <n-statistic label="PTS" :value="track.LastValue.PTS" />
           </n-gi>
           <n-gi span="1">
-            <n-statistic label="DTS" :value="track.LastValue.DTS"></n-statistic>
+            <n-statistic label="DTS" :value="track.LastValue.DTS" />
           </n-gi>
           <n-gi span="2">
             <canvas :id="'bps' + track.Name"></canvas>
@@ -91,7 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, onUnmounted, nextTick, computed } from 'vue'
+  import { ref, nextTick, computed } from 'vue'
   import { useRoute } from 'vue-router'
   import { getStreamDetail } from '@/api/instance'
   import { TimelineDataSeries, TimelineGraphView } from 'webrtc-internals'
@@ -140,7 +129,7 @@
   const route = useRoute()
   const { query } = route
   const data = ref({} as StreamDetail)
-  let gvs: {
+  const gvs: {
     [key: string]: {
       bps: TimelineGraphView
       fps: TimelineGraphView
