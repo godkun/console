@@ -54,6 +54,7 @@
         </n-form>
       </div>
     </div>
+    <img src="/guide.png" width="300">
   </div>
 </template>
 
@@ -145,18 +146,20 @@
 </script>
 
 <style lang="less" scoped>
-  .view-account {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow: auto;
-
-    &-container {
-      flex: 1;
-      padding: 32px 0;
-      width: 384px;
-      margin: 0 auto;
-    }
+.view-account {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+  &>img {
+    margin: auto;
+  }
+  &-container {
+    flex: 1;
+    padding: 32px 0;
+    width: 384px;
+    margin: 0 auto;
+  }
 
     &-top {
       padding: 32px 0;

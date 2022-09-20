@@ -48,7 +48,7 @@ export function logout() {
  */
 export function changePassword(data) {
   return fetch({
-    url: '/user/changepassword',
+    url: '/api/user/changepassword',
     method: 'POST',
     data
   })
@@ -59,7 +59,7 @@ export function changePassword(data) {
  */
 export function resetPassword(data) {
   return fetch({
-    url: '/user/sendresetpwdmail',
+    url: '/api/user/sendresetpwdmail',
     method: 'POST',
     data
   })
