@@ -87,11 +87,13 @@ export default ({ command }) => {
       target: 'es2015',
       outDir: 'dist',
       rollupOptions: {
-        external: ['vue', 'naive-ui'],
+        external: ['vue', 'vue-demi'],
+        // external: ['vue', 'naive-ui', 'vue-demi'],
         plugins: [
           externalGlobals({
             vue: 'Vue',
-            'naive-ui': 'naive-ui'
+            // 'naive-ui': 'naive-ui',
+            'vue-demi': 'VueDemi'
           })
         ]
       },
