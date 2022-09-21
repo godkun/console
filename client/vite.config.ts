@@ -92,7 +92,7 @@ export default ({ command }) => {
         plugins: [
           externalGlobals({
             vue: 'Vue',
-            // 'naive-ui': 'naive-ui',
+            'naive-ui': 'naive',
             'vue-demi': 'VueDemi'
           })
         ]
