@@ -7,8 +7,9 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import { visualizer } from 'rollup-plugin-visualizer'
 import legacy from '@vitejs/plugin-legacy'
 import createHtmlPlugin from 'vite-plugin-html'
-import Inspector from "@console/vite-plugin-vue-inspector"
+import Inspector from '@console/vite-plugin-vue-inspector'
 import externalGlobals from 'rollup-plugin-external-globals'
+import commonjs from 'rollup-plugin-commonjs'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -17,6 +18,14 @@ const serverProxy = {
   target: 'https://console.monibuca.com:9999',
   changeOrigin: true
 }
+
+const globals = externalGlobals({
+  vue: 'Vue',
+  vueRouter: 'VueRouter',
+  'naive-ui': 'naive',
+  'vue-demi': 'VueDemi'
+})
+
 export default ({ command }) => {
   return {
     base: './',
@@ -32,7 +41,8 @@ export default ({ command }) => {
         minify: true,
         inject: {
           data: {
-            isProd: command === 'build'
+            isProd: command === 'build',
+            BASE_URL: `https://console.monibuca.com`
           }
         }
       }),
@@ -87,15 +97,8 @@ export default ({ command }) => {
       target: 'es2015',
       outDir: 'dist',
       rollupOptions: {
-        external: ['vue', 'vue-demi'],
-        // external: ['vue', 'naive-ui', 'vue-demi'],
-        plugins: [
-          externalGlobals({
-            vue: 'Vue',
-            'naive-ui': 'naive',
-            'vue-demi': 'VueDemi'
-          })
-        ]
+        external: ['vue', 'vue-demi', 'vueRouter'],
+        plugins: [commonjs(), globals]
       },
       // terser 配置
       terserOptions: {

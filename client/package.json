@@ -78,6 +78,7 @@
     "postcss": "^8.4.6",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-external-globals": "^0.6.1",
     "rollup-plugin-visualizer": "^5.8.1",
     "tailwindcss": "^2.2.19",
