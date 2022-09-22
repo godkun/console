@@ -96,6 +96,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { getInstanceSummary, getInstanceList, getSysInfo } from '@/api/instance'
+  import { Interval } from '@/components/Interval'
 
   const loading = ref(true)
   const list = ref([])
@@ -124,10 +125,10 @@
     StartTime.value = info.StartTime
     Version.value = info.Version
     summary.value = r
-    CPUUsage.value = r.CPUUsage.toFixed(2) + '%'
-    HardDiskUsage.value = r.HardDisk.Usage.toFixed(2) + '%'
-    MemoryUsage.value = r.Memory.Usage.toFixed(2) + '%'
-    NetWork.value = r.NetWork.filter((item) => item.Receive != 0 && item.Sent != 0).map((x) => {
+    CPUUsage.value = r.CPUUsage?.toFixed(2) + '%'
+    HardDiskUsage.value = r.HardDisk?.Usage?.toFixed(2) + '%'
+    MemoryUsage.value = r.Memory?.Usage?.toFixed(2) + '%'
+    NetWork.value = r.NetWork?.filter((item) => item.Receive != 0 && item.Sent != 0).map((x) => {
       return {
         Name: x.Name,
         Receive: BPSStr(x.Receive),

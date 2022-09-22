@@ -52,6 +52,7 @@
   import { useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
+  import { Interval } from '@/components/Interval'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
   import { getInstanceList, addInstance, updateInstance, delInstance } from '@/api/instance'

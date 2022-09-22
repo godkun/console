@@ -25,6 +25,7 @@
   import { h, reactive, ref, onUnmounted } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { BasicTable, TableAction } from '@/components/Table'
+  import { Interval } from '@/components/Interval'
   import { columns } from './columns'
   import { getInstanceSummary, getSysInfo, getConfig } from '@/api/instance'
 

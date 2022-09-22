@@ -84,6 +84,7 @@
   import { useRoute } from 'vue-router'
   import { getStreamDetail } from '@/api/instance'
   import { TimelineDataSeries, TimelineGraphView } from 'webrtc-internals'
+  import { Interval } from '@/components/Interval'
   interface TimelineData {
     Timestamp: string
     Value: number

@@ -24,6 +24,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { BasicTable } from '@/components/Table'
+  import { Interval } from '@/components/Interval'
   import { columns } from './columns'
   import { getInstanceGB } from '@/api/instance'
 

@@ -48,7 +48,8 @@ export default ({ command }) => {
       }),
       // 按需引入 NaiveUi 且自动创建组件声明
       Components({
-        dts: true,
+        dts: 'src/components.d.ts',
+        dirs: ['src/components'],
         resolvers: [NaiveUiResolver()]
       }),
       splitVendorChunkPlugin(),
