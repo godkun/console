@@ -15,7 +15,7 @@ async function bootstrap() {
   setupNaive(app)
 
   // 注册全局自定义组件
-  //setupCustomComponents();
+  // setupCustomComponents()
 
   // 注册全局自定义指令，如：v-permission权限指令
   setupDirectives(app)

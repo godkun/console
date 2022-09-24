@@ -45,6 +45,7 @@
   import { useRouter, useRoute } from 'vue-router'
   import { useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
+  import { InstanceSelect } from '@/components/InstanceSelect'
   import { columns } from './columns'
   import { addInstance, updateInstance, getInstancePlugin } from '@/api/instance'
 

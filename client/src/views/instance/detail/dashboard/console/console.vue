@@ -97,6 +97,7 @@
   import { ref } from 'vue'
   import { getInstanceSummary, getInstanceList, getSysInfo } from '@/api/instance'
   import { Interval } from '@/components/Interval'
+  import { InstanceSelect } from '@/components/InstanceSelect'
 
   const loading = ref(true)
   const list = ref([])

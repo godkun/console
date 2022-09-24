@@ -25,6 +25,7 @@
   import { ref } from 'vue'
   import { BasicTable } from '@/components/Table'
   import { Interval } from '@/components/Interval'
+  import { InstanceSelect } from '@/components/InstanceSelect'
   import { columns } from './columns'
   import { getInstanceGB } from '@/api/instance'
 

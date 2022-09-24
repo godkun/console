@@ -55,6 +55,7 @@
   import { columns } from './columns'
   import { BasicTable, TableAction } from '@/components/Table'
   import { Interval } from '@/components/Interval'
+  import { InstanceSelect } from '@/components/InstanceSelect'
   import { getInstancePullList, stopStream, pullStream } from '@/api/instance'
   import { ref, reactive, h, toRaw } from 'vue'
   import { FormItemRule, useMessage } from 'naive-ui'

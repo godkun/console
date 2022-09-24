@@ -49,7 +49,6 @@ export default ({ command }) => {
       }),
       Components({
         dts: true,
-        // dirs: ['src/components'],
         resolvers: [NaiveUiResolver()]
       }),
       splitVendorChunkPlugin(),
