@@ -580,6 +580,10 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	mail := formData["mail"]
 	if mail == nil {
 		w.Write(util.ErrJson(util.ErrRequestParamError))
@@ -634,6 +638,10 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	password := formData["password"]
 	oldpassword := formData["oldpassword"]
 	if oldpassword == nil || len(oldpassword.(string)) == 0 || password == nil || len(password.(string)) == 0 {
@@ -715,6 +723,10 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	id := formData["id"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
 	if userData != nil && len(userData) > 0 {
@@ -750,6 +762,10 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	pagesize := int(formData["pagesize"].(float64))
 	pageno := int(formData["pageno"].(float64))
 	if pagesize == 0 { //不分页，获取所有
@@ -797,6 +813,10 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	id := formData["id"]
 	name := formData["name"]
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
@@ -845,6 +865,10 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	name := formData["name"]
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
@@ -974,6 +998,10 @@ func renderError(w http.ResponseWriter, message string, statusCode int) {
 func userLogin(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	mail := formData["mail"]
 	password := formData["password"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
@@ -1061,6 +1089,10 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 func userRegister(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	mail := formData["mail"]
 	password := formData["password"]
 	verifycode := formData["verifycode"]
