@@ -48,7 +48,7 @@ export default ({ command }) => {
       }),
       // 按需引入 NaiveUi 且自动创建组件声明
       Components({
-        dts: 'src/components.d.ts',
+        dts: true,
         dirs: ['src/components'],
         resolvers: [NaiveUiResolver()]
       }),
