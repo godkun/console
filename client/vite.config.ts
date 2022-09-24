@@ -14,6 +14,7 @@ import commonjs from 'rollup-plugin-commonjs'
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
 }
+
 const serverProxy = {
   target: 'https://console.monibuca.com:9999',
   changeOrigin: true
@@ -46,7 +47,6 @@ export default ({ command }) => {
           }
         }
       }),
-      // 按需引入 NaiveUi 且自动创建组件声明
       Components({
         dts: true,
         dirs: ['src/components'],
@@ -81,7 +81,7 @@ export default ({ command }) => {
         }
       }
     },
-    // 需要配置本地host
+    // 需要配置本地 host
     server: {
       host: 'monibuca.com',
       port: 4000,
@@ -101,11 +101,9 @@ export default ({ command }) => {
         external: ['vue', 'vue-demi', 'vueRouter'],
         plugins: [commonjs(), globals]
       },
-      // terser 配置
       terserOptions: {
         compress: {
           keep_infinity: false,
-          // 开启 console 方便专项解决问题 TODO: 预发移除
           drop_console: true
         }
       },

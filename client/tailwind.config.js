@@ -1,6 +1,5 @@
 module.exports = {
   mode: 'jit',
-  // darkMode: 'class',
   plugins: [createEnterPlugin()],
   purge: {
     enable: process.env.NODE_ENV === 'production',
@@ -14,7 +13,6 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: '#0960bd'
-          // dark: primaryColorDark,
         }
       },
       screens: {

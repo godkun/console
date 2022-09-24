@@ -24,3 +24,5 @@ pnpm-debug.log*
 /components.d.ts
 /components.d.ts
 yarn.lock
+
+stats.html
