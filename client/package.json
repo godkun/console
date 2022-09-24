@@ -9,7 +9,7 @@
     "dev": "vite --mode=production",
     "build": "vite build",
     "build:no-cache": "yarn clean:cache && npm run build",
-    "analyz": "NODE_ENV=production npm_config_report=true npm run build",
+    "analysis": "NODE_ENV=production npm_config_report=true npm run build",
     "preview": "vite preview",
     "build typecheck": "vuedx-typecheck . && vite build",
     "deploy": "./scripts/deploy-console.mjs",
