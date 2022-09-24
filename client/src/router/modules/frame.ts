@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'console-doc',
         meta: {
           title: 'console管理器文档',
-          frameSrc: 'http://localhost:5200/'
+          frameSrc: 'https://console.monibuca.com/doc/'
         },
         component: IFrame
       },

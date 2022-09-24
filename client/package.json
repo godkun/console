@@ -12,8 +12,10 @@
     "analyz": "NODE_ENV=production npm_config_report=true npm run build",
     "preview": "vite preview",
     "build typecheck": "vuedx-typecheck . && vite build",
-    "deploy": "./scripts/deploy.mjs",
+    "deploy": "./scripts/deploy-console.mjs",
     "doc": "pnpm --filter @console/doc dev",
+    "doc:build": "pnpm --filter @console/doc build",
+    "doc:deploy": "./scripts/deploy-doc.mjs",
     "lint:eslint": "eslint \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write --loglevel warn \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "format": "prettier --write --loglevel warn \"./**/*.{js,json,ts,tsx,css,less,vue,html}\""

@@ -3,6 +3,7 @@ node_modules
 /screenshots
 .pnpm-store
 /dist
+/doc/doc/doc
 # local env files
 .env.local
 .env.*.local
