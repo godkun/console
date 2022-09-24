@@ -750,6 +750,10 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 	}
 	formData := getDataFromHttpRequest(w, r)
 	fmt.Printf("formData is %+v\n", formData)
+	if len(formData) == 0 {
+		w.Write(util.ErrJson(util.ErrRequestParamError))
+		return
+	}
 	pagesize := int(formData["pagesize"].(float64))
 	pageno := int(formData["pageno"].(float64))
 	if pagesize == 0 { //不分页，获取所有
