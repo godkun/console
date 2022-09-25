@@ -60,16 +60,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, unref, computed, onMounted } from 'vue'
+  import { useRoute } from 'vue-router'
   import { Logo } from './components/Logo'
-  import { TabsView } from './components/TagsView'
+  import { useLoadingBar } from 'naive-ui'
   import { MainView } from './components/Main'
   import { AsideMenu } from './components/Menu'
+  import { TabsView } from './components/TagsView'
   import { PageHeader } from './components/Header'
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
+  import { ref, unref, computed, onMounted } from 'vue'
   import { useDesignSetting } from '@/hooks/setting/useDesignSetting'
-  import { useLoadingBar } from 'naive-ui'
-  import { useRoute } from 'vue-router'
+  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
   import { useProjectSettingStore } from '@/store/modules/projectSetting'
 
   const { getDarkTheme } = useDesignSetting()
