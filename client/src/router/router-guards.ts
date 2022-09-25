@@ -1,5 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router'
-import { isNavigationFailure, Router } from 'vue-router'
+import { Router } from 'vue-router'
 import { useUserStoreWidthOut } from '@/store/modules/user'
 import { useAsyncRouteStoreWidthOut } from '@/store/modules/asyncRoute'
 import { PageEnum } from '@/enums/pageEnum'
@@ -50,7 +50,7 @@ export function createRouterGuards(router: Router) {
     Loading && Loading.finish()
   })
 
-  router.afterEach((to, _, failure) => {
+  router.afterEach((to, _) => {
     document.title = (to?.meta?.title as string) || document.title
     if (to.name == 'stream-play') {
       to.meta.frameSrc = to.query.frameSrc

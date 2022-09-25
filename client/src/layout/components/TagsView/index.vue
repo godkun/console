@@ -488,8 +488,7 @@
       })
 
       function onElementResize() {
-        let observer
-        observer = elementResizeDetectorMaker()
+        const observer = elementResizeDetectorMaker()
         observer.listenTo(navWrap.value, handleResize)
       }
 

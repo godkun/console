@@ -24,7 +24,6 @@
   import { emit } from 'cluster'
 
   rtcPeerConnection: null
-  const iceConnectionState = ref('')
   const rtcPeerConnectionInit = ref(false)
   const rtcStream = ref(null)
   const loading = ref(true)
@@ -88,10 +87,6 @@
         sdp: result.sdp
       })
     )
-  }
-  function close() {
-    const rtcPeerConnection = $options.rtcPeerConnection
-    rtcPeerConnection && rtcPeerConnection.close()
   }
 </script>
 

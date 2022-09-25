@@ -144,7 +144,7 @@ export function modifyConfig(data, name) {
 }
 
 // 获取实例所有插件
-export function getInstancePlugin(params) {
+export function getInstancePlugin() {
   return fetch({
     url: '/api/plugins',
     method: 'post',
