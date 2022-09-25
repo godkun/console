@@ -5,7 +5,6 @@
       <div class="view-account-top">
         <div class="view-account-top-logo">
           <img src="~@/assets/images/logo.png" alt="" />
-          <!-- <h2 class="title">Monibuca</h2> -->
         </div>
         <div class="view-account-top-desc">流媒体在线管理</div>
       </div>
@@ -168,15 +167,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 160px;
-        line-height: 64px;
+        // height: 160px;
+        // line-height: 64px;
         overflow: hidden;
         white-space: nowrap;
 
         img {
           width: auto;
           height: auto;
-          // height: 32px;
+          // height: 64px;
         }
 
         .title {
@@ -187,7 +186,7 @@
       }
 
       &-desc {
-        font-size: 14px;
+        font-size: 24px;
         color: #808695;
       }
     }
@@ -207,7 +206,7 @@
 
   @media (min-width: 768px) {
     .view-account {
-      background-image: url('../../assets/images/login.svg');
+      background-image: url('../../assets/images/login-bg.svg');
       background-repeat: no-repeat;
       background-position: 50%;
       background-size: 100%;

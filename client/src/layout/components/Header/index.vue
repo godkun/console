@@ -14,12 +14,13 @@
         :inverted="getInverted"
         mode="horizontal" />
     </div>
+
     <!--左侧菜单-->
     <div class="layout-header-left" v-else>
       <!-- 菜单收起 -->
       <div
         class="ml-1 layout-header-trigger layout-header-trigger-min"
-        @click="() => $emit('update:collapsed', !collapsed)">
+        @click="switchCollapse(collapsed)">
         <n-icon size="18" v-if="collapsed">
           <MenuUnfoldOutlined />
         </n-icon>
@@ -27,7 +28,9 @@
           <MenuFoldOutlined />
         </n-icon>
       </div>
+
       <!-- 刷新 -->
+
       <div
         class="mr-1 layout-header-trigger layout-header-trigger-min"
         v-if="headerSetting.isReload"
@@ -36,7 +39,9 @@
           <ReloadOutlined />
         </n-icon>
       </div>
+
       <!-- 面包屑 -->
+
       <n-breadcrumb v-if="crumbsSetting.show">
         <template v-for="routeItem in breadcrumbList" :key="routeItem.name">
           <n-breadcrumb-item>
@@ -75,7 +80,9 @@
           <span>{{ item.tips }}</span>
         </n-tooltip>
       </div>
+
       <!--切换全屏-->
+
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-tooltip placement="bottom">
           <template #trigger>
@@ -86,19 +93,24 @@
           <span>全屏</span>
         </n-tooltip>
       </div>
+
       <!-- 个人中心 -->
+
       <div class="layout-header-trigger layout-header-trigger-min">
         <n-dropdown trigger="hover" @select="avatarSelect" :options="avatarOptions">
           <div class="avatar">
-            <n-avatar round>
+            <n-avatar
+              :style="{
+                color: 'white',
+                backgroundColor: '#2d8cf0'
+              }"
+              round>
               {{ username }}
-              <template #icon>
-                <UserOutlined />
-              </template>
             </n-avatar>
           </div>
         </n-dropdown>
       </div>
+
       <!--设置-->
       <div class="layout-header-trigger layout-header-trigger-min" @click="openSetting">
         <n-tooltip placement="bottom-end">
@@ -112,6 +124,7 @@
       </div>
     </div>
   </div>
+
   <!--项目配置-->
   <ProjectSetting ref="drawerSetting" />
 </template>
@@ -138,7 +151,8 @@
         type: Boolean
       }
     },
-    setup(props) {
+    emits: ['update:collapsed'],
+    setup(props, { emit }) {
       const userStore = useUserStore()
       const message = useMessage()
       const dialog = useDialog()
@@ -298,6 +312,10 @@
         openDrawer()
       }
 
+      function switchCollapse(collapsed) {
+        emit('update:collapsed', !collapsed)
+      }
+
       return {
         ...toRefs(state),
         iconList,
@@ -314,7 +332,8 @@
         openSetting,
         getInverted,
         getMenuLocation,
-        mixMenu
+        mixMenu,
+        switchCollapse
       }
     }
   })
@@ -445,12 +464,4 @@
     left: 200px;
     z-index: 11;
   }
-
-  //::v-deep(.menu-router-link) {
-  //  color: #515a6e;
-  //
-  //  &:hover {
-  //    color: #1890ff;
-  //  }
-  //}
 </style>

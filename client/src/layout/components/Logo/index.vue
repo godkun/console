@@ -33,6 +33,8 @@
 
     .title {
       margin-bottom: 0;
+      font-size: 18px;
+      font-weight: bold;
     }
   }
 </style>
