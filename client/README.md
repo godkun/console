@@ -11,5 +11,5 @@ Monibuca Console
 ## 设置本地host
 
 ```
-本机ip monibuca.com
+本机 ip monibuca.com
 ```

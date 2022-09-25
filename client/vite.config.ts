@@ -1,15 +1,15 @@
-import { splitVendorChunkPlugin } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import Components from 'unplugin-vue-components/vite'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
-import { visualizer } from 'rollup-plugin-visualizer'
 import legacy from '@vitejs/plugin-legacy'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import commonjs from 'rollup-plugin-commonjs'
+import { splitVendorChunkPlugin } from 'vite'
 import createHtmlPlugin from 'vite-plugin-html'
+import { visualizer } from 'rollup-plugin-visualizer'
+import Components from 'unplugin-vue-components/vite'
 import Inspector from '@console/vite-plugin-vue-inspector'
 import externalGlobals from 'rollup-plugin-external-globals'
-import commonjs from 'rollup-plugin-commonjs'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)

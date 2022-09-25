@@ -1,10 +1,10 @@
+import App from './App.vue'
 import './styles/tailwind.css'
 import { createApp } from 'vue'
-import App from './App.vue'
-import router, { setupRouter } from './router'
 import { setupStore } from '@/store'
-import { setupNaive, setupDirectives, setupGlobalMethods } from '@/plugins'
+import router, { setupRouter } from './router'
 import { AppProvider } from '@/components/Application'
+import { setupNaive, setupDirectives, setupGlobalMethods } from '@/plugins'
 
 async function bootstrap() {
   const appProvider = createApp(AppProvider)
@@ -13,9 +13,6 @@ async function bootstrap() {
 
   // 注册全局常用的 naive-ui 组件
   setupNaive(app)
-
-  // 注册全局自定义组件
-  // setupCustomComponents()
 
   // 注册全局自定义指令，如：v-permission权限指令
   setupDirectives(app)
