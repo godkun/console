@@ -4,7 +4,7 @@ import { createApp } from 'vue'
 import { setupStore } from '@/store'
 import router, { setupRouter } from './router'
 import { AppProvider } from '@/components/Application'
-import { setupNaive, setupDirectives, setupGlobalMethods } from '@/plugins'
+import { setupNaive, setupDirectives } from '@/plugins'
 
 async function bootstrap() {
   const appProvider = createApp(AppProvider)
@@ -16,9 +16,6 @@ async function bootstrap() {
 
   // 注册全局自定义指令，如：v-permission权限指令
   setupDirectives(app)
-
-  // 注册全局方法，如：app.config.globalProperties.$message = message
-  setupGlobalMethods(app)
 
   // 挂载状态管理
   setupStore(app)

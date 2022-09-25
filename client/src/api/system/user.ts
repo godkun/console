@@ -34,7 +34,7 @@ export function login(data) {
 }
 
 /**
- * @description: 用户登录
+ * @description: 用户登出
  */
 export function logout() {
   return fetch({
@@ -44,7 +44,7 @@ export function logout() {
 }
 
 /**
- * @description: 用户登录
+ * @description: 修改密码
  */
 export function changePassword(data) {
   return fetch({
@@ -55,7 +55,7 @@ export function changePassword(data) {
 }
 
 /**
- * @description: 用户登录
+ * @description: 重置密码
  */
 export function resetPassword(data) {
   return fetch({

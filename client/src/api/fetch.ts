@@ -1,8 +1,6 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import router from '@/router'
 
-// axios 请求简单封装
-
 // 创建一个实例
 const service = axios.create({
   timeout: 4000,
