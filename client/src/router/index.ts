@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { RedirectRoute } from '@/router/base'
-import { PageEnum } from '@/enums/pageEnum'
+import { PageEnum } from '@/enums'
 import { createRouterGuards } from './router-guards'
 
 // 不需要手动引入，放在src/router/modules 内的文件会自动被加载

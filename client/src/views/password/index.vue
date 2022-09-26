@@ -4,7 +4,7 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img src="~@/assets/images/logo.png" alt="" />
+          <img src="~@/assets/imgs/logo.png" alt="" />
           <h2 class="title">Monibuca</h2>
         </div>
       </div>
@@ -139,7 +139,7 @@
 
   @media (min-width: 768px) {
     .view-account {
-      background-image: url('../../assets/images/login-bg.svg');
+      background-image: url('../../assets/imgs/login-bg.svg');
       background-repeat: no-repeat;
       background-position: 50%;
       background-size: 100%;

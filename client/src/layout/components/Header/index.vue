@@ -5,7 +5,7 @@
       class="layout-header-left"
       v-if="navMode === 'horizontal' || (navMode === 'horizontal-mix' && mixMenu)">
       <div class="logo" v-if="navMode === 'horizontal'">
-        <img src="~@/assets/images/logo.png" alt="" />
+        <img src="~@/assets/imgs/logo.png" alt="" />
         <h2 v-show="!collapsed" class="title">Monibuca</h2>
       </div>
       <AsideMenu

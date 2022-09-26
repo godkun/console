@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import { Router } from 'vue-router'
 import { useUserStoreWidthOut } from '@/store/modules/user'
 import { useAsyncRouteStoreWidthOut } from '@/store/modules/asyncRoute'
-import { PageEnum } from '@/enums/pageEnum'
+import { PageEnum } from '@/enums'
 import { ErrorPageRoute } from '@/router/base'
 
 const LOGIN_PATH = PageEnum.BASE_LOGIN

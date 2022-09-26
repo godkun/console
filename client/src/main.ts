@@ -1,12 +1,13 @@
 import App from './App.vue'
-import './styles/tailwind.css'
 import { createApp } from 'vue'
 import { setupStore } from '@/store'
 import router, { setupRouter } from './router'
+import { setupDirectives } from './directives';
 import { AppProvider } from '@/components/Application'
-import { setupNaive, setupDirectives } from '@/plugins'
+import { setupNaive, setupAssets } from '@/plugins'
 
-async function bootstrap() {
+async function setupApp() {
+  setupAssets()
   const appProvider = createApp(AppProvider)
 
   const app = createApp(App)
@@ -32,4 +33,4 @@ async function bootstrap() {
   app.mount('#app', true)
 }
 
-void bootstrap()
+setupApp()

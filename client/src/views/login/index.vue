@@ -4,7 +4,7 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img src="~@/assets/images/logo.png" alt="" />
+          <img src="~@/assets/imgs/logo.png" alt="" />
         </div>
         <div class="view-account-top-desc">流媒体在线管理</div>
       </div>
@@ -63,7 +63,7 @@
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
-  import { PageEnum } from '@/enums/pageEnum'
+  import { PageEnum } from '@/enums'
 
   interface FormState {
     mail: string
@@ -206,7 +206,7 @@
 
   @media (min-width: 768px) {
     .view-account {
-      background-image: url('../../assets/images/login-bg.svg');
+      background-image: url('../../assets/imgs/login-bg.svg');
       background-repeat: no-repeat;
       background-position: 50%;
       background-size: 100%;

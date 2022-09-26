@@ -42,5 +42,5 @@
 </script>
 
 <style lang="less">
-  @import 'styles/index.less';
+  @import 'styles/less/index.less';
 </style>

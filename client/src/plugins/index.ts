@@ -1,2 +1,2 @@
 export { setupNaive } from '@/plugins/naive'
-export { setupDirectives } from '@/plugins/directives'
+export { setupAssets } from '@/plugins/assets'

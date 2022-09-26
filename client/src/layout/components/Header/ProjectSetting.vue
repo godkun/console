@@ -46,7 +46,7 @@
             <n-tooltip placement="top">
               <template #trigger>
                 <img
-                  src="~@/assets/images/nav-theme-dark.svg"
+                  src="~@/assets/imgs/nav-theme-dark.svg"
                   @click="togNavMode('vertical')"
                   alt="左侧菜单模式" />
               </template>
@@ -59,7 +59,7 @@
             <n-tooltip placement="top">
               <template #trigger>
                 <img
-                  src="~@/assets/images/nav-horizontal.svg"
+                  src="~@/assets/imgs/nav-horizontal.svg"
                   alt="顶部菜单模式"
                   @click="togNavMode('horizontal')" />
               </template>
@@ -72,7 +72,7 @@
             <n-tooltip placement="top">
               <template #trigger>
                 <img
-                  src="~@/assets/images/nav-horizontal-mix.svg"
+                  src="~@/assets/imgs/nav-horizontal-mix.svg"
                   @click="togNavMode('horizontal-mix')"
                   alt="顶部菜单混合模式" />
               </template>
@@ -89,7 +89,7 @@
             <n-tooltip placement="top">
               <template #trigger>
                 <img
-                  src="~@/assets/images/nav-theme-dark.svg"
+                  src="~@/assets/imgs/nav-theme-dark.svg"
                   alt="暗色侧边栏"
                   @click="togNavTheme('dark')" />
               </template>
@@ -102,7 +102,7 @@
             <n-tooltip placement="top">
               <template #trigger>
                 <img
-                  src="~@/assets/images/nav-theme-light.svg"
+                  src="~@/assets/imgs/nav-theme-light.svg"
                   alt="白色侧边栏"
                   @click="togNavTheme('light')" />
               </template>
@@ -115,7 +115,7 @@
             <n-tooltip placement="top">
               <template #trigger>
                 <img
-                  src="~@/assets/images/header-theme-dark.svg"
+                  src="~@/assets/imgs/header-theme-dark.svg"
                   @click="togNavTheme('header-dark')"
                   alt="暗色顶栏" />
               </template>

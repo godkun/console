@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center page-container">
     <div class="text-center">
-      <img src="~@/assets/images/exception/403.svg" alt="" />
+      <img src="~@/assets/imgs/exception/403.svg" alt="" />
     </div>
     <div class="text-center">
       <h1 class="text-base text-gray-500">抱歉，你无权访问该页面</h1>

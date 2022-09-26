@@ -1,19 +1,33 @@
 import { resolve } from 'path'
+import unocss from '@unocss/vite';
 import vue from '@vitejs/plugin-vue'
 import legacy from '@vitejs/plugin-legacy'
+import progress from 'vite-plugin-progress';
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import commonjs from 'rollup-plugin-commonjs'
 import { splitVendorChunkPlugin } from 'vite'
 import createHtmlPlugin from 'vite-plugin-html'
 import { visualizer } from 'rollup-plugin-visualizer'
 import Components from 'unplugin-vue-components/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import Inspector from '@console/vite-plugin-vue-inspector'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 
+
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
 }
+
+const srcPath = pathResolve('src')
+
+const localIconPath = `${srcPath}/assets/svg-icon`;
+
+/** 本地svg图标集合名称 */
+const collectionName = 'icon-local'.replace(`icon-`, '');
 
 const serverProxy = {
   target: 'https://console.monibuca.com:9999',
@@ -35,7 +49,8 @@ export default ({ command }) => {
       Inspector({
         enabled: true,
         toggleButtonVisibility: 'always',
-        toggleComboKey: 'control'
+        toggleComboKey: 'control',
+        toggleButtonPos: 'bottom-right'
       }),
       vueJsx(),
       createHtmlPlugin({
@@ -47,16 +62,35 @@ export default ({ command }) => {
           }
         }
       }),
+      Icons({
+        compiler: 'vue3',
+        customCollections: {
+          [collectionName]: FileSystemIconLoader(localIconPath)
+        },
+        scale: 1,
+        defaultClass: 'inline-block'
+      }),
       Components({
         dts: true,
-        resolvers: [NaiveUiResolver()]
+        resolvers: [
+          NaiveUiResolver(),
+          IconsResolver({ customCollections: [collectionName], componentPrefix: 'icon' })
+        ]
+      }),
+      unocss(),
+      createSvgIconsPlugin({
+        iconDirs: [localIconPath],
+        symbolId: `icon-local-[dir]-[name]`,
+        inject: 'body-last',
+        customDomId: '__SVG_ICON_LOCAL__'
       }),
       splitVendorChunkPlugin(),
       legacy(),
       visualizer({
         gzipSize: true,
         brotliSize: true
-      })
+      }),
+      progress()
     ],
     resolve: {
       alias: [
@@ -76,7 +110,7 @@ export default ({ command }) => {
         less: {
           modifyVars: {},
           javascriptEnabled: true,
-          additionalData: `@import "src/styles/var.less";`
+          additionalData: `@import "src/styles/less/index.less";`
         }
       }
     },

@@ -32,7 +32,7 @@
               <div
                 :id="`tag${element.fullPath.split('/').join('\/')}`"
                 class="tabs-card-scroll-item"
-                :class="{ 'active-item': activeKey === element.path }"
+                :class="{ 'active-item': activeKey === element.fullPath }"
                 @click.stop="goPage(element)"
                 @contextmenu="handleContextMenu($event, element)">
                 <span>{{ element.meta.title }}</span>
@@ -94,7 +94,7 @@
   import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
   import { useMessage } from 'naive-ui'
   import Draggable from 'vuedraggable'
-  import { PageEnum } from '@/enums/pageEnum'
+  import { PageEnum } from '@/enums'
   import {
     DownOutlined,
     ReloadOutlined,
@@ -148,7 +148,6 @@
       const getBaseColor = computed(() => {
         return themeVars.value.textColor1
       })
-
       const state = reactive({
         activeKey: route.fullPath,
         scrollable: false,

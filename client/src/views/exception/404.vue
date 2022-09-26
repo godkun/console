@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center page-container">
     <div class="text-center">
-      <img src="~@/assets/images/exception/404.svg" alt="" />
+      <img src="~@/assets/imgs/exception/404.svg" alt="" />
     </div>
     <div class="text-center">
       <h1 class="text-base text-gray-500">抱歉，你访问的页面不存在</h1>
