@@ -22,7 +22,7 @@
   import { ref } from 'vue'
   import { useMessage } from 'naive-ui'
   import { useRoute } from 'vue-router'
-  import JsonEditor from '@/components/Editor-s/index.vue'
+  import JsonEditor from '@/components/Editor/index.vue'
   import { getConfig, modifyConfig } from '@/api/instance'
 
   const jsonCode = ref('')
