@@ -14,7 +14,7 @@ export default defineConfig({
     footer: {
       copyright: 'Copyright © 2022-present m7s'
     }
-  },
+  }
 })
 
 function nav() {

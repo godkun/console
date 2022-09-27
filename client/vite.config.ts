@@ -1,22 +1,21 @@
 import { resolve } from 'path'
-import unocss from '@unocss/vite';
+import unocss from '@unocss/vite'
 import vue from '@vitejs/plugin-vue'
+import Icons from 'unplugin-icons/vite'
 import legacy from '@vitejs/plugin-legacy'
-import progress from 'vite-plugin-progress';
+import progress from 'vite-plugin-progress'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import commonjs from 'rollup-plugin-commonjs'
 import { splitVendorChunkPlugin } from 'vite'
 import createHtmlPlugin from 'vite-plugin-html'
-import { visualizer } from 'rollup-plugin-visualizer'
-import Components from 'unplugin-vue-components/vite'
-import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
-import { FileSystemIconLoader } from 'unplugin-icons/loaders'
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import Components from 'unplugin-vue-components/vite'
+import { visualizer } from 'rollup-plugin-visualizer'
 import Inspector from '@console/vite-plugin-vue-inspector'
 import externalGlobals from 'rollup-plugin-external-globals'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
-
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -24,10 +23,10 @@ function pathResolve(dir: string) {
 
 const srcPath = pathResolve('src')
 
-const localIconPath = `${srcPath}/assets/svg-icon`;
+const localIconPath = `${srcPath}/assets/svg-icon`
 
 /** 本地svg图标集合名称 */
-const collectionName = 'icon-local'.replace(`icon-`, '');
+const collectionName = 'icon-local'.replace(`icon-`, '')
 
 const serverProxy = {
   target: 'https://console.monibuca.com:9999',

@@ -2,7 +2,7 @@ import App from './App.vue'
 import { createApp } from 'vue'
 import { setupStore } from '@/store'
 import router, { setupRouter } from './router'
-import { setupDirectives } from './directives';
+import { setupDirectives } from './directives'
 import { AppProvider } from '@/components/Application'
 import { setupNaive, setupAssets } from '@/plugins'
 

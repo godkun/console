@@ -1,8 +1,8 @@
-import { defineConfig } from '@unocss/vite';
-import presetUno from '@unocss/preset-uno';
+import { defineConfig } from '@unocss/vite'
+import presetUno from '@unocss/preset-uno'
 
 export default defineConfig({
-  exclude: ['node_modules', 'dist', '.git', '.husky', '.vscode', 'public', 'build', 'mock', './stats.html'],
+  exclude: ['node_modules', 'dist', '.git', '.husky', '.vscode', 'public', './stats.html'],
   presets: [presetUno({ dark: 'class' })],
   shortcuts: {
     'wh-full': 'w-full h-full',
@@ -65,4 +65,4 @@ export default defineConfig({
       dark: '#18181c'
     }
   }
-});
+})

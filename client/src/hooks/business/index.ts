@@ -1,3 +1,3 @@
-import useCountDown from './useCountDown';
+import useCountDown from './useCountDown'
 
-export { useCountDown };
+export { useCountDown }

@@ -14,7 +14,7 @@ module.exports = {
     { value: 'revert', name: 'revert:   回滚到上一个版本' }
   ],
   scopes: [
-		['projects', '项目搭建'],
+    ['projects', '项目搭建'],
     ['components', '组件相关'],
     ['hooks', 'hook 相关'],
     ['utils', 'utils 相关'],
