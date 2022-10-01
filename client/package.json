@@ -48,8 +48,6 @@
     "webrtc-internals": "^0.0.8"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
     "@console/vite-plugin-vue-inspector": "workspace:*",
     "@milahu/patch-package": "^6.4.14",
     "@types/lodash": "^4.14.178",
@@ -66,7 +64,6 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.1.0",
     "autoprefixer": "^10.4.2",
-    "commitizen": "^4.2.4",
     "core-js": "^3.21.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
@@ -110,11 +107,6 @@
   },
   "lint-staged": {
     "*.{vue,js,jsx,ts,tsx,json}": "eslint --fix"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-customizable"
-    }
   },
   "workspaces": [
     "packages/*",
