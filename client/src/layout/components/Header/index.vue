@@ -158,12 +158,10 @@
       const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } =
         useProjectSetting()
 
-      const { username } = userStore?.info || {}
-
       const drawerSetting = ref()
 
       const state = reactive({
-        username: username || '',
+        username: 'admin',
         fullscreenIcon: 'FullscreenOutlined',
         navMode: getNavMode,
         navTheme: getNavTheme,
@@ -240,14 +238,12 @@
               message.success('成功退出登录')
               // 移除标签页
               localStorage.removeItem('TABS-ROUTES')
-              router
-                .replace({
-                  name: 'Login',
-                  query: {
-                    redirect: route.fullPath
-                  }
-                })
-                .finally(() => location.reload())
+              router.replace({
+                name: 'Login',
+                query: {
+                  redirect: route.fullPath
+                }
+              })
             })
           },
           onNegativeClick: () => {}

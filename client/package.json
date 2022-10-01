@@ -15,8 +15,7 @@
     "lint:prettier": "prettier --write --loglevel warn \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "format": "prettier --write --loglevel warn \"./**/*.{js,json,ts,tsx,css,less,vue,html}\"",
     "postinstall": "patch-package",
-    "clean": "pnpm rimraf node_modules pnpm-lock.yaml",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    "clean": "pnpm rimraf node_modules pnpm-lock.yaml"
   },
   "dependencies": {
     "@core-player/playcore-hls": "^0.1.1",
