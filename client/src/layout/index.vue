@@ -68,8 +68,7 @@
   import { TabsView } from './components/TagsView'
   import { PageHeader } from './components/Header'
   import { ref, unref, computed, onMounted } from 'vue'
-  import { useDesignSetting } from '@/hooks/setting/useDesignSetting'
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
+  import { useDesignSetting, useProjectSetting } from '@/hooks'
   import { useProjectSettingStore } from '@/store/modules/projectSetting'
 
   const { getDarkTheme } = useDesignSetting()

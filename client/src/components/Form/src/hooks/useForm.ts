@@ -2,7 +2,6 @@ import type { FormProps, FormActionType, UseFormReturnType } from '../types/form
 import type { DynamicProps } from '/#/utils'
 
 import { ref, onUnmounted, unref, nextTick, watch } from 'vue'
-import { isProdMode } from '@/utils/env'
 import { getDynamicProps } from '@/utils'
 
 type Props = Partial<DynamicProps<FormProps>>
@@ -23,12 +22,11 @@ export function useForm(props?: Props): UseFormReturnType {
   }
 
   function register(instance: FormActionType) {
-    isProdMode() &&
-      onUnmounted(() => {
-        formRef.value = null
-        loadedRef.value = null
-      })
-    if (unref(loadedRef) && isProdMode() && instance === unref(formRef)) return
+    onUnmounted(() => {
+      formRef.value = null
+      loadedRef.value = null
+    })
+    if (unref(loadedRef) && instance === unref(formRef)) return
 
     formRef.value = instance
     loadedRef.value = true

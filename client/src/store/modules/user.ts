@@ -18,9 +18,6 @@ export const useUserStore = defineStore({
     permissions: []
   }),
   getters: {
-    getToken(): string {
-      return this.token
-    },
     getAvatar(): string {
       return this.avatar
     },
@@ -30,22 +27,13 @@ export const useUserStore = defineStore({
     getPermissions(): [any][] {
       return this.permissions
     },
-    getUserInfo(): object {
-      return this.info
-    }
   },
   actions: {
-    setToken(token: string) {
-      this.token = token
-    },
     setAvatar(avatar: string) {
       this.avatar = avatar
     },
     setPermissions(permissions) {
       this.permissions = permissions
-    },
-    setUserInfo(info) {
-      this.info = info
     },
     // 注册
     async register(userInfo) {
@@ -66,38 +54,10 @@ export const useUserStore = defineStore({
       }
     },
 
-    // 获取用户信息
-    GetInfo() {
-      const that = this
-      return new Promise((resolve, reject) => {
-        const res = {
-          userId: '1',
-          username: 'admin',
-          realName: 'Admin',
-          avatar: 'http://dummyimage.com/120x60',
-          desc: 'manager',
-          password: 'TTNJYLREVTSSL',
-          token: 'ANEJRNFFCHKPTIPMUQFWADJLQPVESUVH',
-          permissions: [{ label: '主控台', value: 'dashboard_console' }]
-        }
-        const result = res
-        if (result.permissions && result.permissions.length) {
-          const permissionsList = result.permissions
-          that.setPermissions(permissionsList)
-          that.setUserInfo(result)
-        } else {
-          reject(new Error('getInfo: permissionsList must be a non-null array !'))
-        }
-        that.setAvatar(result.avatar)
-        resolve(res)
-      })
-    },
-
     // 登出
     async logout() {
       await logout()
       this.setPermissions([])
-      this.setUserInfo('')
       return Promise.resolve('')
     }
   }

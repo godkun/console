@@ -31,7 +31,7 @@
 <script lang="ts">
   import { defineComponent, PropType, computed, toRaw } from 'vue'
   import { ActionItem } from '@/components/Table'
-  import { isBoolean, isFunction } from '@/utils/is'
+  import { isBoolean, isFunction } from '@/utils/common'
   import { DownOutlined } from '@vicons/antd'
 
   export default defineComponent({

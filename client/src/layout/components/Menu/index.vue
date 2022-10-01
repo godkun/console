@@ -19,7 +19,7 @@
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
   import { generatorMenu, generatorMenuMix } from '@/utils'
   import { useProjectSettingStore } from '@/store/modules/projectSetting'
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
+  import { useProjectSetting } from '@/hooks'
 
   export default defineComponent({
     name: 'Menu',

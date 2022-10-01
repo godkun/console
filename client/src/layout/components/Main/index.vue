@@ -14,7 +14,7 @@
 <script>
   import { defineComponent, computed, unref } from 'vue'
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
+  import { useProjectSetting } from '@/hooks'
 
   export default defineComponent({
     name: 'MainView',

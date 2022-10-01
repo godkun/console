@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
-import router from '@/router'
+import { router } from '@/router'
 
 // 创建一个实例
 const service = axios.create({

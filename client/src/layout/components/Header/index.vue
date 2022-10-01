@@ -138,7 +138,7 @@
   import { useUserStore } from '@/store/modules/user'
   import ProjectSetting from './ProjectSetting.vue'
   import { AsideMenu } from '@/layout/components/Menu'
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
+  import { useProjectSetting } from '@/hooks'
 
   export default defineComponent({
     name: 'PageHeader',

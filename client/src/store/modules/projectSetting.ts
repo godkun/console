@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { store } from '@/store'
-import projectSetting from '@/settings/projectSetting'
+import { projectSetting } from '@/settings'
 import type { IheaderSetting, ImenuSetting, ImultiTabsSetting, IcrumbsSetting } from '/#/config'
 
 const {

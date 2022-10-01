@@ -86,7 +86,7 @@
     VerticalLeftOutlined
   } from '@vicons/antd'
   import Draggable from 'vuedraggable/src/vuedraggable'
-  import { useDesignSetting } from '@/hooks/setting/useDesignSetting'
+  import { useDesignSetting } from '@/hooks'
 
   interface Options {
     title: string

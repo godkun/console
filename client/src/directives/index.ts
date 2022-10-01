@@ -1,5 +1,4 @@
-import { App } from 'vue'
-
+import type { App } from 'vue'
 import ClickOutside from './clickOutside'
 
 /**

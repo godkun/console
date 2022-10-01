@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useProjectSettingStore } from '@/store/modules/projectSetting'
 
-export function useProjectSetting() {
+export default function useProjectSetting() {
   const projectStore = useProjectSettingStore()
 
   const getNavMode = computed(() => projectStore.navMode)

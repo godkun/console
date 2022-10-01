@@ -1,4 +1,4 @@
-const setting = {
+export const projectSetting = {
   //导航模式 vertical 左侧菜单模式 horizontal 顶部菜单模式
   navMode: 'vertical',
   //导航风格 dark 暗色侧边栏 light 白色侧边栏 header-dark 暗色顶栏
@@ -52,4 +52,3 @@ const setting = {
   //路由动画类型
   pageAnimateType: 'zoom-fade'
 }
-export default setting

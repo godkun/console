@@ -1,4 +1,5 @@
 import useCountDown from './useCountDown'
-import useWindowSizeFn from './useWindowSizeFn'
+import useDesignSetting from './useDesignSetting'
+import useProjectSetting from './useProjectSetting'
 
-export { useCountDown, useWindowSizeFn }
+export { useCountDown, useDesignSetting, useProjectSetting }

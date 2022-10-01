@@ -86,12 +86,12 @@
     nextTick
   } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import { storage } from '@/utils/Storage'
+  import { storage } from '@/utils/common'
   import { TABS_ROUTES } from '@/store/mutation-types'
   import { useTabsViewStore } from '@/store/modules/tabsView'
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
   import { RouteItem } from '@/store/modules/tabsView'
-  import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
+  import { useProjectSetting, useDesignSetting } from '@/hooks'
   import { useMessage } from 'naive-ui'
   import Draggable from 'vuedraggable'
   import { PageEnum } from '@/enums'
@@ -106,7 +106,6 @@
   } from '@vicons/antd'
   import { renderIcon } from '@/utils'
   import elementResizeDetectorMaker from 'element-resize-detector'
-  import { useDesignSetting } from '@/hooks/setting/useDesignSetting'
   import { useProjectSettingStore } from '@/store/modules/projectSetting'
   import { useThemeVars } from 'naive-ui'
 

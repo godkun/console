@@ -1,7 +1,7 @@
 import App from './App.vue'
 import { createApp } from 'vue'
 import { setupStore } from '@/store'
-import router, { setupRouter } from './router'
+import { setupRouter } from './router'
 import { setupDirectives } from './directives'
 import { AppProvider } from '@/components/Application'
 import { setupNaive, setupAssets } from '@/plugins'
@@ -26,9 +26,6 @@ async function setupApp() {
 
   // 挂载路由
   await setupRouter(app)
-
-  // 路由准备就绪后挂载APP实例
-  await router.isReady()
 
   app.mount('#app', true)
 }

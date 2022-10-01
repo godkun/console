@@ -1,7 +1,7 @@
 import type { ComputedRef, Ref } from 'vue'
 import type { FormProps, FormSchema, FormActionType } from '../types/form'
 import { unref, toRaw } from 'vue'
-import { isFunction } from '@/utils/is'
+import { isFunction } from '@/utils/common'
 
 declare type EmitType = (event: string, ...args: any[]) => void
 

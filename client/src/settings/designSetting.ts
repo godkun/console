@@ -1,5 +1,5 @@
 // app theme preset color
-export const appThemeList: string[] = [
+const appThemeList: string[] = [
   '#2d8cf0',
   '#0960bd',
   '#0084f4',
@@ -20,7 +20,7 @@ export const appThemeList: string[] = [
   '#FC5404'
 ]
 
-const setting = {
+export const designSetting = {
   //深色主题
   darkTheme: false,
   //系统主题色
@@ -28,5 +28,3 @@ const setting = {
   //系统内置主题色列表
   appThemeList
 }
-
-export default setting

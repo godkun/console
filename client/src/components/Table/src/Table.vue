@@ -79,14 +79,13 @@
   import { useColumns } from './hooks/useColumns'
   import { useDataSource } from './hooks/useDataSource'
   import { usePagination } from './hooks/usePagination'
+  import { useWindowSizeFn } from './hooks/useWindowSizeFn'
 
   import { basicProps } from './props'
 
   import { BasicTableProps } from './types/table'
 
-  import { getViewportOffset } from '@/utils/domUtils'
-  import { useWindowSizeFn } from '@/hooks/business'
-  import { isBoolean } from '@/utils/is'
+  import { getViewportOffset, isBoolean } from '@/utils/common'
 
   const densityOptions = [
     {

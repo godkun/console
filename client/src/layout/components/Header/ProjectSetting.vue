@@ -110,7 +110,6 @@
   import { CheckOutlined } from '@vicons/antd'
   import { Moon, SunnySharp } from '@vicons/ionicons5'
   import { darkTheme } from 'naive-ui'
-  import { animates as animateOptions } from '@/settings/animateSetting'
 
   export default defineComponent({
     name: 'ProjectSetting',
@@ -145,10 +144,6 @@
         }
       )
 
-      const directionsOptions = computed(() => {
-        return animateOptions.find((item) => item.value == unref(settingStore.pageAnimateType))
-      })
-
       function openDrawer() {
         state.isDrawer = true
       }
@@ -182,9 +177,7 @@
         togTheme,
         darkTheme,
         openDrawer,
-        closeDrawer,
-        animateOptions,
-        directionsOptions
+        closeDrawer
       }
     }
   })

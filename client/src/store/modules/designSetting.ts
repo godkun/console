@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { store } from '@/store'
-import designSetting from '@/settings/designSetting'
+import { designSetting } from '@/settings'
 
 const { darkTheme, appTheme, appThemeList } = designSetting
 
