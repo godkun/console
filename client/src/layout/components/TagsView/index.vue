@@ -87,7 +87,6 @@
   } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { storage } from '@/utils/common'
-  import { TABS_ROUTES } from '@/store/mutation-types'
   import { useTabsViewStore } from '@/store/modules/tabsView'
   import { useAsyncRouteStore } from '@/store/modules/asyncRoute'
   import { RouteItem } from '@/store/modules/tabsView'
@@ -229,7 +228,7 @@
       let cacheRoutes: RouteItem[] = []
       const simpleRoute = getSimpleRoute(route)
       try {
-        const routesStr = storage.get(TABS_ROUTES) as string | null | undefined
+        const routesStr = storage.get('TABS-ROUTES') as string | null | undefined
         cacheRoutes = routesStr ? JSON.parse(routesStr) : [simpleRoute]
       } catch (e) {
         cacheRoutes = [simpleRoute]
@@ -298,7 +297,7 @@
 
       // 在页面关闭或刷新之前，保存数据
       window.addEventListener('beforeunload', () => {
-        storage.set(TABS_ROUTES, JSON.stringify(tabsList.value))
+        storage.set('TABS-ROUTES', JSON.stringify(tabsList.value))
       })
 
       // 关闭当前页面

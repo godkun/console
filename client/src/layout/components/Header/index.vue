@@ -134,7 +134,6 @@
   import { useRouter, useRoute } from 'vue-router'
   import components from './components'
   import { NDialogProvider, useDialog, useMessage } from 'naive-ui'
-  import { TABS_ROUTES } from '@/store/mutation-types'
   import { useUserStore } from '@/store/modules/user'
   import ProjectSetting from './ProjectSetting.vue'
   import { AsideMenu } from '@/layout/components/Menu'
@@ -240,7 +239,7 @@
             userStore.logout().then(() => {
               message.success('成功退出登录')
               // 移除标签页
-              localStorage.removeItem(TABS_ROUTES)
+              localStorage.removeItem('TABS-ROUTES')
               router
                 .replace({
                   name: 'Login',

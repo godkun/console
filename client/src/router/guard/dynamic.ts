@@ -1,5 +1,5 @@
 import type { Router, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
-import { useAsyncRouteStoreWidthOut } from '@/store/modules/asyncRoute'
+import { useAsyncRouteStore } from '@/store/'
 import { ErrorPageRoute } from '@/router/constant'
 import { PageEnum } from '@/enums'
 const LOGIN_PATH = PageEnum.BASE_LOGIN
@@ -10,7 +10,7 @@ export async function createDynamicRouteGuard(
   next: NavigationGuardNext,
   router: Router
 ) {
-  const asyncRouteStore = useAsyncRouteStoreWidthOut()
+  const asyncRouteStore = useAsyncRouteStore()
   if (from.path === LOGIN_PATH && to.name === 'errorPage') {
     next(PageEnum.BASE_HOME)
     return

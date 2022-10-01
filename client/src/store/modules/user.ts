@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { store } from '@/store'
 import { login, register, logout } from '@/api/system/user'
 
 export interface IUserState {
@@ -62,8 +61,3 @@ export const useUserStore = defineStore({
     }
   }
 })
-
-// Need to be used outside the setup
-export function useUserStoreWidthOut() {
-  return useUserStore(store)
-}

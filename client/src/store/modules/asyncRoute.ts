@@ -1,7 +1,6 @@
 import { toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { RouteRecordRaw } from 'vue-router'
-import { store } from '@/store'
 import { asyncRoutes, constantRouter } from '@/router'
 
 export interface IAsyncRouteState {
@@ -57,8 +56,3 @@ export const useAsyncRouteStore = defineStore({
     }
   }
 })
-
-// Need to be used outside the setup
-export function useAsyncRouteStoreWidthOut() {
-  return useAsyncRouteStore(store)
-}
