@@ -57,7 +57,6 @@ export function getInstanceSummary() {
     const pageno = 0
     getInstanceList({ pagesize, pageno }).then((res) => {
       id = res.data.list[0].id
-      console.log('🚀 ~ file: index.ts ~ line 62 ~ getInstanceList ~ id', id)
       return fetch({
         url: '/api/summary?json=1',
         method: 'post',

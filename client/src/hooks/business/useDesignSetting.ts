@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useDesignSettingStore } from '@/store/modules/designSetting'
 
-export default function useDesignSetting() {
+export function useDesignSetting() {
   const designStore = useDesignSettingStore()
 
   const getDarkTheme = computed(() => designStore.darkTheme)

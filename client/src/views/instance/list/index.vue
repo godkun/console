@@ -55,7 +55,8 @@
   import { Interval } from '@/components/Interval'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
-  import { getInstanceList, addInstance, updateInstance, delInstance } from '@/api/instance'
+  import { addInstance, updateInstance, delInstance } from '@/api/instance'
+  import { useInstanceList } from '@/hooks'
 
   const rules = {
     name: {
@@ -163,8 +164,11 @@
   async function tick() {
     const pagesize = 0
     const pageno = 0
-    const r = await getInstanceList({ pagesize, pageno })
-    instanceData.value = r.data.list
+    const { list, error, fetchResource } = useInstanceList()
+    await fetchResource({ pagesize, pageno })
+    if (!error.value) {
+      instanceData.value = (list as any).value.data.list
+    } else message.info(`error--${error.value}`)
   }
 
   function onCheckedRow(rowKeys) {

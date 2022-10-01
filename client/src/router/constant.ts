@@ -7,8 +7,6 @@ export const ErrorPage = () => import('@/views/exception/404.vue')
 
 export const Layout = () => import('@/layout/index.vue')
 
-export const ParentLayout = () => import('@/layout/parentLayout.vue')
-
 // 根据sort值，对路由表进行排序
 export const RootRoute: RouteRecordRaw = {
   path: '/',

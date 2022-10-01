@@ -5,7 +5,7 @@ import { useBoolean } from '../common'
  * 倒计时
  * @param second - 倒计时的时间(s)
  */
-export default function useCountDown(second: number) {
+export function useCountDown(second: number) {
   if (second <= 0 && second % 1 !== 0) {
     throw new Error('倒计时的时间应该为一个正整数！')
   }
