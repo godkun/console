@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { RouteRecordRaw } from 'vue-router'
 import { store } from '@/store'
 import { asyncRoutes, constantRouter } from '@/router/index'
-import { generatorDynamicRouter } from '@/router/generator-routers'
 import { useProjectSetting } from '@/hooks/setting/useProjectSetting'
 
 interface TreeHelperConfig {
@@ -99,11 +98,11 @@ export const useAsyncRouteStore = defineStore({
       const permissionMode = unref(getPermissionMode)
       if (permissionMode === 'BACK') {
         // 动态获取菜单
-        try {
-          accessedRouters = await generatorDynamicRouter()
-        } catch (error) {
-          console.log(error)
-        }
+        // try {
+        //   accessedRouters = await generatorDynamicRouter()
+        // } catch (error) {
+        //   console.log(error)
+        // }
       } else {
         try {
           //过滤账户是否拥有某一个权限，并将菜单从加载列表移除

@@ -1,30 +1,21 @@
 import { defineStore } from 'pinia'
-import { createStorage } from '@/utils/Storage'
 import { store } from '@/store'
-import { ACCESS_TOKEN, CURRENT_USER } from '@/store/mutation-types'
-
-const Storage = createStorage({ storage: localStorage })
 import { login, register, logout } from '@/api/system/user'
-import { storage } from '@/utils/Storage'
 
 export interface IUserState {
-  token: string
   username: string
   welcome: string
   avatar: string
   permissions: any[]
-  info: any
 }
 
 export const useUserStore = defineStore({
   id: 'app-user',
   state: (): IUserState => ({
-    token: Storage.get(ACCESS_TOKEN, ''),
     username: '',
     welcome: '',
     avatar: '',
-    permissions: [],
-    info: Storage.get(CURRENT_USER, {})
+    permissions: []
   }),
   getters: {
     getToken(): string {
@@ -107,8 +98,6 @@ export const useUserStore = defineStore({
       await logout()
       this.setPermissions([])
       this.setUserInfo('')
-      storage.remove(ACCESS_TOKEN)
-      storage.remove(CURRENT_USER)
       return Promise.resolve('')
     }
   }

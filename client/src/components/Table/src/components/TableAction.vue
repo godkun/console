@@ -31,7 +31,6 @@
 <script lang="ts">
   import { defineComponent, PropType, computed, toRaw } from 'vue'
   import { ActionItem } from '@/components/Table'
-  import { usePermission } from '@/hooks/web/usePermission'
   import { isBoolean, isFunction } from '@/utils/is'
   import { DownOutlined } from '@vicons/antd'
 
@@ -58,7 +57,6 @@
       }
     },
     setup(props) {
-      const { hasPermission } = usePermission()
 
       const actionType =
         props.style === 'button' ? 'default' : props.style === 'text' ? 'primary' : 'default'
@@ -76,7 +74,7 @@
       const getDropdownList = computed(() => {
         return (toRaw(props.dropDownActions) || [])
           .filter((action) => {
-            return hasPermission(action.auth) && isIfShow(action)
+            return isIfShow(action)
           })
           .map((action) => {
             const { popConfirm } = action
@@ -109,7 +107,7 @@
       const getActions = computed(() => {
         return (toRaw(props.actions) || [])
           .filter((action) => {
-            return hasPermission(action.auth) && isIfShow(action)
+            return isIfShow(action)
           })
           .map((action) => {
             const { popConfirm } = action

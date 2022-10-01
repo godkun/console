@@ -197,6 +197,11 @@
 
     .default-color {
       color: #515a6e;
+      .flex-initial {
+        a {
+          cursor: pointer;
+        }
+      }
 
       .ant-checkbox-wrapper {
         color: #515a6e;
