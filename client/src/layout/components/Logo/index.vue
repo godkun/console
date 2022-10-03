@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <img src="~@/assets/imgs/logo.png" alt="" :class="{ 'mr-2': !collapsed }" />
+    <icon-local-logo class="icon" :class="{ 'mr-2': !collapsed }" />
     <h2 v-show="!collapsed" class="title">Monibuca</h2>
   </div>
 </template>
@@ -26,7 +26,7 @@
     overflow: hidden;
     white-space: nowrap;
 
-    img {
+    .icon {
       width: auto;
       height: 32px;
     }

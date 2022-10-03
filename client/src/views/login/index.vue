@@ -4,7 +4,7 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img src="~@/assets/imgs/logo.png" alt="" />
+          <icon-local-logo />
         </div>
         <div class="view-account-top-desc">流媒体在线管理</div>
       </div>
