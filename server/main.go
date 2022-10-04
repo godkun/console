@@ -1,12 +1,21 @@
 package main
 
 import (
+	"bufio"
+	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/tls"
+	"crypto/x509"
 	"database/sql"
 	"encoding/json"
+	"encoding/pem"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"math/big"
 	"mime"
 	_ "net"
 	"net/http"
@@ -20,20 +29,20 @@ import (
 	"gitee.com/console/server/util"
 	"github.com/BurntSushi/toml"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/lucas-clemente/quic-go"
 	"golang.org/x/net/websocket"
+	"golang.org/x/sync/errgroup"
 )
 
-var MysqlDb *sql.DB
-var MysqlDbErr error
-var mailtxt string
-var resetpwdtxt string
-var sessionM *sessions.SessionManager
-var instances = NewConcurInstances()
-var commandChannel = make(chan string, 10)
-var ch = make(chan string, 1)
-
 var (
-	config = &struct {
+	ctxBack     = context.Background()
+	MysqlDb     *sql.DB
+	MysqlDbErr  error
+	mailtxt     string
+	resetpwdtxt string
+	sessionM    *sessions.SessionManager
+	instances   = NewConcurInstances()
+	config      = &struct {
 		Server            string
 		Username          string
 		Password          string
@@ -54,6 +63,28 @@ var (
 	ConfigRaw []byte
 )
 
+func generateTLSConfig() *tls.Config {
+	key, err := rsa.GenerateKey(rand.Reader, 1024)
+	if err != nil {
+		panic(err)
+	}
+	template := x509.Certificate{SerialNumber: big.NewInt(1)}
+	certDER, err := x509.CreateCertificate(rand.Reader, &template, &template, &key.PublicKey, key)
+	if err != nil {
+		panic(err)
+	}
+	keyPEM := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(key)})
+	certPEM := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certDER})
+
+	tlsCert, err := tls.X509KeyPair(certPEM, keyPEM)
+	if err != nil {
+		panic(err)
+	}
+	return &tls.Config{
+		Certificates: []tls.Certificate{tlsCert},
+		NextProtos:   []string{"monibuca"},
+	}
+}
 func init() {
 	sessionM = sessions.NewSessionMange() //建议把这个放在你的公共区域，用的时候只调用一次就行了，初始化
 	var err error
@@ -150,27 +181,6 @@ func main() {
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
-	//http.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
-	//	fmt.Println("start server at 9999")
-	//	conn, _, _, err := ws.UpgradeHTTP(r, w)
-	//	if err != nil {
-	//		// handle error
-	//	}
-	//	go func() {
-	//		defer conn.Close()
-	//
-	//		for {
-	//			msg, op, err := wsutil.ReadClientData(conn)
-	//			fmt.Println("read msg is " + string(msg))
-	//			if err != nil {
-	//			}
-	//			err = wsutil.WriteServerMessage(conn, op, msg)
-	//			if err != nil {
-	//				// handle error
-	//			}
-	//		}
-	//	}()
-	//})
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
 	http.Handle("/ws/v1", websocket.Handler(func(w *websocket.Conn) {
 		var secret string
@@ -268,23 +278,65 @@ func main() {
 			}
 		}
 	}))
-	//http.HandleFunc("/api/instance/sendCommand", sendCommand)
-	// http.HandleFunc("/api/summary", summaryCommand)
-	// http.HandleFunc("/api/plugins", pluginsCommand)
-	// http.HandleFunc("/api/stream", streamCommand)
-	// http.HandleFunc("/api/sysinfo", sysinfoCommand)
-	// http.HandleFunc("/api/stopstream", stopstreamCommand)
-	// http.HandleFunc("/api/getconfig", getconfigCommand)
-	// http.HandleFunc("/api/modifyconfig", modifyconfigCommand)
-	// http.HandleFunc("/api/updateconfig", updateconfigCommand)
-	// http.HandleFunc("/api/gb28181/api/list", gb28181listCommand)
 	http.HandleFunc("/", relay)
-	go func() {
-		clearTimeOutInstance()
-	}()
-	log.Fatal(http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil))
-	//log.Fatal(http.ListenAndServe(config.ServerPort, nil))
+	clearTimeOutInstance()
+	var g errgroup.Group
+	g.Go(startQuic)
+	g.Go(func() error {
+		return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
+	})
+	log.Fatal(g.Wait())
 }
+
+func startQuic() error {
+	listener, err := quic.ListenAddr(":4242", generateTLSConfig(), nil)
+	if err != nil {
+		return err
+	}
+	fmt.Println("start quic  server at :4242")
+	for {
+		conn, err := listener.Accept(ctxBack)
+		if err != nil {
+			return err
+		}
+		remoteAddr := conn.RemoteAddr().String()
+		fmt.Println("客户端获取到的ip为:", remoteAddr)
+		stream, err := conn.AcceptStream(ctxBack)
+		if err != nil {
+			fmt.Println("AcceptStream error:", err)
+			continue
+		}
+		secret, err := bufio.NewReader(stream).ReadString('\n')
+		if err != nil {
+			fmt.Println("readsecret error:", err)
+			continue
+		}
+		secret = secret[:len(secret)-1]
+		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
+		if err != nil {
+			fmt.Println(err)
+			stream.Write(util.ErrJson(util.ErrDatabase))
+		} else if totalcount > 0 {
+			instance := NewInstance("", secret)
+			instance.lastAccessedTime = time.Now()
+			instance.Quic = conn
+			instances.Set(secret, instance)
+			stream.Write(util.ErrJson(util.OK()))
+			remoteIP, _, _ := strings.Cut(remoteAddr, ":")
+			go func() {
+				fmt.Println("client online:", remoteAddr)
+				MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
+				<-conn.Context().Done()
+				fmt.Println("client offline:", remoteAddr)
+				MysqlDb.Exec("update instance set online='0' where secret=? ", secret)
+			}()
+		} else {
+			stream.Write(util.ErrJson(util.ErrSecretWrong))
+		}
+		stream.Close()
+	}
+}
+
 func relay(w http.ResponseWriter, r *http.Request) {
 	sessionV := sessionM.BeginSession(w, r)
 	mail := sessionV.Get("mail")
@@ -307,179 +359,30 @@ func relay(w http.ResponseWriter, r *http.Request) {
 		}
 		instance.lastAccessedTime = time.Now()
 		instances.Set(secret, instance)
-		var rq IncomingRequest
-		rq.W = w
-		rq.R = r
-		rq.Add(1)
-		instance.Ch <- &rq
-		rq.Wait()
+		if instance.Quic != nil {
+			s, err := instance.Quic.OpenStreamSync(r.Context())
+			if err == nil {
+				body, _ := ioutil.ReadAll(r.Body)
+				s.Write([]byte(r.RequestURI + "\r" + string(body) + "\n"))
+				body, err = io.ReadAll(s)
+				if err == nil {
+					w.Write(body)
+					return
+				}
+			}
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		} else {
+			var rq IncomingRequest
+			rq.W = w
+			rq.R = r
+			rq.Add(1)
+			instance.Ch <- &rq
+			rq.Wait()
+		}
 	} else {
 		w.Write(util.ErrJson(util.ErrSecretWrong))
 	}
 }
-
-// func gb28181listCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/gb28181/api/list")
-// }
-
-// func updateconfigCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/updateconfig")
-// }
-
-// func modifyconfigCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/modifyconfig")
-// }
-
-// func getconfigCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/getconfig")
-// }
-// func stopstreamCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/stopstream")
-// }
-
-// func sysinfoCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/sysinfo")
-// }
-// func streamCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/stream")
-// }
-// func pluginsCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/plugins")
-// }
-// func summaryCommand(w http.ResponseWriter, r *http.Request) {
-// 	execCommand(w, r, "/api/summary")
-// }
-
-// func execCommand(w http.ResponseWriter, r *http.Request, command string) {
-// 	sessionV := sessionM.BeginSession(w, r)
-// 	mail := sessionV.Get("mail")
-// 	if mail == nil {
-// 		w.Write(util.ErrJson(util.ErrUserNotLogin))
-// 		return
-// 	}
-// 	//formData := getDataFromHttpRequest(w, r)
-// 	//fmt.Printf("formData is %+v\n", formData)
-// 	fmt.Printf("Header is %+v\n", r.Header["M7sid"])
-// 	id := r.Header["M7sid"][0]
-// 	fmt.Printf("m7sid is %+v\n", id)
-// 	secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
-// 	if secretData != nil {
-// 		secret := secretData["secret"]
-// 		if len(secret) > 0 {
-// 			instance := instances.Get(secret)
-// 			if instance == nil {
-// 				w.Write(util.ErrJson(util.ErrInstanceNotConnect))
-// 				return
-// 			}
-// 			instance.lastAccessedTime = time.Now()
-// 			instances.Set(secret, instance)
-// 			timer := time.NewTimer(time.Second * 5)
-// 			defer timer.Stop()
-// 			switch command {
-// 			case "/api/summary":
-// 				if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			case "/api/plugins":
-// 				if error := websocket.Message.Send(instance.W, "/api/plugins\n"); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			case "/api/stream":
-// 				streamPath := r.URL.Query().Get("streamPath")
-// 				if len(streamPath) > 0 {
-// 					if error := websocket.Message.Send(instance.W, "/api/stream?streamPath="+streamPath+"\n"); error != nil {
-// 						log.Println("websocket出现异常", error)
-// 					}
-// 					break
-// 				} else {
-// 					w.Write(util.ErrJson(util.ErrRequestParamError))
-// 					return
-// 				}
-// 			case "/api/sysinfo":
-// 				if error := websocket.Message.Send(instance.W, "/api/sysinfo\n"); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			case "/api/stopstream":
-// 				streamPath := r.URL.Query().Get("streamPath")
-// 				if len(streamPath) > 0 {
-// 					if error := websocket.Message.Send(instance.W, "/api/stopstream?streamPath="+streamPath+"\n"); error != nil {
-// 						log.Println("websocket出现异常", error)
-// 					}
-// 					break
-// 				} else {
-// 					w.Write(util.ErrJson(util.ErrRequestParamError))
-// 					return
-// 				}
-// 				break
-// 			case "/api/getconfig":
-// 				name := r.URL.Query().Get("name")
-// 				url := "/api/getconfig"
-// 				if name != "" {
-// 					url += "?name=" + name + "\n"
-// 				} else {
-// 					url += "\n"
-// 				}
-// 				if error := websocket.Message.Send(instance.W, url); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			case "/api/modifyconfig":
-// 				name := r.URL.Query().Get("name")
-// 				url := "/api/modifyconfig"
-// 				if name != "" {
-// 					url += "?name=" + name + "\n"
-// 				} else {
-// 					url += "\n"
-// 				}
-// 				body, _ := ioutil.ReadAll(r.Body)
-// 				fmt.Printf("body is %+v\n", string(body))
-// 				fmt.Printf("name is %+v\n", name)
-// 				if error := websocket.Message.Send(instance.W, url+string(body)); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			case "/api/updateconfig":
-// 				name := r.URL.Query().Get("name")
-// 				url := "/api/updateconfig"
-// 				if name != "" {
-// 					url += "?name=" + name + "\n"
-// 				} else {
-// 					url += "\n"
-// 				}
-// 				if error := websocket.Message.Send(instance.W, url); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			case "/gb28181/api/list":
-// 				if error := websocket.Message.Send(instance.W, "/gb28181/api/list?json=1\n"); error != nil {
-// 					log.Println("websocket出现异常", error)
-// 				}
-// 				break
-// 			default:
-// 				w.Write(util.ErrJson(util.ErrRequestParamError))
-// 				return
-// 			}
-// 			for {
-// 				select {
-// 				case data := <-instance.Ch:
-// 					fmt.Println("get ch is " + data)
-// 					w.Write([]byte(data))
-// 					return
-// 				case <-timer.C:
-// 					fmt.Println("time out secret is " + secret)
-// 					w.Write(util.ErrJson(util.ErrTimeOut))
-// 					return
-// 				}
-// 			}
-// 		} else {
-// 			w.Write(util.ErrJson(util.ErrSecretWrong))
-// 			return
-// 		}
-// 	}
-// }
 
 /**
 ws链接关闭时清理缓存
@@ -677,28 +580,6 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-
-// func sendCommand(w http.ResponseWriter, r *http.Request) {
-// 	sessionV := sessionM.BeginSession(w, r)
-// 	mail := sessionV.Get("mail")
-// 	formData := getDataFromHttpRequest(w, r)
-// 	fmt.Printf("formData is %+v\n", formData)
-// 	secret := formData["secret"]
-// 	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ? and mail= ?", secret, mail)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 		w.Write(util.ErrJson(util.ErrDatabase))
-// 		return
-// 	}
-// 	if totalcount > 0 {
-// 		instance := instances.Get(secret.(string))
-// 		instance.lastAccessedTime = time.Now()
-// 		instances.Set(secret.(string), instance)
-// 		if error := websocket.Message.Send(instance.W, "/api/summary?json=1\n"); error != nil {
-// 			log.Println("websocket出现异常", error)
-// 		}
-// 	}
-// }
 
 /**
 登出

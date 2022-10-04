@@ -5,8 +5,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/lucas-clemente/quic-go"
 	"golang.org/x/net/websocket"
 )
+
 type IncomingRequest struct {
 	W http.ResponseWriter
 	R *http.Request
@@ -16,6 +18,7 @@ type Instance struct {
 	Name             string `json:"name"`
 	Secret           string `json:"secret"`
 	W                *websocket.Conn
+	Quic             quic.Connection
 	lastAccessedTime time.Time
 	maxAge           int64
 	Ch               chan *IncomingRequest
