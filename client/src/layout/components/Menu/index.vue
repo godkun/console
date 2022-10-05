@@ -124,7 +124,9 @@
         } else {
           router.push({
             name: key,
-            query: currentRoute.query
+            query: {
+              id: currentRoute.query.id
+            }
           })
         }
         emit('clickMenuItem' as any, key)

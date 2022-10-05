@@ -1,7 +1,6 @@
 <template>
   <div class="console">
     <div class="top">
-      <InstanceSelect />
       <Interval @tick="tick" />
     </div>
     <!--数据卡片-->
@@ -104,7 +103,6 @@
   import { ref, onMounted } from 'vue'
   import { getInstanceSummary, getSysInfo } from '@/api/instance'
   import { Interval } from '@/components/Interval'
-  import { InstanceSelect } from '@/components/InstanceSelect'
   import TimelineGraph from '@/components/TimelineGraph.vue'
   const loading = ref(true)
   // const list = ref([])

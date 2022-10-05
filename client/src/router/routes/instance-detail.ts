@@ -57,7 +57,8 @@ const routes: Array<RouteRecordRaw> = [
         path: 'streamDetail',
         name: `${routeName}_stream_detail`,
         meta: {
-          title: '流详情'
+          title: '流详情',
+          hidden: true
         },
         component: () => import('@/views/instance/detail/stream-detail/index.vue')
       },

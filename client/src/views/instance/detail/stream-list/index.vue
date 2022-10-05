@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="top">
-      <InstanceSelect @changeIp="changeIp" />
       <Interval @tick="tick" />
     </div>
     <n-card :bordered="false" class="proCard">
@@ -26,7 +25,6 @@
   import { useRoute, useRouter } from 'vue-router'
   import { BasicTable, TableAction } from '@/components/Table'
   import { Interval } from '@/components/Interval'
-  import { InstanceSelect } from '@/components/InstanceSelect'
   import { columns } from './columns'
   import { getInstanceSummary, getSysInfo, getConfig } from '@/api/instance'
 
