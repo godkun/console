@@ -104,12 +104,12 @@ const COOKIE_MAX_MAX_AGE  = time.Hour * 24 / time.Second  // 单位：秒。
 func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Session  {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	fmt.Println("cookie-name:",m.cookieName)
+	// fmt.Println("cookie-name:",m.cookieName)
 	cookie, err := r.Cookie(m.cookieName)
 	fmt.Println(cookie, err)
 	maxAge2 := int(COOKIE_MAX_MAX_AGE)
 	if err != nil || cookie.Value == "" {
-		fmt.Println("----------> current session not exists")
+		// fmt.Println("----------> current session not exists")
 		sid := m.randomId()
 
 		session,_ := m.storage.InitSession(sid, m.maxAge)
@@ -134,9 +134,9 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 	} else {
 		sid ,_ := url.QueryUnescape(cookie.Value)
 		session := m.storage.(*FromMemory).sessions[sid]
-		fmt.Println("sesssion----->", session)
+		// fmt.Println("sesssion----->", session)
 		if session == nil {
-			fmt.Println("-----------> current session is nil")
+			// fmt.Println("-----------> current session is nil")
 			//创建一个
 			//sid := m.randomId()
 			//根据保存session方式，如内存，数据库中创建
@@ -159,7 +159,7 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 				Expires:  time.Now().Add(time.Duration(maxAge)),
 			}
 			http.SetCookie(w, &newCookie) //设置到响应中
-			fmt.Println("-----------> current session exists")
+			// fmt.Println("-----------> current session exists")
 			return newSession
 		}
 		return session

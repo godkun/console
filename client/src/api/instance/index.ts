@@ -110,9 +110,10 @@ export function stopStream(streamPath) {
 }
 
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
-export function getConfig(name) {
+export function getConfig(name: string) {
+  const params = new URLSearchParams({ yaml: '1', name })
   return fetch({
-    url: name ? `/api/getconfig?name=${name}` : `/api/getconfig`,
+    url: `/api/getconfig?${params.toString()}`,
     method: 'post',
     headers: {
       m7sid: getInstanceId()

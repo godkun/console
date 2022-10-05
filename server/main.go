@@ -648,7 +648,7 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	fmt.Printf("formData is %+v\n", formData)
+	// fmt.Printf("formData is %+v\n", formData)
 	if len(formData) == 0 {
 		w.Write(util.ErrJson(util.ErrRequestParamError))
 		return

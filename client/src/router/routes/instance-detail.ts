@@ -40,8 +40,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'config',
         name: `config`,
         meta: {
-          title: '配置',
-          hidden: true
+          title: '配置'
         },
         component: () => import('@/views/instance/detail/config/index.vue')
       },

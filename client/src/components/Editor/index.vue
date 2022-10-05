@@ -22,7 +22,7 @@
       const createInstance = async () => {
         const monaco = await loader.init()
         instance = monaco.editor.create(dom.value, {
-          model: monaco.editor.createModel(json.value!, 'json'),
+          model: monaco.editor.createModel(json.value!, 'yaml'),
           tabSize: 2,
           automaticLayout: true,
           scrollBeyondLastLine: false,

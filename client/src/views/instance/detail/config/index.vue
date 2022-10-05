@@ -1,74 +1,69 @@
 <template>
-  <div class="page">
-    <n-grid x-gap="12" :cols="6">
-      <n-gi span="2">
-        <n-space class="action">
-          <n-button type="primary" @click="edit">编辑</n-button>
+  <n-space>
+    <n-card :title="`修改过的${name || '全局'}配置`">
+      <template #header-extra>
+        <template v-if="isEdit">
           <n-button type="success" @click="saveConfigFile">保存</n-button>
           <n-button type="primary" @click="noSaveConfigFile">不保存</n-button>
-        </n-space>
-      </n-gi>
-      <n-gi span="4">
-        <n-space>
-          <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="jsonCode" />
-          <pre v-else class="pre">{{ jsonCode }}</pre>
-        </n-space>
-      </n-gi>
-    </n-grid>
-  </div>
+        </template>
+        <n-button v-else type="primary" @click="edit">编辑</n-button>
+      </template>
+      <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="yamls.Modified" />
+      <pre v-else class="pre">{{ yamls.Modified }}</pre>
+    </n-card>
+    <n-card :title="`配置文件中的${name || '全局'}配置`">
+      <pre class="pre">{{ yamls.File }}</pre>
+    </n-card>
+    <n-card :title="`最终合并后的${name || '全局'}配置`">
+      <pre class="pre">{{ yamls.Merged }}</pre>
+    </n-card>
+  </n-space>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { useMessage } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import JsonEditor from '@/components/Editor/index.vue'
   import { getConfig, modifyConfig } from '@/api/instance'
-
-  const jsonCode = ref('')
+  const yamls = reactive({ Merged: '', Modified: '', File: '' })
   const oldJsonCode = ref('')
   const isEdit = ref(false)
   const message = useMessage()
 
   const route = useRoute()
   const { query } = route
+  const name = (query.name as string) || ''
 
-  getConfig(query.name).then((res) => {
-    jsonCode.value = JSON.stringify(res, null, 2)
+  getConfig(name).then((res) => {
+    Object.assign(yamls, res)
+    // jsonCode.value = JSON.stringify(res, null, 2)
   })
 
   function edit() {
     isEdit.value = true
-    oldJsonCode.value = jsonCode.value
+    oldJsonCode.value = yamls.Modified
   }
 
   function saveConfigFile() {
     isEdit.value = false
-    modifyConfig(jsonCode.value, query.name).then(() => {
+    modifyConfig(yamls.Modified, query.name).then(() => {
       message.success('配置保存成功')
     })
   }
 
   function noSaveConfigFile() {
-    jsonCode.value = oldJsonCode.value
+    yamls.Modified = oldJsonCode.value
     isEdit.value = false
   }
 </script>
 
 <style lang="less" scoped>
-  .page {
-    position: relative;
-    .action {
-      position: sticky;
-      top: 120px;
-    }
-    .jsonEditor {
-      width: 55vw;
-      min-height: 80vh;
-    }
-    .pre {
-      width: 70vw;
-      height: 80vh;
-    }
+  .jsonEditor {
+    width: 45vw;
+    min-height: 80vh;
+  }
+  .pre {
+    width: auto;
   }
 </style>
