@@ -365,6 +365,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 				body, _ := ioutil.ReadAll(r.Body)
 				s.Write([]byte(r.RequestURI + "\r" + string(body) + "\n"))
 				body, err = io.ReadAll(s)
+				s.Close()
 				if err == nil {
 					w.Write(body)
 					return
