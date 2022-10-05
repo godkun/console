@@ -83,7 +83,7 @@
     width: 220,
     title: '操作',
     key: 'action',
-    fixed: 'right',
+    // fixed: 'right',
     render(record) {
       return h(TableAction as any, {
         style: 'button',
@@ -103,14 +103,6 @@
               }
             }
           }
-          // {
-          //   label: '详情',
-          //   type: 'primary',
-          //   onClick: handleDetail.bind(null, record),
-          //   ifShow: () => {
-          //     if (record.Name == 'GB28181') return true
-          //   }
-          // }
         ],
         select: (key) => {
           message.info(`您点击了，${key} 按钮`)

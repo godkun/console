@@ -7,6 +7,6 @@ export const columns = [
   {
     title: '版本',
     key: 'Version',
-    width: 100
+    width: 200
   }
 ]
