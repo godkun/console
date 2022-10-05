@@ -155,12 +155,8 @@
           })
           g.bps.addDataSeries(g.bpsds)
           g.fps.addDataSeries(g.fpsds)
-          t.BPSs.forEach((x) => {
-            g.bpsds.addPoint(+new Date(x.Timestamp), x.Value)
-          })
-          t.FPSs.forEach((x) => {
-            g.fpsds.addPoint(+new Date(x.Timestamp), x.Value)
-          })
+          g.bpsds.setPoints(t.BPSs.map((x) => ({ time: +new Date(x.Timestamp), value: x.Value })))
+          g.fpsds.setPoints(t.FPSs.map((x) => ({ time: +new Date(x.Timestamp), value: x.Value })))
           g.bps.updateEndDate()
           g.fps.updateEndDate()
         })
