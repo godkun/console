@@ -329,6 +329,7 @@ func startQuic() error {
 				<-conn.Context().Done()
 				fmt.Println("client offline:", remoteAddr)
 				MysqlDb.Exec("update instance set online='0' where secret=? ", secret)
+				instances.Delete(secret)
 			}()
 		} else {
 			stream.Write(util.ErrJson(util.ErrSecretWrong))
@@ -346,42 +347,46 @@ func relay(w http.ResponseWriter, r *http.Request) {
 	}
 	//formData := getDataFromHttpRequest(w, r)
 	//fmt.Printf("formData is %+v\n", formData)
-	fmt.Printf("Header is %+v\n", r.Header["M7sid"])
+	// fmt.Printf("Header is %+v\n", r.Header["M7sid"])
 	id := r.Header["M7sid"][0]
-	fmt.Printf("m7sid is %+v\n", id)
-	secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
-	secret := secretData["secret"]
-	if len(secret) > 0 {
-		instance := instances.Get(secret)
-		if instance == nil {
-			w.Write(util.ErrJson(util.ErrInstanceNotConnect))
+	// fmt.Printf("m7sid is %+v\n", id)
+	instance := instances.FindByIdAndMail(id, mail.(string))
+	if instance == nil {
+		secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
+		secret := secretData["secret"]
+		if len(secret) > 0 {
+			instance = instances.Get(secret)
+			if instance == nil {
+				w.Write(util.ErrJson(util.ErrInstanceNotConnect))
+				return
+			} else {
+				instance.mail = mail.(string)
+				instance.id = id
+			}
+
+		} else {
+			w.Write(util.ErrJson(util.ErrSecretWrong))
 			return
 		}
-		instance.lastAccessedTime = time.Now()
-		instances.Set(secret, instance)
-		if instance.Quic != nil {
-			s, err := instance.Quic.OpenStreamSync(r.Context())
-			if err == nil {
-				body, _ := ioutil.ReadAll(r.Body)
-				s.Write([]byte(r.RequestURI + "\r" + string(body) + "\n"))
-				body, err = io.ReadAll(s)
-				s.Close()
-				if err == nil {
-					w.Write(body)
-					return
-				}
-			}
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	instance.lastAccessedTime = time.Now()
+	if instance.Quic != nil {
+		s, err := instance.Quic.OpenStream()
+		if err == nil {
+			s.Write([]byte(r.RequestURI + "\n"))
+			io.Copy(s, r.Body)
+			s.Close()
+			io.Copy(w, s)
 		} else {
-			var rq IncomingRequest
-			rq.W = w
-			rq.R = r
-			rq.Add(1)
-			instance.Ch <- &rq
-			rq.Wait()
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	} else {
-		w.Write(util.ErrJson(util.ErrSecretWrong))
+		var rq IncomingRequest
+		rq.W = w
+		rq.R = r
+		rq.Add(1)
+		instance.Ch <- &rq
+		rq.Wait()
 	}
 }
 

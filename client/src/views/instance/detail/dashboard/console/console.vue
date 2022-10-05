@@ -25,7 +25,26 @@
         </NCard>
       </n-grid-item>
       <n-grid-item>
-        <TimelineGraph :value="tlds" />
+        <NCard
+          title="资源使用"
+          :segmented="{ content: true, footer: true }"
+          size="small"
+          :bordered="false">
+          <div class="py-1 px-1 flex justify-between">
+            <TimelineGraph :value="tlds" />
+          </div>
+        </NCard>
+      </n-grid-item>
+      <n-grid-item>
+        <NCard
+          title="流数量"
+          :segmented="{ content: true, footer: true }"
+          size="small"
+          :bordered="false">
+          <div class="py-1 px-1 flex justify-between">
+            <TimelineGraph :value="tldsStream" />
+          </div>
+        </NCard>
       </n-grid-item>
       <n-grid-item>
         <NCard
@@ -102,7 +121,7 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
   import { getInstanceSummary, getSysInfo } from '@/api/instance'
-  import { Interval } from '@/components/Interval'
+  import { Interval } from '@/components/interval'
   import TimelineGraph from '@/components/TimelineGraph.vue'
   const loading = ref(true)
   // const list = ref([])
@@ -117,6 +136,7 @@
   const Version = ref('')
   const StartTime = ref('')
   const tlds = ref<number[]>([])
+  const tldsStream = ref<number[]>([])
   const tldsNetWorkSent = ref<number[]>([])
   const tldsNetWorkRec = ref<number[]>([])
   function BPSStr(bps: number) {
@@ -135,6 +155,7 @@
     // const s = await getInstanceList({ pagesize, pageno })
     const r = await getInstanceSummary()
     tlds.value = [r.CPUUsage || 0, r.HardDisk?.Usage || 0, r.Memory?.Usage || 0]
+    tldsStream.value = [r.Streams?.length || 0]
     summary.value = r
     CPUUsage.value = r.CPUUsage?.toFixed(2) + '%'
     HardDiskUsage.value = r.HardDisk?.Usage?.toFixed(2) + '%'

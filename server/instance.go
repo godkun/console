@@ -17,6 +17,8 @@ type IncomingRequest struct {
 type Instance struct {
 	Name             string `json:"name"`
 	Secret           string `json:"secret"`
+	id               string
+	mail             string
 	W                *websocket.Conn
 	Quic             quic.Connection
 	lastAccessedTime time.Time
@@ -55,6 +57,17 @@ func (c *ConcurInstances) Get(k string) *Instance {
 	} else {
 		return nil
 	}
+}
+
+func (c *ConcurInstances) FindByIdAndMail(id, mail string) *Instance {
+	c.RLock()
+	defer c.RUnlock()
+	for _, instance := range c.Instances {
+		if instance.mail == mail && instance.id == id {
+			return instance
+		}
+	}
+	return nil
 }
 
 func (c *ConcurInstances) Set(k string, v *Instance) {

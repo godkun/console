@@ -7,7 +7,7 @@
   const canvas = ref<HTMLCanvasElement>()
   const props = defineProps<{ value: number[] }>()
   const tlds: TimelineDataSeries[] = []
-  const colors = ['red', 'blue', 'green']
+  const colors = ['red', 'blue', 'green', 'yellow']
   onMounted(() => {
     const view = new TimelineGraphView(canvas.value!)
     let lastTime = 0
