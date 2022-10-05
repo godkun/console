@@ -98,38 +98,38 @@
       return h(TableAction as any, {
         style: 'button',
         actions: [
+          // {
+          //   label: '配置',
+          //   type: 'primary',
+          //   icon: 'ic:outline-delete-outline',
+          //   onClick: handleInstanceConfig.bind(null, record),
+          //   // 根据业务控制是否显示 isShow 和 auth 是并且关系
+          //   ifShow: () => record.online == 1
+          // },
+          // {
+          //   label: '流列表',
+          //   type: 'primary',
+          //   icon: 'ic:outline-delete-outline',
+          //   onClick: handleInstanceDetail.bind(null, record),
+          //   // 根据业务控制是否显示 isShow 和 auth 是并且关系
+          //   ifShow: () => record.online == 1
+          // },
+          // {
+          //   label: '插件列表',
+          //   type: 'primary',
+          //   icon: 'ic:outline-delete-outline',
+          //   onClick: handleInstancePlugin.bind(null, record),
+          //   // 根据业务控制是否显示 isShow 和 auth 是并且关系
+          //   ifShow: () => record.online == 1
+          // },
           {
-            label: '监控',
+            label: '详情',
             type: 'primary',
-            onClick: handleConsole.bind(null, record),
-            ifShow: () => record.online == 1
+            disabled: record.online == 1 ? false : true,
+            onClick: handleInstanceDetail.bind(null, record)
           },
           {
-            label: '配置',
-            type: 'primary',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleInstanceConfig.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => record.online == 1
-          },
-          {
-            label: '流列表',
-            type: 'primary',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleInstanceDetail.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => record.online == 1
-          },
-          {
-            label: '插件列表',
-            type: 'primary',
-            icon: 'ic:outline-delete-outline',
-            onClick: handleInstancePlugin.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => record.online == 1
-          },
-          {
-            label: '更新',
+            label: '编辑',
             type: 'primary',
             onClick: handleEdit.bind(null, record),
             ifShow: () => {
@@ -185,12 +185,12 @@
           addInstance({ name }).then(() => {
             message.success('新建成功')
           })
-        } else if (modalTitle.value == '更新实例') {
+        } else if (modalTitle.value == '编辑实例') {
           const name = formParams.name
           const id = instance.value.id
           const secret = instance.value.secret
           updateInstance({ name, id, secret }).then(() => {
-            message.success('更新成功')
+            message.success('编辑成功')
           })
         }
       } else {
@@ -203,7 +203,7 @@
   function handleEdit(record: Recordable) {
     formParams.name = record.name
     formParams.url = record.url
-    modalTitle.value = '更新实例'
+    modalTitle.value = '编辑实例'
     showModal.value = true
     instance.value.id = record.id
     instance.value.name = record.name
@@ -213,12 +213,13 @@
   // 跳转到实例详情
   function handleInstanceDetail(record: Recordable) {
     const id = record.id
-    router.push({
+    const page = router.resolve({
       name: 'instance_stream_list',
       query: {
         id
       }
     })
+    window.open(page.href, '_blank')
   }
 
   // 跳转到实例详情

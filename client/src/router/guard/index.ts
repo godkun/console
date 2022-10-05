@@ -1,6 +1,12 @@
 import { Router } from 'vue-router'
 import { createDynamicRouteGuard } from './dynamic'
 import { useTitle } from '@vueuse/core'
+import { queryURLparamsRegEs6 } from '@/utils'
+
+function getInstanceId() {
+  const query = queryURLparamsRegEs6(window.location.href)
+  return query.id
+}
 
 /**
  * 创建路由守卫
@@ -17,7 +23,21 @@ export function createRouterGuard(router: Router) {
     if (to.name == 'stream-play') {
       to.meta.frameSrc = to.query.frameSrc
     }
-    // 结束 loadingBar
-    window.$loadingBar?.finish()
+    const id = getInstanceId()
+    if (!id) {
+      window.$loadingBar?.finish()
+      return
+    } else {
+      router.options.routes.forEach((item) => {
+        if (item.name == 'instance') {
+          item.meta.hidden = true
+        }
+        if (item.name == 'list') {
+          item.meta.hidden = false
+        }
+      })
+      // 结束 loadingBar
+      window.$loadingBar?.finish()
+    }
   })
 }

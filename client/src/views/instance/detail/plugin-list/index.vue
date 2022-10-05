@@ -104,15 +104,15 @@
                 }
               }
             }
-          },
-          {
-            label: '详情',
-            type: 'primary',
-            onClick: handleDetail.bind(null, record),
-            ifShow: () => {
-              if (record.Name == 'GB28181') return true
-            }
           }
+          // {
+          //   label: '详情',
+          //   type: 'primary',
+          //   onClick: handleDetail.bind(null, record),
+          //   ifShow: () => {
+          //     if (record.Name == 'GB28181') return true
+          //   }
+          // }
         ],
         select: (key) => {
           message.info(`您点击了，${key} 按钮`)
@@ -126,7 +126,7 @@
     console.log(1111, record.Name)
     if (record.Name == 'GB28181') {
       router.push({
-        name: 'gb28181',
+        name: 'GB28181',
         query: {
           id
         }

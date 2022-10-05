@@ -24,7 +24,8 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '实例详情',
       icon: renderIcon(AppstoreOutlined),
-      sort: 2
+      sort: 2,
+      hidden: true
     },
     children: [
       {

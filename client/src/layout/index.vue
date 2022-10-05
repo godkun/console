@@ -42,7 +42,7 @@
             'layout-content-main-fix': fixedMulti,
             'fluid-header': fixedHeader === 'static'
           }">
-          <TabsView v-if="isMultiTabs" v-model:collapsed="collapsed" />
+          <!-- <TabsView v-if="isMultiTabs" v-model:collapsed="collapsed" /> -->
           <div
             class="main-view"
             :class="{
@@ -245,7 +245,7 @@
   }
 
   .main-view-fix {
-    padding-top: 44px;
+    padding-top: 5px;
   }
 
   .noMultiTabs {
