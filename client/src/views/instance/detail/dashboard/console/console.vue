@@ -1,8 +1,8 @@
 <template>
   <div class="console">
-    <div class="top">
+    <!-- <div class="top">
       <Interval @tick="tick" />
-    </div>
+    </div> -->
     <!--数据卡片-->
     <n-grid cols="1 s:2 m:3 l:4 xl:4 2xl:4" responsive="screen" :x-gap="12" :y-gap="8">
       <n-grid-item>
@@ -120,11 +120,10 @@
 </template>
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
-  import { getInstanceSummary, getSysInfo } from '@/api/instance'
-  import { Interval } from '@/components/interval'
+  import { useRoute, onBeforeRouteLeave } from 'vue-router'
+  import { getSysInfo } from '@/api/instance'
   import TimelineGraph from '@/components/TimelineGraph.vue'
   const loading = ref(true)
-  // const list = ref([])
   const summary = ref({})
   const NetWork = ref<
     { Name: string; Receive: string; Sent: string; ReceiveSpeed: string; SentSpeed: string }[]
@@ -144,31 +143,33 @@
     if (bps > 1024) return (bps / 1024).toFixed(2) + ' kb/s'
     return bps.toString() + ' b/s'
   }
+  const id = useRoute().params.id as string
   onMounted(async () => {
-    const info = await getSysInfo()
+    const info = await getSysInfo(id)
     StartTime.value = info.StartTime
     Version.value = info.Version
+    const es = new EventSource('/api/summary?m7sid=' + id)
+    es.onmessage = tick
+    onBeforeRouteLeave(() => es.close())
   })
-  async function tick() {
-    // const pagesize = 0
-    // const pageno = 0
-    // const s = await getInstanceList({ pagesize, pageno })
-    const r = await getInstanceSummary()
+  async function tick(event) {
+    const r = JSON.parse(event.data)
     tlds.value = [r.CPUUsage || 0, r.HardDisk?.Usage || 0, r.Memory?.Usage || 0]
     tldsStream.value = [r.Streams?.length || 0]
     summary.value = r
     CPUUsage.value = r.CPUUsage?.toFixed(2) + '%'
     HardDiskUsage.value = r.HardDisk?.Usage?.toFixed(2) + '%'
     MemoryUsage.value = r.Memory?.Usage?.toFixed(2) + '%'
-    NetWork.value = r.NetWork?.filter((item) => item.Receive != 0 && item.Sent != 0).map((x) => {
-      return {
-        Name: x.Name,
-        Receive: BPSStr(x.Receive),
-        Sent: BPSStr(x.Sent),
-        ReceiveSpeed: BPSStr(x.ReceiveSpeed),
-        SentSpeed: BPSStr(x.SentSpeed)
-      }
-    })
+    NetWork.value =
+      r.NetWork?.filter((item) => item.Receive != 0 && item.Sent != 0).map((x) => {
+        return {
+          Name: x.Name,
+          Receive: BPSStr(x.Receive),
+          Sent: BPSStr(x.Sent),
+          ReceiveSpeed: BPSStr(x.ReceiveSpeed),
+          SentSpeed: BPSStr(x.SentSpeed)
+        }
+      }) || []
     tldsNetWorkRec.value = r.NetWork?.map((item) => item.ReceiveSpeed)
     tldsNetWorkSent.value = r.NetWork?.map((item) => item.SentSpeed)
     // list.value = s.data.list

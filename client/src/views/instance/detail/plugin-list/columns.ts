@@ -1,7 +1,23 @@
+import { NTag } from 'naive-ui'
+import { h } from 'vue'
+
 export const columns = [
   {
-    title: '插件名称',
-    key: 'Name',
+    title: '名称',
+    render(row) {
+      return row.RawConfig['enabled'] === false
+        ? h('div', [
+            h('text', row.Name),
+            h(
+              NTag,
+              {
+                type: 'primary'
+              },
+              '禁用'
+            )
+          ])
+        : h('text', row.Name)
+    },
     width: 100
   },
   {

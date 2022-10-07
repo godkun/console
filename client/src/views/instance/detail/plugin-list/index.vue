@@ -49,7 +49,7 @@
 
   const router = useRouter()
   const route = useRoute()
-  const { query } = route
+  const { query, params } = route
 
   const rules = {
     name: {
@@ -138,9 +138,7 @@
   }
 
   async function initPage() {
-    const r = await getInstancePlugin({
-      id: query.id
-    })
+    const r = await getInstancePlugin(params.id as string)
     pluginData.value = Object.values(r)
   }
   initPage()

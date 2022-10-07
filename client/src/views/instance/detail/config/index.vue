@@ -32,10 +32,10 @@
   const message = useMessage()
 
   const route = useRoute()
-  const { query } = route
+  const { query, params } = route
   const name = (query.name as string) || ''
-
-  getConfig(name).then((res) => {
+  const id = params.id as string
+  getConfig(id, name).then((res) => {
     Object.assign(yamls, res)
     // jsonCode.value = JSON.stringify(res, null, 2)
   })
@@ -47,7 +47,7 @@
 
   function saveConfigFile() {
     isEdit.value = false
-    modifyConfig(yamls.Modified, query.name).then(() => {
+    modifyConfig(id, yamls.Modified, query.name as string).then(() => {
       message.success('配置保存成功')
     })
   }

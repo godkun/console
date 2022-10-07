@@ -8,20 +8,20 @@
         class="table"
         :row-class-name="'row'"
         :columns="columns"
-        :dataSource="pulllist"
+        :dataSource="pushlist"
         :pagination="false"
         :actionColumn="actionColumn"
         :row-key="(row) => row.id"
         :scroll-x="1090">
         <template #tableTitle>
-          <n-gradient-text type="success"> 远端拉流列表 </n-gradient-text>
+          <n-gradient-text type="success"> 向远端推流列表 </n-gradient-text>
         </template>
         <template #toolbar>
-          <n-button @click="showModal = true" type="primary" round>添加拉流</n-button>
+          <n-button @click="showModal = true" type="primary" round>添加推流</n-button>
         </template>
       </BasicTable>
     </n-card>
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="从远端服务器导入流">
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="向远端服务器推流">
       <n-form
         :model="formParams"
         :rules="rules"
@@ -30,7 +30,7 @@
         :label-width="80"
         class="py-4">
         <n-form-item label="远端流地址" path="target">
-          <n-input placeholder="请输入远端流的地址" v-model:value="formParams.target" />
+          <n-input placeholder="请输入远端服务器推流地址" v-model:value="formParams.target" />
         </n-form-item>
         <n-form-item label="StreamPath" path="streamPath">
           <n-input placeholder="请输入StreamPath" v-model:value="formParams.streamPath" />
@@ -55,15 +55,16 @@
   import { BasicTable, TableAction } from '@/components/Table'
   import { Interval } from '@/components/interval'
   import { useRoute } from 'vue-router'
-  import { getInstancePullList, stopStream, pullStream } from '@/api/instance'
+  import { stopPush, pushStream, getInstancePushList } from '@/api/instance'
   import { ref, reactive, h, toRaw } from 'vue'
   import { FormItemRule, useMessage } from 'naive-ui'
-  const { params } = useRoute()
   const msg = useMessage()
   const formParams = reactive({ target: '', streamPath: '', save: false })
   const formBtnLoading = ref(false)
-  const pulllist = ref([])
+  const pushlist = ref([])
   const showModal = ref(false)
+  const { params } = useRoute()
+  const id = params.id as string
   const rules = {
     target: {
       required: true,
@@ -78,12 +79,8 @@
           return true
         } else if (target.startsWith('rtmp')) {
           return true
-        } else if (/\.m3u8($|\?)/.test(target)) {
-          return true
-        } else if (target.startsWith('http')) {
-          return true
         } else {
-          rule.message = 'only support rtsp,rtmp,hls,hdl'
+          rule.message = 'only support rtsp,rtmp'
           return false
         }
       }
@@ -113,30 +110,26 @@
     }
   }
   async function tick() {
-    pulllist.value = await getInstancePullList(params.id as string)
+    pushlist.value = await getInstancePushList(id)
   }
   async function confirmForm() {
     formBtnLoading.value = true
     const { target, streamPath } = toRaw(formParams)
-    let type: 'rtsp' | 'rtmp' | 'hls' | 'hdl' = 'hdl'
+    let type: 'rtsp' | 'rtmp' = 'rtmp'
     if (target.startsWith('rtsp')) {
       type = 'rtsp'
     } else if (target.startsWith('rtmp')) {
       type = 'rtmp'
-    } else if (/\.m3u8($|\?)/.test(target)) {
-      type = 'hls'
-    } else if (target.startsWith('http')) {
-      type = 'hdl'
     } else {
       msg.error('type not support')
       formBtnLoading.value = false
       return
     }
     try {
-      await pullStream(params.id as string, type, streamPath, target)
+      await pushStream(id, type, streamPath, target)
       formBtnLoading.value = false
       showModal.value = false
-      msg.success('成功导入远端流')
+      msg.success('成功推到远端流')
     } catch (err) {
       formBtnLoading.value = false
       msg.error(err)
@@ -144,8 +137,8 @@
   }
   async function handleDelete(record) {
     try {
-      await stopStream(params.id as string, record.StreamPath)
-      msg.success('删除成功')
+      await stopPush(id, record.RemoteURL)
+      msg.success('停止推流成功')
     } catch (err) {
       msg.error(err.toString())
     }
@@ -161,7 +154,7 @@
         style: 'button',
         actions: [
           {
-            label: '删除',
+            label: '停止推流',
             type: 'error',
             icon: 'ic:outline-delete-outline',
             onClick: handleDelete.bind(null, record),

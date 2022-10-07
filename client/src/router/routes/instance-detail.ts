@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: 'dashboard',
+        path: 'dashboard/:id',
         name: `${routeName}_dashboard`,
         meta: {
           title: '监控'
@@ -37,7 +37,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/dashboard/console/console.vue')
       },
       {
-        path: 'config',
+        path: 'config/:id',
         name: `config`,
         meta: {
           title: '配置'
@@ -45,7 +45,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/config/index.vue')
       },
       {
-        path: 'stream',
+        path: 'stream/:id',
         name: `${routeName}_stream_list`,
         meta: {
           title: '流列表'
@@ -53,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/stream-list/index.vue')
       },
       {
-        path: 'streamDetail',
+        path: 'streamDetail/:id',
         name: `${routeName}_stream_detail`,
         meta: {
           title: '流详情',
@@ -62,7 +62,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/stream-detail/index.vue')
       },
       {
-        path: 'plugin',
+        path: 'plugin/:id',
         name: `${routeName}_plugin_list`,
         meta: {
           title: '插件列表'
@@ -70,7 +70,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/plugin-list/index.vue')
       },
       {
-        path: 'pull',
+        path: 'pull/:id',
         name: `pull`,
         meta: {
           title: '导入远端流'
@@ -78,7 +78,23 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/pull/index.vue')
       },
       {
-        path: 'gb28181',
+        path: 'push/:id',
+        name: `push`,
+        meta: {
+          title: '向远端推流'
+        },
+        component: () => import('@/views/instance/detail/push/index.vue')
+      },
+      {
+        path: 'logs/:id',
+        name: `logs`,
+        meta: {
+          title: '日志管理'
+        },
+        component: () => import('@/views/instance/detail/logrotate/index.vue')
+      },
+      {
+        path: 'gb28181/:id',
         name: `GB28181`,
         meta: {
           title: 'GB28181'

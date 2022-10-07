@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="top">
+    <!-- <div class="top">
       <Interval @tick="tick" />
-    </div>
+    </div> -->
     <n-card :bordered="false" class="proCard">
       <BasicTable
         :columns="columns"
@@ -21,27 +21,20 @@
 </template>
 
 <script lang="ts" setup>
-  import { h, reactive, ref, onUnmounted } from 'vue'
-  import { useRoute, useRouter } from 'vue-router'
+  import { h, reactive, ref, onMounted } from 'vue'
+  import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
   import { BasicTable, TableAction } from '@/components/Table'
-  import { Interval } from '@/components/Interval'
+  // import { Interval } from '@/components/interval'
   import { columns } from './columns'
-  import { getInstanceSummary, getSysInfo, getConfig } from '@/api/instance'
+  import { getInstanceHttp } from '@/api/instance'
 
   const route = useRoute()
   const router = useRouter()
-  const { query } = route
+  const { params } = route
 
-  const id = ref('')
-  id.value = query.id as string
+  const id = params.id as string
 
   const streamData = ref([])
-
-  const remoteIp = ref('')
-
-  function changeIp(ip: string) {
-    remoteIp.value = ip
-  }
 
   const actionColumn = reactive({
     width: 220,
@@ -102,10 +95,15 @@
     }
   })
 
-  let timer
+  onMounted(() => {
+    const es = new EventSource('/api/summary?m7sid=' + id)
+    es.onmessage = tick
+    onBeforeRouteLeave(() => es.close())
+  })
 
-  async function tick() {
-    const r = await getInstanceSummary()
+  async function tick(event) {
+    // const r = await getInstanceSummary(id)
+    const r = JSON.parse(event.data)
     streamData.value = r.Streams
   }
 
@@ -115,27 +113,8 @@
 
   async function handleSelect(key: string, record) {
     const path = record.text
-    const info = await getSysInfo()
-    // 局域网ip
-    const localIp = info.LocalIP
-    const config = await getConfig('')
-    const { publicaddr, publicaddrtls } = config.console
-    const { listenaddr, listenaddrtls } = config.http
-    // http公网
-    if (key == '1') {
-      const ip = publicaddr ? publicaddr : remoteIp.value
-      window.open(`http://${ip}${listenaddr}/preview/${path}`, '_blank')
-      // http局域网
-    } else if (key == '2') {
-      window.open(`http://${localIp}${listenaddr}/preview/${path}`, '_blank')
-      // https公网
-    } else if (key == '3') {
-      const ip = publicaddrtls ? publicaddrtls : remoteIp.value
-      window.open(`https://${ip}${listenaddrtls}/preview/${path}`, 'target')
-      // https局域网
-    } else if (key == '4') {
-      window.open(`https://${localIp}${listenaddrtls}/preview/${path}`, 'target')
-    }
+    const url = await getInstanceHttp(id, key == '2' || key == '4', key == '3' || key == '4')
+    window.open(`${url}/preview/${path}`, '_blank')
   }
 
   function handleDetail(record: Recordable) {
@@ -149,10 +128,6 @@
       }
     })
   }
-
-  onUnmounted(() => {
-    clearInterval(timer)
-  })
 </script>
 
 <style lang="less" scoped>

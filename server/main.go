@@ -174,6 +174,7 @@ func main() {
 	http.HandleFunc("/api/user/changepassword", changePassword)
 	http.HandleFunc("/api/user/sendresetpwdmail", sendResetPwdMail)
 	http.HandleFunc("/api/user/resetpwd", resetPwd)
+	http.HandleFunc("/api/instance/detail", instanceDetail)
 	http.HandleFunc("/api/instance/list", instanceList)
 	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/instance/del", instanceDel)
@@ -327,9 +328,11 @@ func startQuic() error {
 				fmt.Println("client online:", remoteAddr)
 				MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
 				<-conn.Context().Done()
-				fmt.Println("client offline:", remoteAddr)
-				MysqlDb.Exec("update instance set online='0' where secret=? ", secret)
-				instances.Delete(secret)
+				if instances.Get(secret) == instance {
+					fmt.Println("client offline:", remoteAddr)
+					MysqlDb.Exec("update instance set online='0' where secret=? ", secret)
+					instances.Delete(secret)
+				}
 			}()
 		} else {
 			stream.Write(util.ErrJson(util.ErrSecretWrong))
@@ -345,10 +348,14 @@ func relay(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
 	}
+
 	//formData := getDataFromHttpRequest(w, r)
 	//fmt.Printf("formData is %+v\n", formData)
 	// fmt.Printf("Header is %+v\n", r.Header["M7sid"])
-	id := r.Header["M7sid"][0]
+	id := r.Header.Get("M7sid")
+	if id == "" {
+		id = r.URL.Query().Get("m7sid")
+	}
 	// fmt.Printf("m7sid is %+v\n", id)
 	instance := instances.FindByIdAndMail(id, mail.(string))
 	if instance == nil {
@@ -372,13 +379,40 @@ func relay(w http.ResponseWriter, r *http.Request) {
 	instance.lastAccessedTime = time.Now()
 	if instance.Quic != nil {
 		s, err := instance.Quic.OpenStream()
-		if err == nil {
-			s.Write([]byte(r.RequestURI + "\n"))
-			io.Copy(s, r.Body)
-			s.Close()
-			io.Copy(w, s)
+		if r.Header.Get("Accept") == "text/event-stream" {
+			header := w.Header()
+			header.Set("Content-Type", "text/event-stream")
+			header.Set("Cache-Control", "no-cache")
+			header.Set("Connection", "keep-alive")
+			header.Set("X-Accel-Buffering", "no")
+			header.Set("Access-Control-Allow-Origin", "*")
+			s.Write([]byte(r.RequestURI + "\r\n"))
+			r.Header.Write(s)
+			s.Write([]byte("\r\n"))
+			b := make([]byte, 1024)
+			defer s.Close()
+			for r.Context().Err() == nil {
+				if n, err := s.Read(b); err == nil {
+					if _, err = w.Write(b[:n]); err == nil {
+						w.(http.Flusher).Flush()
+					} else {
+						return
+					}
+				} else {
+					return
+				}
+			}
 		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			if err == nil {
+				s.Write([]byte(r.RequestURI + "\r\n"))
+				r.Header.Write(s)
+				s.Write([]byte("\r\n"))
+				io.Copy(s, r.Body)
+				s.Close()
+				io.Copy(w, s)
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 		}
 	} else {
 		var rq IncomingRequest
@@ -596,6 +630,24 @@ func userLogout(w http.ResponseWriter, r *http.Request) {
 	sessionM.Destroy(w, r)
 	w.Write(util.ErrJson(util.OK()))
 	return
+}
+
+func instanceDetail(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
+	formData := getDataFromHttpRequest(w, r)
+	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, formData["id"])
+	if userData != nil && len(userData) > 0 {
+		if err := json.NewEncoder(w).Encode(userData[0]); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+	}
 }
 
 /**

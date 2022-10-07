@@ -52,7 +52,7 @@
   import { useRouter } from 'vue-router'
   import { useDialog, useMessage } from 'naive-ui'
   import { BasicTable, TableAction } from '@/components/Table'
-  import { Interval } from '@/components/Interval'
+  import { Interval } from '@/components/interval'
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
   import { addInstance, updateInstance, delInstance } from '@/api/instance'
@@ -214,46 +214,46 @@
   function handleInstanceDetail(record: Recordable) {
     const id = record.id
     const page = router.resolve({
-      name: 'instance_stream_list',
-      query: {
+      name: 'instance_dashboard',
+      params: {
         id
       }
     })
     window.open(page.href, '_blank')
   }
 
-  // 跳转到实例详情
-  function handleConsole(record: Recordable) {
-    const id = record.id
-    router.push({
-      name: 'instance_dashboard',
-      query: {
-        id
-      }
-    })
-  }
+  // // 跳转到实例详情
+  // function handleConsole(record: Recordable) {
+  //   const id = record.id
+  //   router.push({
+  //     name: 'instance_dashboard',
+  //     query: {
+  //       id
+  //     }
+  //   })
+  // }
 
-  // 跳转到实例详情
-  function handleInstancePlugin(record: Recordable) {
-    const id = record.id
-    router.push({
-      name: 'instance_plugin_list',
-      query: {
-        id
-      }
-    })
-  }
+  // // 跳转到实例详情
+  // function handleInstancePlugin(record: Recordable) {
+  //   const id = record.id
+  //   router.push({
+  //     name: 'instance_plugin_list',
+  //     query: {
+  //       id
+  //     }
+  //   })
+  // }
 
-  // 跳转到实例详情
-  function handleInstanceConfig(record: Recordable) {
-    const id = record.id
-    router.push({
-      name: 'config',
-      query: {
-        id
-      }
-    })
-  }
+  // // 跳转到实例详情
+  // function handleInstanceConfig(record: Recordable) {
+  //   const id = record.id
+  //   router.push({
+  //     name: 'config',
+  //     query: {
+  //       id
+  //     }
+  //   })
+  // }
 
   function handleDelete(record: Recordable) {
     dialog.info({

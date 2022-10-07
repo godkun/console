@@ -30,17 +30,17 @@
         value: item
       }
     })
-    if (!localStorage.getItem('id')) {
-      localStorage.setItem('id', options.value[0].label)
-    }
-    const v = res.data.list.find((item) => item.id == localStorage.getItem('id'))
-    value.value = v
-    const remoteIp = v.RemoteIP
-    emit('changeIp', remoteIp)
+    // if (!localStorage.getItem('id')) {
+    //   localStorage.setItem('id', options.value[0].label)
+    // }
+    // const v = res.data.list.find((item) => item.id == localStorage.getItem('id'))
+    // value.value = v
+    // const remoteIp = v.RemoteIP
+    // emit('changeIp', remoteIp)
   })
   function handleUpdateValue(value) {
     emit('changeIp', value.RemoteIP)
-    localStorage.setItem('id', value.id)
+    // localStorage.setItem('id', value.id)
     router.push({
       path: unref(route).path,
       query: {

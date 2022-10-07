@@ -84,7 +84,7 @@
   import { useRoute } from 'vue-router'
   import { getStreamDetail } from '@/api/instance'
   import { TimelineDataSeries, TimelineGraphView } from 'webrtc-internals'
-  import { Interval } from '@/components/Interval'
+  import { Interval } from '@/components/interval'
   interface TimelineData {
     Timestamp: string
     Value: number
@@ -128,7 +128,7 @@
     return JSON.stringify(data.value, null, 2)
   })
   const route = useRoute()
-  const { query } = route
+  const { query, params } = route
   const data = ref({} as StreamDetail)
   const gvs: {
     [key: string]: {
@@ -139,7 +139,7 @@
     }
   } = {}
   async function tick() {
-    data.value = await getStreamDetail(query.path)
+    data.value = await getStreamDetail(params.id as string, query.path)
     data.value.Tracks.forEach((t) => {
       if (!gvs[t.Name]) {
         nextTick(() => {

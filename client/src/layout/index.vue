@@ -65,7 +65,6 @@
   import { useLoadingBar } from 'naive-ui'
   import { MainView } from './components/Main'
   import { AsideMenu } from './components/Menu'
-  import { TabsView } from './components/TagsView'
   import { PageHeader } from './components/Header'
   import { ref, unref, computed, onMounted } from 'vue'
   import { useDesignSetting, useProjectSetting } from '@/hooks'

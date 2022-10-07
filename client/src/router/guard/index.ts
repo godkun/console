@@ -1,13 +1,6 @@
 import { Router } from 'vue-router'
 import { createDynamicRouteGuard } from './dynamic'
 import { useTitle } from '@vueuse/core'
-import { queryURLparamsRegEs6 } from '@/utils'
-
-function getInstanceId() {
-  const query = queryURLparamsRegEs6(window.location.href)
-  return query.id
-}
-
 /**
  * 创建路由守卫
  * @param router
@@ -23,7 +16,7 @@ export function createRouterGuard(router: Router) {
     if (to.name == 'stream-play') {
       to.meta.frameSrc = to.query.frameSrc
     }
-    const id = getInstanceId()
+    const id = to.params.id
     if (!id) {
       window.$loadingBar?.finish()
       return

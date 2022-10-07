@@ -2,7 +2,7 @@ import { h } from 'vue'
 import { NTime, NButton } from 'naive-ui'
 import { BasicTable } from '@/components/Table'
 import { gb28181Invite } from '@/api/instance'
-const channelsColumns = [
+const channelsColumns = (m7sid) => [
   {
     title: '通道编号',
     key: 'DeviceID',
@@ -20,7 +20,7 @@ const channelsColumns = [
               circle: true,
               type: 'primary',
               onClick: () => {
-                gb28181Invite(row.ParentID, row.DeviceID)
+                gb28181Invite(m7sid, row.ParentID, row.DeviceID)
               }
             },
             '▶️'
@@ -69,7 +69,7 @@ const channelsColumns = [
     width: 50
   }
 ]
-export const columns = [
+export const columns = (m7sid) => [
   {
     type: 'expand',
     expandable: (rowData) => rowData.Channels.length > 0,
@@ -77,7 +77,7 @@ export const columns = [
       return h(BasicTable, {
         pagination: false,
         dataSource: rowData.Channels,
-        columns: channelsColumns,
+        columns: channelsColumns(m7sid),
         title: '通道',
         titleTooltip: rowData.ID
       })

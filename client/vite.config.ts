@@ -123,7 +123,8 @@ export default ({ command }) => {
         '/rtsp': serverProxy,
         '/hdl': serverProxy,
         '/rtmp': serverProxy,
-        '/hls': serverProxy
+        '/hls': serverProxy,
+        '/logrotate': serverProxy
       }
     },
     build: {

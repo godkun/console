@@ -7,7 +7,7 @@
       <BasicTable
         class="table"
         :row-class-name="'row'"
-        :columns="columns"
+        :columns="columns(params.id as string)"
         :dataSource="streamData"
         :pagination="false"
         :row-key="(row) => row.id"
@@ -23,14 +23,14 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { BasicTable } from '@/components/Table'
-  import { Interval } from '@/components/Interval'
+  import { Interval } from '@/components/interval'
   import { columns } from './columns'
   import { getInstanceGB } from '@/api/instance'
-
+  import { useRoute } from 'vue-router'
   const streamData = ref([])
-
+  const { params } = useRoute()
   async function tick() {
-    const r = await getInstanceGB()
+    const r = await getInstanceGB(params.id as string)
     streamData.value = r
   }
 </script>
