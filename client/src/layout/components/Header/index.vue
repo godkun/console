@@ -31,14 +31,14 @@
 
       <!-- 刷新 -->
 
-      <div
+      <!-- <div
         class="mr-1 layout-header-trigger layout-header-trigger-min"
         v-if="headerSetting.isReload"
         @click="reloadPage">
         <n-icon size="18">
           <ReloadOutlined />
         </n-icon>
-      </div>
+      </div> -->
 
       <!-- 面包屑 -->
 
