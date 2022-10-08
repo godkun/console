@@ -1,6 +1,7 @@
 <template>
   <div class="logo">
-    <icon-local-logo class="icon" :class="{ 'mr-2': !collapsed }" />
+    <icon-local-logo />
+    <img src="~@/assets/imgs/logo.png" class="icon" :class="{ 'mr-2': !collapsed }" alt="" />
     <h2 v-show="!collapsed" class="title">Monibuca</h2>
   </div>
 </template>
