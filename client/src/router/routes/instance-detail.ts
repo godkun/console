@@ -32,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'dashboard/:id',
         name: `${routeName}_dashboard`,
         meta: {
-          title: '监控'
+          title: '仪表盘'
         },
         component: () => import('@/views/instance/detail/dashboard/console/console.vue')
       },

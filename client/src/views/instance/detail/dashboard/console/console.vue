@@ -100,16 +100,35 @@
                       <TimelineGraph :value="tldsNetWorkSent" />
                     </n-card>
                   </n-grid-item>
-                  <n-grid-item v-for="item in NetWork" :key="item.Name">
+                  <!-- <n-grid-item v-for="item in NetWork" :key="item.Name">
                     <n-card :title="item.Name">
                       <div>Receive: {{ item.Receive }}</div>
                       <div>Sent: {{ item.Sent }}</div>
                       <div>ReceiveSpeed: {{ item.ReceiveSpeed }}</div>
                       <div>SentSpeed: {{ item.SentSpeed }}</div>
                     </n-card>
-                  </n-grid-item>
+                  </n-grid-item> -->
                 </n-grid>
-                <!-- <NetWork /> -->
+                <n-table :single-line="false">
+                  <thead>
+                    <tr>
+                      <td>网卡</td>
+                      <td>接收总bit</td>
+                      <td>发送总bit</td>
+                      <td>接收速率</td>
+                      <td>发送速率</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in NetWork" :key="item.Name">
+                      <td>{{ item.Name }}</td>
+                      <td>{{ BitStr(item.Receive) }}</td>
+                      <td>{{ BitStr(item.Sent) }}</td>
+                      <td>{{ BPSStr(item.ReceiveSpeed) }}</td>
+                      <td>{{ BPSStr(item.SentSpeed) }}</td>
+                    </tr>
+                  </tbody>
+                </n-table>
               </n-tab-pane>
             </n-tabs>
           </n-card>
@@ -126,7 +145,7 @@
   const loading = ref(true)
   const summary = ref({})
   const NetWork = ref<
-    { Name: string; Receive: string; Sent: string; ReceiveSpeed: string; SentSpeed: string }[]
+    { Name: string; Receive: number; Sent: number; ReceiveSpeed: number; SentSpeed: number }[]
   >([])
 
   const CPUUsage = ref('')
@@ -142,6 +161,11 @@
     if (bps > 1024 * 1024) return (bps / 1024 / 1024).toFixed(2) + ' mb/s'
     if (bps > 1024) return (bps / 1024).toFixed(2) + ' kb/s'
     return bps.toString() + ' b/s'
+  }
+  function BitStr(bits: number) {
+    if (bits > 1024 * 1024) return (bits / 1024 / 1024).toFixed(2) + ' mb'
+    if (bits > 1024) return (bits / 1024).toFixed(2) + ' kb'
+    return bits.toString() + ' b'
   }
   const id = useRoute().params.id as string
   onMounted(async () => {
@@ -160,18 +184,10 @@
     CPUUsage.value = r.CPUUsage?.toFixed(2) + '%'
     HardDiskUsage.value = r.HardDisk?.Usage?.toFixed(2) + '%'
     MemoryUsage.value = r.Memory?.Usage?.toFixed(2) + '%'
-    NetWork.value =
-      r.NetWork?.filter((item) => item.Receive != 0 && item.Sent != 0).map((x) => {
-        return {
-          Name: x.Name,
-          Receive: BPSStr(x.Receive),
-          Sent: BPSStr(x.Sent),
-          ReceiveSpeed: BPSStr(x.ReceiveSpeed),
-          SentSpeed: BPSStr(x.SentSpeed)
-        }
-      }) || []
-    tldsNetWorkRec.value = r.NetWork?.map((item) => item.ReceiveSpeed)
-    tldsNetWorkSent.value = r.NetWork?.map((item) => item.SentSpeed)
+    const networks = (r.NetWork || []).filter((item) => item.Receive != 0 && item.Sent != 0)
+    NetWork.value = networks
+    tldsNetWorkRec.value = networks.map((item) => item.ReceiveSpeed)
+    tldsNetWorkSent.value = networks.map((item) => item.SentSpeed)
     // list.value = s.data.list
     loading.value = false
   }
