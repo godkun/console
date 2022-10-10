@@ -240,3 +240,13 @@ export function getLogFiles(m7sid: string) {
     }
   })
 }
+
+export function getRecordFiles(m7sid: string) {
+  return fetch({
+    url: '/record/api/list',
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}

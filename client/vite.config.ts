@@ -29,7 +29,7 @@ const localIconPath = `${srcPath}/assets/svg-icon`
 const collectionName = 'icon-local'.replace(`icon-`, '')
 
 const serverProxy = {
-  target: 'https://console.monibuca.com:9999',
+  target: 'https://console.monibuca.com',
   changeOrigin: true
 }
 
@@ -119,12 +119,7 @@ export default ({ command }) => {
       port: 4000,
       proxy: {
         '/api': serverProxy,
-        '/gb28181': serverProxy,
-        '/rtsp': serverProxy,
-        '/hdl': serverProxy,
-        '/rtmp': serverProxy,
-        '/hls': serverProxy,
-        '/logrotate': serverProxy
+        '/m7s': serverProxy
       }
     },
     build: {

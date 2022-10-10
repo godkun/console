@@ -94,6 +94,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/instance/detail/logrotate/index.vue')
       },
       {
+        path: 'record/:id',
+        name: `record`,
+        meta: {
+          title: '录像管理'
+        },
+        component: () => import('@/views/instance/detail/record/index.vue')
+      },
+      {
         path: 'gb28181/:id',
         name: `GB28181`,
         meta: {
