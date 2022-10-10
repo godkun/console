@@ -6,7 +6,7 @@
         <div class="view-account-top-logo">
           <icon-local-logo />
         </div>
-        <div class="view-account-top-desc">流媒体在线管理</div>
+        <div class="view-account-top-desc">实例管理平台</div>
       </div>
       <div class="view-account-form">
         <n-form
