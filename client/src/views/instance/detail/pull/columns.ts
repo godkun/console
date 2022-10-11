@@ -6,7 +6,7 @@ export const columns = [
     key: 'StartTime',
     width: 160,
     render(row) {
-      return h(NTime, row.StartTime)
+      return h(NTime, { time: new Date(row.StartTime), type: 'relative' })
     }
   },
   {

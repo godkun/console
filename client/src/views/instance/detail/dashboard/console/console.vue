@@ -17,9 +17,7 @@
               <div>
                 版本号： <span class="text-1xl">{{ Version }}</span>
               </div>
-              <div>
-                启动时间： <span class="text-1xl">{{ StartTime }}</span>
-              </div>
+              <div>启动时间： <n-time :time="new Date(StartTime)" type="relative" /></div>
             </div>
           </div>
         </NCard>

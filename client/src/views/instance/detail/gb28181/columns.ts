@@ -118,7 +118,7 @@ export const columns = (m7sid) => [
     key: 'RegisterTime',
     width: 130,
     render(row) {
-      return h(NTime, row.RegisterTime)
+      return h(NTime, { time: new Date(row.RegisterTime), type: 'relative' })
     }
   },
   {
@@ -126,7 +126,7 @@ export const columns = (m7sid) => [
     key: 'UpdateTIme',
     width: 130,
     render(row) {
-      return h(NTime, row.UpdateTIme)
+      return h(NTime, { time: new Date(row.UpdateTIme), type: 'relative' })
     }
   },
 

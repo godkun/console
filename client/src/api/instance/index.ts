@@ -250,3 +250,33 @@ export function getRecordFiles(m7sid: string) {
     }
   })
 }
+
+export function getRecordingList(m7sid: string) {
+  return fetch({
+    url: '/record/api/recording',
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+
+export function stopRecord(m7sid: string, id: string) {
+  return fetch({
+    url: '/record/api/stop?id=' + id,
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+
+export function startRecord(m7sid: string, streamPath: string, type: string) {
+  return fetch({
+    url: '/record/api/start?' + new URLSearchParams({ streamPath, type }),
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
