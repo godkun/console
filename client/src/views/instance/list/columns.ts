@@ -2,29 +2,29 @@ import { NTag } from 'naive-ui'
 import { h } from 'vue'
 export const columns = [
   {
-    title: '实例id',
+    title: 'id',
     key: 'id',
-    width: '10%'
+    width: 50
   },
   {
-    title: '实例名称',
+    title: '名称',
     key: 'name',
-    width: '10%'
+    width: 100
   },
   {
-    title: '实例秘钥',
+    title: 'secret',
     key: 'secret',
-    width: '15%'
+    width: 200
   },
   {
     title: '创建时间',
     key: 'createtime',
-    width: '15%'
+    width: 200
   },
   {
-    title: '是否在线',
+    title: '状态',
     key: 'online',
-    width: '8%',
+    width: 100,
     render(row) {
       return h(
         NTag,
