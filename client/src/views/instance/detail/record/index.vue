@@ -39,25 +39,20 @@
         </n-tab-pane>
       </n-tabs>
     </n-layout-content>
-    <n-modal v-model:show="showModal">
-      <n-card
-        style="width: 600px"
-        title="开始录制"
-        :bordered="false"
-        size="huge"
-        preset="dialog"
-        positive-text="确认"
-        negative-text="算了"
-        @positive-click="record()">
-        <n-radio-group v-model:value="recordType" name="radiobuttongroup1">
-          <n-radio-button
-            v-for="t in ['flv', 'mp4', 'hls', 'raw']"
-            :key="t"
-            :value="t"
-            :label="t" />
-        </n-radio-group>
-        <n-input v-model:value="recordStreamPath" placeholder="输入需要录制的StreamPath" />
-      </n-card>
+    <n-modal
+      v-model:show="showModal"
+      style="width: 600px"
+      title="开始录制"
+      :bordered="false"
+      size="huge"
+      preset="dialog"
+      positive-text="确认"
+      negative-text="算了"
+      @positive-click="record()">
+      <n-radio-group v-model:value="recordType" name="radiobuttongroup1">
+        <n-radio-button v-for="t of ['flv', 'mp4', 'hls', 'raw']" :key="t" :value="t" :label="t" />
+      </n-radio-group>
+      <n-input v-model:value="recordStreamPath" placeholder="输入需要录制的StreamPath" />
     </n-modal>
   </n-layout>
 </template>
@@ -86,43 +81,42 @@
     {
       title: 'Type',
       key: 'Type',
-      width: 100
+      width: 150
     },
     {
       title: '开始时间',
       render: (row: any) => h(NTime, { type: 'relative', time: new Date(row.StartTime) }),
-      width: 100
+      width: 150
     }
   ]
-  const recordingAction = [
-    {
-      title: '操作',
-      key: 'action',
-      width: 100,
-      render: (row: { ID: string }) =>
-        h(
-          NButton,
-          {
-            type: 'error',
-            size: 'small',
-            onClick: () => {
-              stopRecord(params.id as string, row.ID)
-                .then((x) => {
-                  if (x == 'ok') {
-                    message.success('停止录制成功')
-                  } else {
-                    message.error('停止录制失败')
-                  }
-                })
-                .catch((err) => {
-                  message.error(err)
-                })
-            }
-          },
-          ['停止']
-        )
-    }
-  ]
+  const recordingAction = {
+    title: '操作',
+    key: 'action',
+    width: 100,
+    render: (row: { ID: string }) =>
+      h(
+        NButton,
+        {
+          type: 'error',
+          size: 'small',
+          onClick: () => {
+            stopRecord(params.id as string, row.ID)
+              .then((x) => {
+                if (x == 'ok') {
+                  message.success('停止录制成功')
+                } else {
+                  message.error('停止录制失败')
+                }
+              })
+              .catch((err) => {
+                message.error(err)
+              })
+          }
+        },
+        ['停止']
+      )
+  }
+
   const columns = [
     {
       title: '文件',
@@ -147,13 +141,13 @@
   })
   function tick() {
     getRecordingList(params.id as string).then((x) => {
-      recordingList.value = x
+      recordingList.value = x || []
     })
   }
   function record() {
     startRecord(params.id as string, recordStreamPath.value, recordType.value)
       .then((x) => {
-        if (x == 'ok') {
+        if (x) {
           message.success('开始录制成功')
         } else {
           message.error('开始录制失败')

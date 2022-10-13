@@ -253,7 +253,7 @@ export function getRecordFiles(m7sid: string) {
 
 export function getRecordingList(m7sid: string) {
   return fetch({
-    url: '/record/api/recording',
+    url: '/record/api/list/recording',
     method: 'post',
     headers: {
       m7sid

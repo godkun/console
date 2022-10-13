@@ -29,8 +29,9 @@ const localIconPath = `${srcPath}/assets/svg-icon`
 const collectionName = 'icon-local'.replace(`icon-`, '')
 
 const serverProxy = {
-  target: 'https://console.monibuca.com',
-  changeOrigin: true
+  target: 'https://console.monibuca.com:9999',
+  changeOrigin: true,
+  rewrite: (path) => path.replace(/^\/m7s/, '')
 }
 
 const globals = externalGlobals({
@@ -115,7 +116,7 @@ export default ({ command }) => {
     },
     // 需要配置本地 host
     server: {
-      host: 'monibuca.com',
+      host: 'local.monibuca.com',
       port: 4000,
       proxy: {
         '/api': serverProxy,
