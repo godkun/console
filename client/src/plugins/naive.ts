@@ -68,7 +68,8 @@ import {
   NSkeleton,
   NStatistic,
   NGradientText,
-  NGi
+  NGi,
+  NCode
 } from 'naive-ui'
 
 const naive = create({
@@ -140,7 +141,8 @@ const naive = create({
     NSkeleton,
     NStatistic,
     NGradientText,
-    NGi
+    NGi,
+    NCode
   ]
 })
 
