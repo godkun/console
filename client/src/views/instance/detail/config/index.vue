@@ -9,13 +9,13 @@
         <n-button v-else type="primary" @click="edit">编辑</n-button>
       </template>
       <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="yamls.Modified" />
-      <pre v-else class="pre">{{ yamls.Modified }}</pre>
+      <n-code language="yaml" show-line-numbers v-else>{{ yamls.Modified }}</n-code>
     </n-card>
     <n-card :title="`配置文件中的${name || '全局'}配置`">
-      <pre class="pre">{{ yamls.File }}</pre>
+      <n-code :code="yamls.File" language="yaml" show-line-numbers />
     </n-card>
     <n-card :title="`最终合并后的${name || '全局'}配置`">
-      <pre class="pre">{{ yamls.Merged }}</pre>
+      <n-code :code="yamls.Merged" language="yaml" show-line-numbers />
     </n-card>
   </n-space>
 </template>
@@ -47,9 +47,14 @@
 
   function saveConfigFile() {
     isEdit.value = false
-    modifyConfig(id, yamls.Modified, query.name as string).then(() => {
-      message.success('配置保存成功')
-    })
+    modifyConfig(id, yamls.Modified, query.name as string)
+      .then((x) => {
+        if (x == 'ok') message.success('配置保存成功')
+        else message.error('配置保存失败' + x)
+      })
+      .catch((e) => {
+        message.error('配置保存失败' + e)
+      })
   }
 
   function noSaveConfigFile() {

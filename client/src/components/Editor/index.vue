@@ -13,6 +13,7 @@
     props: {
       json: String
     },
+    emits: ['update:json'],
     setup(props, { emit }) {
       const { json } = toRefs(props)
       const dom = ref()

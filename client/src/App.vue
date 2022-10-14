@@ -3,6 +3,7 @@
     :locale="zhCN"
     :theme="getDarkTheme"
     :theme-overrides="getThemeOverrides"
+    :hljs="hljs"
     :date-locale="dateZhCN">
     <AppProvider>
       <RouterView />
@@ -16,7 +17,10 @@
   import { zhCN, dateZhCN, darkTheme } from 'naive-ui'
   import { AppProvider } from '@/components/Application'
   import { useDesignSettingStore } from '@/store/modules/designSetting'
+  import hljs from 'highlight.js/lib/core'
+  import yaml from 'highlight.js/lib/languages/yaml'
 
+  hljs.registerLanguage('yaml', yaml)
   const designStore = useDesignSettingStore()
 
   /**

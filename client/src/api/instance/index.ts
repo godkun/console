@@ -125,9 +125,9 @@ export function updateConfig(data) {
 
 // 修改配置信息，可以加参数 name=xxx，代表修改 xxx 插件的配置信息（不加参数则修改全局配置信息）
 // 修改的配置信息通过请求的 body（JSON 格式）提交
-export function modifyConfig(m7sid: string, data, name: string) {
+export function modifyConfig(m7sid: string, data, name = '') {
   return fetch({
-    url: name ? `/api/modifyconfig?name=${name}` : `/api/modifyconfig`,
+    url: `/api/modifyconfig?${new URLSearchParams({ name: name || '', yaml: '1' })}`,
     method: 'post',
     headers: {
       m7sid
