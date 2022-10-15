@@ -4,6 +4,7 @@ import { setupStore } from '@/store'
 import { setupRouter } from './router'
 import { setupDirectives } from './directives'
 import { AppProvider } from '@/components/Application'
+import { SvgIcon } from '@/components/SvgIcon'
 import { setupNaive, setupAssets } from '@/plugins'
 
 async function setupApp() {
@@ -26,6 +27,9 @@ async function setupApp() {
 
   // 挂载路由
   await setupRouter(app)
+
+  // 挂载全局svg组件
+  app.component('svg-icon', SvgIcon)
 
   app.mount('#app', true)
 }
