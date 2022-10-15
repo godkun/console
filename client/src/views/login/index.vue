@@ -4,7 +4,7 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <icon-local-logo />
+          <svg-icon name="logo" width="256px" />
         </div>
         <div class="view-account-top-desc">实例管理平台</div>
       </div>

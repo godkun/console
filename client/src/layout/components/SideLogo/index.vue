@@ -1,7 +1,6 @@
 <template>
   <div class="logo">
-    <icon-local-logo />
-    <img src="~@/assets/imgs/logo.png" class="icon" :class="{ 'mr-2': !collapsed }" alt="" />
+    <svg-icon name="logo" height="32px" width="64px" class="icon" :class="{ 'mr-2': !collapsed }" />
     <h2 v-show="!collapsed" class="title">Monibuca</h2>
   </div>
 </template>

@@ -15,7 +15,7 @@
       :native-scrollbar="false"
       :inverted="inverted"
       class="layout-sider">
-      <Logo :collapsed="collapsed" />
+      <SideLogo :collapsed="collapsed" />
       <AsideMenu v-model:collapsed="collapsed" v-model:location="getMenuLocation" />
     </n-layout-sider>
 
@@ -24,7 +24,7 @@
       :width="menuWidth"
       :placement="'left'"
       class="layout-side-drawer">
-      <Logo :collapsed="collapsed" />
+      <SideLogo :collapsed="collapsed" />
       <AsideMenu @clickMenuItem="collapsed = false" />
     </n-drawer>
 
@@ -61,7 +61,7 @@
 
 <script lang="ts" setup>
   import { useRoute } from 'vue-router'
-  import { Logo } from './components/Logo'
+  import { SideLogo } from './components/SideLogo'
   import { useLoadingBar } from 'naive-ui'
   import { MainView } from './components/Main'
   import { AsideMenu } from './components/Menu'

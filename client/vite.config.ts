@@ -20,10 +20,9 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
 }
+// const srcPath = pathResolve('src')
 
-const srcPath = pathResolve('src')
-
-const localIconPath = `${srcPath}/assets/svg-icon`
+const localIconPath = resolve(process.cwd(), 'src/assets/svg-icon')
 
 /** 本地svg图标集合名称 */
 const collectionName = 'icon-local'.replace(`icon-`, '')
@@ -80,9 +79,7 @@ export default ({ command }) => {
       unocss(),
       createSvgIconsPlugin({
         iconDirs: [localIconPath],
-        symbolId: `icon-local-[dir]-[name]`,
-        inject: 'body-last',
-        customDomId: '__SVG_ICON_LOCAL__'
+        symbolId: `icon-[name]`
       }),
       splitVendorChunkPlugin(),
       legacy(),
