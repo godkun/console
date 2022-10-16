@@ -91,7 +91,12 @@ export function getConfig(m7sid: string, name: string) {
     }
   })
 }
-export async function getInstanceHttp(id: string, local: boolean, https: boolean) {
+export async function getInstanceHttp(
+  id: string,
+  local: boolean,
+  https: boolean,
+  protocol = 'http'
+) {
   const sysInfo = await getSysInfo(id)
   const detail = await fetch({
     url: `/api/instance/detail`,
@@ -112,7 +117,9 @@ export async function getInstanceHttp(id: string, local: boolean, https: boolean
   const { publicaddr, publicaddrtls } = config.console
   const { listenaddr, listenaddrtls } = config.http
   const ip = (https ? publicaddrtls : publicaddr) || remoteIp
-  return `http${https ? 's' : ''}://${local ? localIp : ip}${https ? listenaddrtls : listenaddr}`
+  return `${protocol}${https ? 's' : ''}://${local ? localIp : ip}${
+    https ? listenaddrtls : listenaddr
+  }`
 }
 // 热更新配置信息，可以加参数 name=xxx，代表热更新 xxx 插件的配置信息（不加参数则热更新全局配置信息）
 export function updateConfig(data) {

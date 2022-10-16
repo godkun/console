@@ -106,7 +106,7 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 	defer m.lock.Unlock()
 	// fmt.Println("cookie-name:",m.cookieName)
 	cookie, err := r.Cookie(m.cookieName)
-	fmt.Println(cookie, err)
+	// fmt.Println(cookie, err)
 	maxAge2 := int(COOKIE_MAX_MAX_AGE)
 	if err != nil || cookie.Value == "" {
 		// fmt.Println("----------> current session not exists")

@@ -9,7 +9,7 @@
         <n-button v-else type="primary" @click="edit">编辑</n-button>
       </template>
       <JsonEditor v-if="isEdit" class="jsonEditor" v-model:json="yamls.Modified" />
-      <n-code language="yaml" show-line-numbers v-else>{{ yamls.Modified }}</n-code>
+      <n-code language="yaml" show-line-numbers v-else :code="yamls.Modified" />
     </n-card>
     <n-card :title="`配置文件中的${name || '全局'}配置`">
       <n-code :code="yamls.File" language="yaml" show-line-numbers />

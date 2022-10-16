@@ -31,9 +31,17 @@ const routes: Array<RouteRecordRaw> = [
         path: 'list',
         name: `${routeName}_list`,
         meta: {
-          title: '控制台'
+          title: '实例列表'
         },
         component: () => import('@/views/instance/list/index.vue')
+      },
+      {
+        path: 'room',
+        name: `${routeName}_room`,
+        meta: {
+          title: 'Room Demo'
+        },
+        component: () => import('@/views/instance/detail/room/index.vue')
       }
     ]
   }

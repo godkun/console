@@ -280,6 +280,7 @@ func main() {
 		}
 	}))
 	http.HandleFunc("/", relay)
+
 	clearTimeOutInstance()
 	var g errgroup.Group
 	g.Go(startQuic)
@@ -389,7 +390,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 			s.Write([]byte(r.RequestURI + "\r\n"))
 			r.Header.Write(s)
 			s.Write([]byte("\r\n"))
-			b := make([]byte, 1024)
+			b := make([]byte, 4096)
 			defer s.Close()
 			for r.Context().Err() == nil {
 				if n, err := s.Read(b); err == nil {
@@ -402,6 +403,26 @@ func relay(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 			}
+		} else if r.Header.Get("Upgrade") == "websocket" {
+			websocket.Handler(func(w *websocket.Conn){
+				defer w.Close()
+				s.Write([]byte(r.RequestURI + "\r\n"))
+				r.Header.Write(s)
+				s.Write([]byte("\r\n"))
+				b := make([]byte, 4096)
+				defer s.Close()
+				for r.Context().Err() == nil {
+					if n, err := s.Read(b); err == nil {
+						if _, err = w.Write(b[:n]); err == nil {
+						
+						} else {
+							return
+						}
+					} else {
+						return
+					}
+				}
+			}).ServeHTTP(w, r)
 		} else {
 			if err == nil {
 				s.Write([]byte(r.RequestURI + "\r\n"))
@@ -424,7 +445,8 @@ func relay(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 ws链接关闭时清理缓存
 */
 func wsClose(w *websocket.Conn, secret string) {
@@ -442,7 +464,8 @@ func wsClose(w *websocket.Conn, secret string) {
 	w.Close()
 }
 
-/**
+/*
+*
 清除超时实例
 */
 func clearTimeOutInstance() {
@@ -462,7 +485,8 @@ func clearTimeOutInstance() {
 	})
 }
 
-/**
+/*
+*
 重置密码链接
 */
 func resetPwd(w http.ResponseWriter, r *http.Request) {
@@ -517,7 +541,8 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 重置密码，忘记密码
 */
 func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
@@ -569,7 +594,8 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 修改密码
 */
 func changePassword(w http.ResponseWriter, r *http.Request) {
@@ -621,7 +647,8 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 
 }
 
-/**
+/*
+*
 登出
 */
 func userLogout(w http.ResponseWriter, r *http.Request) {
@@ -650,7 +677,8 @@ func instanceDetail(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 删除实例
 */
 func instanceDel(w http.ResponseWriter, r *http.Request) {
@@ -689,7 +717,8 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 获取实例列表
 */
 func instanceList(w http.ResponseWriter, r *http.Request) {
@@ -740,7 +769,8 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 更新实例
 */
 func instanceUpdate(w http.ResponseWriter, r *http.Request) {
@@ -792,7 +822,8 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 新增实例
 */
 func instanceAdd(w http.ResponseWriter, r *http.Request) {
@@ -931,7 +962,8 @@ func renderError(w http.ResponseWriter, message string, statusCode int) {
 	w.Write([]byte(message))
 }
 
-/**
+/*
+*
 登录
 */
 func userLogin(w http.ResponseWriter, r *http.Request) {
@@ -968,7 +1000,8 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 获取验证码
 */
 func getVerifyCode(w http.ResponseWriter, r *http.Request) {
@@ -1022,7 +1055,8 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 注册
 */
 func userRegister(w http.ResponseWriter, r *http.Request) {
@@ -1109,7 +1143,8 @@ func CORS(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-/**
+/*
+*
 解析request数据，返回map
 */
 func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData map[string]interface{}) {

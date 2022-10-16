@@ -108,6 +108,14 @@ const routes: Array<RouteRecordRaw> = [
           title: 'GB28181'
         },
         component: () => import('@/views/instance/detail/gb28181/index.vue')
+      },
+      {
+        path: 'room/:id',
+        name: `room`,
+        meta: {
+          title: 'Room'
+        },
+        component: () => import('@/views/instance/detail/room/index.vue')
       }
     ]
   }

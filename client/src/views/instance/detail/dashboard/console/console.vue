@@ -166,13 +166,16 @@
     return bits.toString() + ' b'
   }
   const id = useRoute().params.id as string
+  let es: EventSource
   onMounted(async () => {
     const info = await getSysInfo(id)
     StartTime.value = info.StartTime
     Version.value = info.Version
-    const es = new EventSource('/api/summary?m7sid=' + id)
+    es = new EventSource('/api/summary?m7sid=' + id)
     es.onmessage = tick
-    onBeforeRouteLeave(() => es.close())
+  })
+  onBeforeRouteLeave(() => {
+    es?.close()
   })
   async function tick(event) {
     const r = JSON.parse(event.data)

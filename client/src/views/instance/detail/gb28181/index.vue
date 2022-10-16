@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div v-if="noPlugin">
+    <n-alert title="当前页面不可用" type="error"> 当前实例未安装插件，无法使用此功能 </n-alert>
+  </div>
+  <div v-else>
     <div class="top">
       <Interval @tick="tick" />
     </div>
@@ -27,8 +30,14 @@
   import { columns } from './columns'
   import { getInstanceGB } from '@/api/instance'
   import { useRoute } from 'vue-router'
+  import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   const streamData = ref([])
   const { params } = useRoute()
+  const configStore = usePluginConfigStore()
+  const noPlugin = ref(false)
+  configStore.getConfig(params.id as string, 'GB28181').catch((err) => {
+    noPlugin.value = true
+  })
   async function tick() {
     const r = await getInstanceGB(params.id as string)
     streamData.value = r
