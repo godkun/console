@@ -28,7 +28,7 @@ type Instance struct {
 
 const DEFEALT_TIME = 1800
 
-//实例化
+// 实例化
 func NewInstance(name string, secret string) *Instance {
 	return &Instance{
 		Name:   name,
@@ -60,10 +60,18 @@ func (c *ConcurInstances) Get(k string) *Instance {
 }
 
 func (c *ConcurInstances) FindByIdAndMail(id, mail string) *Instance {
+	instance := c.FindById(id)
+	if instance != nil && instance.mail == mail {
+		return instance
+	}
+	return nil
+}
+
+func (c *ConcurInstances) FindById(id string) *Instance {
 	c.RLock()
 	defer c.RUnlock()
 	for _, instance := range c.Instances {
-		if instance.mail == mail && instance.id == id {
+		if instance.id == id {
 			return instance
 		}
 	}

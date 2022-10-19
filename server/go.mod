@@ -13,6 +13,8 @@ require (
 require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20210107165309-348f09dbbbc0 // indirect
+	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/marten-seemann/qtls-go1-18 v0.1.2 // indirect
 	github.com/marten-seemann/qtls-go1-19 v0.1.0 // indirect
@@ -27,6 +29,7 @@ require (
 )
 
 require (
+	github.com/gobwas/ws v1.1.0
 	github.com/lucas-clemente/quic-go v0.29.1
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	golang.org/x/sync v0.0.0-20220929204114-8fcdb60fdcc0

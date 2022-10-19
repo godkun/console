@@ -35,7 +35,7 @@
   const { query, params } = route
   const name = (query.name as string) || ''
   const id = params.id as string
-  getConfig(id, name).then((res) => {
+  getConfig(id, name, '1').then((res) => {
     Object.assign(yamls, res)
     // jsonCode.value = JSON.stringify(res, null, 2)
   })

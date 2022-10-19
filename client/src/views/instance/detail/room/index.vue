@@ -1,27 +1,30 @@
 <template>
   <n-layout>
-    <n-layout-header>
+    <!-- <n-layout-header v-if="noPlugin || roomPass">
+    </n-layout-header> -->
+    <n-layout-content content-style="padding: 24px;height:calc(100vh - 120px)">
       <n-alert v-if="noPlugin" title="当前功能受限" type="error">
         当前实例未安装插件，无法创建房间
       </n-alert>
-      <n-alert v-else-if="roomId != null" type="success">{{ roomURL }}</n-alert>
-    </n-layout-header>
-    <n-layout-content content-style="padding: 24px;">
-      <n-card v-for="user in userList" :title="user.ID" :key="user.ID">
-        <video></video>
-      </n-card>
+      <n-alert v-else-if="roomPass" type="success">邀请他人入房的口令：{{ roomPass }}</n-alert>
+      <n-space>
+        <UserVideo v-for="user in userList" :title="user.ID" :key="user.ID" />
+      </n-space>
     </n-layout-content>
     <n-layout-footer>
-      <n-input v-model:value="chatMessage">
-        <template #append>
-          <n-button type="primary" @click="send">发送</n-button>
-        </template>
-      </n-input>
+      <n-input-group>
+        <n-input
+          v-model:value="chatMessage"
+          clearable
+          placeholder="发送聊天信息"
+          @keyup="inputKeyup" />
+        <n-button type="primary" @click="send">发送</n-button>
+      </n-input-group>
     </n-layout-footer>
-    <n-modal v-model:show="showModal">
+    <n-modal v-model:show="showModal" :close-on-esc="false" :mask-closable="false">
       <n-card
         style="width: 600px"
-        title="选择功能"
+        :title="m7sId ? '进入房间' : '加入房间'"
         :bordered="false"
         size="huge"
         role="dialog"
@@ -29,54 +32,36 @@
         <template #header-extra>
           <n-button type="primary" @click="router.back()">返回</n-button>
         </template>
-        <n-tabs
-          class="card-tabs"
-          default-value="signin"
-          size="large"
-          animated
-          style="margin: 0 -4px"
-          pane-style="padding-left: 4px; padding-right: 4px; box-sizing: border-box;">
-          <n-tab-pane name="signin" tab="加入当前实例房间" v-if="!noPlugin">
-            <n-form>
-              <n-form-item-row label="房间名称">
-                <n-input v-model:value="roomId" />
-              </n-form-item-row>
-              <n-form-item-row label="用户名称">
-                <n-input v-model:value="myUserId" />
-              </n-form-item-row>
-            </n-form>
-            <n-button type="primary" block secondary strong @click="enterCurrent"> 进入 </n-button>
-          </n-tab-pane>
-          <n-tab-pane name="signup" tab="加入他人的实例房间">
-            <n-form>
-              <n-form-item-row label="房间地址">
-                <n-input v-model:value="roomURL" />
-              </n-form-item-row>
-              <n-form-item-row label="用户名称">
-                <n-input v-model:value="myUserId" />
-              </n-form-item-row>
-            </n-form>
-            <n-button type="primary" block secondary strong @click="enterOther"> 加入 </n-button>
-          </n-tab-pane>
-        </n-tabs>
-        <template #footer> </template>
+        <n-form>
+          <n-form-item-row :label="m7sId ? '房间名称' : '入房口令'">
+            <n-input v-model:value="roomId" />
+          </n-form-item-row>
+          <n-form-item-row label="用户名称">
+            <n-input v-model:value="myUserId" />
+          </n-form-item-row>
+        </n-form>
+        <template #footer>
+          <n-button type="primary" block secondary strong @click="enterCurrent"> 进入 </n-button>
+        </template>
       </n-card>
     </n-modal>
   </n-layout>
 </template>
 <script setup lang="ts">
-  import { getInstanceHttp } from '@/api/instance'
-  import { ref } from 'vue'
+  // import { getInstanceHttp } from '@/api/instance'
+  import UserVideo from './user.vue'
+  import { onUnmounted, reactive, ref } from 'vue'
   import { useMessage } from 'naive-ui'
   import { useRoute, useRouter } from 'vue-router'
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
+  import { getRoomPass } from '@/api/instance'
   interface User {
     ID: string
     StreamPath: string
   }
   const showModal = ref(true)
   const router = useRouter()
-  const userList = ref<User[]>([])
+  const userList = reactive<User[]>([])
   const chatMessage = ref('')
   const route = useRoute()
   const message = useMessage()
@@ -88,24 +73,48 @@
   const noPlugin = ref(false)
   const appName = ref('room')
   const roomId = ref('')
-  const roomURL = ref('')
-  if (m7sId)
+  const roomPass = ref('')
+  let consoleURL = 'wss://console.monibuca.com:9999'
+  if (m7sId) {
     configStore
-      .getConfig(m7sId, 'room')
-      .then((res) => {
-        appName.value = res.AppName
-      })
-      .catch((err) => {
-        noPlugin.value = true
-      })
-  function enterCurrent() {
-    getInstanceHttp(m7sId, true, true, 'ws').then((res) => {
-      roomURL.value = res + '/room/' + roomId.value
-      enterOther()
+      .getConfig(m7sId, 'Room')
+      .then((res) => (appName.value = res.appname))
+      .catch((err) => (noPlugin.value = true))
+    configStore.getConfig(m7sId, '').then((res) => {
+      const regx = /[^:\/]+/
+      consoleURL =
+        'wss://' + (regx.exec(res.console.server)?.[0] || 'console.monibuca.com') + ':9999'
     })
   }
-  function enterOther() {
-    ws = new WebSocket(roomURL.value + '/' + myUserId.value)
+  function inputKeyup(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      send()
+    }
+  }
+  onUnmounted(() => {
+    ws?.close()
+  })
+  function enterCurrent() {
+    // getInstanceHttp(m7sId, true, true, 'ws').then((res) => {
+    //   roomURL.value = res + '/room/' + roomId.value
+    // })
+    // consoleURL = location.protocol.replace('http', 'ws') + '//' + location.host + '/m7s'
+    if (m7sId) {
+      getRoomPass(m7sId, roomId.value).then((x) => {
+        roomPass.value = x
+      })
+      enterOther([consoleURL, 'room', roomId.value, myUserId.value].join('/') + '?m7sid=' + m7sId)
+    } else {
+      enterOther(
+        `${consoleURL}/room/join?${new URLSearchParams({
+          userId: myUserId.value,
+          pass: roomId.value
+        })}`
+      )
+    }
+  }
+  function enterOther(wsAddr: string) {
+    ws = new WebSocket(wsAddr)
     ws.onmessage = (e) => {
       const { data, event, userId } = JSON.parse(e.data)
       switch (event) {
@@ -117,17 +126,17 @@
         case 'msg':
           message.info(`${userId}：${data}`)
           break
-        case 'userList':
-          userList.value = data
+        case 'userlist':
+          userList.push(...data)
           break
         case 'userjoin':
           message.success(data.ID + '加入房间')
-          userList.value.push(data)
+          userList.push(data)
           break
         case 'userleave':
           message.info(userId + '离开房间')
-          userList.value.splice(
-            userList.value.findIndex((user) => user.ID === userId),
+          userList.splice(
+            userList.findIndex((user) => user.ID === userId),
             1
           )
           break
@@ -144,11 +153,11 @@
   }
 
   function findUser(userId: string) {
-    return userList.value.find((user) => user.ID === userId)
+    return userList.find((user) => user.ID === userId)
   }
   function send() {
     if (ws) {
-      ws.send(JSON.stringify({ event: 'msg', data: chatMessage.value, userId: myUserId.value }))
+      ws.send(chatMessage.value)
       chatMessage.value = ''
     } else {
       message.error('未连接到服务器')

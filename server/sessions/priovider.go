@@ -22,19 +22,18 @@ type Provider interface {
 	GCSession()
 }
 
-
 type FromMemory struct {
-	lock      sync.Mutex
-	sessions  map[string]Session
+	lock     sync.Mutex
+	sessions map[string]Session
 }
 
-func newFromMemory() *FromMemory  {
+func newFromMemory() *FromMemory {
 	return &FromMemory{
 		sessions: make(map[string]Session, 0),
 	}
 }
 
-func (fm * FromMemory) InitSession(sid string, maxAge int64)  (Session, error) {
+func (fm *FromMemory) InitSession(sid string, maxAge int64) (Session, error) {
 	fm.lock.Lock()
 	defer fm.lock.Unlock()
 
@@ -50,12 +49,12 @@ func (fm * FromMemory) InitSession(sid string, maxAge int64)  (Session, error) {
 	return newSession, nil
 }
 
-func (fm *FromMemory) SetSession(session Session) error  {
+func (fm *FromMemory) SetSession(session Session) error {
 	fm.sessions[session.GetId()] = session
 	return nil
 }
 
-func (fm *FromMemory) DestroySession(sid string) error  {
+func (fm *FromMemory) DestroySession(sid string) error {
 	if _, ok := fm.sessions[sid]; ok {
 		delete(fm.sessions, sid)
 		return nil
@@ -63,14 +62,14 @@ func (fm *FromMemory) DestroySession(sid string) error  {
 	return nil
 }
 
-func (fm *FromMemory) GCSession()  {
+func (fm *FromMemory) GCSession() {
 	sessions := fm.sessions
 
 	if len(sessions) < 1 {
 		return
 	}
 	fmt.Println("xxxxxxxxxxxxxx--gc-session", sessions)
-	for k,v := range sessions {
+	for k, v := range sessions {
 		t := (v.(*SessionFromMemory).lastAccessedTime.Unix()) + (v.(*SessionFromMemory).maxAge)
 		if t < time.Now().Unix() {
 			fmt.Println("timeout------->", v)
@@ -80,10 +79,10 @@ func (fm *FromMemory) GCSession()  {
 }
 
 type SessionManager struct {
-	cookieName    string
-	storage       Provider
-	maxAge        int64
-	lock          sync.Mutex
+	cookieName string
+	storage    Provider
+	maxAge     int64
+	lock       sync.Mutex
 }
 
 func NewSessionMange() *SessionManager {
@@ -97,11 +96,15 @@ func NewSessionMange() *SessionManager {
 	return SessionManager
 }
 
-func (m *SessionManager) GetCookieN() string  {
+func (m *SessionManager) GetCookieN() string {
 	return m.cookieName
 }
-const COOKIE_MAX_MAX_AGE  = time.Hour * 24 / time.Second  // 单位：秒。
-func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Session  {
+
+const COOKIE_MAX_MAX_AGE = time.Hour * 24 / time.Second // 单位：秒。
+func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Session {
+	if r.Header.Get("Upgrade") == "websocket" {
+		return m.GetSession(w, r)
+	}
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	// fmt.Println("cookie-name:",m.cookieName)
@@ -112,7 +115,7 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 		// fmt.Println("----------> current session not exists")
 		sid := m.randomId()
 
-		session,_ := m.storage.InitSession(sid, m.maxAge)
+		session, _ := m.storage.InitSession(sid, m.maxAge)
 		maxAge := m.maxAge
 
 		if maxAge == 0 {
@@ -123,16 +126,16 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 
 		//maxAge2 := int(COOKIE_MAX_MAX_AGE)
 		uid_cookie := &http.Cookie{
-			Name:  m.cookieName,
-			Value:  url.QueryEscape(sid),
-			Path:   "/",
+			Name:     m.cookieName,
+			Value:    url.QueryEscape(sid),
+			Path:     "/",
 			HttpOnly: false,
-			MaxAge:  maxAge2,
+			MaxAge:   maxAge2,
 		}
 		http.SetCookie(w, uid_cookie) //设置到响应中
 		return session
 	} else {
-		sid ,_ := url.QueryUnescape(cookie.Value)
+		sid, _ := url.QueryUnescape(cookie.Value)
 		session := m.storage.(*FromMemory).sessions[sid]
 		// fmt.Println("sesssion----->", session)
 		if session == nil {
@@ -165,23 +168,30 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 		return session
 	}
 }
-
-//通过ID获取session
-func (m *SessionManager) GetSessionById(sid string) Session {
-	session := m.storage.(*FromMemory).sessions[sid]
-	return session
-}
-
-//是否内存中存在
-func (m *SessionManager) MemoryIsExists(sid string) bool {
-	_, ok := m.storage.(*FromMemory).sessions[sid]
-	if ok {
-		return true
+func (m *SessionManager) GetSession(w http.ResponseWriter, r *http.Request) Session {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	// fmt.Println("cookie-name:",m.cookieName)
+	cookie, err := r.Cookie(m.cookieName)
+	if err != nil {
+		return nil
 	}
-	return false
+	sid, _ := url.QueryUnescape(cookie.Value)
+	return m.GetSessionById(sid)
 }
 
-//手动销毁session，同时删除cookie
+// 通过ID获取session
+func (m *SessionManager) GetSessionById(sid string) Session {
+	return m.storage.(*FromMemory).sessions[sid]
+}
+
+// 是否内存中存在
+func (m *SessionManager) MemoryIsExists(sid string) (ok bool) {
+	_, ok = m.storage.(*FromMemory).sessions[sid]
+	return
+}
+
+// 手动销毁session，同时删除cookie
 func (m *SessionManager) Destroy(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie(m.cookieName)
 	if err != nil || cookie.Value == "" {
@@ -205,7 +215,7 @@ func (m *SessionManager) Destroy(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (m *SessionManager) Update(w http.ResponseWriter, r *http.Request)  {
+func (m *SessionManager) Update(w http.ResponseWriter, r *http.Request) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 
@@ -224,12 +234,12 @@ func (m *SessionManager) Update(w http.ResponseWriter, r *http.Request)  {
 	if m.maxAge != 0 {
 		cookie.MaxAge = int(m.maxAge)
 	} else {
-		cookie.MaxAge =  int(session.maxAge)
+		cookie.MaxAge = int(session.maxAge)
 	}
-	http.SetCookie(w,cookie)
+	http.SetCookie(w, cookie)
 }
 
-func (m * SessionManager) randomId() string  {
+func (m *SessionManager) randomId() string {
 	b := make([]byte, 32)
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		return ""
@@ -237,7 +247,7 @@ func (m * SessionManager) randomId() string  {
 	return base64.URLEncoding.EncodeToString(b)
 }
 
-func (m *SessionManager) GC()  {
+func (m *SessionManager) GC() {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 

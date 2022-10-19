@@ -1,13 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha1"
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
+	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
 	"flag"
@@ -19,18 +20,19 @@ import (
 	"mime"
 	_ "net"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
+	"compress/zlib"
+
 	"gitee.com/console/server/sessions"
 	"gitee.com/console/server/util"
 	"github.com/BurntSushi/toml"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/lucas-clemente/quic-go"
-	"golang.org/x/net/websocket"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -60,9 +62,22 @@ var (
 	}{"127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
 		"", 300, ":9999", "Monibuca#!4", "http://localhost/"}
-	ConfigRaw []byte
+	ConfigRaw     []byte
+	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 )
 
+func getNonceAccept(nonce []byte) (expected []byte, err error) {
+	h := sha1.New()
+	if _, err = h.Write(nonce); err != nil {
+		return
+	}
+	if _, err = h.Write([]byte(websocketGUID)); err != nil {
+		return
+	}
+	expected = make([]byte, 28)
+	base64.StdEncoding.Encode(expected, h.Sum(nil))
+	return
+}
 func generateTLSConfig() *tls.Config {
 	key, err := rsa.GenerateKey(rand.Reader, 1024)
 	if err != nil {
@@ -179,106 +194,14 @@ func main() {
 	http.HandleFunc("/api/instance/add", instanceAdd)
 	http.HandleFunc("/api/instance/del", instanceDel)
 	http.HandleFunc("/api/instance/update", instanceUpdate)
+	http.HandleFunc("/api/instance/getroompass", getRoomPass)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs := http.FileServer(http.Dir(uploadPath))
 	http.Handle("/files/", http.StripPrefix("/files", fs))
 	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
-	http.Handle("/ws/v1", websocket.Handler(func(w *websocket.Conn) {
-		var secret string
-		var err error
-		connect := false
-		remoteAddr := w.Request().RemoteAddr
-		fmt.Println("客户端获取到的ip为:" + remoteAddr)
-		for {
-			//只支持string类型
-			var reply string
-			if err = websocket.Message.Receive(w, &reply); err != nil {
-				log.Println("websocket出现异常", err)
-				break
-			}
-			fmt.Println("收到客户端消息:" + reply)
-			//replyJson := make(map[string]string)
-			//json.Unmarshal([]byte(reply), &replyJson)
-			//secret = replyJson["secret"]
-			secret = reply
-			totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
-			if err != nil {
-				fmt.Println(err)
-				if err = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); err != nil {
-					log.Println("websocket出现异常", err)
-				}
-				break
-			}
-			if totalcount > 0 {
-				instance := NewInstance("", secret)
-				instance.lastAccessedTime = time.Now()
-				instance.W = w
-				instances.Set(secret, instance)
-				if err = websocket.Message.Send(w, util.ErrJson(util.OK())); err != nil {
-					log.Println("websocket出现异常", err)
-					break
-				}
-				connect = true
-				remoteIP, _, _ := strings.Cut(remoteAddr, ":")
-				go MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
-				break
-			} else {
-				if err = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); err != nil {
-					log.Println("websocket出现异常", err)
-				}
-				break
-			}
-			//msg := reply + ", 我是服务端"
-			//fmt.Println("发送客户端消息:" + msg)
-			//if error = websocket.Message.Send(w, msg); error != nil {
-			//	log.Println("websocket出现异常", error)
-			//	break
-			//}
-		}
-		defer wsClose(w, secret)
-		instance := instances.Get(secret)
-		if instance == nil {
-			w.Write(util.ErrJson(util.ErrInstanceNotConnect))
-			return
-		}
-		delay := time.NewTimer(time.Second)
-		defer delay.Stop()
-		for connect {
-			delay.Reset(time.Second)
-			select {
-			case <-delay.C:
-				if err = websocket.Message.Send(instance.W, "/api/sysinfo\n"); err != nil {
-					log.Println("websocket出现异常", err)
-					return
-				} else {
-					var reply string
-					if err = websocket.Message.Receive(w, &reply); err != nil {
-						log.Println("websocket出现异常", err)
-						return
-					}
-				}
-			case rw := <-instance.Ch:
-				body, _ := ioutil.ReadAll(rw.R.Body)
-				if len(body) > 0 {
-					fmt.Printf("body is %+v\n", string(body))
-				}
-				if err = websocket.Message.Send(instance.W, rw.R.RequestURI+"\n"+string(body)); err != nil {
-					log.Println("websocket出现异常", err)
-					connect = false
-				} else {
-					var reply string
-					if err = websocket.Message.Receive(w, &reply); err != nil {
-						log.Println("websocket出现异常", err)
-						connect = false
-					} else if rw.R.Context().Err() == nil {
-						rw.W.Write([]byte(reply))
-					}
-					fmt.Println("收到客户端消息1111:" + reply)
-				}
-				rw.Done()
-			}
-		}
-	}))
+	http.Handle("/ws/v1", wsv1)
+	http.HandleFunc("/room/join", joinRoom)
+	http.HandleFunc("/report", report)
 	http.HandleFunc("/", relay)
 
 	clearTimeOutInstance()
@@ -290,178 +213,27 @@ func main() {
 	log.Fatal(g.Wait())
 }
 
-func startQuic() error {
-	listener, err := quic.ListenAddr(":4242", generateTLSConfig(), nil)
+type Report struct {
+	UUID    string `json:"uuid"`
+	IP      string
+	Version string `json:"version"`
+	OS      string `json:"os"`
+	Arch    string `json:"arch"`
+	Streams int    `json:"streams"`
+}
+
+func report(w http.ResponseWriter, r *http.Request) {
+	report := &Report{}
+	err := json.NewDecoder(r.Body).Decode(report)
 	if err != nil {
-		return err
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-	fmt.Println("start quic  server at :4242")
-	for {
-		conn, err := listener.Accept(ctxBack)
-		if err != nil {
-			return err
-		}
-		remoteAddr := conn.RemoteAddr().String()
-		fmt.Println("客户端获取到的ip为:", remoteAddr)
-		stream, err := conn.AcceptStream(ctxBack)
-		if err != nil {
-			fmt.Println("AcceptStream error:", err)
-			continue
-		}
-		secret, err := bufio.NewReader(stream).ReadString('\n')
-		if err != nil {
-			fmt.Println("readsecret error:", err)
-			continue
-		}
-		secret = secret[:len(secret)-1]
-		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
-		if err != nil {
-			fmt.Println(err)
-			stream.Write(util.ErrJson(util.ErrDatabase))
-		} else if totalcount > 0 {
-			instance := NewInstance("", secret)
-			instance.lastAccessedTime = time.Now()
-			instance.Quic = conn
-			instances.Set(secret, instance)
-			stream.Write(util.ErrJson(util.OK()))
-			remoteIP, _, _ := strings.Cut(remoteAddr, ":")
-			go func() {
-				fmt.Println("client online:", remoteAddr)
-				MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
-				<-conn.Context().Done()
-				if instances.Get(secret) == instance {
-					fmt.Println("client offline:", remoteAddr)
-					MysqlDb.Exec("update instance set online='0' where secret=? ", secret)
-					instances.Delete(secret)
-				}
-			}()
-		} else {
-			stream.Write(util.ErrJson(util.ErrSecretWrong))
-		}
-		stream.Close()
-	}
-}
-
-func relay(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
-		return
-	}
-
-	//formData := getDataFromHttpRequest(w, r)
-	//fmt.Printf("formData is %+v\n", formData)
-	// fmt.Printf("Header is %+v\n", r.Header["M7sid"])
-	id := r.Header.Get("M7sid")
-	if id == "" {
-		id = r.URL.Query().Get("m7sid")
-	}
-	// fmt.Printf("m7sid is %+v\n", id)
-	instance := instances.FindByIdAndMail(id, mail.(string))
-	if instance == nil {
-		secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
-		secret := secretData["secret"]
-		if len(secret) > 0 {
-			instance = instances.Get(secret)
-			if instance == nil {
-				w.Write(util.ErrJson(util.ErrInstanceNotConnect))
-				return
-			} else {
-				instance.mail = mail.(string)
-				instance.id = id
-			}
-
-		} else {
-			w.Write(util.ErrJson(util.ErrSecretWrong))
-			return
-		}
-	}
-	instance.lastAccessedTime = time.Now()
-	if instance.Quic != nil {
-		s, err := instance.Quic.OpenStream()
-		if r.Header.Get("Accept") == "text/event-stream" {
-			header := w.Header()
-			header.Set("Content-Type", "text/event-stream")
-			header.Set("Cache-Control", "no-cache")
-			header.Set("Connection", "keep-alive")
-			header.Set("X-Accel-Buffering", "no")
-			header.Set("Access-Control-Allow-Origin", "*")
-			s.Write([]byte(r.RequestURI + "\r\n"))
-			r.Header.Write(s)
-			s.Write([]byte("\r\n"))
-			b := make([]byte, 4096)
-			defer s.Close()
-			for r.Context().Err() == nil {
-				if n, err := s.Read(b); err == nil {
-					if _, err = w.Write(b[:n]); err == nil {
-						w.(http.Flusher).Flush()
-					} else {
-						return
-					}
-				} else {
-					return
-				}
-			}
-		} else if r.Header.Get("Upgrade") == "websocket" {
-			websocket.Handler(func(w *websocket.Conn){
-				defer w.Close()
-				s.Write([]byte(r.RequestURI + "\r\n"))
-				r.Header.Write(s)
-				s.Write([]byte("\r\n"))
-				b := make([]byte, 4096)
-				defer s.Close()
-				for r.Context().Err() == nil {
-					if n, err := s.Read(b); err == nil {
-						if _, err = w.Write(b[:n]); err == nil {
-						
-						} else {
-							return
-						}
-					} else {
-						return
-					}
-				}
-			}).ServeHTTP(w, r)
-		} else {
-			if err == nil {
-				s.Write([]byte(r.RequestURI + "\r\n"))
-				r.Header.Write(s)
-				s.Write([]byte("\r\n"))
-				io.Copy(s, r.Body)
-				s.Close()
-				io.Copy(w, s)
-			} else {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
-		}
+	report.IP, _, _ = strings.Cut(r.RemoteAddr, ":")
+	if report.Version == "" {
+		MysqlDb.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,now())", report.UUID, report.Streams)
 	} else {
-		var rq IncomingRequest
-		rq.W = w
-		rq.R = r
-		rq.Add(1)
-		instance.Ch <- &rq
-		rq.Wait()
+		MysqlDb.Exec("insert INTO report(uuid,version,os,arch,ip,createtime) values(?,?,?,?,?,now())", report.UUID, report.Version, report.OS, report.Arch, report.IP)
 	}
-}
-
-/*
-*
-ws链接关闭时清理缓存
-*/
-func wsClose(w *websocket.Conn, secret string) {
-	fmt.Println("nothing")
-	if len(secret) > 0 {
-		go func() {
-			MysqlDb.Exec("update instance set online='0'  where secret=? ", secret)
-		}()
-		instances.Delete(secret)
-		fmt.Println("delete ws,secret is" + secret)
-	} else {
-		fmt.Println("into else")
-	}
-	fmt.Println("websocket is closes 1111,secret is " + secret)
-	w.Close()
 }
 
 /*
@@ -483,6 +255,69 @@ func clearTimeOutInstance() {
 	time.AfterFunc(time.Duration(age2), func() {
 		clearTimeOutInstance()
 	})
+}
+
+func getRoomPass(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
+	id := r.Header.Get("M7sid")
+	roomId := r.URL.Query().Get("roomId")
+	in := base64.NewEncoder(base64.StdEncoding, w)
+	z := zlib.NewWriter(in)
+	z.Write([]byte(fmt.Sprintf("%s:%s", id, roomId)))
+	z.Close()
+	in.Close()
+}
+
+// 加入别人的房间
+func joinRoom(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	if sessionV == nil {
+		http.Error(w, "session error", http.StatusInternalServerError)
+		return
+	}
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
+
+	pass := r.URL.Query().Get("pass")
+	userId := r.URL.Query().Get("userId")
+	z, err := zlib.NewReader(base64.NewDecoder(base64.StdEncoding, strings.NewReader(pass)))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	info, _ := io.ReadAll(z)
+	z.Close()
+	ss := strings.Split(string(info), ":")
+	if len(ss) != 2 {
+		http.Error(w, "pass not right", http.StatusBadRequest)
+		return
+	}
+	instanceId := ss[0]
+	roomId := ss[1]
+	instance := instances.FindById(instanceId)
+	if instance == nil {
+		http.Error(w, "instance not found", http.StatusNotFound)
+		return
+	}
+	if instance.Quic == nil {
+		http.Error(w, "instance not connect with quic", http.StatusServiceUnavailable)
+		return
+	}
+	if r.Header.Get("Upgrade") != "websocket" {
+		http.Error(w, "not websocket", http.StatusBadRequest)
+		return
+	}
+	r.RequestURI = fmt.Sprintf("/room/%s/%s", roomId, userId)
+	r.URL, err = url.ParseRequestURI(r.RequestURI)
+	instance.relayQuic(w, r)
 }
 
 /*
@@ -1160,7 +995,7 @@ func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData ma
 			w.Write(util.ErrJson(util.ErrRequestParamError))
 			return
 		}
-		fmt.Println("json:", string(body))
+		// fmt.Println("json:", string(body))
 		// 初始化请求变量结构
 		// 调用json包的解析，解析请求body
 		if err = json.Unmarshal(body, &formData); err != nil {
@@ -1169,6 +1004,6 @@ func getDataFromHttpRequest(w http.ResponseWriter, r *http.Request) (formData ma
 			return
 		}
 	}
-	fmt.Printf("formData is %+v\n", formData)
+	// fmt.Printf("formData is %+v\n", formData)
 	return formData
 }

@@ -81,8 +81,8 @@ export function stopStream(m7sid: string, streamPath) {
 }
 
 // 获取配置文件信息，可以加参数 name=xxx，获取 xxx 插件的配置信息（不加参数则获取全局配置信息）
-export function getConfig(m7sid: string, name: string) {
-  const params = new URLSearchParams({ yaml: '1', name })
+export function getConfig(m7sid: string, name: string, yaml = '') {
+  const params = new URLSearchParams({ yaml, name })
   return fetch({
     url: `/api/getconfig?${params.toString()}`,
     method: 'post',
@@ -281,6 +281,25 @@ export function stopRecord(m7sid: string, id: string) {
 export function startRecord(m7sid: string, streamPath: string, type: string) {
   return fetch({
     url: '/record/api/start?' + new URLSearchParams({ streamPath, type }),
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+//获取入房口令
+export function getRoomPass(m7sid: string, roomId: string) {
+  return fetch({
+    url: `/api/instance/getroompass?roomId=${roomId}`,
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+export function getSDPs(m7sid: string, pageNum = 0, pageSize = 10) {
+  return fetch({
+    url: `/webrtc/batch?pageNum=${pageNum}&pageSize=${pageSize}`,
     method: 'post',
     headers: {
       m7sid

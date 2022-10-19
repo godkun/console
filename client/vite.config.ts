@@ -25,7 +25,11 @@ const serverProxy = {
   changeOrigin: true,
   rewrite: (path) => path.replace(/^\/m7s/, '')
 }
-
+const serverWsProxy = {
+  target: 'wss://console.monibuca.com:9999',
+  changeOrigin: true,
+  rewrite: (path) => path.replace(/^\/m7s/, '')
+}
 const globals = externalGlobals({
   vue: 'Vue',
   vueRouter: 'VueRouter',
@@ -96,10 +100,11 @@ export default ({ command }) => {
     },
     // 需要配置本地 host
     server: {
-      host: 'local.monibuca.com',
+      host: 'console.monibuca.com',
       port: 4000,
       proxy: {
         '/api': serverProxy,
+        '/m7s/room': serverWsProxy,
         '/m7s': serverProxy
       }
     },

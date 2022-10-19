@@ -15,9 +15,9 @@ export const usePluginConfigStore = defineStore({
     async getConfig(instantceId: string, name: string) {
       if (!this[instantceId]) {
         this[instantceId] = {}
-        if (!this[instantceId][name])
-          return getConfig(instantceId, name).then((config) => (this[instantceId][name] = config))
       }
+      if (!this[instantceId][name])
+        return getConfig(instantceId, name).then((config) => (this[instantceId][name] = config))
       return this[instantceId][name]
     }
   }
