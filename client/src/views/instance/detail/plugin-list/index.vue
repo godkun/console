@@ -70,7 +70,7 @@
     url: ''
   })
   const modalTitle = ref('')
-  const pluginData = ref([])
+  const pluginData = ref<Array<{ Name: string; RawConfig: any }>>([])
 
   const instance = ref({
     id: '',
@@ -139,7 +139,9 @@
 
   async function initPage() {
     const r = await getInstancePlugin(params.id as string)
-    pluginData.value = Object.values(r)
+    pluginData.value = Object.values(r).sort((a: { Name: string }, b: { Name: string }) =>
+      a.Name.localeCompare(b.Name)
+    ) as Array<{ Name: string; RawConfig: any }>
   }
   initPage()
 

@@ -104,7 +104,7 @@
   async function tick(event) {
     // const r = await getInstanceSummary(id)
     const r = JSON.parse(event.data)
-    streamData.value = r.Streams
+    streamData.value = r.Streams.sort((a, b) => a.Path.localeCompare(b.Path))
   }
 
   function onCheckedRow(rowKeys) {

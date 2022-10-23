@@ -13,7 +13,7 @@
         :columns="columns(params.id as string)"
         :dataSource="streamData"
         :pagination="false"
-        :row-key="(row) => row.id"
+        :row-key="(row) => row.ID"
         :scroll-x="1090">
         <template #tableTitle>
           <n-gradient-text type="success"> GB28181 </n-gradient-text>
@@ -39,8 +39,8 @@
     noPlugin.value = true
   })
   async function tick() {
-    const r = await getInstanceGB(params.id as string)
-    streamData.value = r
+    const r = (await getInstanceGB(params.id as string)) || []
+    streamData.value = r.sort((a, b) => a.ID.localeCompare(b.ID))
   }
 </script>
 

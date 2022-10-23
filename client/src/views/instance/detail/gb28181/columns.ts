@@ -76,7 +76,8 @@ export const columns = (m7sid) => [
     renderExpand: (rowData) => {
       return h(BasicTable, {
         pagination: false,
-        dataSource: rowData.Channels,
+        'row-key': (row) => row.DeviceID,
+        dataSource: rowData.Channels.sort((a, b) => a.DeviceID.localeCompare(b.DeviceID)),
         columns: channelsColumns(m7sid),
         title: '通道',
         titleTooltip: rowData.ID
@@ -122,11 +123,11 @@ export const columns = (m7sid) => [
     }
   },
   {
-    title: 'UpdateTIme',
-    key: 'UpdateTIme',
+    title: 'UpdateTime',
+    key: 'UpdateTime',
     width: 130,
     render(row) {
-      return h(NTime, { time: new Date(row.UpdateTIme), type: 'relative' })
+      return h(NTime, { time: new Date(row.UpdateTime), type: 'relative' })
     }
   },
 

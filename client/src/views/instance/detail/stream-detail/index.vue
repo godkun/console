@@ -140,6 +140,7 @@
   } = {}
   async function tick() {
     data.value = await getStreamDetail(params.id as string, query.path)
+    data.value.Tracks = data.value.Tracks.sort((a, b) => a.Name.localeCompare(b.Name))
     data.value.Tracks.forEach((t) => {
       if (!gvs[t.Name]) {
         nextTick(() => {

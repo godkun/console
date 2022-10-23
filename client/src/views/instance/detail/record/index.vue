@@ -134,14 +134,16 @@
     }
   ]
   const actionColumn = []
-  const dataSource = ref([])
-  const recordingList = ref([])
+  const dataSource = ref<Array<{ Path: string }>>([])
+  const recordingList = ref<Array<{ ID: string }>>([])
   getRecordFiles(params.id as string).then((x) => {
-    dataSource.value = x
+    dataSource.value = x || []
+    dataSource.value = dataSource.value.sort((a, b) => a.Path.localeCompare(b.Path))
   })
   function tick() {
     getRecordingList(params.id as string).then((x) => {
       recordingList.value = x || []
+      recordingList.value = recordingList.value.sort((a, b) => a.ID.localeCompare(b.ID))
     })
   }
   function record() {
