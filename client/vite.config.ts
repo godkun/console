@@ -1,4 +1,5 @@
-import { resolve } from 'path'
+import { resolve, join } from 'path'
+import fs from 'fs'
 import unocss from '@unocss/vite'
 import vue from '@vitejs/plugin-vue'
 import legacy from '@vitejs/plugin-legacy'
@@ -100,6 +101,10 @@ export default ({ command }) => {
     },
     // 需要配置本地 host
     server: {
+      https: {
+        cert: fs.readFileSync(join(__dirname, '../server/console.monibuca.com_bundle.crt')),
+        key: fs.readFileSync(join(__dirname, '../server/console.monibuca.com.key'))
+      },
       host: 'console.monibuca.com',
       port: 4000,
       proxy: {

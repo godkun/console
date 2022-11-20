@@ -116,6 +116,14 @@ const routes: Array<RouteRecordRaw> = [
           title: 'Room'
         },
         component: () => import('@/views/instance/detail/room/index.vue')
+      },
+      {
+        path: 'webrtc/:id',
+        name: `webrtc`,
+        meta: {
+          title: 'WebRTC屏幕墙'
+        },
+        component: () => import('@/views/instance/detail/webrtc/index.vue')
       }
     ]
   }

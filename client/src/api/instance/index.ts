@@ -297,12 +297,13 @@ export function getRoomPass(m7sid: string, roomId: string) {
     }
   })
 }
-export function getSDPs(m7sid: string, pageNum = 0, pageSize = 10) {
+export function getSDPs(m7sid: string, sdp: string) {
   return fetch({
-    url: `/webrtc/batch?pageNum=${pageNum}&pageSize=${pageSize}`,
+    url: `/webrtc/batch`,
     method: 'post',
     headers: {
       m7sid
-    }
+    },
+    data: sdp
   })
 }
