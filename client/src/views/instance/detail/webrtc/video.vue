@@ -1,15 +1,16 @@
 <template>
   <div class="container">
     <video ref="videoEle" :srcObject="stream" autoplay></video>
-    <div class="title">{{ value.stream.Path }}</div>
+    <div class="title">{{ value.id }}</div>
   </div>
 </template>
 <script setup lang="ts">
+  import { WebRTCStream } from 'jv4-connection'
   import { ref, watchEffect } from 'vue'
   const videoEle = ref()
   const stream = new MediaStream()
   const props = defineProps<{
-    value: { audioTrack: MediaStreamTrack; videoTrack: MediaStreamTrack; stream: { Path: string } }
+    value: WebRTCStream
   }>()
   watchEffect(() => {
     if (props.value.audioTrack && stream.getAudioTracks().length == 0) {

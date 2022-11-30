@@ -11,55 +11,62 @@
   import { onMounted, reactive, ref } from 'vue'
   import Video from './video.vue'
   import { getInstanceSummary } from '@/api/instance'
-  import { useRoute } from 'vue-router'
+  import { onBeforeRouteLeave, useRoute } from 'vue-router'
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   import { DemuxEvent, FlvDemuxer } from 'jv4-demuxer'
-  import { DataChannelConnection, WebRTCConnection } from 'jv4-connection'
+  import { DataChannelConnection, WebRTCConnection, WebRTCStream } from 'jv4-connection'
   import { VideoDecoderHard } from 'jv4-decoder'
   import { VideoDecoderEvent } from 'jv4-decoder/src/types'
   let signalChannel: RTCDataChannel
-  const videoList = reactive<
-    Record<
-      string,
-      {
-        stream: any
-        audioTrack?: MediaStreamTrack
-        videoTrack?: MediaStreamTrack
-      }
-    >
-  >({})
+  const videoList = reactive<Record<string, WebRTCStream>>({})
   const { params } = useRoute()
   const configStore = usePluginConfigStore()
   const noPlugin = ref(false)
   const pageSize = ref(9)
   const pageNum = ref(0)
   const total = ref(0)
-  const allStreams: Array<{ Path: string }> = []
   configStore.getConfig(params.id as string, 'WebRTC').catch((err) => {
     noPlugin.value = true
   })
-  onMounted(async () => {
-    const summary = await getInstanceSummary(params.id as string)
+  const conn = new WebRTCConnection('m7s/webrtc/batch', {
+    requestInit: {
+      headers: {
+        m7sid: params.id as string
+      }
+    }
+  })
+  const pc = conn.webrtc
+  async function tick(event: MessageEvent<string>) {
+    const summary = JSON.parse(event.data)
     if (!summary.Streams) return
     total.value = summary.Streams.length
-    allStreams.push(...summary.Streams.sort((a, b) => a.Path.localeCompare(b.Path)))
-    const conn = new WebRTCConnection('m7s/webrtc/batch', {
-      requestInit: {
-        headers: {
-          m7sid: params.id as string
-        }
-      }
-    })
-    const pc = conn.webrtc
+    const allStreams = summary.Streams.sort((a, b) => a.Path.localeCompare(b.Path))
     const streams = allStreams.slice(
       pageNum.value * pageSize.value,
       (pageNum.value + 1) * pageSize.value
     )
+    console.log(streams)
+    const streamList: string[] = []
     for (const s of streams) {
-      videoList[s.Path] = {
-        stream: s
+      if (!videoList[s.Path]) {
+        videoList[s.Path] = new WebRTCStream(s.Path)
+        conn.addStream(videoList[s.Path])
+        streamList.push(s.Path)
       }
     }
+    if (streamList.length > 0) {
+      const offer = await pc.createOffer()
+      await pc.setLocalDescription(offer)
+      signalChannel.send(
+        JSON.stringify({
+          type: 'subscribe',
+          offer: offer.sdp,
+          streamList
+        })
+      )
+    }
+  }
+  onMounted(async () => {
     signalChannel = pc.createDataChannel('signal')
     signalChannel.onmessage = async (evt) => {
       console.log(evt)
@@ -70,6 +77,7 @@
           pc.setRemoteDescription(new RTCSessionDescription(signal))
           break
         case 'remove':
+          conn.deleteStream(signal.streamPath)
           delete videoList[signal.streamPath]
           break
         case 'offer':
@@ -80,23 +88,9 @@
       }
     }
     signalChannel.onopen = async () => {
-      for (const s of streams) {
-        pc.addTransceiver('audio', {
-          direction: 'recvonly'
-        })
-        pc.addTransceiver('video', {
-          direction: 'recvonly'
-        })
-      }
-      const offer = await pc.createOffer()
-      await pc.setLocalDescription(offer)
-      signalChannel.send(
-        JSON.stringify({
-          type: 'subscribe',
-          offer: offer.sdp,
-          streamList: streams.map((s) => s.Path)
-        })
-      )
+      const es = new EventSource('/api/summary?m7sid=' + params.id)
+      es.onmessage = tick
+      onBeforeRouteLeave(() => es.close())
     }
     pc.ondatachannel = async (evt) => {
       const dc = evt.channel
@@ -134,16 +128,6 @@
           console.error(err)
         })
         console.log(pipe)
-      }
-    }
-    pc.ontrack = ({ track, streams, transceiver }) => {
-      console.log(track, streams, transceiver)
-      if (streams.length) {
-        const info = videoList[streams[0].id]
-        if (info) {
-          info.videoTrack = streams[0].getVideoTracks()[0]
-          info.audioTrack = streams[0].getAudioTracks()[0]
-        }
       }
     }
     conn.connect()
