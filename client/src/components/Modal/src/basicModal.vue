@@ -28,7 +28,6 @@
     unref,
     computed,
     useAttrs,
-    defineEmits,
     defineProps
   } from 'vue'
   import { basicProps } from './props'

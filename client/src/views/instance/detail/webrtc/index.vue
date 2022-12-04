@@ -10,13 +10,14 @@
 <script lang="ts" setup>
   import { onMounted, reactive, ref } from 'vue'
   import Video from './video.vue'
-  import { getInstanceSummary } from '@/api/instance'
   import { onBeforeRouteLeave, useRoute } from 'vue-router'
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   import { DemuxEvent, FlvDemuxer } from 'jv4-demuxer'
   import { DataChannelConnection, WebRTCConnection, WebRTCStream } from 'jv4-connection'
   import { VideoDecoderHard } from 'jv4-decoder'
+  import { DemuxMode } from 'jv4-demuxer/src/base'
   import { VideoDecoderEvent } from 'jv4-decoder/src/types'
+  import { dualCalendarValidation } from 'naive-ui/es/date-picker/src/validation-utils'
   let signalChannel: RTCDataChannel
   const videoList = reactive<Record<string, WebRTCStream>>({})
   const { params } = useRoute()
@@ -45,7 +46,6 @@
       pageNum.value * pageSize.value,
       (pageNum.value + 1) * pageSize.value
     )
-    console.log(streams)
     const streamList: string[] = []
     for (const s of streams) {
       if (!videoList[s.Path]) {
@@ -99,35 +99,28 @@
       if (info) {
         const track = new MediaStreamTrackGenerator({ kind: 'video' })
         info.videoTrack = track
+        const writer = track.writable.getWriter()
         const dcConn = new DataChannelConnection(dc)
-        await dcConn.connect()
-        const demuxer = new FlvDemuxer(dcConn)
+        const demuxer = new FlvDemuxer(DemuxMode.PUSH, dcConn)
+        demuxer.gotVideo = (chunk) => videoDecoder.decode(chunk)
         const videoDecoder = new VideoDecoderHard()
         await videoDecoder.initialize()
         demuxer.on(DemuxEvent.VIDEO_ENCODER_CONFIG_CHANGED, (data: Uint8Array) => {
+          console.log('VIDEO_ENCODER_CONFIG_CHANGED', data)
           videoDecoder.configure({
             codec: 'hvc1.1.6.L0.12.34.56.78.9A.BC',
             extraData: data,
             videoType: 'hevc'
           })
         })
-
-        const pipe = demuxer.videoReadable
-          .pipeThrough(
-            new TransformStream({
-              start(controller) {
-                videoDecoder.on(VideoDecoderEvent.VideoFrame, (frame) => controller.enqueue(frame))
-              },
-              transform(chunk: EncodedVideoChunkInit) {
-                videoDecoder.decode(chunk)
-              }
-            })
-          )
-          .pipeTo(track.writable)
-        pipe.catch((err) => {
+        videoDecoder.on(VideoDecoderEvent.Error, (err) => {
           console.error(err)
+          videoDecoder.initialize()
         })
-        console.log(pipe)
+        videoDecoder.on(VideoDecoderEvent.VideoFrame, (frame: VideoFrame) => {
+          writer.write(frame)
+        })
+        dcConn.connect()
       }
     }
     conn.connect()

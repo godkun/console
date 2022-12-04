@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref, defineEmits, onMounted, onUnmounted } from 'vue'
+  import { ref, onMounted, onUnmounted } from 'vue'
   const emit = defineEmits(['interval-change', 'tick'])
   const interval = localStorage.getItem('interval')
   const value = ref(Number(interval) || 5)
