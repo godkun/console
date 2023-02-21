@@ -8,7 +8,13 @@
       </n-alert>
       <n-alert v-else-if="roomPass" type="success">邀请他人入房的口令：{{ roomPass }}</n-alert>
       <n-space>
-        <UserVideo v-for="user in userList" :title="user.ID" :key="user.ID" />
+        <MySelf
+          :title="myUserId"
+          :value="myStream"
+          :signalReady="signalReady"
+          v-if="myStream"
+          @publish="publish" />
+        <UserVideo v-for="user in userList" :title="user.ID" :key="user.ID" :value="user.Stream" />
       </n-space>
     </n-layout-content>
     <n-layout-footer>
@@ -50,14 +56,17 @@
 <script setup lang="ts">
   // import { getInstanceHttp } from '@/api/instance'
   import UserVideo from './user.vue'
+  import MySelf from './myself.vue'
   import { onUnmounted, reactive, ref } from 'vue'
   import { useMessage } from 'naive-ui'
   import { useRoute, useRouter } from 'vue-router'
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   import { getRoomPass } from '@/api/instance'
+  import { WebRTCConnection, WebRTCStream } from 'jv4-connection'
   interface User {
     ID: string
     StreamPath: string
+    Stream: WebRTCStream
   }
   const showModal = ref(true)
   const router = useRouter()
@@ -74,7 +83,18 @@
   const appName = ref('room')
   const roomId = ref('')
   const roomPass = ref('')
+  const signalReady = ref(false)
   let consoleURL = 'wss://console.monibuca.com:9999'
+  let signalChannel: RTCDataChannel
+  const myStream = ref<WebRTCStream>()
+  const conn = new WebRTCConnection('m7s/webrtc/batch', {
+    requestInit: {
+      headers: {
+        m7sid: m7sId
+      }
+    }
+  })
+  const pc = conn.webrtc
   if (m7sId) {
     configStore
       .getConfig(m7sId, 'Room')
@@ -113,7 +133,22 @@
       )
     }
   }
+  async function publish() {
+    if (myStream.value) {
+      const rtcStream = myStream.value
+      conn.addStream(rtcStream)
+      const offer = await pc.createOffer()
+      await pc.setLocalDescription(offer)
+      signalChannel.send(
+        JSON.stringify({
+          type: 'publish',
+          offer: offer.sdp
+        })
+      )
+    }
+  }
   function enterOther(wsAddr: string) {
+    myStream.value = new WebRTCStream(myUserId.value, 'sendonly')
     ws = new WebSocket(wsAddr)
     ws.onmessage = (e) => {
       const { data, event, userId } = JSON.parse(e.data)
@@ -122,28 +157,82 @@
           token.value = data
           message.success('成功加入房间')
           showModal.value = false
+          signalChannel = pc.createDataChannel('signal')
+          signalChannel.onmessage = async (evt) => {
+            const signal = JSON.parse(evt.data)
+            switch (signal.type) {
+              case 'answer':
+                pc.setRemoteDescription(new RTCSessionDescription(signal))
+                break
+              case 'remove':
+                conn.deleteStream(signal.streamPath)
+                const user = userList.find((x) => x.StreamPath == signal.streamPath)
+                if (user) {
+                  user.StreamPath = ''
+                }
+                break
+              case 'offer':
+                await pc.setRemoteDescription(new RTCSessionDescription(signal))
+                const answer = await pc.createAnswer()
+                await pc.setLocalDescription(answer)
+                signalChannel.send(JSON.stringify(answer))
+            }
+          }
+          signalChannel.onopen = async () => {
+            message.success('成功连接信令服务器')
+            const streamPath = `room/${roomId.value}/${myUserId.value}?token=${token.value}&userId=${myUserId.value}&roomId=${roomId.value}`
+            signalChannel.send(JSON.stringify({ type: 'streamPath', streamPath }))
+            signalReady.value = true
+          }
+          signalChannel.onclose = () => {
+            message.error('信令服务器连接断开')
+            signalReady.value = false
+          }
+          conn.connect().catch((err) => {
+            message.error('连接失败' + err)
+          })
           break
         case 'msg':
           message.info(`${userId}：${data}`)
           break
         case 'userlist':
-          userList.push(...data)
+          for (const user of data) {
+            if (isSelf(user.ID)) continue
+            userList.push(user)
+            const streamPath = user.StreamPath
+            if (streamPath) {
+              user.Stream = new WebRTCStream(streamPath)
+              conn.addStream(user.Stream)
+            }
+          }
+          sendSubscribe()
           break
         case 'userjoin':
           message.success(data.ID + '加入房间')
-          userList.push(data)
+          if (!isSelf(data.ID)) userList.push(data)
           break
         case 'userleave':
           message.info(userId + '离开房间')
-          userList.splice(
-            userList.findIndex((user) => user.ID === userId),
-            1
-          )
+          {
+            const user = findUser(userId)
+            if (user) {
+              if (user.StreamPath) conn.deleteStream(user.StreamPath)
+              userList.splice(
+                userList.findIndex((user) => user.ID === userId),
+                1
+              )
+            }
+          }
           break
         case 'publish':
           const streamPath = data
           const user = findUser(userId)
-          if (user) user.StreamPath = streamPath
+          if (user && !isSelf(userId)) {
+            user.StreamPath = streamPath
+            user.Stream = new WebRTCStream(streamPath)
+            conn.addStream(user.Stream)
+            sendSubscribe()
+          }
           break
       }
     }
@@ -151,9 +240,26 @@
       message.error(e.toString())
     }
   }
-
+  async function sendSubscribe() {
+    const streamList: string[] = []
+    for (const user of userList) {
+      if (user.StreamPath) streamList.push(user.StreamPath)
+    }
+    const offer = await pc.createOffer()
+    await pc.setLocalDescription(offer)
+    signalChannel.send(
+      JSON.stringify({
+        type: 'subscribe',
+        offer: offer.sdp,
+        streamList
+      })
+    )
+  }
   function findUser(userId: string) {
     return userList.find((user) => user.ID === userId)
+  }
+  function isSelf(userId: string) {
+    return myUserId.value === userId
   }
   function send() {
     if (ws) {

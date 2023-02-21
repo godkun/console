@@ -17,7 +17,6 @@
   import { VideoDecoderHard } from 'jv4-decoder'
   import { DemuxMode } from 'jv4-demuxer/src/base'
   import { VideoDecoderEvent } from 'jv4-decoder/src/types'
-  import { dualCalendarValidation } from 'naive-ui/es/date-picker/src/validation-utils'
   let signalChannel: RTCDataChannel
   const videoList = reactive<Record<string, WebRTCStream>>({})
   const { params } = useRoute()

@@ -26,11 +26,11 @@ const serverProxy = {
   changeOrigin: true,
   rewrite: (path) => path.replace(/^\/m7s/, '')
 }
-const serverWsProxy = {
-  target: 'wss://console.monibuca.com:9999',
-  changeOrigin: true,
-  rewrite: (path) => path.replace(/^\/m7s/, '')
-}
+// const serverWsProxy = {
+//   target: 'wss://console.monibuca.com:10000',
+//   changeOrigin: true,
+//   rewrite: (path) => path.replace(/^\/m7s/, '')
+// }
 const globals = externalGlobals({
   vue: 'Vue',
   vueRouter: 'VueRouter',
@@ -109,7 +109,6 @@ export default ({ command }) => {
       port: 4000,
       proxy: {
         '/api': serverProxy,
-        '/m7s/room': serverWsProxy,
         '/m7s': serverProxy
       }
     },

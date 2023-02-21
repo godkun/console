@@ -181,6 +181,7 @@ func main() {
 	defer MysqlDb.Close()
 
 	fmt.Println("start server at ", config.ServerPort)
+	http.HandleFunc("/test", test)
 	http.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/api/user/register", userRegister)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
@@ -210,6 +211,9 @@ func main() {
 	g.Go(func() error {
 		return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
 	})
+	g.Go(func() error {
+		return http.ListenAndServe(":10000", nil)
+	})
 	log.Fatal(g.Wait())
 }
 
@@ -220,6 +224,10 @@ type Report struct {
 	OS      string `json:"os"`
 	Arch    string `json:"arch"`
 	Streams int    `json:"streams"`
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("hello world"))
 }
 
 func report(w http.ResponseWriter, r *http.Request) {

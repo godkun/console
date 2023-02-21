@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"gitee.com/console/server/util"
-	"github.com/lucas-clemente/quic-go"
+	"github.com/quic-go/quic-go"
 )
 
 func startQuic() error {

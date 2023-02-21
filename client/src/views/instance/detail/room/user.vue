@@ -1,12 +1,29 @@
 <template>
   <div class="user">
-    <video width="320" height="240"></video>
+    <video ref="videoEle" :srcObject="stream" autoplay></video>
     <div class="title">{{ title }}</div>
   </div>
 </template>
 <script setup lang="ts">
-  import { defineProps } from 'vue'
-  defineProps<{ title: string }>()
+  import { WebRTCStream } from 'jv4-connection'
+  import { ref, watchEffect } from 'vue'
+  const videoEle = ref()
+  const stream = new MediaStream()
+  const props = defineProps<{
+    value: WebRTCStream
+    title: string
+  }>()
+  watchEffect(() => {
+    if (props.value.audioTrack && stream.getAudioTracks().length == 0) {
+      stream.addTrack(props.value.audioTrack)
+    }
+    if (props.value.videoTrack && stream.getVideoTracks().length == 0) {
+      stream.addTrack(props.value.videoTrack)
+    }
+    if ((props.value.audioTrack || props.value.videoTrack) && videoEle.value) {
+      videoEle.value.play()
+    }
+  })
 </script>
 <style scoped>
   .user {
@@ -31,5 +48,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    width: 320px;
+    height: 240px;
   }
 </style>
