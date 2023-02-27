@@ -14,6 +14,7 @@
     title: string
   }>()
   watchEffect(() => {
+    if (!props.value) return
     if (props.value.audioTrack && stream.getAudioTracks().length == 0) {
       stream.addTrack(props.value.audioTrack)
     }

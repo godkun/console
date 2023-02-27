@@ -103,33 +103,45 @@ func relay(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
 	}
+	var instance *Instance
 	//formData := getDataFromHttpRequest(w, r)
 	//fmt.Printf("formData is %+v\n", formData)
 	// fmt.Printf("Header is %+v\n", r.Header["M7sid"])
-	id := r.Header.Get("M7sid")
-	if id == "" {
-		id = r.URL.Query().Get("m7sid")
-	}
-	// fmt.Printf("m7sid is %+v\n", id)
-	instance := instances.FindByIdAndMail(id, mail.(string))
-	if instance == nil {
-		secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
-		secret := secretData["secret"]
-		if len(secret) > 0 {
-			instance = instances.Get(secret)
-			if instance == nil {
-				w.Write(util.ErrJson(util.ErrInstanceNotConnect))
-				return
-			} else {
-				instance.mail = mail.(string)
-				instance.id = id
-			}
+	pass := r.Header.Get("Pass")
+	instanceId, _, err := decodePass(pass)
+	if err != nil {
+		id := r.Header.Get("M7sid")
+		if id == "" {
+			id = r.URL.Query().Get("m7sid")
+		}
+		// fmt.Printf("m7sid is %+v\n", id)
+		instance = instances.FindByIdAndMail(id, mail.(string))
+		if instance == nil {
+			secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
+			secret := secretData["secret"]
+			if len(secret) > 0 {
+				instance = instances.Get(secret)
+				if instance == nil {
+					w.Write(util.ErrJson(util.ErrInstanceNotConnect))
+					return
+				} else {
+					instance.mail = mail.(string)
+					instance.id = id
+				}
 
-		} else {
-			w.Write(util.ErrJson(util.ErrSecretWrong))
+			} else {
+				w.Write(util.ErrJson(util.ErrSecretWrong))
+				return
+			}
+		}
+	} else {
+		instance = instances.FindById(instanceId)
+		if instance == nil {
+			http.Error(w, "instance not found", http.StatusNotFound)
 			return
 		}
 	}
+
 	instance.lastAccessedTime = time.Now()
 	if instance.Quic != nil {
 		instance.relayQuic(w, r)

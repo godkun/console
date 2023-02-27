@@ -13,7 +13,6 @@ import (
 	"encoding/pem"
 	"flag"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"math/big"
@@ -296,20 +295,11 @@ func joinRoom(w http.ResponseWriter, r *http.Request) {
 
 	pass := r.URL.Query().Get("pass")
 	userId := r.URL.Query().Get("userId")
-	z, err := zlib.NewReader(base64.NewDecoder(base64.StdEncoding, strings.NewReader(pass)))
+	instanceId, roomId, err := decodePass(pass)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	info, _ := io.ReadAll(z)
-	z.Close()
-	ss := strings.Split(string(info), ":")
-	if len(ss) != 2 {
-		http.Error(w, "pass not right", http.StatusBadRequest)
-		return
-	}
-	instanceId := ss[0]
-	roomId := ss[1]
 	instance := instances.FindById(instanceId)
 	if instance == nil {
 		http.Error(w, "instance not found", http.StatusNotFound)

@@ -44,8 +44,8 @@ export default ({ command }) => {
     plugins: [
       vue(),
       Inspector({
-        enabled: true,
-        toggleButtonVisibility: 'always',
+        enabled: false,
+        toggleButtonVisibility: 'never',
         toggleComboKey: 'control',
         toggleButtonPos: 'bottom-right'
       }),

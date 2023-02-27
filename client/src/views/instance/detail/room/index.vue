@@ -13,7 +13,8 @@
           :value="myStream"
           :signalReady="signalReady"
           v-if="myStream"
-          @publish="publish" />
+          @publish="publish"
+          @unpublish="unpublish" />
         <UserVideo v-for="user in userList" :title="user.ID" :key="user.ID" :value="user.Stream" />
       </n-space>
     </n-layout-content>
@@ -74,14 +75,14 @@
   const chatMessage = ref('')
   const route = useRoute()
   const message = useMessage()
-  const myUserId = ref('')
+  const myUserId = ref('dexter')
   const token = ref('')
   let ws: WebSocket
   const configStore = usePluginConfigStore()
   const m7sId = route.params.id as string
   const noPlugin = ref(false)
   const appName = ref('room')
-  const roomId = ref('')
+  const roomId = ref('abc')
   const roomPass = ref('')
   const signalReady = ref(false)
   let consoleURL = 'wss://console.monibuca.com:9999'
@@ -131,6 +132,8 @@
           pass: roomId.value
         })}`
       )
+      // @ts-ignore
+      conn.options.requestInit.headers.pass = roomId.value
     }
   }
   async function publish() {
@@ -142,6 +145,21 @@
       signalChannel.send(
         JSON.stringify({
           type: 'publish',
+          offer: offer.sdp,
+          streamPath: `room/${roomId.value}/${myUserId.value}?token=${token.value}`
+        })
+      )
+    }
+  }
+  async function unpublish() {
+    if (myStream.value) {
+      const rtcStream = myStream.value
+      conn.deleteStream(rtcStream.id)
+      const offer = await pc.createOffer()
+      await pc.setLocalDescription(offer)
+      signalChannel.send(
+        JSON.stringify({
+          type: 'unpublish',
           offer: offer.sdp
         })
       )
@@ -155,6 +173,7 @@
       switch (event) {
         case 'joined':
           token.value = data
+          roomId.value = data.split(':')[0]
           message.success('成功加入房间')
           showModal.value = false
           signalChannel = pc.createDataChannel('signal')
@@ -180,8 +199,6 @@
           }
           signalChannel.onopen = async () => {
             message.success('成功连接信令服务器')
-            const streamPath = `room/${roomId.value}/${myUserId.value}?token=${token.value}&userId=${myUserId.value}&roomId=${roomId.value}`
-            signalChannel.send(JSON.stringify({ type: 'streamPath', streamPath }))
             signalReady.value = true
           }
           signalChannel.onclose = () => {
@@ -196,6 +213,7 @@
           message.info(`${userId}：${data}`)
           break
         case 'userlist':
+          if (!data) break
           for (const user of data) {
             if (isSelf(user.ID)) continue
             userList.push(user)
