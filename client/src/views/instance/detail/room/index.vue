@@ -200,6 +200,7 @@
           signalChannel.onopen = async () => {
             message.success('成功连接信令服务器')
             signalReady.value = true
+            sendSubscribe()
           }
           signalChannel.onclose = () => {
             message.error('信令服务器连接断开')
@@ -259,11 +260,13 @@
     }
   }
   async function sendSubscribe() {
+    if (!signalReady.value) return
     const streamList: string[] = []
     for (const user of userList) {
       if (user.StreamPath) streamList.push(user.StreamPath)
     }
     const offer = await pc.createOffer()
+    console.log(offer)
     await pc.setLocalDescription(offer)
     signalChannel.send(
       JSON.stringify({

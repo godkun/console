@@ -2,7 +2,7 @@ import { h } from 'vue'
 import { NTime, NButton } from 'naive-ui'
 import { BasicTable } from '@/components/Table'
 import { gb28181Invite } from '@/api/instance'
-const channelsColumns = (m7sid) => [
+const channelsColumns = (m7sid, id) => [
   {
     title: '通道编号',
     key: 'DeviceID',
@@ -20,7 +20,7 @@ const channelsColumns = (m7sid) => [
               circle: true,
               type: 'primary',
               onClick: () => {
-                gb28181Invite(m7sid, row.ParentID, row.DeviceID)
+                gb28181Invite(m7sid, id, row.DeviceID)
               }
             },
             '▶️'
@@ -78,7 +78,7 @@ export const columns = (m7sid) => [
         pagination: false,
         'row-key': (row) => row.DeviceID,
         dataSource: rowData.Channels.sort((a, b) => a.DeviceID.localeCompare(b.DeviceID)),
-        columns: channelsColumns(m7sid),
+        columns: channelsColumns(m7sid, rowData.ID),
         title: '通道',
         titleTooltip: rowData.ID
       })

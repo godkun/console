@@ -45,7 +45,7 @@
     if (props.value.mediaStream && videoEle.value) {
       videoEle.value.srcObject = props.value.mediaStream
       videoEle.value.muted = true
-      videoEle.value.play()
+      videoEle.value.play().catch(() => {})
     }
   })
   function publish(value: boolean) {
