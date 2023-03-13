@@ -1,8 +1,15 @@
 {
   "pipeline": {
+    "all":{
+      "dependsOn": ["dev","server","monibuca"]
+    },
     "dev": {
       "cache": false,
       "dependsOn": ["^build"]
+    },
+    "server":{},
+    "monibuca":{
+
     },
     "build": {
       "dependsOn": ["^build"]

@@ -26,6 +26,9 @@ export const useUserStore = defineStore({
     getPermissions(): [any][] {
       return this.permissions
     },
+    getCurrentCamera(): string {
+      return localStorage.getItem("currentCamera") || "";
+    }
   },
   actions: {
     setAvatar(avatar: string) {
@@ -33,6 +36,9 @@ export const useUserStore = defineStore({
     },
     setPermissions(permissions) {
       this.permissions = permissions
+    },
+    setCurrentCamera(cameraId: string) {
+      localStorage.setItem("currentCamera", cameraId);
     },
     // 注册
     async register(userInfo) {

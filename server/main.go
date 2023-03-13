@@ -181,6 +181,7 @@ func main() {
 
 	fmt.Println("start server at ", config.ServerPort)
 	http.HandleFunc("/test", test)
+	http.HandleFunc("/api/user/islogin", islogin)
 	http.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
 	http.HandleFunc("/api/user/register", userRegister)
 	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
@@ -210,9 +211,9 @@ func main() {
 	g.Go(func() error {
 		return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
 	})
-	g.Go(func() error {
-		return http.ListenAndServe(":10000", nil)
-	})
+	// g.Go(func() error {
+	// 	return http.ListenAndServe(":10000", nil)
+	// })
 	log.Fatal(g.Wait())
 }
 
@@ -490,6 +491,16 @@ func userLogout(w http.ResponseWriter, r *http.Request) {
 	sessionM.Destroy(w, r)
 	w.Write(util.ErrJson(util.OK()))
 	return
+}
+
+func islogin(w http.ResponseWriter, r *http.Request) {
+	sessionV := sessionM.BeginSession(w, r)
+	if mail := sessionV.Get("mail"); mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	} else {
+		w.Write(util.ErrJson(&util.Errno{Code: 0, Msg: "OK", Data: mail}))
+	}
 }
 
 func instanceDetail(w http.ResponseWriter, r *http.Request) {

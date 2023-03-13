@@ -2,15 +2,16 @@
   <div class="user">
     <video ref="videoEle" autoplay></video>
     <div class="title">{{ title }}</div>
-    <n-switch type="primary" @update:value="publish" v-if="signalReady">
+    <!-- <n-switch type="primary" @update:value="publish" v-if="signalReady">
       <template #unchecked> 点击推流 </template>
-    </n-switch>
-    <div class="camlist" v-if="cameraList.length">
+    </n-switch> -->
+    <div class="camlist" v-if="cameraList.length > 1">
       <n-select v-model:value="currentCamera" :options="cameraList" value-field="deviceId" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
+  import { useUserStore } from '@/store/modules/user'
   import { WebRTCStream } from 'jv4-connection'
   import { ref, watchEffect } from 'vue'
   const videoEle = ref<HTMLVideoElement>()
@@ -21,12 +22,15 @@
   }>()
   const emit = defineEmits(['update:value', 'publish', 'unpublish'])
   const cameraList = ref<MediaDeviceInfo[]>([])
-  const currentCamera = ref('')
+  const userStore = useUserStore()
+  const currentCamera = ref(userStore.getCurrentCamera)
   navigator.mediaDevices.enumerateDevices().then((devices) => {
     cameraList.value = devices.filter((device) => device.kind == 'videoinput')
+    if (cameraList.value.find((x) => x.deviceId == currentCamera.value)) return
     currentCamera.value = cameraList.value[0].deviceId
   })
   watchEffect(() => {
+    userStore.setCurrentCamera(currentCamera.value)
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -48,10 +52,10 @@
       videoEle.value.play().catch(() => {})
     }
   })
-  function publish(value: boolean) {
-    if (value) emit('publish')
-    else emit('unpublish')
-  }
+  // function publish(value: boolean) {
+  //   if (value) emit('publish')
+  //   else emit('unpublish')
+  // }
   // watchEffect(() => {
   //   if (props.value.audioTrack && stream.getAudioTracks().length == 0) {
   //     stream.addTrack(props.value.audioTrack)
@@ -75,7 +79,7 @@
   }
   .title {
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
     height: 30px;

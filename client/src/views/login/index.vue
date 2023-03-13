@@ -108,9 +108,7 @@
           if (res.code == 0) {
             const toPath = decodeURIComponent((route.query?.redirect || '/') as string)
             message.success('登录成功')
-            if (route.name === LOGIN_NAME) {
-              router.replace('/')
-            } else router.replace(toPath)
+            router.replace(toPath)
           }
         } catch (err) {
           loading.value = false
@@ -134,12 +132,13 @@
     })
   }
 
-  document.onkeydown = function () {
-    const key = window.event.keyCode
-    //事件中keycode=13为回车事件
-    if (key == 13) {
-      handleSubmit()
-    }
+  document.onkeydown = function (ev) {
+    ev.key == 'Enter' && handleSubmit()
+    // const key = ev.keyCode
+    // //事件中keycode=13为回车事件
+    // if (key == 13) {
+    //   handleSubmit()
+    // }
   }
 </script>
 

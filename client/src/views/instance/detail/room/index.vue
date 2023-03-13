@@ -3,18 +3,25 @@
     <!-- <n-layout-header v-if="noPlugin || roomPass">
     </n-layout-header> -->
     <n-layout-content content-style="padding: 24px;height:calc(100vh - 120px)">
-      <n-alert v-if="noPlugin" title="当前功能受限" type="error">
-        当前实例未安装插件，无法创建房间
-      </n-alert>
-      <n-alert v-else-if="roomPass" type="success">邀请他人入房的口令：{{ roomPass }}</n-alert>
+      <n-space>
+        <n-alert v-if="webrtcError" type="error"> WebRTC连接失败：{{ webrtcError }} </n-alert>
+        <n-alert v-else-if="!signalReady" type="warning"> 正在等待WebRTC连接 </n-alert>
+        <n-alert v-else type="success"> WebRTC已连接 </n-alert>
+        <n-alert v-if="publishing" type="success"> 正在发布流 </n-alert>
+        <n-alert v-if="noPlugin" title="当前功能受限" type="error">
+          当前实例未安装插件，无法创建房间
+        </n-alert>
+        <n-alert v-else-if="roomPass" type="success" @click="copyLink"
+          >邀请他人入房链接（点击复制到剪切板）：{{ inviteLink }}</n-alert
+        >
+      </n-space>
       <n-space>
         <MySelf
           :title="myUserId"
           :value="myStream"
           :signalReady="signalReady"
           v-if="myStream"
-          @publish="publish"
-          @unpublish="unpublish" />
+          @update:value="publish" />
         <UserVideo v-for="user in userList" :title="user.ID" :key="user.ID" :value="user.Stream" />
       </n-space>
     </n-layout-content>
@@ -64,6 +71,8 @@
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   import { getRoomPass } from '@/api/instance'
   import { WebRTCConnection, WebRTCStream } from 'jv4-connection'
+  import { computed } from 'vue'
+  import fetch from '@/api/fetch'
   interface User {
     ID: string
     StreamPath: string
@@ -75,16 +84,21 @@
   const chatMessage = ref('')
   const route = useRoute()
   const message = useMessage()
-  const myUserId = ref('dexter')
+  const myUserId = ref('usr' + Math.random().toString(36).substr(2, 9))
   const token = ref('')
   let ws: WebSocket
   const configStore = usePluginConfigStore()
   const m7sId = route.params.id as string
   const noPlugin = ref(false)
   const appName = ref('room')
-  const roomId = ref('abc')
+  const roomId = ref(route.query.pass || 'test')
   const roomPass = ref('')
   const signalReady = ref(false)
+  const webrtcError = ref()
+  const publishing = ref(false)
+  const inviteLink = computed(
+    () => location.protocol + '//' + location.host + '/#/instance/room?pass=' + roomPass.value
+  )
   let consoleURL = 'wss://console.monibuca.com:9999'
   let signalChannel: RTCDataChannel
   const myStream = ref<WebRTCStream>()
@@ -96,6 +110,14 @@
     }
   })
   const pc = conn.webrtc
+  fetch({
+    url: '/api/user/islogin',
+    method: 'POST'
+  }).then((res) => {
+    if (res.code === 0) {
+      myUserId.value = res.data
+    }
+  })
   if (m7sId) {
     configStore
       .getConfig(m7sId, 'Room')
@@ -105,6 +127,11 @@
       const regx = /[^:\/]+/
       consoleURL =
         'wss://' + (regx.exec(res.console.server)?.[0] || 'console.monibuca.com') + ':9999'
+    })
+  }
+  function copyLink() {
+    navigator.clipboard.writeText(inviteLink.value).then(() => {
+      message.success('链接已复制到剪切板')
     })
   }
   function inputKeyup(event: KeyboardEvent) {
@@ -137,7 +164,8 @@
     }
   }
   async function publish() {
-    if (myStream.value) {
+    if (myStream.value && myStream.value.mediaStream && signalReady.value && !publishing.value) {
+      publishing.value = true
       const rtcStream = myStream.value
       conn.addStream(rtcStream)
       const offer = await pc.createOffer()
@@ -151,34 +179,36 @@
       )
     }
   }
-  async function unpublish() {
-    if (myStream.value) {
-      const rtcStream = myStream.value
-      conn.deleteStream(rtcStream.id)
-      const offer = await pc.createOffer()
-      await pc.setLocalDescription(offer)
-      signalChannel.send(
-        JSON.stringify({
-          type: 'unpublish',
-          offer: offer.sdp
-        })
-      )
-    }
-  }
+  // async function unpublish() {
+  //   if (myStream.value) {
+  //     const rtcStream = myStream.value
+  //     conn.deleteStream(rtcStream.id)
+  //     const offer = await pc.createOffer()
+  //     await pc.setLocalDescription(offer)
+  //     signalChannel.send(
+  //       JSON.stringify({
+  //         type: 'unpublish',
+  //         offer: offer.sdp
+  //       })
+  //     )
+  //   }
+  // }
   function enterOther(wsAddr: string) {
     myStream.value = new WebRTCStream(myUserId.value, 'sendonly')
     ws = new WebSocket(wsAddr)
     ws.onmessage = (e) => {
       const { data, event, userId } = JSON.parse(e.data)
+      console.log(data, event, userId)
       switch (event) {
         case 'joined':
-          token.value = data
-          roomId.value = data.split(':')[0]
+          token.value = data.token
+          roomId.value = token.value.split(':')[0]
           message.success('成功加入房间')
           showModal.value = false
           signalChannel = pc.createDataChannel('signal')
           signalChannel.onmessage = async (evt) => {
             const signal = JSON.parse(evt.data)
+            console.log(signal)
             switch (signal.type) {
               case 'answer':
                 pc.setRemoteDescription(new RTCSessionDescription(signal))
@@ -200,31 +230,30 @@
           signalChannel.onopen = async () => {
             message.success('成功连接信令服务器')
             signalReady.value = true
+            publish()
             sendSubscribe()
           }
           signalChannel.onclose = () => {
             message.error('信令服务器连接断开')
             signalReady.value = false
           }
+          if (data.userList)
+            for (const user of data.userList) {
+              if (isSelf(user.ID)) continue
+              userList.push(user)
+              const streamPath = user.StreamPath
+              if (streamPath) {
+                user.Stream = reactive(new WebRTCStream(streamPath))
+                conn.addStream(user.Stream)
+              }
+            }
           conn.connect().catch((err) => {
+            webrtcError.value = err
             message.error('连接失败' + err)
           })
           break
         case 'msg':
           message.info(`${userId}：${data}`)
-          break
-        case 'userlist':
-          if (!data) break
-          for (const user of data) {
-            if (isSelf(user.ID)) continue
-            userList.push(user)
-            const streamPath = user.StreamPath
-            if (streamPath) {
-              user.Stream = new WebRTCStream(streamPath)
-              conn.addStream(user.Stream)
-            }
-          }
-          sendSubscribe()
           break
         case 'userjoin':
           message.success(data.ID + '加入房间')

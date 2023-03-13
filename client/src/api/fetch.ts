@@ -11,7 +11,7 @@ const service = axios.create({
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     if (config.headers && 'm7sid' in config.headers) {
-      config.baseURL = "/m7s/"
+      config.baseURL = '/m7s/'
     }
     return config
   },
@@ -30,7 +30,10 @@ service.interceptors.response.use(
       if (res.code == 20305) {
         setTimeout(() => {
           router.replace({
-            name: 'Login'
+            name: 'Login',
+            query: {
+              redirect: encodeURI(router.currentRoute.value.fullPath)
+            }
           })
         }, 500)
       }
