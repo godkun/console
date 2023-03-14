@@ -21,8 +21,14 @@
           :value="myStream"
           :signalReady="signalReady"
           v-if="myStream"
-          @update:value="publish" />
-        <UserVideo v-for="user in userList" :title="user.ID" :key="user.ID" :value="user.Stream" />
+          @update:value="publish"
+          :audio-context="audioContext" />
+        <UserVideo
+          v-for="user in userList"
+          :title="user.ID"
+          :key="user.ID"
+          :value="user.Stream"
+          :audio-context="audioContext" />
       </n-space>
     </n-layout-content>
     <n-layout-footer>
@@ -91,7 +97,7 @@
   const m7sId = route.params.id as string
   const noPlugin = ref(false)
   const appName = ref('room')
-  const roomId = ref(route.query.pass || 'test')
+  const roomId = ref((route.query.pass as string) || 'test')
   const roomPass = ref('')
   const signalReady = ref(false)
   const webrtcError = ref()
@@ -110,6 +116,12 @@
     }
   })
   const pc = conn.webrtc
+  const audioContext = new AudioContext()
+  onUnmounted(() => {
+    audioContext.close()
+    conn.close()
+    ws?.close()
+  })
   fetch({
     url: '/api/user/islogin',
     method: 'POST'
@@ -122,7 +134,7 @@
     configStore
       .getConfig(m7sId, 'Room')
       .then((res) => (appName.value = res.appname))
-      .catch((err) => (noPlugin.value = true))
+      .catch(() => (noPlugin.value = true))
     configStore.getConfig(m7sId, '').then((res) => {
       const regx = /[^:\/]+/
       consoleURL =
@@ -139,9 +151,6 @@
       send()
     }
   }
-  onUnmounted(() => {
-    ws?.close()
-  })
   function enterCurrent() {
     // getInstanceHttp(m7sId, true, true, 'ws').then((res) => {
     //   roomURL.value = res + '/room/' + roomId.value

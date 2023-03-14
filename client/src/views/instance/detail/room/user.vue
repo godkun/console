@@ -1,7 +1,14 @@
 <template>
   <div class="user">
     <video ref="videoEle" :srcObject="stream" autoplay></video>
-    <div class="title">{{ title }}</div>
+    <div class="title">
+      {{ title }}
+      <Mic
+        class="mic"
+        :muted="value.audioTrack != null && !value.audioTrack.enabled"
+        :has-mic="value.audioTrack != null"
+        :volume="volume" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -12,11 +19,33 @@
   const props = defineProps<{
     value: WebRTCStream
     title: string
+    audioContext: AudioContext
   }>()
+  const volume = ref(0)
   watchEffect(() => {
     if (!props.value) return
     if (props.value.audioTrack && stream.getAudioTracks().length == 0) {
       stream.addTrack(props.value.audioTrack)
+      const sourceNode = props.audioContext.createMediaStreamSource(stream)
+      const analyserNode = props.audioContext.createAnalyser()
+      sourceNode.connect(analyserNode)
+      const volumeData = new Uint8Array(analyserNode.frequencyBinCount)
+      function updateLevelMeter() {
+        if (props.audioContext.state == 'closed') return
+        // 获取频域数据
+        analyserNode.getByteFrequencyData(volumeData)
+        // 计算音量级别
+        let sum = 0
+        for (let i = 0; i < volumeData.length; i++) {
+          sum += volumeData[i]
+        }
+        volume.value = sum / volumeData.length
+        // 更新级别计量器
+        // console.log(volume.value)
+        // 通过 requestAnimationFrame() 定期更新级别计量器
+        requestAnimationFrame(updateLevelMeter)
+      }
+      updateLevelMeter()
     }
     if (props.value.videoTrack && stream.getVideoTracks().length == 0) {
       stream.addTrack(props.value.videoTrack)
@@ -34,6 +63,14 @@
     position: relative;
     color: white;
     background-color: black;
+  }
+  .mic {
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
   }
   .title {
     position: absolute;

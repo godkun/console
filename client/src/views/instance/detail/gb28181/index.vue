@@ -40,7 +40,7 @@
   })
   async function tick() {
     const r = (await getInstanceGB(params.id as string)) || []
-    streamData.value = r.sort((a, b) => a.ID.localeCompare(b.ID))
+    if (Array.isArray(r)) streamData.value = r.sort((a, b) => a.ID.localeCompare(b.ID))
   }
 </script>
 
