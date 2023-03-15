@@ -31,12 +31,12 @@ function sidebar() {
     {
       text: '基本功能',
       collapsible: true,
-      items: [{ text: '控制台', link: '/nav/group1/控制台' }]
+      items: [{ text: '快速开始', link: '/nav/group1/index' }]
     },
     {
-      text: '二次开发',
+      text: 'Room示例',
       collapsible: true,
-      items: [{ text: '开发插件', link: '/nav/group2/开发插件' }]
+      items: [{ text: '基本原理', link: '/nav/room/tech' }]
     }
   ]
 }

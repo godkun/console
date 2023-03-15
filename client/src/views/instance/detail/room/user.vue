@@ -5,13 +5,14 @@
       {{ title }}
       <Mic
         class="mic"
-        :muted="value.audioTrack != null && !value.audioTrack.enabled"
-        :has-mic="value.audioTrack != null"
+        :muted="value && value.audioTrack && !value.audioTrack.enabled"
+        :has-mic="value && value.audioTrack"
         :volume="volume" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
+  import Mic from './mic.vue'
   import { WebRTCStream } from 'jv4-connection'
   import { ref, watchEffect } from 'vue'
   const videoEle = ref()

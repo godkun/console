@@ -14,9 +14,8 @@ hero:
       link: https://m7s.live/
 
 features:
-  - title: 控制台
-    # details: 技术选型
-  - title: 实例
-    # details: 架构
-  - title: vip功能
+  - title: 实例管理
+    details: 可以创建实例获取秘钥用于连接控制台，可以看到每个实例的在线状态
+  - title: 实例详情
+    details: 可查看实例中的流详情信息，查看和修改实例的配置，查看日志，查看GB设备等
 ---
