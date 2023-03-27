@@ -97,18 +97,16 @@
       <!-- 个人中心 -->
 
       <div class="layout-header-trigger layout-header-trigger-min">
-        <n-dropdown trigger="hover" @select="avatarSelect" :options="avatarOptions">
-          <div class="avatar">
-            <n-avatar
-              :style="{
-                color: 'white',
-                backgroundColor: '#2d8cf0'
-              }"
-              round>
-              {{ username }}
-            </n-avatar>
-          </div>
-        </n-dropdown>
+        <div class="avatar" @click="userSetting">
+          <n-avatar
+            :style="{
+              color: 'white',
+              backgroundColor: '#2d8cf0'
+            }"
+            round>
+            {{ username }}({{ level }})
+          </n-avatar>
+        </div>
       </div>
 
       <!--设置-->
@@ -133,7 +131,7 @@
   import { defineComponent, reactive, toRefs, ref, computed, unref } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import components from './components'
-  import { NDialogProvider, useDialog, useMessage } from 'naive-ui'
+  import { NDialogProvider } from 'naive-ui'
   import { useUserStore } from '@/store/modules/user'
   import ProjectSetting from './ProjectSetting.vue'
   import { AsideMenu } from '@/layout/components/Menu'
@@ -153,15 +151,15 @@
     emits: ['update:collapsed'],
     setup(props, { emit }) {
       const userStore = useUserStore()
-      const message = useMessage()
-      const dialog = useDialog()
+
       const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } =
         useProjectSetting()
 
       const drawerSetting = ref()
 
       const state = reactive({
-        username: 'admin',
+        username: userStore.username || userStore.mail,
+        level: userStore.level,
         fullscreenIcon: 'FullscreenOutlined',
         navMode: getNavMode,
         navTheme: getNavTheme,
@@ -226,30 +224,6 @@
         })
       }
 
-      // 退出登录
-      const doLogout = () => {
-        dialog.info({
-          title: '提示',
-          content: '您确定要退出登录吗',
-          positiveText: '确定',
-          negativeText: '取消',
-          onPositiveClick: () => {
-            userStore.logout().then(() => {
-              message.success('成功退出登录')
-              // 移除标签页
-              localStorage.removeItem('TABS-ROUTES')
-              router.replace({
-                name: 'Login',
-                query: {
-                  redirect: route.fullPath
-                }
-              })
-            })
-          },
-          onNegativeClick: () => {}
-        })
-      }
-
       // 切换全屏图标
       const toggleFullscreenIcon = () =>
         (state.fullscreenIcon =
@@ -279,28 +253,28 @@
           }
         }
       ]
-      const avatarOptions = [
-        {
-          label: '个人设置',
-          key: 1
-        },
-        {
-          label: '退出登录',
-          key: 2
-        }
-      ]
+      // const avatarOptions = [
+      //   {
+      //     label: '个人设置',
+      //     key: 1
+      //   },
+      //   {
+      //     label: '退出登录',
+      //     key: 2
+      //   }
+      // ]
 
       //头像下拉菜单
-      const avatarSelect = (key) => {
-        switch (key) {
-          case 1:
-            router.push({ name: 'Setting' })
-            break
-          case 2:
-            doLogout()
-            break
-        }
-      }
+      // const avatarSelect = (key) => {
+      //   switch (key) {
+      //     case 1:
+      //       router.push({ name: 'Setting' })
+      //       break
+      //     case 2:
+      //       doLogout()
+      //       break
+      //   }
+      // }
 
       function openSetting() {
         const { openDrawer } = drawerSetting.value
@@ -315,12 +289,14 @@
         ...toRefs(state),
         iconList,
         toggleFullScreen,
-        doLogout,
+        // doLogout,
         route,
         dropdownSelect,
-        avatarOptions,
+        userSetting() {
+          router.push({ name: 'Setting' })
+        },
         getChangeStyle,
-        avatarSelect,
+        // avatarSelect,
         breadcrumbList,
         reloadPage,
         drawerSetting,

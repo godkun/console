@@ -218,12 +218,13 @@ func main() {
 }
 
 type Report struct {
-	UUID    string `json:"uuid"`
-	IP      string
-	Version string `json:"version"`
-	OS      string `json:"os"`
-	Arch    string `json:"arch"`
-	Streams int    `json:"streams"`
+	UUID     string `json:"uuid"`
+	Machine  string `json:"machine"`
+	Instance string `json:"instance"`
+	Version  string `json:"version"`
+	OS       string `json:"os"`
+	Arch     string `json:"arch"`
+	Streams  int    `json:"streams"`
 }
 
 func test(w http.ResponseWriter, r *http.Request) {
@@ -236,11 +237,19 @@ func report(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-	report.IP, _, _ = strings.Cut(r.RemoteAddr, ":")
+	var result sql.Result
 	if report.Version == "" {
-		MysqlDb.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,now())", report.UUID, report.Streams)
+		result, err = MysqlDb.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,now())", report.UUID, report.Streams)
 	} else {
-		MysqlDb.Exec("insert INTO report(uuid,version,os,arch,ip,createtime) values(?,?,?,?,?,now())", report.UUID, report.Version, report.OS, report.Arch, report.IP)
+		id, _ := strconv.Atoi(report.Instance)
+		result, err = MysqlDb.Exec("insert INTO report(uuid,machine,instance,version,os,arch,ip,createtime) values(?,?,?,?,?,now())", report.UUID, report.Machine, id, report.Version, report.OS, report.Arch, r.RemoteAddr)
+
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	} else {
+		rows, _ := result.RowsAffected()
+		http.Error(w, fmt.Sprintf("%d", rows), http.StatusOK)
 	}
 }
 
@@ -632,6 +641,8 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 	id := formData["id"]
 	name := formData["name"]
+	enableReport := formData["enableReport"]
+	resetSecret := formData["resetSecret"].(bool)
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
@@ -646,7 +657,12 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrInstanceNameExist))
 			return
 		}
-		result, err := MysqlDb.Exec("update instance set name=?,secret=md5(?),updatetimestamp=? where id=? and mail=? ", name, secret, updatetimestamp, id, mail)
+		var result sql.Result
+		if resetSecret {
+			result, err = MysqlDb.Exec("update instance set name=?,secret=md5(?),report=?,updatetimestamp=? where id=? and mail=? ", name, secret, enableReport, updatetimestamp, id, mail)
+		} else {
+			result, err = MysqlDb.Exec("update instance set name=?,report=?,updatetimestamp=? where id=? and mail=? ", name, enableReport, updatetimestamp, id, mail)
+		}
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -821,7 +837,7 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 	password := formData["password"]
 	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		userData = util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? and password=md5(?)", mail, password)
+		userData = util.QueryAndParseJsonRows(MysqlDb, "select mail,nickname,level from user where mail=? and password=md5(?)", mail, password)
 		if userData != nil && len(userData) > 0 {
 			fmt.Println("user data is %+v", userData)
 			go func() {

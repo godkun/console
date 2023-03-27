@@ -23,21 +23,63 @@
   </n-grid>
 </template>
 <script lang="ts" setup>
+  import { useUserStore } from '@/store'
+  import { useMessage, useDialog } from 'naive-ui'
   import { ref } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
   import BasicSetting from './BasicSetting.vue'
   const typeTabList = [
     {
       name: '修改密码',
       key: 1
+    },
+    {
+      name: '修改昵称',
+      key: 2
+    },
+    {
+      name: '退出登录',
+      key: 3
     }
   ]
 
   const type = ref(1)
   const typeTitle = ref('修改密码')
-
+  const message = useMessage()
+  const userStore = useUserStore()
+  const dialog = useDialog()
+  const router = useRouter()
+  const route = useRoute()
+  // 退出登录
+  function doLogout() {
+    dialog.info({
+      title: '提示',
+      content: '您确定要退出登录吗',
+      positiveText: '确定',
+      negativeText: '取消',
+      onPositiveClick: () => {
+        userStore.logout().then(() => {
+          message.success('成功退出登录')
+          // 移除标签页
+          localStorage.removeItem('TABS-ROUTES')
+          router.replace({
+            name: 'Login',
+            query: {
+              redirect: route.fullPath
+            }
+          })
+        })
+      },
+      onNegativeClick: () => {}
+    })
+  }
   function switchType(e) {
-    type.value = e.key
-    typeTitle.value = e.name
+    if (e.key == 3) {
+      doLogout()
+    } else {
+      type.value = e.key
+      typeTitle.value = e.name
+    }
   }
 </script>
 <style lang="less" scoped>
