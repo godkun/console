@@ -124,6 +124,92 @@ const routes: Array<RouteRecordRaw> = [
           title: 'WebRTC屏幕墙'
         },
         component: () => import('@/views/instance/detail/webrtc/index.vue')
+      },
+      // {
+      //   path: 'monitor/:id',
+      //   name: `monitor`,
+      //   meta: {
+      //     title: '监控仪表盘'
+      //   },
+      //   children: [
+      //     {
+      //       path: '',
+      //       name: `monitor-search`,
+      //       meta: {
+      //         title: '查询流记录'
+      //       },
+      //       component: () => import('@/views/instance/detail/monitor/index.vue')
+      //     },
+      //     {
+      //       path: 'detail/:stream',
+      //       name: `monitor-detail`,
+      //       meta: {
+      //         title: '记录详情',
+      //         hidden: true
+      //       },
+      //       component: () => import('@/views/instance/detail/monitor/detail.vue')
+      //     }
+      //   ]
+      // },
+      {
+        path: 'monitor/:id',
+        name: `monitor-search`,
+        meta: {
+          title: '监控记录'
+        },
+        component: () => import('@/views/instance/detail/monitor/index.vue')
+      },
+      {
+        path: 'monitor/:id/detail/:stream',
+        name: `monitor-detail`,
+        meta: {
+          title: '监控记录详情',
+          hidden: true
+        },
+        component: () => import('@/views/instance/detail/monitor/detail.vue')
+      },
+      // {
+      //   path: 'pprof/:id',
+      //   name: `pprof`,
+      //   meta: {
+      //     title: '性能分析'
+      //   },
+      //   children: [
+      //     {
+      //       path: '',
+      //       name: `pprof-index`,
+      //       meta: {
+      //         title: '总览'
+      //       },
+      //       component: () => import('@/views/instance/detail/pprof/index.vue')
+      //     },
+      //     {
+      //       path: ':path',
+      //       name: `pprof-detail`,
+      //       meta: {
+      //         title: '详情',
+      //         hidden: true
+      //       },
+      //       component: () => import('@/views/instance/detail/pprof/index.vue')
+      //     }
+      //   ]
+      // }
+      {
+        path: 'pprof/:id',
+        name: `pprof-index`,
+        meta: {
+          title: '性能分析'
+        },
+        component: () => import('@/views/instance/detail/pprof/index.vue')
+      },
+      {
+        path: 'pprof/:id/:path',
+        name: `pprof-detail`,
+        meta: {
+          title: '性能分析详情',
+          hidden: true
+        },
+        component: () => import('@/views/instance/detail/pprof/index.vue')
       }
     ]
   }

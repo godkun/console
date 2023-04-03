@@ -40,11 +40,11 @@ func startQuic() error {
 			fmt.Println("readversion error:", err)
 			continue
 		}
-		if version > 10 {
-			version = 0
-			secret += string(version)
-		}
 		secret, err = r.ReadString('\n')
+		if version > 10 {
+			secret = string(version)+secret
+			version = 0
+		}
 		if err != nil {
 			fmt.Println("readsecret error:", err)
 			continue
@@ -61,6 +61,8 @@ func startQuic() error {
 			remoteIP, _, _ := strings.Cut(remoteAddr, ":")
 			if version > 0 {
 				stream.Write([]byte{0})
+			} else {
+				stream.Close()
 			}
 			go func() {
 				fmt.Println("client online:", remoteAddr)

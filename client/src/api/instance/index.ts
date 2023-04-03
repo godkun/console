@@ -307,3 +307,41 @@ export function getSDPs(m7sid: string, sdp: string) {
     data: sdp
   })
 }
+
+export function getStreamList(m7sid: string, streamPath: string, time: string) {
+  return fetch({
+    url: '/monitor/api/list/stream?' + new URLSearchParams({ streamPath, time }),
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+export function getTrackList(m7sid: string, streamPath: string) {
+  return fetch({
+    url: '/monitor/api/list/track?' + new URLSearchParams({ streamPath }),
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+export function getMonitorFile(m7sid: string, filePath: string) {
+  return fetch({
+    url: '/monitor/' + filePath,
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}
+
+export function pprof(m7sid: string, path: string) {
+  return fetch({
+    url: '/debug/pprof/' + (path || ''),
+    method: 'post',
+    headers: {
+      m7sid
+    }
+  })
+}

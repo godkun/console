@@ -3,3 +3,4 @@ shutdown.sh
 .turbo
 console.code-workspace
 .history
+.vscode
