@@ -56,6 +56,14 @@
       }
     }
   }
+  const lineOption = {
+    showSymbol: false,
+    smooth: true,
+    type: 'line',
+    lineStyle: {
+      width: 1
+    }
+  }
   const startTime = ref<number>(0)
   const xAxis = {
     type: 'time',
@@ -157,10 +165,8 @@
         const data = YAML.parse(res)
         option.series.push({
           yAxisIndex: 0,
-          showSymbol: false,
-          smooth: true,
           name: track,
-          type: 'line',
+          ...lineOption,
           data: data.map((item) => {
             return {
               value: [item.time, item.bps >> 10]
@@ -169,9 +175,7 @@
         })
         option_fps.series.push({
           name: track,
-          showSymbol: false,
-          smooth: true,
-          type: 'line',
+          ...lineOption,
           data: data.map((item) => {
             return {
               value: [item.time, item.fps]
@@ -180,9 +184,7 @@
         })
         option_rbs.series.push({
           name: track,
-          showSymbol: false,
-          smooth: true,
-          type: 'line',
+          ...lineOption,
           data: data.map((item) => {
             return {
               value: [item.time, item.rb]
