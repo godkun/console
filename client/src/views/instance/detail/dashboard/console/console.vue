@@ -4,7 +4,7 @@
       <Interval @tick="tick" />
     </div> -->
     <!--数据卡片-->
-    <n-grid cols="1 s:2 m:3 l:4 xl:4 2xl:4" responsive="screen" :x-gap="12" :y-gap="8">
+    <n-grid cols="1 s:2 m:3 l:3 xl:4 2xl:4" responsive="screen" :x-gap="12" :y-gap="8">
       <n-grid-item>
         <NCard
           title="基本信息"
@@ -87,7 +87,7 @@
           <n-card content-style="padding: 0;" :bordered="false">
             <n-tabs type="line" size="large" :tabs-padding="20" pane-style="padding: 20px;">
               <n-tab-pane name="网络" class="pane">
-                <n-grid cols="1 s:2 m:3 l:4 xl:4 2xl:4" responsive="screen" :x-gap="12" :y-gap="8">
+                <n-grid cols="2 s:1 m:1 l:1 xl:2 2xl:2" responsive="screen" :x-gap="12" :y-gap="8">
                   <n-grid-item>
                     <n-card title="接收速率">
                       <TimelineGraph :value="tldsNetWorkRec" />
