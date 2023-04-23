@@ -85,10 +85,6 @@
   import { getStreamDetail } from '@/api/instance'
   import { TimelineDataSeries, TimelineGraphView } from 'webrtc-internals'
   import { Interval } from '@/components/interval'
-  interface TimelineData {
-    Timestamp: string
-    Value: number
-  }
   interface StreamDetail {
     Path: string
     StartTime: string
@@ -103,8 +99,6 @@
       FPS: number
       RawPart: number[]
       RawSize: number
-      BPSs: TimelineData[]
-      FPSs: TimelineData[]
       Channels: number
       SampleSize: number
       GOP?: number
@@ -156,18 +150,10 @@
           })
           g.bps.addDataSeries(g.bpsds)
           g.fps.addDataSeries(g.fpsds)
-          g.bpsds.setPoints(t.BPSs.map((x) => ({ time: +new Date(x.Timestamp), value: x.Value })))
-          g.fpsds.setPoints(t.FPSs.map((x) => ({ time: +new Date(x.Timestamp), value: x.Value })))
-          g.bps.updateEndDate()
-          g.fps.updateEndDate()
         })
       } else {
-        t.BPSs.forEach((x) => {
-          gvs[t.Name].bpsds.addPoint(+new Date(x.Timestamp), x.Value)
-        })
-        t.FPSs.forEach((x) => {
-          gvs[t.Name].fpsds.addPoint(+new Date(x.Timestamp), x.Value)
-        })
+        gvs[t.Name].bpsds.addPoint(+new Date(), t.BPS)
+        gvs[t.Name].fpsds.addPoint(+new Date(), t.FPS)
         gvs[t.Name].bps.updateEndDate()
         gvs[t.Name].fps.updateEndDate()
       }
