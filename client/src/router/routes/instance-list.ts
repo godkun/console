@@ -39,7 +39,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'room',
         name: `${routeName}_room`,
         meta: {
-          title: 'Room Demo'
+          title: '房间演示'
         },
         component: () => import('@/views/instance/detail/room/index.vue')
       }

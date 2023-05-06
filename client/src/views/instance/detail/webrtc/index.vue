@@ -96,9 +96,7 @@
       console.log('ondatachannel', evt)
       const info = videoList[dc.label]
       if (info) {
-        const track = new MediaStreamTrackGenerator({ kind: 'video' })
-        info.videoTrack = track
-        const writer = track.writable.getWriter()
+        let videoWriter: WritableStreamDefaultWriter<VideoFrame>
         const dcConn = new DataChannelConnection(dc)
         const demuxer = new FlvDemuxer(DemuxMode.PUSH, dcConn)
         demuxer.gotVideo = (chunk) => videoDecoder.decode(chunk)
@@ -117,7 +115,12 @@
           videoDecoder.initialize()
         })
         videoDecoder.on(VideoDecoderEvent.VideoFrame, (frame: VideoFrame) => {
-          writer.write(frame)
+          if (!info.videoTrack) {
+            const track = new MediaStreamTrackGenerator({ kind: 'video' })
+            info.videoTrack = track
+            videoWriter = track.writable.getWriter()
+          }
+          videoWriter.write(frame)
         })
         dcConn.connect()
       }

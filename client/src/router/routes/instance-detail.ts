@@ -210,6 +210,14 @@ const routes: Array<RouteRecordRaw> = [
           hidden: true
         },
         component: () => import('@/views/instance/detail/pprof/index.vue')
+      },
+      {
+        path: 'address',
+        name: `address`,
+        meta: {
+          title: '地址生成器'
+        },
+        component: () => import('@/views/instance/detail/address/index.vue')
       }
     ]
   }
