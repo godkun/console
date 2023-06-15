@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
+	"embed"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
@@ -34,7 +35,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/sync/errgroup"
 )
-
+//go:embed web/*
+var webfs embed.FS
 var (
 	ctxBack     = context.Background()
 	MysqlDb     *sql.DB
@@ -199,19 +201,22 @@ func main() {
 	http.HandleFunc("/api/instance/update", instanceUpdate)
 	http.HandleFunc("/api/instance/getroompass", getRoomPass)
 	http.HandleFunc("/api/uploadFile", uploadFileHandler())
-	fs := http.FileServer(http.Dir(uploadPath))
-	http.Handle("/files/", http.StripPrefix("/files", fs))
-	http.Handle("/api/files/", http.StripPrefix("/api/files", fs))
+	fs1 := http.FileServer(http.Dir(uploadPath))
+	http.Handle("/files/", http.StripPrefix("/files", fs1))
+	http.Handle("/api/files/", http.StripPrefix("/api/files", fs1))
 	http.Handle("/ws/v1", wsv1)
 	http.HandleFunc("/room/join", joinRoom)
 	http.HandleFunc("/report", report)
-	http.HandleFunc("/", relay)
+	http.HandleFunc("/relay", relay)
+
+	http.Handle("/", http.FileServer(http.FS(webfs)))
 
 	clearTimeOutInstance()
 	var g errgroup.Group
 	g.Go(startQuic)
 	g.Go(func() error {
-		return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
+		//return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
+		return http.ListenAndServe(config.ServerPort, nil)
 	})
 	// g.Go(func() error {
 	// 	return http.ListenAndServe(":10000", nil)
