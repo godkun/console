@@ -13,7 +13,7 @@ import (
 )
 
 func startQuic() error {
-	listener, err := quic.ListenAddr(":4242", generateTLSConfig(), &quic.Config{
+	listener, err := quic.ListenAddr(config.QuicPort, generateTLSConfig(), &quic.Config{
 		EnableDatagrams: true,
 	})
 	if err != nil {

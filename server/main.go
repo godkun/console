@@ -58,9 +58,10 @@ var (
 		ServerPort        string
 		Secret            string
 		HostName          string
+		QuicPort          string
 	}{"127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
-		"", 300, ":9999", "Monibuca#!4", "http://localhost/"}
+		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944"}
 	ConfigRaw     []byte
 	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 )
@@ -175,6 +176,7 @@ const maxUploadSize = 2 * 1024 * 2014 // 2 MB
 const uploadPath = "./files"
 
 func main() {
+
 	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
 	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer MysqlDb.Close()
