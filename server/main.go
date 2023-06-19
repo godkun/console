@@ -35,6 +35,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/sync/errgroup"
 )
+
 //go:embed web/*
 var webfs embed.FS
 var (
@@ -61,9 +62,11 @@ var (
 		Secret            string
 		HostName          string
 		QuicPort          string
+		SqliteDbPath      string
+		SqliteSwitch      bool
 	}{"127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
-		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944"}
+		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944", "./sqlite.db", true}
 	ConfigRaw     []byte
 	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 )
@@ -134,10 +137,19 @@ func init() {
 	var cg map[string]interface{}
 
 	if _, err = toml.Decode(string(ConfigRaw), &cg); err == nil {
-		if cfg, ok := cg["Mysql"]; ok {
+		if cfg, ok := cg["Sqlite"]; ok { //读取到Sqlite数据库配置，优先使用Sqlite作为数据库
 			b, _ := json.Marshal(cfg)
 			if err = json.Unmarshal(b, config); err != nil {
 				log.Println(err)
+			} else {
+
+			}
+		} else {
+			if cfg, ok := cg["Mysql"]; ok {
+				b, _ := json.Marshal(cfg)
+				if err = json.Unmarshal(b, config); err != nil {
+					log.Println(err)
+				}
 			}
 		}
 		if cfg, ok := cg["Mail"]; ok {

@@ -17,3 +17,5 @@ SMTPpassword = "Gcgm35TT7nZ4HrT4"
 #SMTPusername = "pg@monibuca.com"
 #SMTPpassword = "LjDAxkuV3hQBBkHY"
 SMTPshowname = "m7s"
+[Sqlite]
+SqliteDbPath = "./m7s.db"
