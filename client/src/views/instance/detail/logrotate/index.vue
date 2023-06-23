@@ -2,6 +2,7 @@
   <n-layout>
     <n-layout-content content-style="padding: 24px;">
       <BasicTable
+        title="日志文件列表"
         class="table"
         :loading="loading"
         :row-class-name="'row'"
@@ -11,9 +12,6 @@
         :actionColumn="actionColumn"
         :row-key="(row) => row.Name"
         :scroll-x="1090">
-        <template #tableTitle>
-          <n-gradient-text type="success"> 日志文件列表 </n-gradient-text>
-        </template>
         <template #toolbar>
           <n-input v-model:value="searchFull" />
           <n-button attr-type="button" @click="onLogSearch"> 全文搜索 </n-button>

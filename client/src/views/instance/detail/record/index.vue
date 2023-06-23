@@ -4,6 +4,7 @@
       <n-tabs type="line" animated>
         <n-tab-pane name="filelist" tab="录像文件列表">
           <BasicTable
+            title="录像文件列表"
             class="table"
             :row-class-name="'row'"
             :columns="columns"
@@ -12,14 +13,12 @@
             :actionColumn="actionColumn"
             :row-key="(row) => row.Name"
             :scroll-x="1090">
-            <template #tableTitle>
-              <n-gradient-text type="success"> 录像文件列表 </n-gradient-text>
-            </template>
             <template #toolbar><n-button @click="showModal = true">开始录制</n-button> </template>
           </BasicTable>
         </n-tab-pane>
         <n-tab-pane name="recording" tab="正在录制列表">
           <BasicTable
+            title="正在录制的流列表"
             class="table"
             :row-class-name="'row'"
             :columns="recordingColumns"
@@ -28,11 +27,8 @@
             :actionColumn="recordingAction"
             :row-key="(row) => row.ID"
             :scroll-x="1090">
-            <template #tableTitle>
-              <n-gradient-text type="success"> 正在录制的流列表 </n-gradient-text>
-            </template>
             <template #toolbar>
-              <Interval @tick="tick" />
+              <Interval @tick="tick" style="padding: 0 20px 0 0" />
               <n-button @click="showModal = true">开始录制</n-button>
             </template>
           </BasicTable>

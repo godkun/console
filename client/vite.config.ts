@@ -10,7 +10,7 @@ import { splitVendorChunkPlugin } from 'vite'
 import createHtmlPlugin from 'vite-plugin-html'
 import Components from 'unplugin-vue-components/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
-import Inspector from '@console/vite-plugin-vue-inspector'
+// import Inspector from '@console/vite-plugin-vue-inspector'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
@@ -43,12 +43,12 @@ export default ({ command }) => {
     base: './',
     plugins: [
       vue(),
-      Inspector({
-        enabled: false,
-        toggleButtonVisibility: 'never',
-        toggleComboKey: 'control',
-        toggleButtonPos: 'bottom-right'
-      }),
+      // Inspector({
+      //   enabled: false,
+      //   toggleButtonVisibility: 'never',
+      //   toggleComboKey: 'control',
+      //   toggleButtonPos: 'bottom-right'
+      // }),
       vueJsx(),
       createHtmlPlugin({
         minify: true,
@@ -105,7 +105,8 @@ export default ({ command }) => {
         cert: fs.readFileSync(join(__dirname, '../server/console.monibuca.com_bundle.crt')),
         key: fs.readFileSync(join(__dirname, '../server/console.monibuca.com.key'))
       },
-      host: 'console.monibuca.com',
+      // host: 'console.monibuca.com',
+      // host: 'console.monibuca.com',
       port: 4000,
       proxy: {
         '/api': serverProxy,

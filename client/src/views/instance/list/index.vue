@@ -29,7 +29,7 @@
           :rules="rules"
           ref="formRef"
           label-placement="left"
-          :label-width="80"
+          :label-width="85"
           class="py-4">
           <n-form-item label="名称" path="name">
             <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />

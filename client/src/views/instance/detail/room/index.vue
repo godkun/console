@@ -294,7 +294,8 @@
       }
     }
     ws.onerror = (e) => {
-      message.error(e.toString())
+      // message.error(e.toString())
+      message.error('进入房间失败')
     }
   }
   async function sendSubscribe() {

@@ -5,6 +5,7 @@
     </div>
     <n-card :bordered="false" class="proCard">
       <BasicTable
+        title="向远端推流列表"
         class="table"
         :row-class-name="'row'"
         :columns="columns"
@@ -13,9 +14,6 @@
         :actionColumn="actionColumn"
         :row-key="(row) => row.id"
         :scroll-x="1090">
-        <template #tableTitle>
-          <n-gradient-text type="success"> 向远端推流列表 </n-gradient-text>
-        </template>
         <template #toolbar>
           <n-button @click="showModal = true" type="primary" round>添加推流</n-button>
         </template>

@@ -1,21 +1,15 @@
 <template>
   <div>
-    <!-- <div class="top">
-      <Interval @tick="tick" />
-    </div> -->
     <n-card :bordered="false" class="proCard">
       <BasicTable
+        title="流列表"
         :columns="columns"
         :dataSource="streamData"
         :pagination="false"
         :row-key="(row) => row.id"
         :actionColumn="actionColumn"
         @update:checked-row-keys="onCheckedRow"
-        :scroll-x="1090">
-        <template #tableTitle>
-          <n-gradient-text type="success"> 流列表 </n-gradient-text>
-        </template>
-      </BasicTable>
+        :scroll-x="1090" />
     </n-card>
   </div>
 </template>

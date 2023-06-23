@@ -98,23 +98,15 @@
                       <TimelineGraph :value="tldsNetWorkSent" />
                     </n-card>
                   </n-grid-item>
-                  <!-- <n-grid-item v-for="item in NetWork" :key="item.Name">
-                    <n-card :title="item.Name">
-                      <div>Receive: {{ item.Receive }}</div>
-                      <div>Sent: {{ item.Sent }}</div>
-                      <div>ReceiveSpeed: {{ item.ReceiveSpeed }}</div>
-                      <div>SentSpeed: {{ item.SentSpeed }}</div>
-                    </n-card>
-                  </n-grid-item> -->
                 </n-grid>
                 <n-table :single-line="false">
                   <thead>
                     <tr>
-                      <td>网卡</td>
-                      <td>接收总bit</td>
-                      <td>发送总bit</td>
-                      <td>接收速率</td>
-                      <td>发送速率</td>
+                      <td style="width: 20%">网卡</td>
+                      <td style="width: 20%">接收总bit</td>
+                      <td style="width: 20%">发送总bit</td>
+                      <td style="width: 20%">接收速率</td>
+                      <td style="width: 20%">发送速率</td>
                     </tr>
                   </thead>
                   <tbody>

@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: 'm7s',
+        path: 'console',
         name: 'console-doc',
         meta: {
           title: 'console管理器文档',

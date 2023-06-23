@@ -1,7 +1,11 @@
 <template>
   <div>
-    <Check name="Debug" v-model:value="noPlugin" />
-    <div v-html="content" v-if="!noPlugin"></div>
+    <n-layout>
+      <n-layout-content content-style="padding: 24px;">
+        <Check name="Debug" v-model:value="noPlugin" />
+        <div v-html="content" v-if="!noPlugin"></div>
+      </n-layout-content>
+    </n-layout>
   </div>
 </template>
 <script setup lang="ts">

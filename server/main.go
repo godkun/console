@@ -8,7 +8,6 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
-	"embed"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
@@ -36,8 +35,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-//go:embed web/*
-var webfs embed.FS
+// var webfs embed.FS
 var (
 	ctxBack     = context.Background()
 	MysqlDb     *sql.DB
@@ -221,7 +219,7 @@ func main() {
 	http.HandleFunc("/report", report)
 	http.HandleFunc("/relay", relay)
 
-	http.Handle("/", http.FileServer(http.FS(webfs)))
+	// http.Handle("/", http.FileServer(http.FS(webfs)))
 
 	clearTimeOutInstance()
 	var g errgroup.Group

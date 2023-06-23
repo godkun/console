@@ -13,10 +13,10 @@
     "doc:build": "pnpm --filter @console/doc build",
     "doc:deploy": "./scripts/deploy-doc.mjs",
     "analysis": "NODE_ENV=production npm_config_report=true npm run build",
+    "postinstall": "cp ./patches/monaco-editor/* ./node_modules/@monaco-editor/loader/lib/es/config/",
     "lint": "eslint \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write --loglevel warn \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "format": "prettier --write --loglevel warn \"./**/*.{js,json,ts,tsx,css,less,vue,html}\"",
-    "postinstall": "patch-package",
     "clean": "pnpm rimraf node_modules pnpm-lock.yaml"
   },
   "dependencies": {
@@ -90,6 +90,7 @@
     "less": "^4.1.2",
     "less-loader": "^9.1.0",
     "lint-staged": "^13.0.3",
+    "patch-package": "^7.0.0",
     "postcss": "^8.4.6",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.5.1",

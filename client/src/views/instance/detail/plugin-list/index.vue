@@ -2,6 +2,7 @@
   <div>
     <n-card :bordered="false" class="proCard">
       <BasicTable
+        title="插件列表"
         :columns="columns"
         :dataSource="pluginData"
         :row-key="(row) => row.id"
@@ -9,11 +10,7 @@
         ref="actionRef"
         :actionColumn="actionColumn"
         @update:checked-row-keys="onCheckedRow"
-        :scroll-x="1090">
-        <template #tableTitle>
-          <n-gradient-text type="success"> 插件列表 </n-gradient-text>
-        </template>
-      </BasicTable>
+        :scroll-x="1090" />
 
       <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="modalTitle">
         <n-form
