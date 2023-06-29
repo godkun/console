@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"database/sql"
+	"embed"
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
@@ -35,16 +36,18 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// var webfs embed.FS
+//go:embed web/*
+var webfs embed.FS
 var (
 	ctxBack     = context.Background()
-	MysqlDb     *sql.DB
+	db          Database
 	MysqlDbErr  error
 	mailtxt     string
 	resetpwdtxt string
 	sessionM    *sessions.SessionManager
 	instances   = NewConcurInstances()
 	config      = &struct {
+		Env               string
 		Server            string
 		Username          string
 		Password          string
@@ -61,10 +64,9 @@ var (
 		HostName          string
 		QuicPort          string
 		SqliteDbPath      string
-		SqliteSwitch      bool
-	}{"127.0.0.1:3306", "root", "123456",
+	}{"dev", "127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
-		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944", "./sqlite.db", true}
+		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944", "./sqlite.db"}
 	ConfigRaw     []byte
 	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 )
@@ -133,6 +135,7 @@ func init() {
 	}
 
 	var cg map[string]interface{}
+	var dbDSN string
 
 	if _, err = toml.Decode(string(ConfigRaw), &cg); err == nil {
 		if cfg, ok := cg["Sqlite"]; ok { //读取到Sqlite数据库配置，优先使用Sqlite作为数据库
@@ -140,13 +143,23 @@ func init() {
 			if err = json.Unmarshal(b, config); err != nil {
 				log.Println(err)
 			} else {
-
+				//初始化sqlite数据库，创建数据库文件，执行建表语句等
+				err = initSqliteDB()
+				if err != nil {
+					util.Println("read config file error:", err)
+					return
+				}
+				db = &SqliteDB{}
+				dbDSN = config.SqliteDbPath
 			}
 		} else {
 			if cfg, ok := cg["Mysql"]; ok {
 				b, _ := json.Marshal(cfg)
 				if err = json.Unmarshal(b, config); err != nil {
 					log.Println(err)
+				} else {
+					db = &MySQLDB{}
+					dbDSN = fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s", config.Username, config.Password, config.Server, config.Database, config.Charset)
 				}
 			}
 		}
@@ -167,20 +180,10 @@ func init() {
 	}
 
 	//Golang数据连接："用户名:密码@tcp(IP:端口号)/数据库名?charset=utf8"
-	dbDSN := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s", config.Username, config.Password, config.Server, config.Database, config.Charset)
 	//打开数据库,前者是驱动名，所以要导入： _ "github.com/go-sql-driver/mysql"
-	MysqlDb, err = sql.Open("mysql", dbDSN)
+	err = db.Open(dbDSN)
 	if err != nil {
-		//如果打开数据库错误，直接panic
-		log.Println(err)
-	}
-	//设置数据库最大连接数
-	MysqlDb.SetConnMaxLifetime(10)
-	//设置上数据库最大闲置连接数
-	MysqlDb.SetMaxIdleConns(5)
-	//验证连接
-	if err := MysqlDb.Ping(); err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 	}
 }
 
@@ -191,7 +194,7 @@ func main() {
 
 	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
 	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
-	defer MysqlDb.Close()
+	defer db.Close()
 
 	fmt.Println("start server at ", config.ServerPort)
 	http.HandleFunc("/test", test)
@@ -219,8 +222,9 @@ func main() {
 	http.HandleFunc("/report", report)
 	http.HandleFunc("/relay", relay)
 
-	// http.Handle("/", http.FileServer(http.FS(webfs)))
-
+	if config.Env == "pro" {
+		http.Handle("/", http.FileServer(http.FS(webfs)))
+	}
 	clearTimeOutInstance()
 	var g errgroup.Group
 	g.Go(startQuic)
@@ -256,10 +260,10 @@ func report(w http.ResponseWriter, r *http.Request) {
 	}
 	var result sql.Result
 	if report.Version == "" {
-		result, err = MysqlDb.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,now())", report.UUID, report.Streams)
+		result, err = db.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,now())", report.UUID, report.Streams)
 	} else {
 		id, _ := strconv.Atoi(report.Instance)
-		result, err = MysqlDb.Exec("insert INTO report(uuid,machine,instance,version,os,arch,ip,createtime) values(?,?,?,?,?,now())", report.UUID, report.Machine, id, report.Version, report.OS, report.Arch, r.RemoteAddr)
+		result, err = db.Exec("insert INTO report(uuid,machine,instance,version,os,arch,ip,createtime) values(?,?,?,?,?,now())", report.UUID, report.Machine, id, report.Version, report.OS, report.Arch, r.RemoteAddr)
 
 	}
 	if err != nil {
@@ -355,12 +359,13 @@ func resetPwd(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("参数错误"))
 		return
 	}
-	pwddata := util.QueryAndParseJsonRows(MysqlDb, "select * from resetpwd where code=? ", code)
+	pwddata := db.QueryAndParseJsonRows("select * from resetpwd where code=? ", code)
 	if pwddata != nil && len(pwddata) > 0 {
 		pwddata := pwddata[0]
 		newpassword := pwddata["password"]
 		mail := pwddata["mail"]
-		tx, err := MysqlDb.Begin()
+		var tx Transaction
+		tx, err := db.Begin()
 		if err != nil {
 			log.Fatalln(err)
 			w.Write([]byte("数据库错误"))
@@ -417,7 +422,7 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrRequestParamError))
 		return
 	}
-	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail=?", mail)
+	totalcount, err := db.QueryCountSql("select count(1) from user where mail=?", mail)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -430,7 +435,7 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 	newpassword := util.RandNumStr(6)
 	code := util.MD5(config.Secret + mail.(string) + newpassword)
 
-	result, err := MysqlDb.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
+	result, err := db.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -477,14 +482,14 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrRequestParamError))
 		return
 	}
-	totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail=? and password=md5(?)", mail, oldpassword)
+	totalcount, err := db.QueryCountSql("select count(1) from user where mail=? and password=md5(?)", mail, oldpassword)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
 		return
 	}
 	if totalcount == 1 {
-		result, err := MysqlDb.Exec("update user set password=md5(?)  where mail=? ", password, mail)
+		result, err := db.Exec("update user set password=md5(?)  where mail=? ", password, mail)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -537,7 +542,7 @@ func instanceDetail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, formData["id"])
+	userData := db.QueryAndParseJsonRows("select * from instance where mail=? and id=? ", mail, formData["id"])
 	if userData != nil && len(userData) > 0 {
 		if err := json.NewEncoder(w).Encode(userData[0]); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -565,9 +570,9 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := formData["id"]
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? and id=? ", mail, id)
+	userData := db.QueryAndParseJsonRows("select * from instance where mail=? and id=? ", mail, id)
 	if userData != nil && len(userData) > 0 {
-		result, err := MysqlDb.Exec("delete from instance where id=? and mail=? ", id, mail)
+		result, err := db.Exec("delete from instance where id=? and mail=? ", id, mail)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -607,7 +612,7 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 	pagesize := int(formData["pagesize"].(float64))
 	pageno := int(formData["pageno"].(float64))
 	if pagesize == 0 { //不分页，获取所有
-		instanceList := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=?  ", mail)
+		instanceList := db.QueryAndParseJsonRows("select * from instance where mail=?  ", mail)
 		var resultDataMap = make(map[string]interface{})
 		resultDataMap["list"] = instanceList
 		resultDataMap["pagesize"] = pagesize
@@ -619,13 +624,13 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(resultData))
 		return
 	} else {
-		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where mail = ?", mail)
+		totalcount, err := db.QueryCountSql("select count(1) from instance where mail = ?", mail)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		}
-		instanceList := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where mail=? limit ?,? ", mail, pagesize*(pageno-1), pagesize)
+		instanceList := db.QueryAndParseJsonRows("select * from instance where mail=? limit ?,? ", mail, pagesize*(pageno-1), pagesize)
 		var resultDataMap = make(map[string]interface{})
 		resultDataMap["list"] = instanceList
 		resultDataMap["pagesize"] = pagesize
@@ -662,9 +667,9 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	resetSecret := formData["resetSecret"].(bool)
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
+	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where name = ? and id != ? and mail=?", name, id, mail)
+		totalcount, err := db.QueryCountSql("select count(1) from instance where name = ? and id != ? and mail=?", name, id, mail)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -676,9 +681,9 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 		var result sql.Result
 		if resetSecret {
-			result, err = MysqlDb.Exec("update instance set name=?,secret=md5(?),report=?,updatetimestamp=? where id=? and mail=? ", name, secret, enableReport, updatetimestamp, id, mail)
+			result, err = db.Exec("update instance set name=?,secret=md5(?),report=?,updatetimestamp=? where id=? and mail=? ", name, secret, enableReport, updatetimestamp, id, mail)
 		} else {
-			result, err = MysqlDb.Exec("update instance set name=?,report=?,updatetimestamp=? where id=? and mail=? ", name, enableReport, updatetimestamp, id, mail)
+			result, err = db.Exec("update instance set name=?,report=?,updatetimestamp=? where id=? and mail=? ", name, enableReport, updatetimestamp, id, mail)
 		}
 		if err != nil {
 			fmt.Println(err)
@@ -719,9 +724,9 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	name := formData["name"]
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
+	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		instanceCount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where mail = ? and name = ?", mail, name)
+		instanceCount, err := db.QueryCountSql("select count(1) from instance where mail = ? and name = ?", mail, name)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -731,7 +736,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrInstanceNameExist))
 			return
 		}
-		result, err := MysqlDb.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,now(),md5(?),?)", mail, name, secret, updatetimestamp)
+		result, err := db.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,now(),md5(?),?)", mail, name, secret, updatetimestamp)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -852,13 +857,13 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	mail := formData["mail"]
 	password := formData["password"]
-	userData := util.QueryAndParseJsonRows(MysqlDb, "select mail from user where mail=? ", mail)
+	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		userData = util.QueryAndParseJsonRows(MysqlDb, "select mail,nickname,level from user where mail=? and password=md5(?)", mail, password)
+		userData = db.QueryAndParseJsonRows("select mail,nickname,level from user where mail=? and password=md5(?)", mail, password)
 		if userData != nil && len(userData) > 0 {
 			fmt.Println("user data is %+v", userData)
 			go func() {
-				MysqlDb.Exec("update user set lastlogintime=now() where mail=?", mail)
+				db.Exec("update user set lastlogintime=now() where mail=?", mail)
 			}()
 			sessionV := sessionM.BeginSession(w, r)
 			sessionV.Set("mail", mail)
@@ -884,7 +889,7 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 	formData := getDataFromHttpRequest(w, r)
 	mail := formData["mail"]
-	datacount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail = ?", mail.(string))
+	datacount, err := db.QueryCountSql("select count(1) from user where mail = ?", mail.(string))
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -895,7 +900,7 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	datacount, err = util.QueryCountSql(MysqlDb, "select count(1) from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
+	datacount, err = db.QueryCountSql("select count(1) from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
 		"  mail=?", config.Verifycodetimeout, mail)
 	if err != nil {
 		fmt.Println(err)
@@ -915,7 +920,7 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrSendMailError))
 		return
 	}
-	result, err := MysqlDb.Exec("insert into verifycode(mail,verifycode,createtime) values(?,?,now())", mail, verifycode)
+	result, err := db.Exec("insert into verifycode(mail,verifycode,createtime) values(?,?,now())", mail, verifycode)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -946,7 +951,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 	mail := formData["mail"]
 	password := formData["password"]
 	verifycode := formData["verifycode"]
-	datacount, err := util.QueryCountSql(MysqlDb, "select count(1) from user where mail=?", mail)
+	datacount, err := db.QueryCountSql("select count(1) from user where mail=?", mail)
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -956,7 +961,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrUserHasRegister))
 		return
 	} else { //没有该邮箱，需要注册，先校验验证码，然后建立用户数据
-		ret, err := util.QueryCountSql(MysqlDb, "select count(1) from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
+		ret, err := db.QueryCountSql("select count(1) from verifycode where NOW()<=DATE_ADD(createtime,INTERVAL ? MINUTE) and "+
 			" verifycode=? and mail=?", config.Verifycodetimeout, verifycode, mail)
 		if err != nil {
 			fmt.Println(err)
@@ -968,7 +973,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrValidation))
 			return
 		}
-		tx, _ := MysqlDb.Begin()
+		tx, _ := db.Begin()
 		if err != nil {
 			log.Fatalln(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -1001,7 +1006,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func clearTransaction(tx *sql.Tx, w http.ResponseWriter) {
+func clearTransaction(tx Transaction, w http.ResponseWriter) {
 	err := tx.Rollback()
 	if err != sql.ErrTxDone && err != nil {
 		log.Fatalln(err)

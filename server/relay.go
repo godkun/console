@@ -117,7 +117,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 		// fmt.Printf("m7sid is %+v\n", id)
 		instance = instances.FindByIdAndMail(id, mail.(string))
 		if instance == nil {
-			secretData := util.QueryAndParse(MysqlDb, "select * from instance where id = ? and mail= ?", id, mail)
+			secretData := db.QueryAndParse( "select * from instance where id = ? and mail= ?", id, mail)
 			secret := secretData["secret"]
 			if len(secret) > 0 {
 				instance = instances.Get(secret)

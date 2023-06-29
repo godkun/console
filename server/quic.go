@@ -50,7 +50,7 @@ func startQuic() error {
 			continue
 		}
 		secret = secret[:len(secret)-1]
-		data := util.QueryAndParseJsonRows(MysqlDb, "select * from instance where secret = ?", secret)
+		data := db.QueryAndParseJsonRows( "select * from instance where secret = ?", secret)
 		if len(data) > 0 {
 			instance := NewInstance("", secret)
 			instance.id = data[0]["id"]
@@ -66,7 +66,7 @@ func startQuic() error {
 			}
 			go func() {
 				fmt.Println("client online:", remoteAddr)
-				MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
+				db.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
 				for {
 					data, err := r.ReadBytes(0)
 					if err != nil {
@@ -85,7 +85,7 @@ func startQuic() error {
 				}
 				if instances.Get(secret) == instance {
 					fmt.Println("client offline:", remoteAddr)
-					MysqlDb.Exec("update instance set online='0' where id=? ", instance.id)
+					db.Exec("update instance set online='0' where id=? ", instance.id)
 					instances.Delete(secret)
 				}
 			}()

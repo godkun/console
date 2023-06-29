@@ -29,7 +29,7 @@ var wsv1 = websocket.Handler(func(w *websocket.Conn) {
 		//json.Unmarshal([]byte(reply), &replyJson)
 		//secret = replyJson["secret"]
 		secret = reply
-		totalcount, err := util.QueryCountSql(MysqlDb, "select count(1) from instance where secret = ?", secret)
+		totalcount, err := db.QueryCountSql( "select count(1) from instance where secret = ?", secret)
 		if err != nil {
 			fmt.Println(err)
 			if err = websocket.Message.Send(w, util.ErrJson(util.ErrDatabase)); err != nil {
@@ -48,7 +48,7 @@ var wsv1 = websocket.Handler(func(w *websocket.Conn) {
 			}
 			connect = true
 			remoteIP, _, _ := strings.Cut(remoteAddr, ":")
-			go MysqlDb.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
+			go db.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
 			break
 		} else {
 			if err = websocket.Message.Send(w, util.ErrJson(util.ErrSecretWrong)); err != nil {
@@ -116,7 +116,7 @@ func wsClose(w *websocket.Conn, secret string) {
 	fmt.Println("nothing")
 	if len(secret) > 0 {
 		go func() {
-			MysqlDb.Exec("update instance set online='0'  where secret=? ", secret)
+			db.Exec("update instance set online='0'  where secret=? ", secret)
 		}()
 		instances.Delete(secret)
 		fmt.Println("delete ws,secret is" + secret)
