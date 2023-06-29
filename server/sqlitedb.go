@@ -32,19 +32,7 @@ func initSqliteDB() error {
 	}
 	defer db.Close()
 	// 创建表
-	sqlStmt := `
-		CREATE TABLE IF NOT EXISTS "instance" (
-		    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-		    "mail" varchar(255),
-		    "name" varchar(255),
-		    "createtime" datetime,
-		    "updatetimestamp" integer,
-		    "secret" varchar(255),
-		    "RemoteIP" varchar(255),
-		    "online" varchar(255),
-		    "report" integer DEFAULT 0
-		    );
-	`
+	sqlStmt := initSql
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
@@ -168,3 +156,51 @@ func (m *SqliteDB) QueryAndParseJsonRows(queryStr string, args ...any) []map[str
 		return nil
 	}
 }
+
+var initSql=`
+		CREATE TABLE IF NOT EXISTS "instance" (
+		    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+		    "mail" varchar(255),
+		    "name" varchar(255),
+		    "createtime" datetime,
+		    "updatetimestamp" integer,
+		    "secret" varchar(255),
+		    "RemoteIP" varchar(255),
+		    "online" varchar(255),
+		    "report" integer DEFAULT 0
+		    );
+		CREATE TABLE IF NOT EXISTS "report" (
+		    "uuid" varchar(100) NOT NULL PRIMARY KEY,
+		    "version" varchar(20),
+		    "os" varchar(50),
+		    "arch" varchar(50),
+		    "createtime" datetime,
+		    "ip" varchar(50),
+		    "machine" varchar(100),
+		    "instance" integer DEFAULT 0
+		    );
+		CREATE TABLE IF NOT EXISTS "report_streams" (
+		    "uuid" varchar(100) NOT NULL PRIMARY KEY,
+		    "stream" integer DEFAULT 0,
+		    "createtime" datetime
+		    );
+		CREATE TABLE IF NOT EXISTS "resetpwd" (
+		    "mail" varchar(255),
+		    "code" varchar(255),
+		    "password" varchar(255)
+		    );
+		CREATE TABLE IF NOT EXISTS "user" (
+		    "mail" varchar(100) NOT NULL PRIMARY KEY,
+		    "nickname" varchar(100),
+		    "password" varchar(100),
+		    "createtime" datetime,
+		    "lastlogintime" datetime,
+		    "level" integer DEFAULT 0
+		    );
+		CREATE TABLE IF NOT EXISTS "verifycode" (
+		    "mail" varchar(255) NOT NULL,
+		    "verifycode" varchar(255) NOT NULL,
+		    "createtime" datetime DEFAULT NULL
+		    );
+		INSERT INTO "main"."user"("mail", "nickname", "password", "createtime", "lastlogintime", "level") VALUES ('admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, 0);
+`

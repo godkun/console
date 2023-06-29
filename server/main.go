@@ -260,10 +260,10 @@ func report(w http.ResponseWriter, r *http.Request) {
 	}
 	var result sql.Result
 	if report.Version == "" {
-		result, err = db.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,now())", report.UUID, report.Streams)
+		result, err = db.Exec("insert INTO report_streams(uuid,stream,createtime) values(?,?,?)", report.UUID, report.Streams, time.Now().Format("2006-01-02 15:04:05"))
 	} else {
 		id, _ := strconv.Atoi(report.Instance)
-		result, err = db.Exec("insert INTO report(uuid,machine,instance,version,os,arch,ip,createtime) values(?,?,?,?,?,now())", report.UUID, report.Machine, id, report.Version, report.OS, report.Arch, r.RemoteAddr)
+		result, err = db.Exec("insert INTO report(uuid,machine,instance,version,os,arch,ip,createtime) values(?,?,?,?,?,?)", report.UUID, report.Machine, id, report.Version, report.OS, report.Arch, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
 
 	}
 	if err != nil {
@@ -435,7 +435,7 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 	newpassword := util.RandNumStr(6)
 	code := util.MD5(config.Secret + mail.(string) + newpassword)
 
-	result, err := db.Exec("insert into resetpwd (mail,code,password) values(?,?,md5(?))", mail, code, newpassword)
+	result, err := db.Exec("insert into resetpwd (mail,code,password) values(?,?,?)", mail, code, util.MD5(newpassword))
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -477,19 +477,21 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	password := formData["password"]
+	passwordStr, _ := password.(string)
 	oldpassword := formData["oldpassword"]
+	oldpasswordStr, _ := oldpassword.(string)
 	if oldpassword == nil || len(oldpassword.(string)) == 0 || password == nil || len(password.(string)) == 0 {
 		w.Write(util.ErrJson(util.ErrRequestParamError))
 		return
 	}
-	totalcount, err := db.QueryCountSql("select count(1) from user where mail=? and password=md5(?)", mail, oldpassword)
+	totalcount, err := db.QueryCountSql("select count(1) from user where mail=? and password=?", mail, util.MD5(oldpasswordStr))
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
 		return
 	}
 	if totalcount == 1 {
-		result, err := db.Exec("update user set password=md5(?)  where mail=? ", password, mail)
+		result, err := db.Exec("update user set password=?  where mail=? ", passwordStr, mail)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -681,7 +683,7 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 		}
 		var result sql.Result
 		if resetSecret {
-			result, err = db.Exec("update instance set name=?,secret=md5(?),report=?,updatetimestamp=? where id=? and mail=? ", name, secret, enableReport, updatetimestamp, id, mail)
+			result, err = db.Exec("update instance set name=?,secret=?,report=?,updatetimestamp=? where id=? and mail=? ", name, util.MD5(secret), enableReport, updatetimestamp, id, mail)
 		} else {
 			result, err = db.Exec("update instance set name=?,report=?,updatetimestamp=? where id=? and mail=? ", name, enableReport, updatetimestamp, id, mail)
 		}
@@ -736,7 +738,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrInstanceNameExist))
 			return
 		}
-		result, err := db.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,now(),md5(?),?)", mail, name, secret, updatetimestamp)
+		result, err := db.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,?,?,?)", mail, name, time.Now().Format("2006-01-02 15:04:05"), util.MD5(secret), updatetimestamp)
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
@@ -857,13 +859,15 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	mail := formData["mail"]
 	password := formData["password"]
+	passwordStr, _ := password.(string)
 	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
-		userData = db.QueryAndParseJsonRows("select mail,nickname,level from user where mail=? and password=md5(?)", mail, password)
+
+		userData = db.QueryAndParseJsonRows("select mail,nickname,level from user where mail=? and password=?", mail, util.MD5(passwordStr))
 		if userData != nil && len(userData) > 0 {
 			fmt.Println("user data is %+v", userData)
 			go func() {
-				db.Exec("update user set lastlogintime=now() where mail=?", mail)
+				db.Exec("update user set lastlogintime=? where mail=?", time.Now().Format("2006-01-02 15:04:05"), mail)
 			}()
 			sessionV := sessionM.BeginSession(w, r)
 			sessionV.Set("mail", mail)
@@ -920,7 +924,7 @@ func getVerifyCode(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrSendMailError))
 		return
 	}
-	result, err := db.Exec("insert into verifycode(mail,verifycode,createtime) values(?,?,now())", mail, verifycode)
+	result, err := db.Exec("insert into verifycode(mail,verifycode,createtime) values(?,?,?)", mail, verifycode, time.Now().Format("2006-01-02 15:04:05"))
 	if err != nil {
 		fmt.Println(err)
 		w.Write(util.ErrJson(util.ErrDatabase))
@@ -950,6 +954,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 	}
 	mail := formData["mail"]
 	password := formData["password"]
+	passwordStr, _ := password.(string)
 	verifycode := formData["verifycode"]
 	datacount, err := db.QueryCountSql("select count(1) from user where mail=?", mail)
 	if err != nil {
@@ -980,7 +985,7 @@ func userRegister(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer clearTransaction(tx, w)
-		_, err = tx.Exec("insert INTO user(mail,password,createtime) values(?,md5(?),now())", mail, password)
+		_, err = tx.Exec("insert INTO user(mail,password,createtime) values(?,?,?)", mail, util.MD5(passwordStr), time.Now().Format("2006-01-02 15:04:05"))
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
