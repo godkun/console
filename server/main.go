@@ -14,6 +14,8 @@ import (
 	"encoding/pem"
 	"flag"
 	"fmt"
+	"github.com/Monibuca/console/server/sessions"
+	"github.com/Monibuca/console/server/util"
 	"io/ioutil"
 	"log"
 	"math/big"
@@ -29,8 +31,6 @@ import (
 
 	"compress/zlib"
 
-	"gitee.com/console/server/sessions"
-	"gitee.com/console/server/util"
 	"github.com/BurntSushi/toml"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/sync/errgroup"

@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/Monibuca/console/server/util"
 	"io/ioutil"
 	"log"
 	"strings"
 	"time"
 
-	"gitee.com/console/server/util"
 	"golang.org/x/net/websocket"
 )
 

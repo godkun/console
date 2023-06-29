@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/Monibuca/console/server/util"
 	"strings"
 	"time"
 
-	"gitee.com/console/server/util"
 	"github.com/quic-go/quic-go"
 	"gopkg.in/yaml.v3"
 )

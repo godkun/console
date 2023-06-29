@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/Monibuca/console/server/util"
 	"io"
 	"net/http"
 	"time"
 
-	"gitee.com/console/server/util"
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 )

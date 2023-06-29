@@ -1,4 +1,4 @@
-module gitee.com/console/server
+module github.com/Monibuca/console/server
 
 go 1.18
 
