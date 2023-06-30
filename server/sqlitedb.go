@@ -13,6 +13,7 @@ type SqliteDB struct {
 }
 
 func initSqliteDB() error {
+	var sqlStmt string
 	dbFile := config.SqliteDbPath
 	_, err := os.Stat(dbFile)
 	if os.IsNotExist(err) {
@@ -22,6 +23,7 @@ func initSqliteDB() error {
 			log.Fatal(err)
 			return err
 		}
+		sqlStmt = initSql
 		file.Close()
 		log.Println("Database file created")
 	}
@@ -32,7 +34,6 @@ func initSqliteDB() error {
 	}
 	defer db.Close()
 	// 创建表
-	sqlStmt := initSql
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
@@ -106,7 +107,7 @@ func (m *SqliteDB) Begin() (Transaction, error) {
 //}
 
 func (m *SqliteDB) Exec(queryStr string, args ...any) (sql.Result, error) {
-	result, err := m.db.Exec(queryStr, args)
+	result, err := m.db.Exec(queryStr, args...)
 	return result, err
 }
 
