@@ -39,6 +39,8 @@ import (
 //go:embed web/*
 var webfs embed.FS
 var (
+	startTime   time.Time
+	nothasStartTime = true
 	ctxBack     = context.Background()
 	db          Database
 	MysqlDbErr  error
@@ -221,6 +223,7 @@ func main() {
 	http.HandleFunc("/room/join", joinRoom)
 	http.HandleFunc("/report", report)
 	http.HandleFunc("/relay", relay)
+	http.HandleFunc("/isTimeout", isTimeout)
 
 	if config.Env == "pro" {
 		http.Handle("/", http.FileServer(http.FS(webfs)))
@@ -236,6 +239,19 @@ func main() {
 	// 	return http.ListenAndServe(":10000", nil)
 	// })
 	log.Fatal(g.Wait())
+}
+/*
+判断体验时间是否到期
+ */
+func isTimeout(w http.ResponseWriter, r *http.Request) {
+	elapsed := time.Since(startTime)
+
+	// 检查是否超过30分钟
+	if elapsed.Minutes() > 30 {
+		w.Write(util.ErrJson(util.ErrTrialPeriodExpired))
+		panic("体验版时间到")
+		return
+	}
 }
 
 type Report struct {
@@ -736,6 +752,10 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 		}
 		if instanceCount > 0 {
 			w.Write(util.ErrJson(util.ErrInstanceNameExist))
+			return
+		}
+		if instanceCount > 2{
+			w.Write(util.ErrJson(util.ErrTrialInstanceCountMax))
 			return
 		}
 		result, err := db.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,?,?,?)", mail, name, time.Now().Format("2006-01-02 15:04:05"), util.MD5(secret), updatetimestamp)

@@ -43,6 +43,8 @@ var (
 	ErrOldPasswordWrong      = &Errno{Code: 20308, Msg: "旧密码错误"}
 	ErrSecretWrong      = &Errno{Code: 20309, Msg: "密钥错误"}
 	ErrInstanceNotConnect      = &Errno{Code: 20310, Msg: "实例未与服务器连接"}
+	ErrTrialPeriodExpired = &Errno{Code: 20311, Msg: "体验版时间到"}
+	ErrTrialInstanceCountMax = &Errno{Code: 20312, Msg: "体验版实例数超限"}
 )
 
 /**

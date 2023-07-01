@@ -13,6 +13,10 @@ import (
 )
 
 func startQuic() error {
+	if nothasStartTime {
+		startTime = time.Now()
+		nothasStartTime = false
+	}
 	listener, err := quic.ListenAddr(config.QuicPort, generateTLSConfig(), &quic.Config{
 		EnableDatagrams: true,
 	})
@@ -42,7 +46,7 @@ func startQuic() error {
 		}
 		secret, err = r.ReadString('\n')
 		if version > 10 {
-			secret = string(version)+secret
+			secret = string(version) + secret
 			version = 0
 		}
 		if err != nil {
@@ -50,7 +54,7 @@ func startQuic() error {
 			continue
 		}
 		secret = secret[:len(secret)-1]
-		data := db.QueryAndParseJsonRows( "select * from instance where secret = ?", secret)
+		data := db.QueryAndParseJsonRows("select * from instance where secret = ?", secret)
 		if len(data) > 0 {
 			instance := NewInstance("", secret)
 			instance.id = data[0]["id"]
