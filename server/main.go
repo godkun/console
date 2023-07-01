@@ -39,16 +39,16 @@ import (
 //go:embed web/*
 var webfs embed.FS
 var (
-	startTime   time.Time
+	startTime       time.Time
 	nothasStartTime = true
-	ctxBack     = context.Background()
-	db          Database
-	MysqlDbErr  error
-	mailtxt     string
-	resetpwdtxt string
-	sessionM    *sessions.SessionManager
-	instances   = NewConcurInstances()
-	config      = &struct {
+	ctxBack         = context.Background()
+	db              Database
+	MysqlDbErr      error
+	mailtxt         string
+	resetpwdtxt     string
+	sessionM        *sessions.SessionManager
+	instances       = NewConcurInstances()
+	config          = &struct {
 		Env               string
 		Server            string
 		Username          string
@@ -240,9 +240,10 @@ func main() {
 	// })
 	log.Fatal(g.Wait())
 }
+
 /*
 判断体验时间是否到期
- */
+*/
 func isTimeout(w http.ResponseWriter, r *http.Request) {
 	elapsed := time.Since(startTime)
 
@@ -250,6 +251,9 @@ func isTimeout(w http.ResponseWriter, r *http.Request) {
 	if elapsed.Minutes() > 30 {
 		w.Write(util.ErrJson(util.ErrTrialPeriodExpired))
 		panic("体验版时间到")
+		return
+	}else {
+		w.Write(util.ErrJson(util.OK()))
 		return
 	}
 }
@@ -754,7 +758,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrInstanceNameExist))
 			return
 		}
-		if instanceCount > 2{
+		if instanceCount > 2 {
 			w.Write(util.ErrJson(util.ErrTrialInstanceCountMax))
 			return
 		}
