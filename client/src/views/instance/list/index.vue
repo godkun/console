@@ -34,12 +34,12 @@
           <n-form-item label="名称" path="name">
             <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
           </n-form-item>
-          <n-form-item label="重置 secret" path="resetSecret">
+          <!-- <n-form-item label="重置 secret" path="resetSecret">
             <n-checkbox v-model:checked="formParams.resetSecret" />
           </n-form-item>
           <n-form-item label="监控" path="enableReport">
             <n-switch v-model:value="formParams.enableReport" :disabled="user.level == 0" />
-          </n-form-item>
+          </n-form-item> -->
         </n-form>
 
         <template #action>
@@ -63,7 +63,7 @@
   import { PlusOutlined } from '@vicons/antd'
   import { addInstance, updateInstance, delInstance } from '@/api/instance'
   import { useInstanceList } from '@/hooks'
-  import { useUserStore } from '@/store'
+  // import { useUserStore } from '@/store'
 
   const rules = {
     name: {
@@ -78,14 +78,14 @@
   const message = useMessage()
   const actionRef = ref()
   const router = useRouter()
-  const user = useUserStore()
+  // const user = useUserStore()
   const showModal = ref(false)
   const formBtnLoading = ref(false)
   const formParams = reactive({
-    name: '',
-    url: '',
-    enableReport: false,
-    resetSecret: false
+    name: ''
+    // url: ''
+    // enableReport: false,
+    // resetSecret: false
   })
   const modalTitle = ref('')
 
@@ -164,7 +164,7 @@
 
   function addTable() {
     formParams.name = ''
-    formParams.url = ''
+    // formParams.url = ''
     modalTitle.value = '新建实例'
     showModal.value = true
   }
@@ -192,6 +192,7 @@
           const name = formParams.name
           addInstance({ name }).then(() => {
             message.success('新建成功')
+            showModal.value = false
           })
         } else if (modalTitle.value == '编辑实例') {
           const id = instance.value.id
@@ -209,8 +210,8 @@
 
   function handleEdit(record: Recordable) {
     formParams.name = record.name
-    formParams.url = record.url
-    formParams.enableReport = record.report == 1
+    // formParams.url = record.url
+    // formParams.enableReport = record.report == 1
     modalTitle.value = '编辑实例'
     showModal.value = true
     instance.value.id = record.id
