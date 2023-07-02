@@ -13,33 +13,40 @@
         <n-form-item label="StreamPath" path="streamPath">
           <n-input placeholder="请输入StreamPath" v-model:value="formParams.streamPath" />
         </n-form-item>
+        <n-form-item label="配置key" path="key">
+          <n-input placeholder="请输入配置key" v-model:value="formParams.key" />
+        </n-form-item>
+        <n-form-item label="过期时间" path="expire">
+          <n-date-picker v-model:value="formParams.expire" type="datetime" />
+        </n-form-item>
       </n-form>
       <n-button @click="genAddr" type="primary">生成推拉流地址</n-button>
       <n-divider />
-      <n-descriptions label-placement="top" title="生成结果">
-        <n-descriptions-item label="推流地址" content-style="padding-right: 20px;">
-          <n-table v-if="pushAddrs.length">
-            <tr v-for="addr in pushAddrs">
-              <td>
-                <n-tag>{{ addr.name }}</n-tag>
-              </td>
-              <td>{{ addr.url }}</td>
-              <td><n-button @click="copy(addr.url)">复制</n-button></td>
-            </tr>
-          </n-table>
-        </n-descriptions-item>
-        <n-descriptions-item label="拉流地址" class="desc">
-          <n-table v-if="pullAddrs.length">
-            <tr v-for="addr in pullAddrs">
-              <td>
-                <n-tag>{{ addr.name }}</n-tag>
-              </td>
-              <td>{{ addr.url }}</td>
-              <td><n-button @click="copy(addr.url)">复制</n-button></td>
-            </tr>
-          </n-table>
-        </n-descriptions-item>
-      </n-descriptions>
+      <n-list>
+        <template #header> 推流地址 </template>
+        <n-list-item v-for="addr in pushAddrs">
+          <template #prefix>
+            <n-button class="btn">{{ addr.name }}</n-button>
+          </template>
+          <template #suffix>
+            <n-button @click="copy(addr.url)">复制</n-button>
+          </template>
+          <n-input :value="addr.url" />
+        </n-list-item>
+      </n-list>
+
+      <n-list>
+        <template #header> 拉流地址 </template>
+        <n-list-item v-for="addr in pullAddrs">
+          <template #prefix>
+            <n-button class="btn">{{ addr.name }}</n-button>
+          </template>
+          <template #suffix>
+            <n-button @click="copy(addr.url)">复制</n-button>
+          </template>
+          <n-input :value="addr.url" />
+        </n-list-item>
+      </n-list>
     </n-layout-content>
   </n-layout>
 </template>
@@ -49,12 +56,19 @@
   import { useRoute } from 'vue-router'
   import { FormItemRule, useMessage } from 'naive-ui'
   import { getInstancePlugin } from '@/api/instance'
-  const pushAddrs = ref<Object[]>([])
-  const pullAddrs = ref<Object[]>([])
+  import CryptoJS from 'crypto-js'
+  interface IItem {
+    url: string
+    name: string
+  }
+  const pushAddrs = ref<Array<IItem>>([])
+  const pullAddrs = ref<Array<IItem>>([])
   const msg = useMessage()
+  const formRef: any = ref(null)
   const formParams = reactive({
     hostname: 'localhost',
     streamPath: 'live/test',
+    key: '',
     expire: new Date()
   })
   const rules = {
@@ -98,6 +112,11 @@
         }
       }
     }
+    // expire: {
+    //   required: true,
+    //   message: '请设置过期时间',
+    //   trigger: ['blur', 'change']
+    // }
   }
   const { id } = useRoute().params as { id: string }
   const pluginMap = {}
@@ -107,59 +126,61 @@
     }
   })
   async function genAddr() {
-    console.log('formParams', pluginMap)
-    const { hostname, streamPath } = formParams
+    await formRef.value.validate()
+    const { hostname, streamPath, key } = formParams
+    const expire = new Date(formParams.expire).getTime().toString(16)
+    const secret = CryptoJS.MD5(key + streamPath + expire).toString()
+    const pushAddrs: Array<IItem> = []
+    const pullAddrs: Array<IItem> = []
     if (pluginMap['RTMP']) {
-      pushAddrs.value.push({
+      pushAddrs.push({
         name: 'RTMP',
         url: `rtmp://${hostname}/${streamPath}`
       })
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'RTMP',
         url: `rtmp://${hostname}/${streamPath}`
       })
     }
     if (pluginMap['RTSP']) {
-      pushAddrs.value.push({
+      pushAddrs.push({
         name: 'RTSP',
         url: `rtsp://${hostname}/${streamPath}`
       })
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'RTMP',
         url: `rtsp://${hostname}/${streamPath}`
       })
     }
 
     if (pluginMap['WebRTC']) {
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'webrtc',
         url: `webrtc://${hostname}/${streamPath}`
       })
     }
     if (pluginMap['Fmp4']) {
       const http = pluginMap['Fmp4'].RawConfig.http
-      console.log('🚀 ~ file: index.vue:136 ~ genAddr ~ http:', http)
       const a = http.listenaddr
       const b = http.listenaddrtls
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'fmp4(http)',
         url: `http://${hostname}${a}/${streamPath}.mp4`
       })
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'fmp4(https)',
         url: `https://${hostname}${b}/${streamPath}.mp4`
       })
     }
     if (pluginMap['HLS']) {
       const http = pluginMap['HLS'].RawConfig.http
-      console.log('🚀 ~ file: index.vue:136 ~ genAddr ~ http:', http)
       const a = http.listenaddr
       const b = http.listenaddrtls
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'hls(http)',
         url: `http://${hostname}${a}/${streamPath}.m3u8`
       })
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'hls(https)',
         url: `https://${hostname}${b}/${streamPath}.m3u8`
       })
@@ -167,7 +188,7 @@
     if (pluginMap['HDL']) {
       const http = pluginMap['HDL'].RawConfig.http
       const a = http.listenaddr
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'http-flv',
         url: `http://${hostname}${a}/${streamPath}.flv`
       })
@@ -175,17 +196,26 @@
     if (pluginMap['Jessica']) {
       const http = pluginMap['Jessica'].RawConfig.http
       const a = http.listenaddr
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'ws-flv',
         url: `ws://${hostname}${a}/${streamPath}.flv`
       })
-      pullAddrs.value.push({
+      pullAddrs.push({
         name: 'ws-raw',
         url: `ws://${hostname}${a}/${streamPath}`
       })
     }
-    // pushAddrs.value = pushAddr
-    // pullAddrs.value = pullAddr
+    pullAddrs.forEach((item) => {
+      item.url = `${item.url}?secret=${secret}&expire=${expire}`
+    })
+    pushAddrs.forEach((item) => {
+      item.url = `${item.url}?secret=${secret}&expire=${expire}`
+    })
+    setAddress(pullAddrs, pushAddrs)
+  }
+  function setAddress(pull, push) {
+    pullAddrs.value = pull
+    pushAddrs.value = push
   }
   function copy(text) {
     navigator.clipboard.writeText(text).then(
@@ -199,9 +229,8 @@
   }
 </script>
 
-<style>
-  .desc {
-    display: none;
-    background: yellow;
+<style lang="less" scoped>
+  .btn {
+    width: 100px;
   }
 </style>
