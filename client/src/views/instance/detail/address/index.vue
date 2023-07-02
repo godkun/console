@@ -148,7 +148,7 @@
         url: `rtsp://${hostname}/${streamPath}`
       })
       pullAddrs.push({
-        name: 'RTMP',
+        name: 'RTSP',
         url: `rtsp://${hostname}/${streamPath}`
       })
     }
@@ -156,7 +156,7 @@
     if (pluginMap['WebRTC']) {
       pullAddrs.push({
         name: 'webrtc',
-        url: `webrtc://${hostname}/${streamPath}`
+        url: `webrtc://${hostname}/webrtc/play/${streamPath}`
       })
     }
     if (pluginMap['Fmp4']) {
@@ -165,11 +165,11 @@
       const b = http.listenaddrtls
       pullAddrs.push({
         name: 'fmp4(http)',
-        url: `http://${hostname}${a}/${streamPath}.mp4`
+        url: `http://${hostname}${a}/fmp4/${streamPath}.mp4`
       })
       pullAddrs.push({
         name: 'fmp4(https)',
-        url: `https://${hostname}${b}/${streamPath}.mp4`
+        url: `https://${hostname}${b}/fmp4/${streamPath}.mp4`
       })
     }
     if (pluginMap['HLS']) {
@@ -178,11 +178,11 @@
       const b = http.listenaddrtls
       pullAddrs.push({
         name: 'hls(http)',
-        url: `http://${hostname}${a}/${streamPath}.m3u8`
+        url: `http://${hostname}${a}/hls/${streamPath}.m3u8`
       })
       pullAddrs.push({
         name: 'hls(https)',
-        url: `https://${hostname}${b}/${streamPath}.m3u8`
+        url: `https://${hostname}${b}/hls/${streamPath}.m3u8`
       })
     }
     if (pluginMap['HDL']) {
@@ -190,7 +190,7 @@
       const a = http.listenaddr
       pullAddrs.push({
         name: 'http-flv',
-        url: `http://${hostname}${a}/${streamPath}.flv`
+        url: `http://${hostname}${a}/hdl/${streamPath}.flv`
       })
     }
     if (pluginMap['Jessica']) {
@@ -198,11 +198,11 @@
       const a = http.listenaddr
       pullAddrs.push({
         name: 'ws-flv',
-        url: `ws://${hostname}${a}/${streamPath}.flv`
+        url: `ws://${hostname}${a}/jessica/${streamPath}.flv`
       })
       pullAddrs.push({
         name: 'ws-raw',
-        url: `ws://${hostname}${a}/${streamPath}`
+        url: `ws://${hostname}${a}/jessica/${streamPath}`
       })
     }
     pullAddrs.forEach((item) => {
