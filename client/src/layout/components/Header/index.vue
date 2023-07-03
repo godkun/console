@@ -67,6 +67,13 @@
       </n-breadcrumb>
     </div>
     <div class="layout-header-right">
+      <div class="c-wrap" v-if="isEnd">体验版时间已用尽，请联系官方人员</div>
+      <div v-else class="c-wrap">
+        体验版倒计时：
+        <div :class="[isHigh ? 'count-down' : '']">
+          <n-countdown :duration="duration" :on-finish="setTip" :active="active" />
+        </div>
+      </div>
       <div
         class="layout-header-trigger layout-header-trigger-min"
         v-for="item in iconList"
@@ -136,6 +143,7 @@
   import ProjectSetting from './ProjectSetting.vue'
   import { AsideMenu } from '@/layout/components/Menu'
   import { useProjectSetting } from '@/hooks'
+  import { isTimeout } from '@/api/system/user'
 
   export default defineComponent({
     name: 'PageHeader',
@@ -156,6 +164,23 @@
         useProjectSetting()
 
       const drawerSetting = ref()
+
+      const duration = ref(0)
+      const active = ref(false)
+      const isHigh = ref(false)
+      const isEnd = ref(false)
+
+      isTimeout()
+        .then((res) => {
+          active.value = true
+
+          duration.value = Number(res.data.remainseconds) * 1000
+          if (duration.value < 5 * 60 * 1000) isHigh.value = true
+          else isHigh.value = false
+        })
+        .catch(() => {
+          isEnd.value = true
+        })
 
       const state = reactive({
         username: userStore.username || userStore.mail,
@@ -188,6 +213,11 @@
       const getMenuLocation = computed(() => {
         return 'header'
       })
+
+      const setTip = () => {
+        console.log(888888)
+        isEnd.value = true
+      }
 
       const router = useRouter()
       const route = useRoute()
@@ -286,6 +316,11 @@
       }
 
       return {
+        isEnd,
+        isHigh,
+        setTip,
+        active,
+        duration,
         ...toRefs(state),
         iconList,
         toggleFullScreen,
@@ -373,6 +408,17 @@
 
       > * {
         cursor: pointer;
+      }
+      .count-down {
+        color: red;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .c-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
       }
     }
 
