@@ -39,7 +39,7 @@ import (
 //go:embed web/*
 var webfs embed.FS
 var (
-	startTime       time.Time
+	expirationTime  time.Time
 	nothasStartTime = true
 	ctxBack         = context.Background()
 	db              Database
@@ -49,6 +49,7 @@ var (
 	sessionM        *sessions.SessionManager
 	instances       = NewConcurInstances()
 	config          = &struct {
+		QuitMinutes       int
 		Env               string
 		Server            string
 		Username          string
@@ -66,7 +67,7 @@ var (
 		HostName          string
 		QuicPort          string
 		SqliteDbPath      string
-	}{"dev", "127.0.0.1:3306", "root", "123456",
+	}{30, "dev", "127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
 		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944", "./sqlite.db"}
 	ConfigRaw     []byte
@@ -194,6 +195,23 @@ const uploadPath = "./files"
 
 func main() {
 
+	Start()
+
+	//go func() {
+	//	log.Println("程序开始运行")
+	//
+	//	// 设置退出时间为30分钟后
+	//	expirationTime = time.Now().Add(time.Duration(config.QuitMinutes) * time.Minute)
+	//
+	//	// 持续检查当前时间是否超过退出时间
+	//	for time.Now().Before(expirationTime) {
+	//		time.Sleep(5 * time.Second) // 每分钟检查一次
+	//	}
+	//
+	//	log.Println("程序运行超过1分钟，退出")
+	//	os.Exit(0)
+	//}()
+
 	//util.SendMailUsingTLS(config.SMTPserver, config.SMTPport, config.SMTPshowname, "pg830616@163.com",
 	//	"hello", config.SMTPpassword, config.SMTPusername, "注册验证码")
 	defer db.Close()
@@ -223,7 +241,7 @@ func main() {
 	http.HandleFunc("/room/join", joinRoom)
 	http.HandleFunc("/report", report)
 	http.HandleFunc("/relay", relay)
-	http.HandleFunc("/isTimeout", isTimeout)
+	http.HandleFunc("/api/isTimeout", isTimeout)
 
 	if config.Env == "pro" {
 		http.Handle("/", http.FileServer(http.FS(webfs)))
@@ -245,15 +263,36 @@ func main() {
 判断体验时间是否到期
 */
 func isTimeout(w http.ResponseWriter, r *http.Request) {
-	elapsed := time.Since(startTime)
-
-	// 检查是否超过30分钟
-	if elapsed.Minutes() > 30 {
-		w.Write(util.ErrJson(util.ErrTrialPeriodExpired))
-		panic("体验版时间到")
+	sessionV := sessionM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
-	}else {
-		w.Write(util.ErrJson(util.OK()))
+	}
+	//nothasStartTime = true
+	//if nothasStartTime {
+	//	nothasStartTime = false
+	//	var resultDataMap = make(map[string]interface{})
+	//	resultDataMap["remainseconds"] = config.QuitMinutes * 60
+	//	resultDataMapByte, _ := json.Marshal(resultDataMap)
+	//	resultData := util.OK()
+	//	json.Unmarshal(resultDataMapByte, &resultData.Data)
+	//	w.Write(util.ErrJson(resultData))
+	//	return
+	//}
+	log.Println("体验版到期时间为" + expirationTime.String())
+	// 检查是否超过30分钟
+	if expirationTime.Sub(time.Now()) <= 0 {
+		w.Write(util.ErrJson(util.ErrTrialPeriodExpired))
+		os.Exit(0)
+		return
+	} else {
+		var resultDataMap = make(map[string]interface{})
+		resultDataMap["remainseconds"] = int(expirationTime.Sub(time.Now()).Seconds())
+		resultDataMapByte, _ := json.Marshal(resultDataMap)
+		resultData := util.OK()
+		json.Unmarshal(resultDataMapByte, &resultData.Data)
+		w.Write(util.ErrJson(resultData))
 		return
 	}
 }
@@ -633,8 +672,10 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 	}
 	pagesize := int(formData["pagesize"].(float64))
 	pageno := int(formData["pageno"].(float64))
+	var instanceList []map[string]string
 	if pagesize == 0 { //不分页，获取所有
-		instanceList := db.QueryAndParseJsonRows("select * from instance where mail=?  ", mail)
+		instanceList = db.QueryAndParseJsonRows(InstanceListSql(mail.(string)))
+
 		var resultDataMap = make(map[string]interface{})
 		resultDataMap["list"] = instanceList
 		resultDataMap["pagesize"] = pagesize
@@ -646,13 +687,14 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(resultData))
 		return
 	} else {
-		totalcount, err := db.QueryCountSql("select count(1) from instance where mail = ?", mail)
+		totalcount, err := db.QueryCountSql(InstanceListCountSql(mail.(string)))
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		}
-		instanceList := db.QueryAndParseJsonRows("select * from instance where mail=? limit ?,? ", mail, pagesize*(pageno-1), pagesize)
+		//instanceList := db.QueryAndParseJsonRows("select * from instance where mail=? limit ?,? ", mail, pagesize*(pageno-1), pagesize)
+		instanceList := db.QueryAndParseJsonRows(InstanceListPage(mail.(string), pagesize, pageno))
 		var resultDataMap = make(map[string]interface{})
 		resultDataMap["list"] = instanceList
 		resultDataMap["pagesize"] = pagesize
@@ -748,6 +790,11 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
 	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
+		var instanceCount int
+		if !InstanceAddCount(mail.(string), w){
+			return
+		}
+
 		instanceCount, err := db.QueryCountSql("select count(1) from instance where mail = ? and name = ?", mail, name)
 		if err != nil {
 			fmt.Println(err)
@@ -758,10 +805,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 			w.Write(util.ErrJson(util.ErrInstanceNameExist))
 			return
 		}
-		if instanceCount > 2 {
-			w.Write(util.ErrJson(util.ErrTrialInstanceCountMax))
-			return
-		}
+
 		result, err := db.Exec("insert into instance (mail,name,createtime,secret,updatetimestamp) values(?,?,?,?,?)", mail, name, time.Now().Format("2006-01-02 15:04:05"), util.MD5(secret), updatetimestamp)
 		if err != nil {
 			fmt.Println(err)

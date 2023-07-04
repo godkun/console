@@ -13,10 +13,7 @@ import (
 )
 
 func startQuic() error {
-	if nothasStartTime {
-		startTime = time.Now()
-		nothasStartTime = false
-	}
+
 	listener, err := quic.ListenAddr(config.QuicPort, generateTLSConfig(), &quic.Config{
 		EnableDatagrams: true,
 	})
@@ -69,6 +66,7 @@ func startQuic() error {
 				stream.Close()
 			}
 			go func() {
+				Trail()
 				fmt.Println("client online:", remoteAddr)
 				db.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
 				for {
