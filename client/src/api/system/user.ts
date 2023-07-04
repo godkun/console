@@ -64,3 +64,12 @@ export function resetPassword(data) {
     data
   })
 }
+
+/**
+ * @description: 重置密码
+ */
+export function isTimeout() {
+  return fetch({
+    url: '/api/isTimeout'
+  })
+}

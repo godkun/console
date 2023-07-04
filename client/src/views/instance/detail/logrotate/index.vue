@@ -55,11 +55,11 @@
     {
       title: () =>
         h('div', [
-          '名称',
+          '名称 ',
           h(NInput, {
             placeholder: '按名称过滤',
+            size: 'small',
             onUpdateValue(s) {
-              console.log(s)
               searchKey.value = s
             }
           })
@@ -77,7 +77,7 @@
   ]
 
   getLogFiles(id).then((data) => {
-    _dataSource.value = data
+    _dataSource.value = data || []
     loading.value = false
   })
 

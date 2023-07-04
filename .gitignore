@@ -4,3 +4,5 @@ shutdown.sh
 console.code-workspace
 .history
 .vscode
+server
+m7s.db
