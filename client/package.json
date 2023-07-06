@@ -7,7 +7,7 @@
     "server": "cd ../server && go run .",
     "monibuca": "cd /Users/dexter/m7s4/monibuca && go1.19 run . -c config1.yaml",
     "dev": "cross-env VUE_EDITOR=code vite --mode=production",
-    "build": "rm -rf dist && vite build && cp dist ../server/web",
+    "build": "rm -rf dist && vite build",
     "deploy": "npm run build && ./scripts/deploy-console.mjs",
     "doc": "pnpm --filter @console/doc dev",
     "doc:build": "pnpm --filter @console/doc build",

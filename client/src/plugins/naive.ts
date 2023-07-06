@@ -6,6 +6,7 @@ import {
   NDialogProvider,
   NInput,
   NButton,
+  NCountdown,
   NForm,
   NFormItem,
   NFormItemRow,
@@ -76,6 +77,7 @@ import {
 
 const naive = create({
   components: [
+    NCountdown,
     NMessageProvider,
     NDialogProvider,
     NConfigProvider,
