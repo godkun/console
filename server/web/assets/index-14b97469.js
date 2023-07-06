@@ -1,1 +1,0 @@
-import{i as e,g as r}from"./vendor-2e943313.js";const n=Vue.defineComponent({name:"Redirect",setup(){const n=e(),t=r();return Vue.onBeforeMount((()=>{const{params:e,query:r}=n,{path:a}=e;t.replace({path:"/"+(Array.isArray(a)?a.join("/"):a),query:r})})),()=>Vue.createVNode(naive.NEmpty,null,null)}});export{n as default};

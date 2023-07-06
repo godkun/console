@@ -1,1 +1,0 @@
-System.register(["./index-legacy.d1f2a5dd.js","./vendor-legacy.9d0d38ef.js"],(function(t,e){"use strict";var s,i;return{setters:[t=>{s=t.a},t=>{i=t.d}],execute:function(){t("u",i({id:"plugin-config",state:()=>({}),getters:{},actions:{async getConfig(t,e){return this[t]||(this[t]={}),this[t][e]?this[t][e]:s(t,e).then((s=>this[t][e]=s))}}}))}}}));

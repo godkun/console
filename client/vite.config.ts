@@ -54,8 +54,8 @@ export default ({ command }) => {
         minify: true,
         inject: {
           data: {
-            isProd: command === 'build',
-            BASE_URL: `https://console.monibuca.com`
+            isProd: command === 'build'
+            // BASE_URL: `web`
           }
         }
       }),
@@ -105,8 +105,7 @@ export default ({ command }) => {
         cert: fs.readFileSync(join(__dirname, '../server/console.monibuca.com_bundle.crt')),
         key: fs.readFileSync(join(__dirname, '../server/console.monibuca.com.key'))
       },
-      // host: 'console.monibuca.com',
-      // host: 'console.monibuca.com',
+      host: 'console.monibuca.com',
       port: 4000,
       proxy: {
         '/api': serverProxy,
@@ -115,7 +114,7 @@ export default ({ command }) => {
     },
     build: {
       target: 'es2015',
-      outDir: 'dist',
+      outDir: '../server/web',
       rollupOptions: {
         external: ['vue', 'vue-demi', 'vueRouter'],
         plugins: [commonjs(), globals]

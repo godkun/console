@@ -1,1 +1,0 @@
-import{b as e}from"./index-dbd922fe.js";function p(){const p=e();return{getDarkTheme:Vue.computed((()=>p.darkTheme)),getAppTheme:Vue.computed((()=>p.appTheme)),getAppThemeList:Vue.computed((()=>p.appThemeList))}}export{p as u};
