@@ -269,17 +269,15 @@ func isTimeout(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(util.ErrUserNotLogin))
 		return
 	}
-	//nothasStartTime = true
-	//if nothasStartTime {
-	//	nothasStartTime = false
-	//	var resultDataMap = make(map[string]interface{})
-	//	resultDataMap["remainseconds"] = config.QuitMinutes * 60
-	//	resultDataMapByte, _ := json.Marshal(resultDataMap)
-	//	resultData := util.OK()
-	//	json.Unmarshal(resultDataMapByte, &resultData.Data)
-	//	w.Write(util.ErrJson(resultData))
-	//	return
-	//}
+	if nothasStartTime {
+		var resultDataMap = make(map[string]interface{})
+		resultDataMap["remainseconds"] = config.QuitMinutes * 60
+		resultDataMapByte, _ := json.Marshal(resultDataMap)
+		resultData := util.OK()
+		json.Unmarshal(resultDataMapByte, &resultData.Data)
+		w.Write(util.ErrJson(resultData))
+		return
+	}
 	log.Println("体验版到期时间为" + expirationTime.String())
 	// 检查是否超过30分钟
 	if expirationTime.Sub(time.Now()) <= 0 {
