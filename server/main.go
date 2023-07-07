@@ -242,10 +242,7 @@ func main() {
 	http.HandleFunc("/report", report)
 	http.HandleFunc("/relay", relay)
 	http.HandleFunc("/api/isTimeout", isTimeout)
-
-	if config.Env == "pro" {
-		http.Handle("/", http.FileServer(http.FS(webfs)))
-	}
+	http.Handle("/web/", http.FileServer(http.FS(webfs)))
 	clearTimeOutInstance()
 	var g errgroup.Group
 	g.Go(startQuic)
@@ -258,6 +255,7 @@ func main() {
 	// })
 	log.Fatal(g.Wait())
 }
+
 
 /*
 判断体验时间是否到期
