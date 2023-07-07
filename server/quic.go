@@ -20,7 +20,7 @@ func startQuic() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("start quic  server at :4242")
+	fmt.Println("start quic  server at "+config.QuicPort)
 	for {
 		conn, err := listener.Accept(ctxBack)
 		if err != nil {

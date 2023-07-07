@@ -69,7 +69,7 @@ var (
 		SqliteDbPath      string
 	}{30, "dev", "127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
-		"", 300, ":9999", "Monibuca#!4", "http://localhost/", "44944", "./sqlite.db"}
+		"", 300, ":9999", "Monibuca#!4", "http://localhost/", ":44944", "./sqlite.db"}
 	ConfigRaw     []byte
 	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 )
