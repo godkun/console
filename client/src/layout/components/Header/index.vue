@@ -67,13 +67,16 @@
       </n-breadcrumb>
     </div>
     <div class="layout-header-right">
-      <div class="c-wrap" v-if="isEnd">体验版时间已用尽，请联系官方人员</div>
-      <div v-else class="c-wrap">
-        体验版倒计时：
-        <div :class="[isHigh ? 'count-down' : '']">
-          <n-countdown :duration="duration" :on-finish="setTip" :active="active" />
+      <div v-if="isTiYan">
+        <div class="c-wrap" v-if="isEnd">体验版时间已用尽，请联系官方人员</div>
+        <div v-else class="c-wrap">
+          体验版倒计时：
+          <div :class="[isHigh ? 'count-down' : '']">
+            <n-countdown :duration="duration" :on-finish="setTip" :active="active" />
+          </div>
         </div>
       </div>
+
       <div
         class="layout-header-trigger layout-header-trigger-min"
         v-for="item in iconList"
@@ -169,18 +172,21 @@
       const active = ref(false)
       const isHigh = ref(false)
       const isEnd = ref(false)
-
-      isTimeout()
-        .then((res) => {
-          active.value = true
-
-          duration.value = Number(res.data.remainseconds) * 1000
-          if (duration.value < 5 * 60 * 1000) isHigh.value = true
-          else isHigh.value = false
-        })
-        .catch(() => {
-          isEnd.value = true
-        })
+      const isTiYan = ref(false)
+      if (location.host !== 'console.monibuca.com') {
+        isTiYan.value = true
+        isTimeout()
+          .then((res) => {
+            active.value = true
+  
+            duration.value = Number(res.data.remainseconds) * 1000
+            if (duration.value < 5 * 60 * 1000) isHigh.value = true
+            else isHigh.value = false
+          })
+          .catch(() => {
+            isEnd.value = true
+          })
+      }
 
       const state = reactive({
         username: userStore.username || userStore.mail,
@@ -316,6 +322,7 @@
       }
 
       return {
+        isTiYan,
         isEnd,
         isHigh,
         setTip,

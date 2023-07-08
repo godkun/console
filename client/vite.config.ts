@@ -38,7 +38,7 @@ const globals = externalGlobals({
   'vue-demi': 'VueDemi'
 })
 
-export default ({ command }) => {
+export default ({ command, mode }) => {
   return {
     base: './',
     plugins: [
@@ -114,7 +114,7 @@ export default ({ command }) => {
     },
     build: {
       target: 'es2015',
-      outDir: '../server/web',
+      outDir: mode == 'prd' ? 'dist' : '../server/web',
       rollupOptions: {
         external: ['vue', 'vue-demi', 'vueRouter'],
         plugins: [commonjs(), globals]
