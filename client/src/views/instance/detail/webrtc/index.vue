@@ -14,9 +14,16 @@
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   import { DemuxEvent, FlvDemuxer } from 'jv4-demuxer'
   import { DataChannelConnection, WebRTCConnection, WebRTCStream } from 'jv4-connection'
-  import { AudioDecoderHard, AudioDecoderSoft, VideoDecoderHard } from 'jv4-decoder'
+  import { AudioDecoderHard, VideoDecoderHard } from 'jv4-decoder'
   import { DemuxMode } from 'jv4-demuxer/src/base'
-  import { AudioDecoderEvent, AudioDecoderInterface, VideoDecoderEvent, VideoDecoderInterface ,VideoDecoderConfig,AudioDecoderConfig} from 'jv4-decoder/src/types'
+  import {
+    AudioDecoderEvent,
+    AudioDecoderInterface,
+    VideoDecoderEvent,
+    VideoDecoderInterface,
+    VideoDecoderConfig,
+    AudioDecoderConfig
+  } from 'jv4-decoder/src/types'
   let signalChannel: RTCDataChannel
   const videoList = reactive<Record<string, WebRTCStream>>({})
   const { params } = useRoute()
@@ -48,7 +55,9 @@
     const streamList: string[] = []
     for (const s of streams) {
       if (!videoList[s.Path]) {
+        console.warn(s.Path)
         videoList[s.Path] = new WebRTCStream(s.Path)
+        console.warn(videoList[s.Path])
         conn.addStream(videoList[s.Path])
         streamList.push(s.Path)
       }
@@ -72,10 +81,11 @@
       const signal = JSON.parse(evt.data)
       switch (signal.type) {
         case 'answer':
-          console.log(signal.sdp)
+          // console.log(signal.sdp)
           pc.setRemoteDescription(new RTCSessionDescription(signal))
           break
         case 'remove':
+          console.log('remove', signal.streamPath)
           conn.deleteStream(signal.streamPath)
           delete videoList[signal.streamPath]
           break
@@ -99,25 +109,20 @@
         let videoWriter: WritableStreamDefaultWriter<VideoFrame>
         let audioWriter: WritableStreamDefaultWriter<AudioData>
         const dcConn = new DataChannelConnection(dc)
-        const demuxer = new FlvDemuxer(DemuxMode.PUSH, dcConn)
+        const demuxer = new FlvDemuxer(dcConn, DemuxMode.PUSH)
         demuxer.gotVideo = (chunk) => videoDecoder.decode(chunk)
         demuxer.gotAudio = (chunk) => audioDecoder.decode(chunk)
         const videoDecoder: VideoDecoderInterface = new VideoDecoderHard()
-        let audioDecoder: AudioDecoderInterface
+        const audioDecoder: AudioDecoderInterface = new AudioDecoderHard()
         await videoDecoder.initialize()
+        await audioDecoder.initialize()
         demuxer.on(DemuxEvent.VIDEO_ENCODER_CONFIG_CHANGED, (conf: VideoDecoderConfig) => {
           console.log('VIDEO_ENCODER_CONFIG_CHANGED', conf)
           videoDecoder.configure(conf)
         })
         demuxer.on(DemuxEvent.AUDIO_ENCODER_CONFIG_CHANGED, (conf: AudioDecoderConfig) => {
           console.log('AUDIO_ENCODER_CONFIG_CHANGED', conf)
-          if( conf.codec == "aac") {
-            audioDecoder= new AudioDecoderHard()
-            audioDecoder.configure(conf)
-          } else {
-            audioDecoder = new AudioDecoderSoft()
-            audioDecoder.configure(conf)
-          }
+          audioDecoder.configure(conf)
         })
         videoDecoder.on(VideoDecoderEvent.Error, (err) => {
           console.error(err)

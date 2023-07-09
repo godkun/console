@@ -105,7 +105,7 @@ export default ({ command, mode }) => {
         cert: fs.readFileSync(join(__dirname, '../server/console.monibuca.com_bundle.crt')),
         key: fs.readFileSync(join(__dirname, '../server/console.monibuca.com.key'))
       },
-      host: 'console.monibuca.com',
+      // host: 'console.monibuca.com',
       port: 4000,
       proxy: {
         '/api': serverProxy,
