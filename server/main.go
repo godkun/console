@@ -14,8 +14,6 @@ import (
 	"encoding/pem"
 	"flag"
 	"fmt"
-	"github.com/Monibuca/console/server/sessions"
-	"github.com/Monibuca/console/server/util"
 	"io/ioutil"
 	"log"
 	"math/big"
@@ -28,6 +26,9 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Monibuca/console/server/sessions"
+	"github.com/Monibuca/console/server/util"
 
 	"compress/zlib"
 
@@ -240,9 +241,12 @@ func main() {
 	http.Handle("/ws/v1", wsv1)
 	http.HandleFunc("/room/join", joinRoom)
 	http.HandleFunc("/report", report)
-	http.HandleFunc("/relay", relay)
 	http.HandleFunc("/api/isTimeout", isTimeout)
+	http.Handle("/m7s/", http.StripPrefix("/m7s", http.DefaultServeMux))
+	http.Handle("/web/m7s/", http.StripPrefix("/web/m7s", http.DefaultServeMux))
 	http.Handle("/web/", http.FileServer(http.FS(webfs)))
+
+	http.HandleFunc("/", relay)
 	clearTimeOutInstance()
 	var g errgroup.Group
 	g.Go(startQuic)
@@ -255,7 +259,6 @@ func main() {
 	// })
 	log.Fatal(g.Wait())
 }
-
 
 /*
 判断体验时间是否到期
@@ -787,7 +790,7 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
 		var instanceCount int
-		if !InstanceAddCount(mail.(string), w){
+		if !InstanceAddCount(mail.(string), w) {
 			return
 		}
 

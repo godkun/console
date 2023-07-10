@@ -1,0 +1,11 @@
+[Options]
+#当前环境是生产还是开发环境,pro为生产环境,启用embed,dev为开发环境,前后端分享
+Env = "pro"
+#QuitMinutes = 30
+#验证码超时时间，单位为分钟数
+Verifycodetimeout = 5
+ServerPort = ":9999"
+Secret = "Monibuca#!4"
+HostName = "http://localhost:9999"
+[Sqlite]
+SqliteDbPath = "./m7s.db"

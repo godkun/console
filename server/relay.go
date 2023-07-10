@@ -2,17 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/Monibuca/console/server/util"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/Monibuca/console/server/util"
 
 	"github.com/gobwas/ws"
 	"github.com/gobwas/ws/wsutil"
 )
 
 func (instance *Instance) relayQuic(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("relayQuic", r.RequestURI)
+	relayURL := r.URL.EscapedPath()
+	if r.URL.RawQuery != "" {
+		relayURL += "?" + r.URL.RawQuery
+	}
+	fmt.Println("relayQuic", relayURL)
 	s, err := instance.Quic.OpenStream()
 	if r.Header.Get("Accept") == "text/event-stream" {
 		header := w.Header()
@@ -21,7 +26,7 @@ func (instance *Instance) relayQuic(w http.ResponseWriter, r *http.Request) {
 		header.Set("Connection", "keep-alive")
 		header.Set("X-Accel-Buffering", "no")
 		header.Set("Access-Control-Allow-Origin", "*")
-		s.Write([]byte(r.RequestURI + "\r\n"))
+		s.Write([]byte(relayURL + "\r\n"))
 		r.Header.Write(s)
 		s.Write([]byte("\r\n"))
 		b := make([]byte, 1024)
@@ -39,7 +44,7 @@ func (instance *Instance) relayQuic(w http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.Header.Get("Upgrade") == "websocket" {
 		conn, _, _, err := ws.UpgradeHTTP(r, w)
-		s.Write([]byte(r.RequestURI + "\r\n"))
+		s.Write([]byte(relayURL + "\r\n"))
 		r.Header.Write(s)
 		s.Write([]byte("\r\n"))
 
@@ -81,7 +86,7 @@ func (instance *Instance) relayQuic(w http.ResponseWriter, r *http.Request) {
 		// }
 	} else {
 		if err == nil {
-			s.Write([]byte(r.RequestURI + "\r\n"))
+			s.Write([]byte(relayURL + "\r\n"))
 			r.Header.Write(s)
 			s.Write([]byte("\r\n"))
 			io.Copy(s, r.Body)
@@ -117,7 +122,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 		// fmt.Printf("m7sid is %+v\n", id)
 		instance = instances.FindByIdAndMail(id, mail.(string))
 		if instance == nil {
-			secretData := db.QueryAndParse( "select * from instance where id = ? and mail= ?", id, mail)
+			secretData := db.QueryAndParse("select * from instance where id = ? and mail= ?", id, mail)
 			secret := secretData["secret"]
 			if len(secret) > 0 {
 				instance = instances.Get(secret)

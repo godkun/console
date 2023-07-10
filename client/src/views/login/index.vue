@@ -16,7 +16,7 @@
           :model="formInline"
           :rules="rules">
           <n-form-item path="mail">
-            <n-input v-model:value="formInline.mail" placeholder="请输入邮箱账号">
+            <n-input v-model:value="formInline.mail" placeholder="请输入账号">
               <template #prefix>
                 <n-icon size="18" color="#808695">
                   <PersonOutline />
@@ -63,7 +63,6 @@
   import { useUserStore } from '@/store/modules/user'
   import { useMessage } from 'naive-ui'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
-  import { PageEnum } from '@/enums'
 
   interface FormState {
     mail: string
@@ -73,11 +72,10 @@
   const formRef = ref()
   const message = useMessage()
   const loading = ref(false)
-  const LOGIN_NAME = PageEnum.BASE_LOGIN_NAME
 
   const formInline = reactive({
-    mail: '',
-    password: '',
+    mail: 'admin',
+    password: '123456',
     isCaptcha: true
   })
 

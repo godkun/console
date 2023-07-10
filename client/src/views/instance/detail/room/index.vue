@@ -105,7 +105,7 @@
   const inviteLink = computed(
     () => location.protocol + '//' + location.host + '/#/instance/room?pass=' + roomPass.value
   )
-  let consoleURL = 'wss://console.monibuca.com:9999'
+  let consoleURL = location.protocol.replace('http', 'ws') + `//${location.hostname}:9999`
   let signalChannel: RTCDataChannel
   const myStream = ref<WebRTCStream>()
   const conn = new WebRTCConnection('m7s/webrtc/batch', {
@@ -138,7 +138,10 @@
     configStore.getConfig(m7sId, '').then((res) => {
       const regx = /[^:\/]+/
       consoleURL =
-        'wss://' + (regx.exec(res.console.server)?.[0] || 'console.monibuca.com') + ':9999'
+        location.protocol.replace('http', 'ws') +
+        '//' +
+        (regx.exec(res.console.server)?.[0] || location.hostname) +
+        ':9999'
     })
   }
   function copyLink() {

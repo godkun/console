@@ -4,7 +4,7 @@
   </div>
   <div v-else class="video-container">
     <Video v-for="v in videoList" :value="v" />
-    <n-pagination v-model:page="pageNum" :page-count="total / pageSize" />
+    <n-pagination v-model:page="pageNum" :page-count="Math.ceil(total / pageSize)" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -25,11 +25,12 @@
     AudioDecoderConfig
   } from 'jv4-decoder/src/types'
   let signalChannel: RTCDataChannel
+  let es: EventSource
   const videoList = reactive<Record<string, WebRTCStream>>({})
   const { params } = useRoute()
   const configStore = usePluginConfigStore()
   const noPlugin = ref(false)
-  const pageSize = ref(9)
+  const pageSize = ref(16)
   const pageNum = ref(0)
   const total = ref(0)
   configStore.getConfig(params.id as string, 'WebRTC').catch((err) => {
@@ -74,6 +75,7 @@
       )
     }
   }
+  onBeforeRouteLeave(() => es?.close())
   onMounted(async () => {
     signalChannel = pc.createDataChannel('signal')
     signalChannel.onmessage = async (evt) => {
@@ -97,9 +99,8 @@
       }
     }
     signalChannel.onopen = async () => {
-      const es = new EventSource('/api/summary?m7sid=' + params.id)
+      es = new EventSource('/api/summary?m7sid=' + params.id)
       es.onmessage = tick
-      onBeforeRouteLeave(() => es.close())
     }
     pc.ondatachannel = async (evt) => {
       const dc = evt.channel
