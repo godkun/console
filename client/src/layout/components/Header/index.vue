@@ -67,7 +67,7 @@
       </n-breadcrumb>
     </div>
     <div class="layout-header-right">
-      <div v-if="isTiYan">
+      <div v-if="!isSaas">
         <div class="c-wrap" v-if="isEnd">体验版时间已用尽，请联系官方人员</div>
         <div v-else class="c-wrap">
           体验版倒计时：
@@ -178,9 +178,7 @@
       const active = ref(false)
       const isHigh = ref(false)
       const isEnd = ref(false)
-      const isTiYan = ref(false)
-      if (!isSaas) {
-        isTiYan.value = true
+      if (!isSaas.value) {
         isTimeout()
           .then((res) => {
             active.value = true
@@ -189,7 +187,8 @@
             if (duration.value < 5 * 60 * 1000) isHigh.value = true
             else isHigh.value = false
           })
-          .catch(() => {
+          .catch((err) => {
+            console.log(err)
             isEnd.value = true
           })
       }
@@ -328,7 +327,7 @@
       }
 
       return {
-        isTiYan,
+        isSaas,
         isEnd,
         isHigh,
         setTip,

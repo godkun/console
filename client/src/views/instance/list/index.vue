@@ -34,10 +34,10 @@
           <n-form-item label="名称" path="name">
             <n-input placeholder="请输入实例名称" v-model:value="formParams.name" />
           </n-form-item>
-          <!-- <n-form-item label="重置 secret" path="resetSecret">
+          <n-form-item label="重置 secret" path="resetSecret" v-if="modalTitle == '编辑实例'">
             <n-checkbox v-model:checked="formParams.resetSecret" />
           </n-form-item>
-          <n-form-item label="监控" path="enableReport">
+          <!-- <n-form-item label="监控" path="enableReport">
             <n-switch v-model:value="formParams.enableReport" :disabled="user.level == 0" />
           </n-form-item> -->
         </n-form>
@@ -82,10 +82,10 @@
   const showModal = ref(false)
   const formBtnLoading = ref(false)
   const formParams = reactive({
-    name: ''
+    name: '',
     // url: ''
     // enableReport: false,
-    // resetSecret: false
+    resetSecret: false
   })
   const modalTitle = ref('')
 
