@@ -28,6 +28,7 @@ interface ProjectSettingState {
   isPageAnimate: boolean //是否开启路由动画
   pageAnimateType: string //路由动画类型
   isMobile: boolean // 是否处于移动端模式
+  isSaas: boolean // 是否是saas模式
 }
 
 export const useProjectSettingStore = defineStore({
@@ -43,7 +44,8 @@ export const useProjectSettingStore = defineStore({
     crumbsSetting,
     permissionMode,
     isPageAnimate,
-    pageAnimateType
+    pageAnimateType,
+    isSaas: location.hostname == 'console.monibuca.com'
   }),
   getters: {
     getNavMode(): string {

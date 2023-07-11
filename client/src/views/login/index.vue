@@ -6,7 +6,9 @@
         <div class="view-account-top-logo">
           <svg-icon name="logo" width="256px" />
         </div>
-        <div class="view-account-top-desc">实例管理平台</div>
+        <div class="view-account-top-desc">
+          实例管理平台{{ projectSettingStore.isSaas ? '（在线版）' : '（私有化体验版）' }}
+        </div>
       </div>
       <div class="view-account-form">
         <n-form
@@ -42,7 +44,7 @@
               登录
             </n-button>
           </n-form-item>
-          <n-form-item class="default-color">
+          <n-form-item class="default-color" v-if="projectSettingStore.isSaas">
             <div class="flex view-account-other">
               <div class="flex-initial" style="margin-left: auto">
                 <a @click="register">注册账号</a>
@@ -53,7 +55,7 @@
         </n-form>
       </div>
     </div>
-    <img src="/guide.png" width="300" />
+    <img src="/guide.png" width="300" v-if="projectSettingStore.isSaas" />
   </div>
 </template>
 
@@ -61,6 +63,7 @@
   import { reactive, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { useUserStore } from '@/store/modules/user'
+  import { useProjectSettingStore } from '@/store/modules/projectSetting'
   import { useMessage } from 'naive-ui'
   import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5'
 
@@ -85,7 +88,7 @@
   }
 
   const userStore = useUserStore()
-
+  const projectSettingStore = useProjectSettingStore()
   const router = useRouter()
   const route = useRoute()
 

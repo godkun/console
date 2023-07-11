@@ -19,7 +19,7 @@ service.interceptors.request.use(
     Promise.reject(error)
   }
 )
-
+let redirectId: ReturnType<typeof setTimeout> | undefined = void 0
 // 响应拦截
 service.interceptors.response.use(
   async (response: AxiosResponse) => {
@@ -28,7 +28,8 @@ service.interceptors.response.use(
     if (res && typeof res?.code == 'number' && res?.code !== 0) {
       window.$message.error(res.msg)
       if (res.code == 20305) {
-        setTimeout(() => {
+        if (redirectId) clearTimeout(redirectId)
+        redirectId = setTimeout(() => {
           router.replace({
             name: 'Login',
             query: {

@@ -163,8 +163,14 @@
     setup(props, { emit }) {
       const userStore = useUserStore()
 
-      const { getNavMode, getNavTheme, getHeaderSetting, getMenuSetting, getCrumbsSetting } =
-        useProjectSetting()
+      const {
+        isSaas,
+        getNavMode,
+        getNavTheme,
+        getHeaderSetting,
+        getMenuSetting,
+        getCrumbsSetting
+      } = useProjectSetting()
 
       const drawerSetting = ref()
 
@@ -173,12 +179,12 @@
       const isHigh = ref(false)
       const isEnd = ref(false)
       const isTiYan = ref(false)
-      if (location.host !== 'console.monibuca.com') {
+      if (!isSaas) {
         isTiYan.value = true
         isTimeout()
           .then((res) => {
             active.value = true
-  
+
             duration.value = Number(res.data.remainseconds) * 1000
             if (duration.value < 5 * 60 * 1000) isHigh.value = true
             else isHigh.value = false

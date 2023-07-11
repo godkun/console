@@ -37,6 +37,7 @@ export function useProjectSetting() {
     getPermissionMode,
     getShowFooter,
     getIsPageAnimate,
-    getPageAnimateType
+    getPageAnimateType,
+    isSaas: computed(() => projectStore.isSaas)
   }
 }

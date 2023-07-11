@@ -70,7 +70,7 @@ export default ({ command, mode }) => {
         symbolId: `icon-[name]`
       }),
       splitVendorChunkPlugin(),
-      legacy(),
+      // legacy(),
       visualizer({
         gzipSize: true,
         brotliSize: true
@@ -113,19 +113,19 @@ export default ({ command, mode }) => {
       }
     },
     build: {
-      target: 'es2015',
+      // target: 'esnext',
       outDir: mode == 'prd' ? 'dist' : '../server/web',
       rollupOptions: {
         external: ['vue', 'vue-demi', 'vueRouter'],
         plugins: [commonjs(), globals]
       },
-      terserOptions: {
-        compress: {
-          keep_infinity: false,
-          drop_console: true
-        }
-      },
-      minify: 'terser',
+      // terserOptions: {
+      //   compress: {
+      //     keep_infinity: false,
+      //     drop_console: true
+      //   }
+      // },
+      minify: 'esbuild',
       chunkSizeWarningLimit: 2000
     }
   }
