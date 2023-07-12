@@ -19,7 +19,8 @@ COPY resetpwdtxt resetpwdtxt
 # 安装依赖库（如果有需要的话）
 
 # 暴露容器的端口
-EXPOSE 9999 
+EXPOSE 9999
+EXPOSE 10000
 EXPOSE 44944/udp
 
 # 设置容器启动命令

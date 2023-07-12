@@ -193,12 +193,14 @@
           addInstance({ name }).then(() => {
             message.success('新建成功')
             showModal.value = false
+            tick()
           })
         } else if (modalTitle.value == '编辑实例') {
           const id = instance.value.id
           updateInstance({ id, ...formParams }).then(() => {
             message.success('编辑成功')
             showModal.value = false
+            tick()
           })
         }
       } else {

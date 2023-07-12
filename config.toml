@@ -5,7 +5,10 @@ Env = "pro"
 #验证码超时时间，单位为分钟数
 Verifycodetimeout = 5
 ServerPort = ":9999"
+SSLPort = ":10000"
+SSLCert = "/data/https.crt"
+SSLKey = "/data/https.key"
 Secret = "Monibuca#!4"
 HostName = "http://localhost:9999"
 [Sqlite]
-SqliteDbPath = "./m7s.db"
+SqliteDbPath = "/data/m7s.db"

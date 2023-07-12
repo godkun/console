@@ -4,7 +4,12 @@
   </div>
   <div v-else class="video-container">
     <Video v-for="v in videoList" :value="v" />
-    <n-pagination v-model:page="pageNum" :page-count="Math.ceil(total / pageSize)" />
+    <n-pagination
+      show-size-picker
+      :page-sizes="[4, 9, 16, 25]"
+      v-model:page="pageNum"
+      :item-count="total"
+      v-model:page-size="pageSize" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -20,9 +25,7 @@
     AudioDecoderEvent,
     AudioDecoderInterface,
     VideoDecoderEvent,
-    VideoDecoderInterface,
-    VideoDecoderConfig,
-    AudioDecoderConfig
+    VideoDecoderInterface
   } from 'jv4-decoder/src/types'
   let signalChannel: RTCDataChannel
   let es: EventSource
@@ -30,7 +33,7 @@
   const { params } = useRoute()
   const configStore = usePluginConfigStore()
   const noPlugin = ref(false)
-  const pageSize = ref(16)
+  const pageSize = ref(9)
   const pageNum = ref(0)
   const total = ref(0)
   configStore.getConfig(params.id as string, 'WebRTC').catch((err) => {
@@ -56,9 +59,7 @@
     const streamList: string[] = []
     for (const s of streams) {
       if (!videoList[s.Path]) {
-        console.warn(s.Path)
         videoList[s.Path] = new WebRTCStream(s.Path)
-        console.warn(videoList[s.Path])
         conn.addStream(videoList[s.Path])
         streamList.push(s.Path)
       }
@@ -83,7 +84,7 @@
       const signal = JSON.parse(evt.data)
       switch (signal.type) {
         case 'answer':
-          // console.log(signal.sdp)
+          console.log(signal.sdp)
           pc.setRemoteDescription(new RTCSessionDescription(signal))
           break
         case 'remove':

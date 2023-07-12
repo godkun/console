@@ -105,7 +105,7 @@
   const inviteLink = computed(
     () => location.protocol + '//' + location.host + '/#/instance/room?pass=' + roomPass.value
   )
-  let consoleURL = location.protocol.replace('http', 'ws') + `//${location.hostname}:9999`
+  const consoleURL = location.protocol.replace('http', 'ws') + `//${location.host}/m7sws`
   let signalChannel: RTCDataChannel
   const myStream = ref<WebRTCStream>()
   const conn = new WebRTCConnection('m7s/webrtc/batch', {
@@ -136,12 +136,8 @@
       .then((res) => (appName.value = res.appname))
       .catch(() => (noPlugin.value = true))
     configStore.getConfig(m7sId, '').then((res) => {
-      const regx = /[^:\/]+/
-      consoleURL =
-        location.protocol.replace('http', 'ws') +
-        '//' +
-        (regx.exec(res.console.server)?.[0] || location.hostname) +
-        ':9999'
+      // consoleURL =
+      //   location.protocol.replace('http', 'ws') + `//${res.console.server || location.host}/m7s`
     })
   }
   function copyLink() {

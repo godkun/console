@@ -1,4 +1,4 @@
-//go:build vip
+//go:build !trail
 
 package main
 

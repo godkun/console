@@ -64,13 +64,16 @@ var (
 		SMTPshowname      string
 		Verifycodetimeout int
 		ServerPort        string
+		SSLPort           string
+		SSLCert           string
+		SSLKey            string
 		Secret            string
 		HostName          string
 		QuicPort          string
 		SqliteDbPath      string
 	}{30, "dev", "127.0.0.1:3306", "root", "123456",
 		"monibuca", "utf8", "", "", "", "",
-		"", 300, ":9999", "Monibuca#!4", "http://localhost/", ":44944", "./sqlite.db"}
+		"", 300, ":9999", "", "", "", "Monibuca#!4", "http://localhost/", ":44944", "./sqlite.db"}
 	ConfigRaw     []byte
 	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
 )
@@ -243,6 +246,7 @@ func main() {
 	http.HandleFunc("/report", report)
 	http.HandleFunc("/api/isTimeout", isTimeout)
 	http.Handle("/m7s/", http.StripPrefix("/m7s", http.DefaultServeMux))
+	http.Handle("/m7sws/", http.StripPrefix("/m7sws", http.DefaultServeMux))
 	http.Handle("/web/m7s/", http.StripPrefix("/web/m7s", http.DefaultServeMux))
 	http.Handle("/web/", http.FileServer(http.FS(webfs)))
 
@@ -254,9 +258,9 @@ func main() {
 		//return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
 		return http.ListenAndServe(config.ServerPort, nil)
 	})
-	// g.Go(func() error {
-	// 	return http.ListenAndServe(":10000", nil)
-	// })
+	if config.SSLPort != "" {
+		go log.Println(http.ListenAndServeTLS(config.SSLPort, config.SSLCert, config.SSLKey, nil))
+	}
 	log.Fatal(g.Wait())
 }
 
