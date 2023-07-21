@@ -131,7 +131,7 @@
       return
     }
     try {
-      await pullStream(params.id as string, type, streamPath, target)
+      await pullStream(params.id as string, type, streamPath, encodeURI(target))
       formBtnLoading.value = false
       showModal.value = false
       msg.success('成功导入远端流')

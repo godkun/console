@@ -124,7 +124,7 @@
       return
     }
     try {
-      await pushStream(id, type, streamPath, target)
+      await pushStream(id, type, streamPath, encodeURI(target))
       formBtnLoading.value = false
       showModal.value = false
       msg.success('成功推到远端流')
