@@ -117,19 +117,21 @@ func init() {
 	var err error
 	addr := flag.String("c", "config.toml", "config file")
 
-	var mailtxtbyte []byte
-	if mailtxtbyte, err = ioutil.ReadFile("registermailtxt"); err != nil {
-		util.Print("read config file error:", err)
-		return
-	}
-	mailtxt = string(mailtxtbyte)
+	//var mailtxtbyte []byte
+	//if mailtxtbyte, err = ioutil.ReadFile("registermailtxt"); err != nil {
+	//	util.Print("read config file error:", err)
+	//	return
+	//}
+	//mailtxt = string(mailtxtbyte)
+	mailtxt = "你好：<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;你的注册验证码为%s，有效期为%d分钟，注册后将绑定此邮箱。"
 
-	var resetpwdtxtbyte []byte
-	if resetpwdtxtbyte, err = ioutil.ReadFile("resetpwdtxt"); err != nil {
-		util.Print("read config file error:", err)
-		return
-	}
-	resetpwdtxt = string(resetpwdtxtbyte)
+	//var resetpwdtxtbyte []byte
+	//if resetpwdtxtbyte, err = ioutil.ReadFile("resetpwdtxt"); err != nil {
+	//	util.Print("read config file error:", err)
+	//	return
+	//}
+	//resetpwdtxt = string(resetpwdtxtbyte)
+	resetpwdtxt = "你好：<br/>\n&nbsp;&nbsp;&nbsp;&nbsp;请点击<a href=\"%s\">重置密码</a>将密码重置为%s，点击后该链接即失效。"
 
 	flag.Parse()
 	if err := util.CreateShutdownScript(); err != nil {
