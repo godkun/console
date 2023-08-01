@@ -101,10 +101,10 @@ export default ({ command, mode }) => {
     },
     // 需要配置本地 host
     server: {
-      https: {
-        cert: fs.readFileSync(join(__dirname, '../server/console.monibuca.com_bundle.crt')),
-        key: fs.readFileSync(join(__dirname, '../server/console.monibuca.com.key'))
-      },
+      // https: {
+      //   cert: fs.readFileSync(join(__dirname, '../server/console.monibuca.com_bundle.crt')),
+      //   key: fs.readFileSync(join(__dirname, '../server/console.monibuca.com.key'))
+      // },
       // host: 'console.monibuca.com',
       port: 4000,
       proxy: {
@@ -114,7 +114,7 @@ export default ({ command, mode }) => {
     },
     build: {
       // target: 'esnext',
-      outDir: mode == 'prd' ? 'dist' : '../server/web',
+      // outDir: mode == 'prd' ? 'dist' : '../server/web',
       rollupOptions: {
         external: ['vue', 'vue-demi', 'vueRouter'],
         plugins: [commonjs(), globals]

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "console",
+  "outputfilename": "console",
+  "frontend:dir": "../client",
+  "frontend:install": "pnpm install",
+  "frontend:build": "npm run build:wails",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "devServer": "localhost:4000",
+  "author": {
+    "name": "langhuihui",
+    "email": "178529795@qq.com"
+  }
+}
