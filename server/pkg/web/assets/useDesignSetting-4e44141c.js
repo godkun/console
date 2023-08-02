@@ -1,0 +1,1 @@
+import{b as s}from"./index-20ae1759.js";function m(){const e=s(),t=Vue.computed(()=>e.darkTheme),o=Vue.computed(()=>e.appTheme),p=Vue.computed(()=>e.appThemeList);return{getDarkTheme:t,getAppTheme:o,getAppThemeList:p}}export{m as u};

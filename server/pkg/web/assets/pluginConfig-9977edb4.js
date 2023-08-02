@@ -1,1 +1,0 @@
-import{a as t}from"./index-44f2928b.js";import{d as f}from"./vendor-1e70d1e5.js";const e=f({id:"plugin-config",state:()=>({}),getters:{},actions:{async getConfig(i,o){return this[i]||(this[i]={}),this[i][o]?this[i][o]:t(i,o).then(r=>this[i][o]=r)}}});export{e as u};

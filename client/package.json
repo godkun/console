@@ -15,7 +15,7 @@
     "doc:build": "pnpm --filter @console/doc build",
     "doc:deploy": "./scripts/deploy-doc.mjs",
     "analysis": "NODE_ENV=production npm_config_report=true npm run build",
-    "postinstall": "cp ./patches/monaco-editor/* ./no·de_modules/@monaco-editor/loader/lib/es/config/",
+    "postinstall": "cp ./patches/monaco-editor/* ./node_modules/@monaco-editor/loader/lib/es/config/",
     "lint": "eslint \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write --loglevel warn \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
     "format": "prettier --write --loglevel warn \"./**/*.{js,json,ts,tsx,css,less,vue,html}\"",
