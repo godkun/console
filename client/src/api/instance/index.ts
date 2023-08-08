@@ -278,9 +278,15 @@ export function stopRecord(m7sid: string, id: string) {
   })
 }
 
-export function startRecord(m7sid: string, streamPath: string, type: string) {
+export function startRecord(
+  m7sid: string,
+  streamPath: string,
+  type: string,
+  fileName: string,
+  fragment: string
+) {
   return fetch({
-    url: '/record/api/start?' + new URLSearchParams({ streamPath, type }),
+    url: '/record/api/start?' + new URLSearchParams({ streamPath, type, fileName, fragment }),
     method: 'post',
     headers: {
       m7sid

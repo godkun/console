@@ -23,6 +23,7 @@ const localIconPath = resolve(process.cwd(), 'src/assets/svg-icon')
 
 const serverProxy = {
   target: 'https://console.monibuca.com:9999',
+  // target: 'http://console.monibuca.com:9999',
   changeOrigin: true,
   rewrite: (path) => path.replace(/^\/m7s/, '')
 }

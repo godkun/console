@@ -41,14 +41,48 @@
       title="开始录制"
       :bordered="false"
       size="huge"
-      preset="dialog"
-      positive-text="确认"
-      negative-text="算了"
-      @positive-click="record()">
-      <n-radio-group v-model:value="recordType" name="radiobuttongroup1">
-        <n-radio-button v-for="t of ['flv', 'mp4', 'hls', 'raw']" :key="t" :value="t" :label="t" />
-      </n-radio-group>
-      <n-input v-model:value="recordStreamPath" placeholder="输入需要录制的StreamPath" />
+      preset="dialog">
+      <n-form
+        :model="formParams"
+        :rules="rules"
+        ref="formRef"
+        label-placement="left"
+        :label-width="85"
+        class="py-4">
+        <n-form-item label="录制格式" path="recordType">
+          <n-radio-group v-model:value="formParams.recordType" name="radiobuttongroup1">
+            <n-radio-button
+              v-for="t of ['flv', 'mp4', 'hls', 'raw']"
+              :key="t"
+              :value="t"
+              :label="t" />
+          </n-radio-group>
+        </n-form-item>
+        <n-form-item label="流路径" path="recordStreamPath">
+          <n-input
+            placeholder="输入需要录制的StreamPath"
+            v-model:value="formParams.recordStreamPath" />
+        </n-form-item>
+        <n-form-item label="文件名" path="fileName">
+          <n-input placeholder="输入文件名" v-model:value="formParams.fileName" />
+        </n-form-item>
+        <n-form-item label="切片时间" path="fragment">
+          <n-input placeholder="输入切片时间（秒）" v-model:value="formParams.fragment" />
+        </n-form-item>
+      </n-form>
+      如何配置请查看官网文档:
+      <a
+        href="https://m7s.live/guide/plugins/record.html#api"
+        target="_blank"
+        style="color: #18a058"
+        >https://m7s.live/guide/plugins/record.html#api</a
+      >
+      <template #action>
+        <n-space>
+          <n-button @click="() => (showModal = false)">取消</n-button>
+          <n-button type="info" @click="record">确认</n-button>
+        </n-space>
+      </template>
     </n-modal>
   </n-layout>
 </template>
@@ -56,14 +90,28 @@
   import { Interval } from '@/components/interval'
   import { BasicTable } from '@/components/Table'
   import { getRecordFiles, getRecordingList, startRecord, stopRecord } from '@/api/instance'
-  import { h, ref } from 'vue'
+  import { h, ref, reactive } from 'vue'
   import { useRoute } from 'vue-router'
   import { NButton, NTime, useMessage } from 'naive-ui'
-  const recordStreamPath = ref('')
-  const recordType = ref('flv')
+  // const recordStreamPath = ref('')
+  // const recordType = ref('flv')
+  const formRef: any = ref(null)
   const message = useMessage()
   const showModal = ref(false)
   const { params } = useRoute()
+  const formParams = reactive({
+    recordStreamPath: '',
+    fileName: '',
+    fragment: '',
+    recordType: 'flv'
+  })
+  const rules = {
+    recordStreamPath: {
+      required: true,
+      trigger: ['blur', 'input'],
+      message: '输入需要录制的StreamPath'
+    }
+  }
   function ByteStr(byte: number) {
     if (byte > 1024 * 1024) return (byte / 1024 / 1024).toFixed(2) + ' MB'
     if (byte > 1024) return (byte / 1024).toFixed(2) + ' KB'
@@ -143,16 +191,43 @@
     })
   }
   function record() {
-    startRecord(params.id as string, recordStreamPath.value, recordType.value)
-      .then((x) => {
-        if (x) {
-          message.success('开始录制成功')
-        } else {
-          message.error('开始录制失败')
+    formRef.value.validate((errors) => {
+      if (!errors) {
+        if (formParams.fragment !== '') {
+          const s = /^\d+$/
+          if (!s.test(formParams.fragment)) {
+            message.error('切片时间请输入非负整数')
+            return
+          }
         }
-      })
-      .catch((err) => {
-        message.error(err)
-      })
+        if (formParams.fileName !== '') {
+          const s = /^[a-z0-9_]*$/g
+          if (!s.test(formParams.fileName)) {
+            message.error('文件名只允许数字、字母和下划线组合')
+            return
+          }
+        }
+        startRecord(
+          params.id as string,
+          formParams.recordStreamPath,
+          formParams.recordType,
+          (formParams.fileName = ''),
+          (formParams.fragment = '0')
+        )
+          .then((x) => {
+            if (x) {
+              message.success('开始录制成功')
+            } else {
+              message.error('开始录制失败')
+            }
+          })
+          .catch(() => {
+            showModal.value = false
+            // message.error(err)
+          })
+      } else {
+        // showModal.value = true
+      }
+    })
   }
 </script>
