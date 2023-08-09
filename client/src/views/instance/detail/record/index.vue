@@ -67,7 +67,7 @@
           <n-input placeholder="输入文件名" v-model:value="formParams.fileName" />
         </n-form-item>
         <n-form-item label="切片时间" path="fragment">
-          <n-input placeholder="输入切片时间（秒）" v-model:value="formParams.fragment" />
+          <n-input placeholder="输入切片时间" v-model:value="formParams.fragment" />
         </n-form-item>
       </n-form>
       如何配置请查看官网文档:
@@ -193,13 +193,6 @@
   function record() {
     formRef.value.validate((errors) => {
       if (!errors) {
-        if (formParams.fragment !== '') {
-          const s = /^\d+$/
-          if (!s.test(formParams.fragment)) {
-            message.error('切片时间请输入非负整数')
-            return
-          }
-        }
         if (formParams.fileName !== '') {
           const s = /^[a-z0-9_]*$/g
           if (!s.test(formParams.fileName)) {
