@@ -6,3 +6,4 @@ console.code-workspace
 .vscode
 ./server/server
 m7s.db
+fatal.log

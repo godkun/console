@@ -27,7 +27,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Monibuca/console/server/pkg/sessions"
 	"github.com/Monibuca/console/server/pkg/util"
 
 	"compress/zlib"
@@ -46,12 +45,10 @@ var defaultConfig []byte
 var (
 	expirationTime  time.Time
 	nothasStartTime = true
-	ctxBack         = context.Background()
 	db              Database
 	MysqlDbErr      error
 	mailtxt         string
 	resetpwdtxt     string
-	sessionM        *sessions.SessionManager
 	instances       = NewConcurInstances()
 	config          = &struct {
 		QuitMinutes       int
@@ -80,6 +77,7 @@ var (
 		"", 300, ":9999", "", "", "", "Monibuca#!4", "http://localhost/", ":44944", "./sqlite.db"}
 	ConfigRaw     []byte
 	websocketGUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+	OEM           ORM
 )
 
 func getNonceAccept(nonce []byte) (expected []byte, err error) {
@@ -116,8 +114,12 @@ func generateTLSConfig() *tls.Config {
 		NextProtos:   []string{"monibuca"},
 	}
 }
-func init() {
-	sessionM = sessions.NewSessionMange() //建议把这个放在你的公共区域，用的时候只调用一次就行了，初始化
+
+const maxUploadSize = 2 * 1024 * 2014 // 2 MB
+const uploadPath = "./files"
+
+func Run(ctx context.Context) {
+	OEM.Start()
 	var err error
 	addr := flag.String("c", "config.toml", "config file")
 
@@ -194,62 +196,60 @@ func init() {
 
 	//Golang数据连接："用户名:密码@tcp(IP:端口号)/数据库名?charset=utf8"
 	//打开数据库,前者是驱动名，所以要导入： _ "github.com/go-sql-driver/mysql"
+	fmt.Println("open db ", dbDSN)
 	err = db.Open(dbDSN)
 	if err != nil {
 		log.Fatalln(err)
 	}
-}
-
-const maxUploadSize = 2 * 1024 * 2014 // 2 MB
-const uploadPath = "./files"
-
-func Run(ctx context.Context) {
 	defer db.Close()
 
 	fmt.Println("start server at ", config.ServerPort)
-	http.HandleFunc("/test", test)
-	http.HandleFunc("/api/user/islogin", islogin)
-	http.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
-	http.HandleFunc("/api/user/register", userRegister)
-	http.HandleFunc("/api/user/getverifycode", getVerifyCode)
-	http.HandleFunc("/api/user/login", userLogin)
-	http.HandleFunc("/api/user/logout", userLogout)
-	http.HandleFunc("/api/user/changepassword", changePassword)
-	http.HandleFunc("/api/user/sendresetpwdmail", sendResetPwdMail)
-	http.HandleFunc("/api/user/resetpwd", resetPwd)
-	http.HandleFunc("/api/instance/detail", instanceDetail)
-	http.HandleFunc("/api/instance/list", instanceList)
-	http.HandleFunc("/api/instance/add", instanceAdd)
-	http.HandleFunc("/api/instance/del", instanceDel)
-	http.HandleFunc("/api/instance/update", instanceUpdate)
-	http.HandleFunc("/api/instance/getroompass", getRoomPass)
-	http.HandleFunc("/api/uploadFile", uploadFileHandler())
+	mux := http.NewServeMux()
+	mux.HandleFunc("/test", test)
+	mux.HandleFunc("/api/user/islogin", islogin)
+	mux.Handle("/api/upload/", http.StripPrefix("/api/upload/", http.FileServer(http.Dir("./static"))))
+	mux.HandleFunc("/api/user/register", userRegister)
+	mux.HandleFunc("/api/user/getverifycode", getVerifyCode)
+	mux.HandleFunc("/api/user/login", userLogin)
+	mux.HandleFunc("/api/user/logout", userLogout)
+	mux.HandleFunc("/api/user/changepassword", changePassword)
+	mux.HandleFunc("/api/user/sendresetpwdmail", sendResetPwdMail)
+	mux.HandleFunc("/api/user/resetpwd", resetPwd)
+	mux.HandleFunc("/api/instance/detail", instanceDetail)
+	mux.HandleFunc("/api/instance/list", instanceList)
+	mux.HandleFunc("/api/instance/add", instanceAdd)
+	mux.HandleFunc("/api/instance/del", instanceDel)
+	mux.HandleFunc("/api/instance/update", instanceUpdate)
+	mux.HandleFunc("/api/instance/getroompass", getRoomPass)
+	mux.HandleFunc("/api/uploadFile", uploadFileHandler())
 	fs1 := http.FileServer(http.Dir(uploadPath))
-	http.Handle("/files/", http.StripPrefix("/files", fs1))
-	http.Handle("/api/files/", http.StripPrefix("/api/files", fs1))
-	http.Handle("/ws/v1", wsv1)
-	http.HandleFunc("/room/join", joinRoom)
-	http.HandleFunc("/report", report)
-	http.HandleFunc("/api/isTimeout", isTimeout)
-	http.Handle("/m7s/", http.StripPrefix("/m7s", http.DefaultServeMux))
-	http.Handle("/m7sws/", http.StripPrefix("/m7sws", http.DefaultServeMux))
-	http.Handle("/web/m7s/", http.StripPrefix("/web/m7s", http.DefaultServeMux))
-	http.Handle("/web/", http.FileServer(http.FS(webfs)))
+	mux.Handle("/files/", http.StripPrefix("/files", fs1))
+	mux.Handle("/api/files/", http.StripPrefix("/api/files", fs1))
+	mux.Handle("/ws/v1", wsv1)
+	mux.HandleFunc("/room/join", joinRoom)
+	mux.HandleFunc("/report", report)
+	mux.HandleFunc("/api/isTimeout", isTimeout)
+	mux.Handle("/m7s/", http.StripPrefix("/m7s", mux))
+	mux.Handle("/m7sws/", http.StripPrefix("/m7sws", mux))
+	mux.Handle("/web/m7s/", http.StripPrefix("/web/m7s", mux))
+	mux.Handle("/web/", http.FileServer(http.FS(webfs)))
 
-	http.HandleFunc("/", relay)
+	mux.HandleFunc("/", relay)
 	clearTimeOutInstance()
 	var g errgroup.Group
-	g.Go(startQuic)
+	g.Go(func() error {
+		return startQuic(ctx)
+	})
 	g.Go(func() error {
 		//return http.ListenAndServeTLS(config.ServerPort, "console.monibuca.com_bundle.crt", "console.monibuca.com.key", nil)
-		return http.ListenAndServe(config.ServerPort, nil)
+		return http.ListenAndServe(config.ServerPort, mux)
 	})
 	g.Go(func() error {
 		<-ctx.Done()
 		return ctx.Err()
 	})
 	if config.SSLPort != "" {
-		go log.Println(http.ListenAndServeTLS(config.SSLPort, config.SSLCert, config.SSLKey, nil))
+		go log.Println(http.ListenAndServeTLS(config.SSLPort, config.SSLCert, config.SSLKey, mux))
 	}
 	log.Fatal(g.Wait())
 }
@@ -258,10 +258,7 @@ func Run(ctx context.Context) {
 判断体验时间是否到期
 */
 func isTimeout(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	if OEM.GetMail(w, r) == "" {
 		return
 	}
 	if nothasStartTime {
@@ -348,10 +345,7 @@ func clearTimeOutInstance() {
 }
 
 func getRoomPass(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	if OEM.GetMail(w, r) == "" {
 		return
 	}
 	id := r.Header.Get("M7sid")
@@ -365,14 +359,7 @@ func getRoomPass(w http.ResponseWriter, r *http.Request) {
 
 // 加入别人的房间
 func joinRoom(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	if sessionV == nil {
-		http.Error(w, "session error", http.StatusInternalServerError)
-		return
-	}
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	if OEM.GetMail(w, r) == "" {
 		return
 	}
 
@@ -516,10 +503,8 @@ func sendResetPwdMail(w http.ResponseWriter, r *http.Request) {
 修改密码
 */
 func changePassword(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
@@ -571,28 +556,24 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 登出
 */
 func userLogout(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
+	sessionV := OEM.BeginSession(w, r)
 	sessionV.Remove("mail")
-	sessionM.Destroy(w, r)
+	OEM.Destroy(w, r)
 	w.Write(util.ErrJson(util.OK()))
 	return
 }
 
 func islogin(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	if mail := sessionV.Get("mail"); mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
-	} else {
-		w.Write(util.ErrJson(&util.Errno{Code: 0, Msg: "OK", Data: mail}))
 	}
+	w.Write(util.ErrJson(&util.Errno{Code: 0, Msg: "OK", Data: mail}))
 }
 
 func instanceDetail(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
@@ -611,10 +592,8 @@ func instanceDetail(w http.ResponseWriter, r *http.Request) {
 删除实例
 */
 func instanceDel(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
@@ -651,10 +630,8 @@ func instanceDel(w http.ResponseWriter, r *http.Request) {
 获取实例列表
 */
 func instanceList(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
@@ -667,7 +644,7 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 	pageno := int(formData["pageno"].(float64))
 	var instanceList []map[string]string
 	if pagesize == 0 { //不分页，获取所有
-		instanceList = db.QueryAndParseJsonRows(InstanceListSql(mail.(string)))
+		instanceList = db.QueryAndParseJsonRows(OEM.InstanceListSql(mail))
 
 		var resultDataMap = make(map[string]interface{})
 		resultDataMap["list"] = instanceList
@@ -680,14 +657,14 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 		w.Write(util.ErrJson(resultData))
 		return
 	} else {
-		totalcount, err := db.QueryCountSql(InstanceListCountSql(mail.(string)))
+		totalcount, err := db.QueryCountSql(OEM.InstanceListCountSql(mail))
 		if err != nil {
 			fmt.Println(err)
 			w.Write(util.ErrJson(util.ErrDatabase))
 			return
 		}
 		//instanceList := db.QueryAndParseJsonRows("select * from instance where mail=? limit ?,? ", mail, pagesize*(pageno-1), pagesize)
-		instanceList := db.QueryAndParseJsonRows(InstanceListPage(mail.(string), pagesize, pageno))
+		instanceList := db.QueryAndParseJsonRows(OEM.InstanceListPage(mail, pagesize, pageno))
 		var resultDataMap = make(map[string]interface{})
 		resultDataMap["list"] = instanceList
 		resultDataMap["pagesize"] = pagesize
@@ -706,10 +683,8 @@ func instanceList(w http.ResponseWriter, r *http.Request) {
 更新实例
 */
 func instanceUpdate(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
@@ -723,7 +698,7 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 	enableReport := formData["enableReport"]
 	resetSecret := formData["resetSecret"].(bool)
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
+	secret := config.Secret + mail + name.(string) + updatetimestamp
 	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
 		totalcount, err := db.QueryCountSql("select count(1) from instance where name = ? and id != ? and mail=?", name, id, mail)
@@ -766,10 +741,8 @@ func instanceUpdate(w http.ResponseWriter, r *http.Request) {
 新增实例
 */
 func instanceAdd(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	formData := getDataFromHttpRequest(w, r)
@@ -780,11 +753,11 @@ func instanceAdd(w http.ResponseWriter, r *http.Request) {
 	}
 	name := formData["name"]
 	updatetimestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	secret := config.Secret + mail.(string) + name.(string) + updatetimestamp
+	secret := config.Secret + mail + name.(string) + updatetimestamp
 	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
 	if userData != nil && len(userData) > 0 {
 		var instanceCount int
-		if !InstanceAddCount(mail.(string), w) {
+		if !OEM.InstanceAddCount(mail, w) {
 			return
 		}
 
@@ -930,7 +903,7 @@ func userLogin(w http.ResponseWriter, r *http.Request) {
 			go func() {
 				db.Exec("update user set lastlogintime=? where mail=?", time.Now().Format("2006-01-02 15:04:05"), mail)
 			}()
-			sessionV := sessionM.BeginSession(w, r)
+			sessionV := OEM.BeginSession(w, r)
 			sessionV.Set("mail", mail)
 			resultData := util.OK()
 			userdataByte, _ := json.Marshal(userData[0])

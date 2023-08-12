@@ -204,5 +204,6 @@ var initSql = `
 		    "verifycode" varchar(255) NOT NULL,
 		    "createtime" datetime DEFAULT NULL
 		    );
+		INSERT INTO "main"."instance"("mail","name","createtime","secret") VALUES ('admin', 'test',time('now'), 'e10adc3949ba59abbe56e057f20f883e');
 		INSERT INTO "main"."user"("mail", "nickname", "password", "createtime", "lastlogintime", "level") VALUES ('admin', 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, 0);
 `

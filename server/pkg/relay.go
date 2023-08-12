@@ -98,14 +98,8 @@ func (instance *Instance) relayQuic(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func relay(w http.ResponseWriter, r *http.Request) {
-	sessionV := sessionM.BeginSession(w, r)
-	if sessionV == nil {
-		http.Error(w, "session error", http.StatusInternalServerError)
-		return
-	}
-	mail := sessionV.Get("mail")
-	if mail == nil {
-		w.Write(util.ErrJson(util.ErrUserNotLogin))
+	mail := OEM.GetMail(w, r)
+	if mail == "" {
 		return
 	}
 	var instance *Instance
@@ -120,7 +114,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 			id = r.URL.Query().Get("m7sid")
 		}
 		// fmt.Printf("m7sid is %+v\n", id)
-		instance = instances.FindByIdAndMail(id, mail.(string))
+		instance = instances.FindByIdAndMail(id, mail)
 		if instance == nil {
 			secretData := db.QueryAndParse("select * from instance where id = ? and mail= ?", id, mail)
 			secret := secretData["secret"]
@@ -130,7 +124,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 					w.Write(util.ErrJson(util.ErrInstanceNotConnect))
 					return
 				} else {
-					instance.mail = mail.(string)
+					instance.mail = mail
 					instance.id = id
 				}
 

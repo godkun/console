@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -13,7 +14,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func startQuic() error {
+func startQuic(ctx context.Context) error {
 
 	listener, err := quic.ListenAddr(config.QuicPort, generateTLSConfig(), &quic.Config{
 		EnableDatagrams: true,
@@ -23,13 +24,13 @@ func startQuic() error {
 	}
 	fmt.Println("start quic  server at " + config.QuicPort)
 	for {
-		conn, err := listener.Accept(ctxBack)
+		conn, err := listener.Accept(ctx)
 		if err != nil {
 			return err
 		}
 		remoteAddr := conn.RemoteAddr().String()
 		fmt.Println("客户端获取到的ip为:", remoteAddr)
-		stream, err := conn.AcceptStream(ctxBack)
+		stream, err := conn.AcceptStream(ctx)
 		if err != nil {
 			fmt.Println("AcceptStream error:", err)
 			continue
@@ -67,7 +68,7 @@ func startQuic() error {
 				stream.Close()
 			}
 			go func() {
-				Trail()
+				OEM.Trail()
 				fmt.Println("client online:", remoteAddr)
 				db.Exec("update instance set RemoteIP=?,online='1'  where secret=? ", remoteIP, secret)
 				for {
@@ -93,6 +94,7 @@ func startQuic() error {
 				}
 			}()
 		} else {
+			fmt.Println("no such secret in db:", secret)
 			stream.Write(util.ErrJson(util.ErrSecretWrong))
 			stream.Close()
 		}

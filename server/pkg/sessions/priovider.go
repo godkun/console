@@ -168,6 +168,11 @@ func (m *SessionManager) BeginSession(w http.ResponseWriter, r *http.Request) Se
 		return session
 	}
 }
+
+func (m *SessionManager) GetMail() {
+
+}
+
 func (m *SessionManager) GetSession(w http.ResponseWriter, r *http.Request) Session {
 	m.lock.Lock()
 	defer m.lock.Unlock()

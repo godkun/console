@@ -1,3 +1,6 @@
+//go:build ignore
+// +build ignore
+
 package main
 
 import (
@@ -7,6 +10,6 @@ import (
 )
 
 func main() {
-	server.OEM = &server.TrailORM{}
+	server.OEM = &server.TrailNoLoginORM{}
 	server.Run(context.Background())
 }
