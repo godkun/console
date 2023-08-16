@@ -215,6 +215,7 @@ func Run(ctx context.Context) {
 	mux.HandleFunc("/api/user/changepassword", changePassword)
 	mux.HandleFunc("/api/user/sendresetpwdmail", sendResetPwdMail)
 	mux.HandleFunc("/api/user/resetpwd", resetPwd)
+	http.HandleFunc("/api/user/getuserinfo", getUserInfo)
 	mux.HandleFunc("/api/instance/detail", instanceDetail)
 	mux.HandleFunc("/api/instance/list", instanceList)
 	mux.HandleFunc("/api/instance/add", instanceAdd)
@@ -252,6 +253,30 @@ func Run(ctx context.Context) {
 		go log.Println(http.ListenAndServeTLS(config.SSLPort, config.SSLCert, config.SSLKey, mux))
 	}
 	log.Fatal(g.Wait())
+}
+
+/**
+获取用户信息
+*/
+func getUserInfo(w http.ResponseWriter, r *http.Request) {
+	sessionV := OEM.BeginSession(w, r)
+	mail := sessionV.Get("mail")
+	if mail == nil {
+		w.Write(util.ErrJson(util.ErrUserNotLogin))
+		return
+	}
+	userData := db.QueryAndParseJsonRows("select mail from user where mail=? ", mail)
+	if userData != nil && len(userData) > 0 {
+		fmt.Println("user data is %+v", userData)
+		resultData := util.OK()
+		userdataByte, _ := json.Marshal(userData[0])
+		json.Unmarshal(userdataByte, &resultData.Data)
+		w.Write(util.ErrJson(resultData))
+		return
+	} else {
+		w.Write(util.ErrJson(util.ErrUserNotRegister))
+		return
+	}
 }
 
 /*
