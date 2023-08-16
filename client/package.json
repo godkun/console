@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "turbo": "turbo run all --parallel",
-    "server": "cross-env CGO_ENABLED=1 cd ../server &&  go run . -tags trail",
+    "server": "cross-env CGO_ENABLED=1 cd ../server &&  go run main.go",
     "monibuca": "cd /Users/dexter/m7s4/monibuca && go run . -c config2.yaml",
     "dev": "cross-env VUE_EDITOR=code vite --mode=production",
-    "build": "vite build --outDir ../server/web --emptyOutDir",
+    "build": "vite build --emptyOutDir",
+    "build:embed": "vite build --outDir ../server/web --emptyOutDir",
     "build:wails": "vite build --outDir ../wails/frontend/dist --emptyOutDir",
     "deploy": "npm run build && ./scripts/deploy-console.mjs",
     "deploy:prd": "npm run build:prd && ./scripts/deploy-console.mjs",

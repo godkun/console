@@ -54,18 +54,20 @@
             <n-statistic v-if="track.GOP" label="GOP" :value="track.GOP" />
             <n-statistic v-else label="位深度" :value="track.SampleSize" />
           </n-gi>
-          <n-gi span="1">
-            <n-statistic label="累计帧数" :value="track.MoveCount" />
-          </n-gi>
-          <n-gi span="1">
-            <n-statistic label="时间戳" :value="track.LastValue.AbsTime" />
-          </n-gi>
-          <n-gi span="1">
-            <n-statistic label="PTS" :value="track.LastValue.PTS" />
-          </n-gi>
-          <n-gi span="1">
-            <n-statistic label="DTS" :value="track.LastValue.DTS" />
-          </n-gi>
+          <template v-if="track.LastValue">
+            <n-gi span="1">
+              <n-statistic label="累计帧数" :value="track.LastValue.Sequence" />
+            </n-gi>
+            <n-gi span="1">
+              <n-statistic label="时间戳" :value="track.LastValue.Timestamp" />
+            </n-gi>
+            <n-gi span="1">
+              <n-statistic label="PTS" :value="track.LastValue.PTS" />
+            </n-gi>
+            <n-gi span="1">
+              <n-statistic label="DTS" :value="track.LastValue.DTS" />
+            </n-gi>
+          </template>
           <n-gi span="2">
             <canvas :id="'bps' + track.Name"></canvas>
           </n-gi>
@@ -103,11 +105,12 @@
       SampleSize: number
       GOP?: number
       SPSInfo?: { Width: number; Height: number }
-      MoveCount: number
+      Size: number
       LastValue: {
+        Sequence: number
         PTS: number
         DTS: number
-        AbsTime: number
+        Timestamp: number
       }
     }[]
     Subscribers: { Type: string; StartTime: string }[]
