@@ -5,13 +5,18 @@ import (
 	"fmt"
 
 	console "github.com/Monibuca/console/server/pkg"
-	_ "m7s.live/plugin/logrotate/v4"
+	m7s "m7s.live/engine/v4"
+	"m7s.live/engine/v4/config"
 	_ "m7s.live/plugin/debug/v4"
+	_ "m7s.live/plugin/edge/v4"
+	_ "m7s.live/plugin/fmp4/v4"
 	_ "m7s.live/plugin/gb28181/v4"
 	_ "m7s.live/plugin/hdl/v4"
 	_ "m7s.live/plugin/hls/v4"
 	_ "m7s.live/plugin/hook/v4"
 	_ "m7s.live/plugin/jessica/v4"
+	_ "m7s.live/plugin/logrotate/v4"
+	_ "m7s.live/plugin/monitor/v4"
 	_ "m7s.live/plugin/preview/v4"
 	_ "m7s.live/plugin/record/v4"
 	_ "m7s.live/plugin/room/v4"
@@ -20,10 +25,6 @@ import (
 	_ "m7s.live/plugin/snap/v4"
 	_ "m7s.live/plugin/webrtc/v4"
 	_ "m7s.live/plugin/webtransport/v4"
-	_ "m7s.live/plugin/edge/v4"
-	_ "m7s.live/plugin/fmp4/v4"
-	_ "m7s.live/plugin/monitor/v4"
-	m7s "m7s.live/engine/v4"
 )
 
 // App struct
@@ -42,7 +43,14 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	console.OEM = &console.TrailNoLoginORM{}
 	go console.Run(ctx)
-	go m7s.Run(ctx, "config.yaml")
+	go m7s.Run(ctx, config.Config{
+		"global": config.Config{
+			"console": config.Config{
+				"server": "localhost:44944",
+				"secret": "e10adc3949ba59abbe56e057f20f883e",
+			},
+		},
+	})
 }
 
 // Greet returns a greeting for the given name
