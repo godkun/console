@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive, toRefs, ref, computed, unref } from 'vue'
+  import { defineComponent, reactive, toRefs, ref, computed, unref, watch } from 'vue'
   import { useRouter, useRoute } from 'vue-router'
   import components from './components'
   import { NDialogProvider } from 'naive-ui'
@@ -369,7 +369,8 @@
         getInverted,
         getMenuLocation,
         mixMenu,
-        switchCollapse
+        switchCollapse,
+        isHome
       }
     }
   })
