@@ -62,7 +62,7 @@
   import { columns } from './columns'
   import { PlusOutlined } from '@vicons/antd'
   import { addInstance, updateInstance, delInstance } from '@/api/instance'
-  import { useInstanceList } from '@/hooks'
+  import { useInstanceList, useProjectSetting } from '@/hooks'
   // import { useUserStore } from '@/store'
 
   const rules = {
@@ -230,6 +230,12 @@
         id
       }
     })
+    const { isSaas } = useProjectSetting()
+    if (isSaas.value) {
+      window.open(page.href, '_blank')
+    } else {
+      window.location.href = page.href
+    }
     window.open(page.href, '_blank')
   }
 
