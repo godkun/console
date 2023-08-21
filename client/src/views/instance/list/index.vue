@@ -236,7 +236,6 @@
     } else {
       window.location.href = page.href
     }
-    window.open(page.href, '_blank')
   }
 
   // // 跳转到实例详情
