@@ -1169,3 +1169,792 @@ pli: 2s}
 21:16:05	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/sysinfo", "remote": ""}
 21:16:05	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/summary?m7sid=1", "remote": ""}
 21:16:07	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/list/pull", "remote": ""}
+21:20:19	[35mDEBUG[0m	[37;40mLogRotate[0m	配置	{"配置": path: ./logs
+size: 0
+days: 1
+formatter: 2006-01-02T15}
+21:20:19	[34mINFO[0m	[37;40mMonitor[0m	初始化	{"版本": "v4.0.3"}
+21:20:19	[35mDEBUG[0m	合并配置submodeargname:mode
+21:20:19	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置waittimeout:10s
+21:20:19	[35mDEBUG[0m	existinternal
+21:20:19	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:20:19	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置secretargname:secret
+21:20:19	[35mDEBUG[0m	合并配置expireargname:expire
+21:20:19	[35mDEBUG[0m	合并配置subaudio:true
+21:20:19	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:20:19	[35mDEBUG[0m	合并配置key:
+21:20:19	[35mDEBUG[0m	合并配置subvideo:true
+21:20:19	[35mDEBUG[0m	合并配置subdataargname:dts
+21:20:19	[35mDEBUG[0m	合并配置submode:0
+21:20:19	[35mDEBUG[0m	合并配置syncmode:0
+21:20:19	[35mDEBUG[0m	合并配置iframeonly:false
+21:20:19	[35mDEBUG[0m	合并配置writebuffersize:0
+21:20:19	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/api/list/stream"}
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/api/list/stream"}
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/api/list/track"}
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/api/list/track"}
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/"}
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/"}
+21:20:19	[35mDEBUG[0m	[37;40mMonitor[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      internal: true
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+path: monitor}
+21:20:19	[34mINFO[0m	[37;40mPreview[0m	初始化	{"版本": "v4.1.2"}
+21:20:19	[35mDEBUG[0m	[37;40mPreview[0m	http处理器已添加到引擎	{"pattern": "/preview/"}
+21:20:19	[35mDEBUG[0m	[37;40mPreview[0m	配置	{"配置": {}}
+21:20:19	[34mINFO[0m	[37;40mRecord[0m	初始化	{"版本": "v4.4.2-0.20230818060709-6c289bbcd27f"}
+21:20:19	[35mDEBUG[0m	合并配置subvideo:true
+21:20:19	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:20:19	[35mDEBUG[0m	合并配置key:
+21:20:19	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:20:19	[35mDEBUG[0m	合并配置subdataargname:dts
+21:20:19	[35mDEBUG[0m	existsubmode
+21:20:19	[35mDEBUG[0m	合并配置syncmode:0
+21:20:19	[35mDEBUG[0m	合并配置iframeonly:false
+21:20:19	[35mDEBUG[0m	合并配置writebuffersize:0
+21:20:19	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:20:19	[35mDEBUG[0m	合并配置submodeargname:mode
+21:20:19	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置waittimeout:10s
+21:20:19	[35mDEBUG[0m	existinternal
+21:20:19	[35mDEBUG[0m	合并配置subaudio:true
+21:20:19	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置secretargname:secret
+21:20:19	[35mDEBUG[0m	合并配置expireargname:expire
+21:20:19	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/list"}
+21:20:19	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/list/recording"}
+21:20:19	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/start"}
+21:20:19	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/stop"}
+21:20:19	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/"}
+21:20:19	[35mDEBUG[0m	[37;40mRecord[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      submode: 1
+      internal: true
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 1
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+flv:
+    ext: .flv
+    path: record/flv
+    autorecord: false
+    filter: ""
+    fragment: 0s
+mp4:
+    ext: .mp4
+    path: record/mp4
+    autorecord: false
+    filter: ""
+    fragment: 0s
+fmp4:
+    ext: .mp4
+    path: record/fmp4
+    autorecord: false
+    filter: ""
+    fragment: 0s
+hls:
+    ext: .m3u8
+    path: record/hls
+    autorecord: false
+    filter: ""
+    fragment: 0s
+raw:
+    ext: .
+    path: record/raw
+    autorecord: false
+    filter: ""
+    fragment: 0s
+rawaudio:
+    ext: .
+    path: record/raw
+    autorecord: false
+    filter: ""
+    fragment: 0s}
+21:20:19	[34mINFO[0m	[37;40mRoom[0m	初始化	{"版本": "v4.0.11"}
+21:20:19	[35mDEBUG[0m	合并配置submode:0
+21:20:19	[35mDEBUG[0m	合并配置syncmode:0
+21:20:19	[35mDEBUG[0m	合并配置iframeonly:false
+21:20:19	[35mDEBUG[0m	合并配置writebuffersize:0
+21:20:19	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:20:19	[35mDEBUG[0m	合并配置subdataargname:dts
+21:20:19	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置waittimeout:10s
+21:20:19	[35mDEBUG[0m	合并配置internal:false
+21:20:19	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:20:19	[35mDEBUG[0m	合并配置submodeargname:mode
+21:20:19	[35mDEBUG[0m	合并配置secretargname:secret
+21:20:19	[35mDEBUG[0m	合并配置expireargname:expire
+21:20:19	[35mDEBUG[0m	existsubaudio
+21:20:19	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置key:
+21:20:19	[35mDEBUG[0m	existsubvideo
+21:20:19	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:20:19	[35mDEBUG[0m	[37;40mRoom[0m	http处理器已添加	{"pattern": "/"}
+21:20:19	[35mDEBUG[0m	[37;40mRoom[0m	http处理器已添加到引擎	{"pattern": "/room/"}
+21:20:19	[35mDEBUG[0m	[37;40mRoom[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      subaudio: false
+      subvideo: false
+subscribe:
+    subaudio: false
+    subvideo: false
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+appname: room
+size: 20
+private: {}
+verify:
+    url: ""
+    method: ""
+    header: {}}
+21:20:19	[34mINFO[0m	[37;40mSnap[0m	初始化	{"版本": "v4.0.7"}
+21:20:19	[35mDEBUG[0m	合并配置submodeargname:mode
+21:20:19	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置waittimeout:10s
+21:20:19	[35mDEBUG[0m	existinternal
+21:20:19	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:20:19	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:20:19	[35mDEBUG[0m	合并配置secretargname:secret
+21:20:19	[35mDEBUG[0m	合并配置expireargname:expire
+21:20:19	[35mDEBUG[0m	existsubaudio
+21:20:19	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:20:19	[35mDEBUG[0m	合并配置key:
+21:20:19	[35mDEBUG[0m	合并配置subvideo:true
+21:20:19	[35mDEBUG[0m	合并配置subdataargname:dts
+21:20:19	[35mDEBUG[0m	合并配置submode:0
+21:20:19	[35mDEBUG[0m	合并配置syncmode:0
+21:20:19	[35mDEBUG[0m	existiframeonly
+21:20:19	[35mDEBUG[0m	合并配置writebuffersize:0
+21:20:19	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:20:19	[35mDEBUG[0m	[37;40mSnap[0m	http处理器已添加	{"pattern": "/"}
+21:20:19	[35mDEBUG[0m	[37;40mSnap[0m	http处理器已添加到引擎	{"pattern": "/snap/"}
+21:20:19	[35mDEBUG[0m	[37;40mSnap[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      subaudio: false
+      iframeonly: true
+      internal: true
+    ffmpeg: ffmpeg
+subscribe:
+    subaudio: false
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: true
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+ffmpeg: ffmpeg
+path: ""
+filter: ""}
+21:20:19	[34mINFO[0m	[37;40mWebRTC[0m	初始化	{"版本": "v4.2.1"}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/batch"}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/play/"}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/push/"}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/publish"}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/screenshare"}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/subscribe"}
+21:20:19	[34mINFO[0m	[37;40mWebRTC[0m	webrtc start listen	{"port": 9000}
+21:20:19	[35mDEBUG[0m	[37;40mWebRTC[0m	配置	{"配置": publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+iceservers: []
+publicip: []
+port: tcp:9000
+pli: 2s}
+21:20:19	[34mINFO[0m	[37;40mWebTransport[0m	初始化	{"版本": "v4.0.8"}
+21:20:19	[35mDEBUG[0m	[37;40mWebTransport[0m	配置	{"配置": listenaddr: :4433
+certfile: ""
+keyfile: ""}
+21:20:19	[34mINFO[0m	monibuca v4.13.10-0.20230821065056-3d14717f69e6[32m 启动成功[0m
+21:20:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:23	[34mINFO[0m	[37;40mGB28181[0m	LocalAndInternalIPs	{"routes": 153.3.160: 153.3.160.145
+153.3.160.145: 153.3.160.145
+192.168.31: 192.168.31.33
+192.168.31.33: 153.3.160.145}
+21:20:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:53	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:55	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:57	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:20:59	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:01	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:03	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:05	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:07	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:09	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:11	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:13	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:15	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:17	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:21:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:22:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:13	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:15	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:17	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:53	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:55	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:57	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:23:59	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:01	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:03	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:05	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:07	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:09	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:11	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:13	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:15	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:17	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:53	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:55	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:57	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:24:59	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:01	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:03	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:05	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:25:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:26:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:27:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:09	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:11	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:13	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:15	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:17	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:53	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:55	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:57	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:28:59	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:01	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:03	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:05	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:07	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:09	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:11	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:13	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:15	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:17	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:53	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:55	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:57	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:29:59	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:01	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:03	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:05	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:07	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:09	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:11	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:13	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:15	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:17	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:53	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:55	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:57	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:30:59	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:01	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:03	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:05	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:07	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:09	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:11	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:31:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:32:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:19	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:21	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:23	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:25	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:27	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:29	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:33:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:30	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:32	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:34	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:36	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:38	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:40	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:42	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:44	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:46	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:48	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:50	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:52	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:54	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:56	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:34:58	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:00	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:02	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:04	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:06	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:08	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:10	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:12	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:14	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:16	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:18	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:20	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:22	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:24	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:26	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:28	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:31	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:33	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:35	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:37	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:39	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:41	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:43	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:45	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:47	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:49	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF
+21:35:51	[31mERROR[0m	连接到控制台服务器localhost:44944失败EOF

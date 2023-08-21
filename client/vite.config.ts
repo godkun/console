@@ -12,6 +12,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import { viteVConsole } from 'vite-plugin-vconsole'
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
@@ -42,6 +43,14 @@ export default ({ command, mode }) => {
     base: './',
     plugins: [
       vue(),
+      viteVConsole({
+        entry: resolve('src/wails.ts'), // or you can use entry: [path.resolve('src/main.ts')]
+        enabled: true,
+        config: {
+          maxLogNumber: 1000,
+          theme: 'dark'
+        }
+      }),
       // Inspector({
       //   enabled: false,
       //   toggleButtonVisibility: 'never',
