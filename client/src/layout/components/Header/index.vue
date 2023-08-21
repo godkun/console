@@ -67,6 +67,9 @@
       </n-breadcrumb>
     </div>
     <div class="layout-header-right">
+      <div v-if="!isSaas" class="c-wrap">
+        <n-button v-if="!isHome" type="primary" @click="goBack">返回首页</n-button>
+      </div>
       <div v-if="!isSaas">
         <div class="c-wrap" v-if="isEnd">体验版时间已用尽，请联系官方人员</div>
         <div v-else class="c-wrap">
@@ -178,6 +181,7 @@
       const active = ref(false)
       const isHigh = ref(false)
       const isEnd = ref(false)
+      const currentRoute = useRoute()
       if (!isSaas.value) {
         isTimeout()
           .then((res) => {
@@ -211,6 +215,11 @@
       const mixMenu = computed(() => {
         return unref(getMenuSetting).mixMenu
       })
+
+      const goBack = () => {
+        window.location.href = 'wails://wails/#/instance/list'
+        window.location.reload()
+      }
 
       const getChangeStyle = computed(() => {
         const { collapsed } = props
@@ -257,6 +266,15 @@
       const dropdownSelect = (key) => {
         router.push({ name: key })
       }
+
+      const isHome = ref(route.name == 'instance_list')
+
+      watch(
+        () => currentRoute.fullPath,
+        () => {
+          isHome.value = currentRoute.name == 'instance_list'
+        }
+      )
 
       // 刷新页面
       const reloadPage = () => {
