@@ -464,10 +464,10 @@ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C
 gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
-m7s.live/engine/v4 v4.13.10-0.20230818101340-d6cee559d331 h1:dwQ7o8CNOVn4+umjY6tO7s0tccU17iFEOBDhTLE+hO8=
-m7s.live/engine/v4 v4.13.10-0.20230818101340-d6cee559d331/go.mod h1:Wfs3OMgtRxLIbw1nCjWFgo1kRkypg6L+38QLghMG6Vw=
-m7s.live/plugin/debug/v4 v4.0.0 h1:yVFI/XB/EwR9NyihwvTIC/tocibPdE/NQZjDnOtRq/M=
-m7s.live/plugin/debug/v4 v4.0.0/go.mod h1:A/C1ViacCOK7EPeeCfiwlUrC2TUtRdEqzrR0Yd9b1KQ=
+m7s.live/engine/v4 v4.13.10-0.20230821065056-3d14717f69e6 h1:WMlAMGRxkvBXjpCet6MgjIg0Obt2KpxQn1QrrzcSCnQ=
+m7s.live/engine/v4 v4.13.10-0.20230821065056-3d14717f69e6/go.mod h1:Wfs3OMgtRxLIbw1nCjWFgo1kRkypg6L+38QLghMG6Vw=
+m7s.live/plugin/debug/v4 v4.0.1 h1:sX0UADsiikwSol8qx+8aQzGeaFa8yJFa/cUKpBs5Lzw=
+m7s.live/plugin/debug/v4 v4.0.1/go.mod h1:A/C1ViacCOK7EPeeCfiwlUrC2TUtRdEqzrR0Yd9b1KQ=
 m7s.live/plugin/edge/v4 v4.0.6 h1:dAxS6cvmWV+pPXCgdu0phoAwH2abjhlKMGfysyxHBNw=
 m7s.live/plugin/edge/v4 v4.0.6/go.mod h1:AWeJV1Nu2UWsEdlcCATlQW+bz6Pz/3A11AZG9Z4hIc0=
 m7s.live/plugin/fmp4/v4 v4.0.4 h1:DOw7opeMBlei7oyDIzqvkOd5CLKzTv7wT+tyL99dqug=

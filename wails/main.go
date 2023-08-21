@@ -52,7 +52,7 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	// req.RequestURI = strings.Replace(req.RequestURI, "wails://wails/", "http://localhost:9999/", -1)
 	// req.Host = "localhost:9999"
 	// resp, err := http.DefaultClient.Do(req)
-	println(req.RequestURI)
+	fmt.Println(req.RequestURI)
 	// resp, err := http.Get("http://localhost:9999/web/index.html")
 	// if err != nil {
 	// 	println(err.Error())
@@ -74,9 +74,9 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		newReq, _ := http.NewRequestWithContext(req.Context(), req.Method, "http://localhost:9999/"+requestedFilename+query, req.Body)
 		newReq.Header = req.Header.Clone()
 		resp, err := http.DefaultClient.Do(newReq)
-		fmt.Println("request server:", requestedFilename)
+		fmt.Println("request server:", requestedFilename+query)
 		if err != nil {
-			println(err.Error())
+			fmt.Println(err.Error())
 			return
 		}
 		for k, v := range resp.Header {

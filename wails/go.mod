@@ -5,8 +5,8 @@ go 1.18
 require (
 	github.com/Monibuca/console/server v0.0.0-00010101000000-000000000000
 	github.com/wailsapp/wails/v2 v2.5.1
-	m7s.live/engine/v4 v4.13.10-0.20230818101340-d6cee559d331
-	m7s.live/plugin/debug/v4 v4.0.0
+	m7s.live/engine/v4 v4.13.10-0.20230821065056-3d14717f69e6
+	m7s.live/plugin/debug/v4 v4.0.1
 	m7s.live/plugin/edge/v4 v4.0.6
 	m7s.live/plugin/fmp4/v4 v4.0.4
 	m7s.live/plugin/gb28181/v4 v4.4.0
@@ -79,7 +79,6 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/term v0.10.0 // indirect
 	m7s.live/plugin/ps/v4 v4.0.9 // indirect
 )
@@ -116,6 +115,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
+	go.uber.org/zap v1.24.0 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/exp v0.0.0-20221205204356-47842c84f3db // indirect
 	golang.org/x/mod v0.10.0 // indirect

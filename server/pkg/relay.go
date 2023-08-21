@@ -108,6 +108,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 	// fmt.Printf("Header is %+v\n", r.Header["M7sid"])
 	pass := r.Header.Get("Pass")
 	instanceId, _, err := decodePass(pass)
+	fmt.Println("relay", r.RequestURI)
 	if err != nil {
 		id := r.Header.Get("M7sid")
 		if id == "" {

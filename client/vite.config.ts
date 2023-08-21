@@ -1,8 +1,6 @@
-import { resolve, join } from 'path'
-import fs from 'fs'
+import { resolve } from 'path'
 import unocss from '@unocss/vite'
 import vue from '@vitejs/plugin-vue'
-import legacy from '@vitejs/plugin-legacy'
 import progress from 'vite-plugin-progress'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import commonjs from 'rollup-plugin-commonjs'
@@ -22,8 +20,8 @@ function pathResolve(dir: string) {
 const localIconPath = resolve(process.cwd(), 'src/assets/svg-icon')
 
 const serverProxy = {
-  target: 'https://console.monibuca.com:9999',
-  // target: 'http://console.monibuca.com:9999',
+  // target: 'https://console.monibuca.com:9999',
+  target: 'http://localhost:9999',
   changeOrigin: true,
   rewrite: (path) => path.replace(/^\/m7s/, '')
 }

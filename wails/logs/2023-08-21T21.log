@@ -1,0 +1,1171 @@
+21:14:08	[35mDEBUG[0m	[37;40mLogRotate[0m	配置	{"配置": path: ./logs
+size: 0
+days: 1
+formatter: 2006-01-02T15}
+21:14:08	[34mINFO[0m	[37;40mMonitor[0m	初始化	{"版本": "v4.0.3"}
+21:14:08	[35mDEBUG[0m	合并配置subdataargname:dts
+21:14:08	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:14:08	[35mDEBUG[0m	合并配置iframeonly:false
+21:14:08	[35mDEBUG[0m	合并配置key:
+21:14:08	[35mDEBUG[0m	合并配置secretargname:secret
+21:14:08	[35mDEBUG[0m	合并配置expireargname:expire
+21:14:08	[35mDEBUG[0m	合并配置subaudio:true
+21:14:08	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:14:08	[35mDEBUG[0m	合并配置submode:0
+21:14:08	[35mDEBUG[0m	合并配置waittimeout:10s
+21:14:08	[35mDEBUG[0m	合并配置writebuffersize:0
+21:14:08	[35mDEBUG[0m	existinternal
+21:14:08	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:14:08	[35mDEBUG[0m	合并配置submodeargname:mode
+21:14:08	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:14:08	[35mDEBUG[0m	合并配置syncmode:0
+21:14:08	[35mDEBUG[0m	合并配置subvideo:true
+21:14:08	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/api/list/stream"}
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/api/list/stream"}
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/api/list/track"}
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/api/list/track"}
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/"}
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/"}
+21:14:08	[35mDEBUG[0m	[37;40mMonitor[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      internal: true
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+path: monitor}
+21:14:08	[34mINFO[0m	[37;40mPreview[0m	初始化	{"版本": "v4.1.2"}
+21:14:08	[35mDEBUG[0m	[37;40mPreview[0m	http处理器已添加到引擎	{"pattern": "/preview/"}
+21:14:08	[35mDEBUG[0m	[37;40mPreview[0m	配置	{"配置": {}}
+21:14:08	[34mINFO[0m	[37;40mPS[0m	初始化	{"版本": "v4.0.9"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加	{"pattern": "/api/receive"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加到引擎	{"pattern": "/ps/api/receive"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加	{"pattern": "/api/replay"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加到引擎	{"pattern": "/ps/api/replay"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加	{"pattern": "/"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加到引擎	{"pattern": "/ps/"}
+21:14:08	[35mDEBUG[0m	[37;40mPS[0m	配置	{"配置": http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+relaymode: 0}
+21:14:08	[34mINFO[0m	[37;40mGB28181[0m	初始化	{"版本": "v4.4.0"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/bye"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/control"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/get/position"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/invite"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/list"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/forward"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/pause"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/resume"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/seek"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/position"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/ptz"}
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/records"}
+21:14:08	[34mINFO[0m	[37;40mGB28181[0m	[32mServer gb28181 start at[0m [94m0.0.0.0:5060[0m
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	start job
+21:14:08	[35mDEBUG[0m	[37;40mGB28181[0m	配置	{"配置": invitemode: 1
+inviteids: ""
+listenaddr: 0.0.0.0
+sipnetwork: udp
+sipip: ""
+sipport: 5060
+serial: "34020000002000000001"
+realm: "3402000000"
+username: ""
+password: ""
+port:
+    sip: udp:5060
+    media: tcp:58200-59200
+registervalidity: 1h0m0s
+heartbeatinterval: 1m0s
+mediaip: ""
+mediaport: 58200
+medianetwork: tcp
+mediaportmin: 58200
+mediaportmax: 59200
+removebaninterval: 10m0s
+loglevel: info
+dumppath: ""
+ignores: {}
+position:
+    autosubposition: false
+    expires: 1h0m0s
+    interval: 6s}
+21:14:08	[34mINFO[0m	[37;40mRecord[0m	初始化	{"版本": "v4.4.2-0.20230818060709-6c289bbcd27f"}
+21:14:08	[35mDEBUG[0m	existinternal
+21:14:08	[35mDEBUG[0m	合并配置subaudio:true
+21:14:08	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:14:08	[35mDEBUG[0m	existsubmode
+21:14:08	[35mDEBUG[0m	合并配置waittimeout:10s
+21:14:08	[35mDEBUG[0m	合并配置writebuffersize:0
+21:14:08	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:14:08	[35mDEBUG[0m	合并配置submodeargname:mode
+21:14:08	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:14:08	[35mDEBUG[0m	合并配置syncmode:0
+21:14:08	[35mDEBUG[0m	合并配置subvideo:true
+21:14:08	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:14:08	[35mDEBUG[0m	合并配置expireargname:expire
+21:14:08	[35mDEBUG[0m	合并配置subdataargname:dts
+21:14:08	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:14:08	[35mDEBUG[0m	合并配置iframeonly:false
+21:14:08	[35mDEBUG[0m	合并配置key:
+21:14:08	[35mDEBUG[0m	合并配置secretargname:secret
+21:14:08	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/list"}
+21:14:08	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/list/recording"}
+21:14:08	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/start"}
+21:14:08	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/stop"}
+21:14:08	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/"}
+21:14:08	[35mDEBUG[0m	[37;40mRecord[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      submode: 1
+      internal: true
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 1
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+flv:
+    ext: .flv
+    path: record/flv
+    autorecord: false
+    filter: ""
+    fragment: 0s
+mp4:
+    ext: .mp4
+    path: record/mp4
+    autorecord: false
+    filter: ""
+    fragment: 0s
+fmp4:
+    ext: .mp4
+    path: record/fmp4
+    autorecord: false
+    filter: ""
+    fragment: 0s
+hls:
+    ext: .m3u8
+    path: record/hls
+    autorecord: false
+    filter: ""
+    fragment: 0s
+raw:
+    ext: .
+    path: record/raw
+    autorecord: false
+    filter: ""
+    fragment: 0s
+rawaudio:
+    ext: .
+    path: record/raw
+    autorecord: false
+    filter: ""
+    fragment: 0s}
+21:14:08	[34mINFO[0m	[37;40mRoom[0m	初始化	{"版本": "v4.0.11"}
+21:14:08	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:14:08	[35mDEBUG[0m	合并配置submodeargname:mode
+21:14:08	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:14:08	[35mDEBUG[0m	合并配置syncmode:0
+21:14:08	[35mDEBUG[0m	existsubvideo
+21:14:08	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:14:08	[35mDEBUG[0m	合并配置subdataargname:dts
+21:14:08	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:14:08	[35mDEBUG[0m	合并配置iframeonly:false
+21:14:08	[35mDEBUG[0m	合并配置key:
+21:14:08	[35mDEBUG[0m	合并配置secretargname:secret
+21:14:08	[35mDEBUG[0m	合并配置expireargname:expire
+21:14:08	[35mDEBUG[0m	existsubaudio
+21:14:08	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:14:08	[35mDEBUG[0m	合并配置submode:0
+21:14:08	[35mDEBUG[0m	合并配置waittimeout:10s
+21:14:08	[35mDEBUG[0m	合并配置writebuffersize:0
+21:14:08	[35mDEBUG[0m	合并配置internal:false
+21:14:08	[35mDEBUG[0m	[37;40mRoom[0m	http处理器已添加	{"pattern": "/"}
+21:14:08	[35mDEBUG[0m	[37;40mRoom[0m	http处理器已添加到引擎	{"pattern": "/room/"}
+21:14:08	[35mDEBUG[0m	[37;40mRoom[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      subaudio: false
+      subvideo: false
+subscribe:
+    subaudio: false
+    subvideo: false
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+appname: room
+size: 20
+private: {}
+verify:
+    url: ""
+    method: ""
+    header: {}}
+21:14:08	[34mINFO[0m	[37;40mRTMP[0m	初始化	{"版本": "v4.2.6-0.20230817113543-91af4e990e99"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加	{"pattern": "/api/pull"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加到引擎	{"pattern": "/rtmp/api/pull"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加	{"pattern": "/api/push"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加到引擎	{"pattern": "/rtmp/api/push"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加	{"pattern": "/api/list"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加到引擎	{"pattern": "/rtmp/api/list"}
+21:14:08	[35mDEBUG[0m	[37;40mRTMP[0m	配置	{"配置": http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+tcp:
+    listenaddr: :1935
+    listenaddrtls: ""
+    certfile: ""
+    keyfile: ""
+    listennum: 0
+    nodelay: false
+pull:
+    repull: 0
+    pullonstart: {}
+    pullonsub: {}
+    proxy: ""
+push:
+    repush: 0
+    pushlist: {}
+    proxy: ""
+chunksize: 65536
+keepalive: false}
+21:14:08	[34mINFO[0m	[37;40mRTSP[0m	初始化	{"版本": "v4.2.6"}
+21:14:08	[35mDEBUG[0m	[37;40mRTSP[0m	http处理器已添加到引擎	{"pattern": "/rtsp/api/pull"}
+21:14:08	[35mDEBUG[0m	[37;40mRTSP[0m	http处理器已添加到引擎	{"pattern": "/rtsp/api/push"}
+21:14:08	[35mDEBUG[0m	[37;40mRTSP[0m	http处理器已添加到引擎	{"pattern": "/rtsp/api/list"}
+21:14:08	[34mINFO[0m	tcp listen 12 at :1935
+21:14:08	[35mDEBUG[0m	[37;40mRTSP[0m	配置	{"配置": publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+pull:
+    repull: 0
+    pullonstart: {}
+    pullonsub: {}
+    proxy: ""
+push:
+    repush: 0
+    pushlist: {}
+    proxy: ""
+listenaddr: :554
+udpaddr: :8000
+rtcpaddr: :8001
+readbuffercount: 2048
+writebuffercount: 2048
+pullprotocol: tcp
+map: {}}
+21:14:08	[34mINFO[0m	[37;40mEdge[0m	初始化	{"版本": "v4.0.6"}
+21:14:08	[33mWARN[0m	[37;40mEdge[0m	origin config error plugin disabled
+21:14:08	[35mDEBUG[0m	[37;40mEdge[0m	配置	{"配置": pull:
+    repull: 0
+    pullonstart: {}
+    pullonsub: {}
+    proxy: ""
+origin: ""}
+21:14:08	[34mINFO[0m	[37;40mSnap[0m	初始化	{"版本": "v4.0.7"}
+21:14:08	[35mDEBUG[0m	合并配置subvideo:true
+21:14:08	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:14:08	[35mDEBUG[0m	existiframeonly
+21:14:08	[35mDEBUG[0m	合并配置key:
+21:14:08	[35mDEBUG[0m	合并配置secretargname:secret
+21:14:08	[35mDEBUG[0m	合并配置expireargname:expire
+21:14:08	[35mDEBUG[0m	合并配置subdataargname:dts
+21:14:08	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:14:08	[35mDEBUG[0m	合并配置submode:0
+21:14:08	[35mDEBUG[0m	合并配置waittimeout:10s
+21:14:08	[35mDEBUG[0m	合并配置writebuffersize:0
+21:14:08	[35mDEBUG[0m	existinternal
+21:14:08	[35mDEBUG[0m	existsubaudio
+21:14:08	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:14:08	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:14:08	[35mDEBUG[0m	合并配置syncmode:0
+21:14:08	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:14:08	[35mDEBUG[0m	合并配置submodeargname:mode
+21:14:08	[35mDEBUG[0m	[37;40mSnap[0m	http处理器已添加	{"pattern": "/"}
+21:14:08	[35mDEBUG[0m	[37;40mSnap[0m	http处理器已添加到引擎	{"pattern": "/snap/"}
+21:14:08	[35mDEBUG[0m	[37;40mSnap[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      subaudio: false
+      iframeonly: true
+      internal: true
+    ffmpeg: ffmpeg
+subscribe:
+    subaudio: false
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: true
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+ffmpeg: ffmpeg
+path: ""
+filter: ""}
+21:14:08	[34mINFO[0m	[37;40mWebTransport[0m	初始化	{"版本": "v4.0.8"}
+21:14:08	[35mDEBUG[0m	[37;40mWebTransport[0m	配置	{"配置": listenaddr: :4433
+certfile: ""
+keyfile: ""}
+21:14:08	[34mINFO[0m	[37;40mWebRTC[0m	初始化	{"版本": "v4.2.1"}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/batch"}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/play/"}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/push/"}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/publish"}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/screenshare"}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/subscribe"}
+21:14:08	[34mINFO[0m	[37;40mWebRTC[0m	webrtc start listen	{"port": 9000}
+21:14:08	[35mDEBUG[0m	[37;40mWebRTC[0m	配置	{"配置": publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+iceservers: []
+publicip: []
+port: tcp:9000
+pli: 2s}
+21:14:08	[34mINFO[0m	[37;40mDebug[0m	初始化	{"版本": "v4.0.1"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加	{"pattern": "/profile"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加到引擎	{"pattern": "/debug/profile"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加	{"pattern": "/"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加到引擎	{"pattern": "/debug/"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加	{"pattern": "/trace"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加到引擎	{"pattern": "/debug/trace"}
+21:14:08	[35mDEBUG[0m	[37;40mDebug[0m	配置	{"配置": http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s}
+21:14:08	[34mINFO[0m	monibuca v4.13.10-0.20230821065056-3d14717f69e6[32m 启动成功[0m
+21:14:09	[34mINFO[0m	连接到控制台服务器localhost:44944成功map[code:0 enableReport:false instanceId:1 msg:ok]
+21:14:09	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/sysinfo", "remote": ""}
+21:14:09	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/summary?m7sid=1", "remote": ""}
+21:15:22	[35mDEBUG[0m	[37;40mLogRotate[0m	配置	{"配置": path: ./logs
+size: 0
+days: 1
+formatter: 2006-01-02T15}
+21:15:22	[34mINFO[0m	[37;40mMonitor[0m	初始化	{"版本": "v4.0.3"}
+21:15:22	[35mDEBUG[0m	合并配置expireargname:expire
+21:15:22	[35mDEBUG[0m	合并配置submodeargname:mode
+21:15:22	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置subaudio:true
+21:15:22	[35mDEBUG[0m	合并配置subdataargname:dts
+21:15:22	[35mDEBUG[0m	合并配置submode:0
+21:15:22	[35mDEBUG[0m	existinternal
+21:15:22	[35mDEBUG[0m	合并配置subvideo:true
+21:15:22	[35mDEBUG[0m	合并配置iframeonly:false
+21:15:22	[35mDEBUG[0m	合并配置waittimeout:10s
+21:15:22	[35mDEBUG[0m	合并配置syncmode:0
+21:15:22	[35mDEBUG[0m	合并配置writebuffersize:0
+21:15:22	[35mDEBUG[0m	合并配置key:
+21:15:22	[35mDEBUG[0m	合并配置secretargname:secret
+21:15:22	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:15:22	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:15:22	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/api/list/stream"}
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/api/list/stream"}
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/api/list/track"}
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/api/list/track"}
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加	{"pattern": "/"}
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	http处理器已添加到引擎	{"pattern": "/monitor/"}
+21:15:22	[35mDEBUG[0m	[37;40mMonitor[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      internal: true
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+path: monitor}
+21:15:22	[34mINFO[0m	[37;40mPreview[0m	初始化	{"版本": "v4.1.2"}
+21:15:22	[35mDEBUG[0m	[37;40mPreview[0m	http处理器已添加到引擎	{"pattern": "/preview/"}
+21:15:22	[35mDEBUG[0m	[37;40mPreview[0m	配置	{"配置": {}}
+21:15:22	[34mINFO[0m	[37;40mPS[0m	初始化	{"版本": "v4.0.9"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加	{"pattern": "/api/receive"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加到引擎	{"pattern": "/ps/api/receive"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加	{"pattern": "/api/replay"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加到引擎	{"pattern": "/ps/api/replay"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加	{"pattern": "/"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	http处理器已添加到引擎	{"pattern": "/ps/"}
+21:15:22	[35mDEBUG[0m	[37;40mPS[0m	配置	{"配置": http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+relaymode: 0}
+21:15:22	[34mINFO[0m	[37;40mGB28181[0m	初始化	{"版本": "v4.4.0"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/bye"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/control"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/get/position"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/invite"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/list"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/forward"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/pause"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/resume"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/play/seek"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/position"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/ptz"}
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	http处理器已添加到引擎	{"pattern": "/gb28181/api/records"}
+21:15:22	[34mINFO[0m	[37;40mGB28181[0m	[32mServer gb28181 start at[0m [94m0.0.0.0:5060[0m
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	配置	{"配置": invitemode: 1
+inviteids: ""
+listenaddr: 0.0.0.0
+sipnetwork: udp
+sipip: ""
+sipport: 5060
+serial: "34020000002000000001"
+realm: "3402000000"
+username: ""
+password: ""
+port:
+    sip: udp:5060
+    media: tcp:58200-59200
+registervalidity: 1h0m0s
+heartbeatinterval: 1m0s
+mediaip: ""
+mediaport: 58200
+medianetwork: tcp
+mediaportmin: 58200
+mediaportmax: 59200
+removebaninterval: 10m0s
+loglevel: info
+dumppath: ""
+ignores: {}
+position:
+    autosubposition: false
+    expires: 1h0m0s
+    interval: 6s}
+21:15:22	[34mINFO[0m	[37;40mRecord[0m	初始化	{"版本": "v4.4.2-0.20230818060709-6c289bbcd27f"}
+21:15:22	[35mDEBUG[0m	合并配置subvideo:true
+21:15:22	[35mDEBUG[0m	合并配置iframeonly:false
+21:15:22	[35mDEBUG[0m	合并配置waittimeout:10s
+21:15:22	[35mDEBUG[0m	existinternal
+21:15:22	[35mDEBUG[0m	合并配置writebuffersize:0
+21:15:22	[35mDEBUG[0m	合并配置key:
+21:15:22	[35mDEBUG[0m	合并配置secretargname:secret
+21:15:22	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:15:22	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:15:22	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:15:22	[35mDEBUG[0m	合并配置syncmode:0
+21:15:22	[35mDEBUG[0m	合并配置submodeargname:mode
+21:15:22	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置expireargname:expire
+21:15:22	[35mDEBUG[0m	合并配置subaudio:true
+21:15:22	[35mDEBUG[0m	合并配置subdataargname:dts
+21:15:22	[35mDEBUG[0m	existsubmode
+21:15:22	[35mDEBUG[0m	[37;40mGB28181[0m	start job
+21:15:22	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/list"}
+21:15:22	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/list/recording"}
+21:15:22	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/start"}
+21:15:22	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/api/stop"}
+21:15:22	[35mDEBUG[0m	[37;40mRecord[0m	http处理器已添加到引擎	{"pattern": "/record/"}
+21:15:22	[35mDEBUG[0m	[37;40mRecord[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      submode: 1
+      internal: true
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 1
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+flv:
+    ext: .flv
+    path: record/flv
+    autorecord: false
+    filter: ""
+    fragment: 0s
+mp4:
+    ext: .mp4
+    path: record/mp4
+    autorecord: false
+    filter: ""
+    fragment: 0s
+fmp4:
+    ext: .mp4
+    path: record/fmp4
+    autorecord: false
+    filter: ""
+    fragment: 0s
+hls:
+    ext: .m3u8
+    path: record/hls
+    autorecord: false
+    filter: ""
+    fragment: 0s
+raw:
+    ext: .
+    path: record/raw
+    autorecord: false
+    filter: ""
+    fragment: 0s
+rawaudio:
+    ext: .
+    path: record/raw
+    autorecord: false
+    filter: ""
+    fragment: 0s}
+21:15:22	[34mINFO[0m	[37;40mRoom[0m	初始化	{"版本": "v4.0.11"}
+21:15:22	[35mDEBUG[0m	existsubaudio
+21:15:22	[35mDEBUG[0m	合并配置subdataargname:dts
+21:15:22	[35mDEBUG[0m	合并配置submode:0
+21:15:22	[35mDEBUG[0m	existsubvideo
+21:15:22	[35mDEBUG[0m	合并配置iframeonly:false
+21:15:22	[35mDEBUG[0m	合并配置waittimeout:10s
+21:15:22	[35mDEBUG[0m	合并配置internal:false
+21:15:22	[35mDEBUG[0m	合并配置writebuffersize:0
+21:15:22	[35mDEBUG[0m	合并配置key:
+21:15:22	[35mDEBUG[0m	合并配置secretargname:secret
+21:15:22	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:15:22	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:15:22	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:15:22	[35mDEBUG[0m	合并配置syncmode:0
+21:15:22	[35mDEBUG[0m	合并配置submodeargname:mode
+21:15:22	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置expireargname:expire
+21:15:22	[35mDEBUG[0m	[37;40mRoom[0m	http处理器已添加	{"pattern": "/"}
+21:15:22	[35mDEBUG[0m	[37;40mRoom[0m	http处理器已添加到引擎	{"pattern": "/room/"}
+21:15:22	[35mDEBUG[0m	[37;40mRoom[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      subaudio: false
+      subvideo: false
+subscribe:
+    subaudio: false
+    subvideo: false
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+appname: room
+size: 20
+private: {}
+verify:
+    url: ""
+    method: ""
+    header: {}}
+21:15:22	[34mINFO[0m	[37;40mRTMP[0m	初始化	{"版本": "v4.2.6-0.20230817113543-91af4e990e99"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加	{"pattern": "/api/pull"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加到引擎	{"pattern": "/rtmp/api/pull"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加	{"pattern": "/api/push"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加到引擎	{"pattern": "/rtmp/api/push"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加	{"pattern": "/api/list"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	http处理器已添加到引擎	{"pattern": "/rtmp/api/list"}
+21:15:22	[35mDEBUG[0m	[37;40mRTMP[0m	配置	{"配置": http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+tcp:
+    listenaddr: :1935
+    listenaddrtls: ""
+    certfile: ""
+    keyfile: ""
+    listennum: 0
+    nodelay: false
+pull:
+    repull: 0
+    pullonstart: {}
+    pullonsub: {}
+    proxy: ""
+push:
+    repush: 0
+    pushlist: {}
+    proxy: ""
+chunksize: 65536
+keepalive: false}
+21:15:22	[34mINFO[0m	[37;40mRTSP[0m	初始化	{"版本": "v4.2.6"}
+21:15:22	[35mDEBUG[0m	[37;40mRTSP[0m	http处理器已添加到引擎	{"pattern": "/rtsp/api/pull"}
+21:15:22	[35mDEBUG[0m	[37;40mRTSP[0m	http处理器已添加到引擎	{"pattern": "/rtsp/api/push"}
+21:15:22	[35mDEBUG[0m	[37;40mRTSP[0m	http处理器已添加到引擎	{"pattern": "/rtsp/api/list"}
+21:15:22	[34mINFO[0m	tcp listen 12 at :1935
+21:15:22	[35mDEBUG[0m	[37;40mRTSP[0m	配置	{"配置": publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+pull:
+    repull: 0
+    pullonstart: {}
+    pullonsub: {}
+    proxy: ""
+push:
+    repush: 0
+    pushlist: {}
+    proxy: ""
+listenaddr: :554
+udpaddr: :8000
+rtcpaddr: :8001
+readbuffercount: 2048
+writebuffercount: 2048
+pullprotocol: tcp
+map: {}}
+21:15:22	[34mINFO[0m	[37;40mEdge[0m	初始化	{"版本": "v4.0.6"}
+21:15:22	[33mWARN[0m	[37;40mEdge[0m	origin config error plugin disabled
+21:15:22	[35mDEBUG[0m	[37;40mEdge[0m	配置	{"配置": pull:
+    repull: 0
+    pullonstart: {}
+    pullonsub: {}
+    proxy: ""
+origin: ""}
+21:15:22	[34mINFO[0m	[37;40mSnap[0m	初始化	{"版本": "v4.0.7"}
+21:15:22	[35mDEBUG[0m	合并配置secretargname:secret
+21:15:22	[35mDEBUG[0m	合并配置subvideoargname:vts
+21:15:22	[35mDEBUG[0m	合并配置subaudioargname:ats
+21:15:22	[35mDEBUG[0m	合并配置subdatatracks:[]
+21:15:22	[35mDEBUG[0m	合并配置syncmode:0
+21:15:22	[35mDEBUG[0m	合并配置writebuffersize:0
+21:15:22	[35mDEBUG[0m	合并配置key:
+21:15:22	[35mDEBUG[0m	合并配置submodeargname:mode
+21:15:22	[35mDEBUG[0m	合并配置subaudiotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置subvideotracks:[]
+21:15:22	[35mDEBUG[0m	合并配置expireargname:expire
+21:15:22	[35mDEBUG[0m	existsubaudio
+21:15:22	[35mDEBUG[0m	合并配置subdataargname:dts
+21:15:22	[35mDEBUG[0m	合并配置submode:0
+21:15:22	[35mDEBUG[0m	合并配置subvideo:true
+21:15:22	[35mDEBUG[0m	existiframeonly
+21:15:22	[35mDEBUG[0m	合并配置waittimeout:10s
+21:15:22	[35mDEBUG[0m	existinternal
+21:15:22	[35mDEBUG[0m	[37;40mSnap[0m	http处理器已添加	{"pattern": "/"}
+21:15:22	[35mDEBUG[0m	[37;40mSnap[0m	http处理器已添加到引擎	{"pattern": "/snap/"}
+21:15:22	[35mDEBUG[0m	[37;40mSnap[0m	配置	{"配置": defaultyaml: |-
+    subscribe:
+      subaudio: false
+      iframeonly: true
+      internal: true
+    ffmpeg: ffmpeg
+subscribe:
+    subaudio: false
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: true
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: true
+http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s
+ffmpeg: ffmpeg
+path: ""
+filter: ""}
+21:15:22	[34mINFO[0m	[37;40mWebTransport[0m	初始化	{"版本": "v4.0.8"}
+21:15:22	[35mDEBUG[0m	[37;40mWebTransport[0m	配置	{"配置": listenaddr: :4433
+certfile: ""
+keyfile: ""}
+21:15:22	[34mINFO[0m	[37;40mWebRTC[0m	初始化	{"版本": "v4.2.1"}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/batch"}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/play/"}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/push/"}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/publish"}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/screenshare"}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	http处理器已添加到引擎	{"pattern": "/webrtc/test/subscribe"}
+21:15:22	[34mINFO[0m	[37;40mWebRTC[0m	webrtc start listen	{"port": 9000}
+21:15:22	[35mDEBUG[0m	[37;40mWebRTC[0m	配置	{"配置": publish:
+    pubaudio: true
+    pubvideo: true
+    insertsei: false
+    kickexist: false
+    publishtimeout: 10s
+    waitclosetimeout: 0s
+    delayclosetimeout: 0s
+    idletimeout: 0s
+    pausetimeout: 30s
+    buffertime: 0s
+    speedlimit: 500ms
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    ringsize: 256
+    ringsizemax: 1024
+subscribe:
+    subaudio: true
+    subvideo: true
+    subvideoargname: vts
+    subaudioargname: ats
+    subdataargname: dts
+    submodeargname: mode
+    subaudiotracks: []
+    subvideotracks: []
+    subdatatracks: []
+    submode: 0
+    syncmode: 0
+    iframeonly: false
+    waittimeout: 10s
+    writebuffersize: 0
+    key: ""
+    secretargname: secret
+    expireargname: expire
+    internal: false
+iceservers: []
+publicip: []
+port: tcp:9000
+pli: 2s}
+21:15:22	[34mINFO[0m	[37;40mDebug[0m	初始化	{"版本": "v4.0.1"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加	{"pattern": "/profile"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加到引擎	{"pattern": "/debug/profile"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加	{"pattern": "/"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加到引擎	{"pattern": "/debug/"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加	{"pattern": "/trace"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	http处理器已添加到引擎	{"pattern": "/debug/trace"}
+21:15:22	[35mDEBUG[0m	[37;40mDebug[0m	配置	{"配置": http:
+    listenaddr: :8080
+    listenaddrtls: :8443
+    certfile: ""
+    keyfile: ""
+    cors: true
+    username: ""
+    password: ""
+    readtimeout: 0s
+    writetimeout: 0s
+    idletimeout: 0s}
+21:15:22	[34mINFO[0m	monibuca v4.13.10-0.20230821065056-3d14717f69e6[32m 启动成功[0m
+21:15:22	[34mINFO[0m	连接到控制台服务器localhost:44944成功map[code:0 enableReport:false instanceId:1 msg:ok]
+21:15:23	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/sysinfo", "remote": ""}
+21:15:23	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/summary?m7sid=1", "remote": ""}
+21:15:30	[34mINFO[0m	[37;40mGB28181[0m	LocalAndInternalIPs	{"routes": 43.132.98: 43.132.98.43
+43.132.98.43: 43.132.98.43
+192.168.255: 192.168.255.10
+192.168.255.10: 43.132.98.43}
+21:15:42	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/sysinfo", "remote": ""}
+21:15:42	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/summary?m7sid=1", "remote": ""}
+21:16:05	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/sysinfo", "remote": ""}
+21:16:05	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/summary?m7sid=1", "remote": ""}
+21:16:05	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/sysinfo", "remote": ""}
+21:16:05	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/summary?m7sid=1", "remote": ""}
+21:16:07	[35mDEBUG[0m	[37;40mengine[0m	visit	{"path": "/api/list/pull", "remote": ""}
