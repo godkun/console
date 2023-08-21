@@ -3,7 +3,6 @@ shutdown.sh
 .turbo
 console.code-workspace
 .history
-.vscode
 ./server/server
 m7s.db
 fatal.log

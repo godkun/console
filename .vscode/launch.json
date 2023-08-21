@@ -12,7 +12,6 @@
       "mode": "auto",
       "program": "${workspaceFolder}/server",
       "cwd": "${workspaceFolder}/server",
-      "buildFlags": "-tags trail",
       "env": {
         "CGO_ENABLED": "1",
       }
