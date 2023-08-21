@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -70,9 +71,10 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		if query != "" {
 			query = "?" + query
 		}
-		req, _ := http.NewRequestWithContext(req.Context(), req.Method, "http://localhost:9999/"+requestedFilename+query, req.Body)
-		req.Header = req.Header.Clone()
-		resp, err := http.DefaultClient.Do(req)
+		newReq, _ := http.NewRequestWithContext(req.Context(), req.Method, "http://localhost:9999/"+requestedFilename+query, req.Body)
+		newReq.Header = req.Header.Clone()
+		resp, err := http.DefaultClient.Do(newReq)
+		fmt.Println("request server:", requestedFilename)
 		if err != nil {
 			println(err.Error())
 			return

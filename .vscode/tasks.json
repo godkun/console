@@ -18,6 +18,14 @@
       "options": {
         "cwd": "${workspaceFolder}/wails"
       }
+    },
+    {
+      "label": "run mac",
+      "type": "shell",
+      "command": "./console",
+      "options": {
+        "cwd": "${workspaceFolder}/wails/build/bin/console.app/Contents/MacOS"
+      }
     }
   ]
 }

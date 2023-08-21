@@ -113,7 +113,7 @@ func relay(w http.ResponseWriter, r *http.Request) {
 		if id == "" {
 			id = r.URL.Query().Get("m7sid")
 		}
-		// fmt.Printf("m7sid is %+v\n", id)
+		fmt.Printf("m7sid is %+v\n", id)
 		instance = instances.FindByIdAndMail(id, mail)
 		if instance == nil {
 			secretData := db.QueryAndParse("select * from instance where id = ? and mail= ?", id, mail)

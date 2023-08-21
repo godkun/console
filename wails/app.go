@@ -45,6 +45,7 @@ func (a *App) startup(ctx context.Context) {
 	go console.Run(ctx)
 	go m7s.Run(ctx, config.Config{
 		"global": config.Config{
+			"loglevel": "debug",
 			"console": config.Config{
 				"server": "localhost:44944",
 				"secret": "e10adc3949ba59abbe56e057f20f883e",
@@ -54,6 +55,6 @@ func (a *App) startup(ctx context.Context) {
 }
 
 // Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) Greet(name []any) string {
+	return fmt.Sprintln(name...)
 }

@@ -1,6 +1,11 @@
 import { setupApp } from './app';
-import { LogInfo, LogError, LogWarning } from '@wailsapp/runtime';
-console.log = LogInfo;
-console.error = LogError;
-console.warn = LogWarning;
+console.log = (...args: any[]) => {
+  window['go']['main']['App']['Greet'](args.map(String));
+};
+console.error = (...args: any[]) => {
+  window['go']['main']['App']['Greet'](args.map(String));
+};
+console.warn = (...args: any[]) => {
+  window['go']['main']['App']['Greet'](args.map(String));
+};
 setupApp();
