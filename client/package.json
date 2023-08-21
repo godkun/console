@@ -9,7 +9,7 @@
     "dev": "cross-env VUE_EDITOR=code vite --mode=production",
     "build": "vite build --emptyOutDir",
     "build:embed": "vite build --outDir ../server/web --emptyOutDir",
-    "build:wails": "vite build --outDir ../wails/frontend/dist --emptyOutDir",
+    "build:wails": "vite build --mode wails --outDir ../wails/frontend/dist --emptyOutDir",
     "deploy": "npm run build && ./scripts/deploy-console.mjs",
     "deploy:prd": "npm run build:prd && ./scripts/deploy-console.mjs",
     "doc": "pnpm --filter @console/doc dev",
@@ -58,6 +58,7 @@
     "webrtc-internals": "^0.0.8"
   },
   "devDependencies": {
+    "@wailsapp/runtime": "workspace:*",
     "@console/vite-plugin-vue-inspector": "workspace:*",
     "@milahu/patch-package": "^6.4.14",
     "@types/dom-mediacapture-transform": "^0.1.4",
@@ -125,6 +126,7 @@
   },
   "workspaces": [
     "packages/*",
+    "packages/wailsjs/*",
     "doc"
   ],
   "volta": {

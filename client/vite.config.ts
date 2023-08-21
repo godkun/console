@@ -55,7 +55,8 @@ export default ({ command, mode }) => {
         minify: true,
         inject: {
           data: {
-            isProd: command === 'build'
+            isProd: command === 'build',
+            entry: mode == 'wails' ? '/src/wails.ts' : '/src/web.ts'
             // BASE_URL: `web`
           }
         }

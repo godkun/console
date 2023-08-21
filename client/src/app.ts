@@ -7,7 +7,7 @@ import { AppProvider } from '@/components/Application'
 import { SvgIcon } from '@/components/SvgIcon'
 import { setupNaive, setupAssets } from '@/plugins'
 
-async function setupApp() {
+export async function setupApp() {
   setupAssets()
   const appProvider = createApp(AppProvider)
 
@@ -33,5 +33,3 @@ async function setupApp() {
 
   app.mount('#app', true)
 }
-
-setupApp()

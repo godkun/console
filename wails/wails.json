@@ -3,6 +3,7 @@
   "name": "console",
   "outputfilename": "console",
   "frontend:dir": "../client",
+  "wailsjsdir": "../client/packages",
   "frontend:install": "pnpm install",
   "frontend:build": "npm run build:wails",
   "frontend:dev:watcher": "npm run dev",
