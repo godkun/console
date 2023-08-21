@@ -370,7 +370,8 @@
         getMenuLocation,
         mixMenu,
         switchCollapse,
-        isHome
+        isHome,
+        goBack
       }
     }
   })
