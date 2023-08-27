@@ -154,6 +154,13 @@
     }
 
     if (pluginMap['WebRTC']) {
+      pushAddrs.push({
+        name: 'webrtc',
+        url: `webrtc://${hostname}/webrtc/push/${streamPath}`
+      })
+    }
+
+    if (pluginMap['WebRTC']) {
       pullAddrs.push({
         name: 'webrtc',
         url: `webrtc://${hostname}/webrtc/play/${streamPath}`
@@ -203,6 +210,14 @@
       pullAddrs.push({
         name: 'ws-raw',
         url: `ws://${hostname}${a}/jessica/${streamPath}`
+      })
+      pullAddrs.push({
+        name: '裸流(h264)',
+        url: `http://${hostname}${a}/jessica/${streamPath}.h264`
+      })
+      pullAddrs.push({
+        name: '裸流(h265)',
+        url: `http://${hostname}${a}/jessica/${streamPath}.h265`
       })
     }
     pullAddrs.forEach((item) => {

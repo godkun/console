@@ -6,4 +6,5 @@ console.code-workspace
 ./server/server
 m7s.db
 fatal.log
-.wails/fatal
+wails/fatal
+logs/
