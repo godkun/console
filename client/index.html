@@ -129,7 +129,10 @@
     </script>
     <script src="<%= entry %>" type="module"></script>
     <script>
-      location.href = '/#/instance/dashboard/1'
+      var isSass = location.hostname == 'console.monibuca.com'
+      if (!isSass) {
+        location.href = '/#/instance/dashboard/1'
+      }
     </script>
   </body>
 </html>
