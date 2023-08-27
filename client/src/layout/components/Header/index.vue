@@ -217,8 +217,8 @@
       })
 
       const goBack = () => {
-        window.location.href = 'wails://wails/#/instance/list'
-        // window.location.reload()
+        window.location.href = '/#/instance/list'
+        window.location.reload()
       }
 
       const getChangeStyle = computed(() => {
