@@ -6,7 +6,7 @@
     {
       "label": "wails client",
       "type": "shell",
-      "command": "npm run build:wails",
+      "command": "npm run build:embed",
       "options": {
         "cwd": "${workspaceFolder}/client"
       }
@@ -25,10 +25,11 @@
     {
       "label": "wails windows",
       "type": "shell",
-      "command": "wails build -s",
+      "command": "wails build -s -debug=true -windowsconsole",
       "options": {
         "cwd": "${workspaceFolder}/wails",
         "env": {
+          "CGO_ENABLED":"1",
           "GOOS": "windows",
           "GOARCH": "amd64"
         }

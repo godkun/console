@@ -131,7 +131,7 @@
           //   ifShow: () => record.online == 1
           // },
           {
-            label: '详情',
+            label: '进入详情',
             type: 'primary',
             disabled: record.online == 1 ? false : true,
             onClick: handleInstanceDetail.bind(null, record)
@@ -230,7 +230,6 @@
         id
       }
     })
-    console.log(page.href)
     const { isSaas } = useProjectSetting()
     if (isSaas.value) {
       window.open(page.href, '_blank')
