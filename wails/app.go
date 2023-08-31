@@ -45,7 +45,7 @@ func (a *App) startup(ctx context.Context) {
 	go console.Run(ctx)
 	go m7s.Run(ctx, config.Config{
 		"global": config.Config{
-			"loglevel": "debug",
+			"loglevel": "info",
 			"console": config.Config{
 				"server": "localhost:44944",
 				"secret": "e10adc3949ba59abbe56e057f20f883e",

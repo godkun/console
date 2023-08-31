@@ -1,17 +1,18 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
 import { router } from '@/router'
-
 // 创建一个实例
 const service = axios.create({
   timeout: 10000,
   withCredentials: false
 })
-
+export const prefix = import.meta.env.VITE_GLOB_API_URL_PREFIX || ''
 // 请求拦截
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     if (config.headers && 'm7sid' in config.headers) {
-      config.baseURL = '/m7s/'
+      config.baseURL = prefix || '/m7s/'
+    } else {
+      config.baseURL = prefix
     }
     return config
   },

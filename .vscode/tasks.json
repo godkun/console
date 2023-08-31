@@ -14,9 +14,35 @@
     {
       "label": "wails",
       "type": "shell",
+      "command": "wails build -debug=true",
+      "options": {
+        "cwd": "${workspaceFolder}/wails",
+        "env": {
+          "CGO_ENABLED":"1",
+        }
+      }
+    },
+    {
+      "label": "wails windows",
+      "type": "shell",
       "command": "wails build -s",
       "options": {
-        "cwd": "${workspaceFolder}/wails"
+        "cwd": "${workspaceFolder}/wails",
+        "env": {
+          "GOOS": "windows",
+          "GOARCH": "amd64"
+        }
+      }
+    },
+    {
+      "label": "wails x86",
+      "type": "shell",
+      "command": "wails build -s",
+      "options": {
+        "cwd": "${workspaceFolder}/wails",
+        "env": {
+          "GOARCH": "amd64"
+        }
       }
     },
     {

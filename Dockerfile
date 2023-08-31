@@ -1,10 +1,10 @@
 FROM golang:1.20-bullseye  AS build
 
-WORKDIR /app
+WORKDIR /app/src
 COPY ./server /app/src/server
-
-RUN go env -w GOPROXY=https://goproxy.cn,direct
-RUN cd /app/src/server &&  CGO_ENABLED=1 GOOS=linux go build  -tags trail -o /app/bin/m7sconsole
+RUN echo "go 1.19\nuse ./server" > /app/src/go.work
+RUN go env -w GOPROXY=https://goproxy.cn,direct CGO_ENABLED=1 GOOS=linux
+RUN go build -o /app/bin/m7sconsole /app/src/server/main.go
 
 
 FROM bitnami/minideb:latest
@@ -13,8 +13,6 @@ RUN cd /app
 # 复制可执行文件到镜像中
 COPY --from=build /app/bin/m7sconsole m7sconsole
 COPY config.toml config.toml
-COPY registermailtxt registermailtxt
-COPY resetpwdtxt resetpwdtxt
 
 # 安装依赖库（如果有需要的话）
 

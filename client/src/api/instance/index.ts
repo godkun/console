@@ -1,5 +1,5 @@
 // 实例管理接口
-import fetch from '../fetch'
+import fetch, { prefix } from '../fetch'
 // 获取实例列表
 export function getInstanceList(data) {
   return fetch({
@@ -45,6 +45,9 @@ export function getInstanceSummary(m7sid: string) {
       m7sid
     }
   })
+}
+export function getInstanceSummarySSE(m7sid: string) {
+  return new EventSource(prefix + '/api/summary?m7sid=' + m7sid)
 }
 
 // 系统信息，包含版本号（Version）和启动时间（StartTime）两个字段

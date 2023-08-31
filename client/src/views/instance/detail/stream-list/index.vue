@@ -20,7 +20,7 @@
   import { BasicTable, TableAction } from '@/components/Table'
   // import { Interval } from '@/components/interval'
   import { columns } from './columns'
-  import { getInstanceHttp } from '@/api/instance'
+  import { getInstanceHttp, getInstanceSummarySSE } from '@/api/instance'
 
   const route = useRoute()
   const router = useRouter()
@@ -90,7 +90,7 @@
   })
 
   onMounted(() => {
-    const es = new EventSource('/api/summary?m7sid=' + id)
+    const es = getInstanceSummarySSE(id)
     es.onmessage = tick
     onBeforeRouteLeave(() => es.close())
   })

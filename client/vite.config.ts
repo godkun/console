@@ -43,14 +43,14 @@ export default ({ command, mode }) => {
     base: './',
     plugins: [
       vue(),
-      viteVConsole({
-        entry: resolve('src/wails.ts'), // or you can use entry: [path.resolve('src/main.ts')]
-        enabled: true,
-        config: {
-          maxLogNumber: 1000,
-          theme: 'dark'
-        }
-      }),
+      // viteVConsole({
+      //   entry: resolve('src/wails.ts'), // or you can use entry: [path.resolve('src/main.ts')]
+      //   enabled: true,
+      //   config: {
+      //     maxLogNumber: 1000,
+      //     theme: 'dark'
+      //   }
+      // }),
       // Inspector({
       //   enabled: false,
       //   toggleButtonVisibility: 'never',

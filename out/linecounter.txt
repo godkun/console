@@ -1,0 +1,1534 @@
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2023-08-29 17:41:59
+count workspace : /Users/dexter/project/console
+total files : 834
+total code lines : 106163
+total comment lines : 19640
+total blank lines : 5840
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |            .ts|          10018|           2234|            801|    9.4|
+   |           .svg|           3066|             13|            303|    2.9|
+   |           .vue|           8566|            380|            768|    8.1|
+   |           .css|            355|            121|             75|   0.33|
+   |          .less|              5|              0|              0| 0.0047|
+   |          .json|           3588|              0|             34|    3.4|
+   |               |            152|             10|             14|   0.14|
+   |            .js|          58838|          10681|            610|     55|
+   |           .crt|            132|              0|              0|   0.12|
+   |           .key|             54|              3|              0|  0.051|
+   |          .yaml|          10382|             55|           1483|    9.8|
+   |           .md5|              1|              0|              0|0.00094|
+   |            .md|            107|              9|             38|   0.10|
+   |           .sum|            827|              4|              0|   0.78|
+   |           .mjs|             10|              3|              2| 0.0094|
+   |          .html|           1713|           3896|            173|    1.6|
+   |          .work|              5|              0|              1| 0.0047|
+   |           .mod|            907|            682|             46|   0.85|
+   |          .toml|             49|              0|              0|  0.046|
+   |            .go|           6260|           1544|           1434|    5.9|
+   |            .sh|              1|              0|              0|0.00094|
+   |           .log|            774|              2|              0|   0.73|
+   |           .txt|             75|              1|             18|  0.071|
+   |         .plist|             86|              1|              0|  0.081|
+   |      .manifest|             15|              0|              0|  0.014|
+   |           .nsh|            152|              1|             27|   0.14|
+   |           .nsi|             25|              0|             13|  0.024|
+   -------------------------------------------------------------------------
+.gitignore, code is 10, comment is 0, blank is 0.
+.history/.gitignore_20230818143040, code is 9, comment is 0, blank is 0.
+.history/.gitignore_20230821094714, code is 8, comment is 0, blank is 0.
+.history/client/index_20230818143040.html, code is 119, comment is 1, blank is 12.
+.history/client/index_20230821093628.html, code is 119, comment is 1, blank is 12.
+.history/client/index_20230821093635.html, code is 119, comment is 1, blank is 12.
+.history/client/index_20230821093637.html, code is 119, comment is 1, blank is 12.
+.history/client/index_20230821144147.html, code is 121, comment is 1, blank is 13.
+.history/client/index_20230821144152.html, code is 122, comment is 1, blank is 12.
+.history/client/index_20230821144155.html, code is 122, comment is 1, blank is 12.
+.history/client/index_20230821144158.html, code is 122, comment is 1, blank is 12.
+.history/client/index_20230821144201.html, code is 122, comment is 1, blank is 12.
+.history/client/index_20230821144202.html, code is 122, comment is 1, blank is 12.
+.history/client/index_20230821144214.html, code is 122, comment is 1, blank is 12.
+.history/client/package_20230818143040.json, code is 132, comment is 0, blank is 1.
+.history/client/package_20230821084351.json, code is 132, comment is 0, blank is 2.
+.history/client/package_20230821084353.json, code is 133, comment is 0, blank is 1.
+.history/client/package_20230821085022.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821085025.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821085028.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821085031.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821085034.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821085037.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092450.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092453.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092458.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092746.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092801.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092806.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821092807.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093521.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093524.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093526.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093527.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093851.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093854.json, code is 134, comment is 0, blank is 1.
+.history/client/package_20230821093857.json, code is 134, comment is 0, blank is 1.
+.history/client/pnpm-workspace_20230818143040.yaml, code is 2, comment is 3, blank is 0.
+.history/client/pnpm-workspace_20230821085242.yaml, code is 2, comment is 4, blank is 0.
+.history/client/src/layout/components/Header/index_20230821134815.vue, code is 422, comment is 30, blank is 61.
+.history/client/src/layout/components/Header/index_20230821205308.vue, code is 421, comment is 31, blank is 61.
+.history/client/src/main_20230818143040.ts, code is 21, comment is 6, blank is 10.
+.history/client/src/main_20230821083346.ts, code is 21, comment is 6, blank is 10.
+.history/client/src/main_20230821083420.ts, code is 20, comment is 6, blank is 9.
+.history/client/src/main_20230821083434.ts, code is 20, comment is 6, blank is 9.
+.history/client/src/wails_20230821083405.ts, code is 0, comment is 0, blank is 0.
+.history/client/src/wails_20230821083409.ts, code is 0, comment is 0, blank is 0.
+.history/client/src/wails_20230821083502.ts, code is 2, comment is 0, blank is 0.
+.history/client/src/wails_20230821083505.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821083510.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821083512.ts, code is 2, comment is 0, blank is 1.
+.history/client/src/wails_20230821084330.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821084336.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821085259.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821085307.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821085309.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821085313.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821085315.ts, code is 3, comment is 0, blank is 0.
+.history/client/src/wails_20230821085319.ts, code is 3, comment is 0, blank is 1.
+.history/client/src/wails_20230821085325.ts, code is 6, comment is 0, blank is 0.
+.history/client/src/wails_20230821085340.ts, code is 6, comment is 0, blank is 0.
+.history/client/src/wails_20230821093150.ts, code is 6, comment is 0, blank is 0.
+.history/client/src/wails_20230821135535.ts, code is 6, comment is 0, blank is 0.
+.history/client/src/wails_20230821135537.ts, code is 6, comment is 0, blank is 0.
+.history/client/src/wails_20230821135539.ts, code is 7, comment is 0, blank is 1.
+.history/client/src/wails_20230821135540.ts, code is 8, comment is 0, blank is 0.
+.history/client/src/wails_20230821135549.ts, code is 8, comment is 0, blank is 0.
+.history/client/src/wails_20230821135550.ts, code is 8, comment is 0, blank is 0.
+.history/client/src/wails_20230821135553.ts, code is 8, comment is 0, blank is 0.
+.history/client/src/wails_20230821135556.ts, code is 8, comment is 0, blank is 0.
+.history/client/src/wails_20230821135558.ts, code is 8, comment is 0, blank is 0.
+.history/client/src/wails_20230821135602.ts, code is 10, comment is 0, blank is 0.
+.history/client/src/wails_20230821135605.ts, code is 10, comment is 0, blank is 0.
+.history/client/src/wails_20230821135607.ts, code is 12, comment is 0, blank is 0.
+.history/client/src/wails_20230821135814.ts, code is 12, comment is 0, blank is 0.
+.history/client/src/wails_20230821135842.ts, code is 12, comment is 0, blank is 0.
+.history/client/src/wails_20230821135845.ts, code is 12, comment is 0, blank is 0.
+.history/client/src/wails_20230821135849.ts, code is 12, comment is 0, blank is 0.
+.history/client/src/wails_20230821135850.ts, code is 12, comment is 0, blank is 0.
+.history/client/src/wails_20230821135853.ts, code is 11, comment is 0, blank is 0.
+.history/client/src/wails_20230821140444.ts, code is 11, comment is 0, blank is 0.
+.history/client/src/wails_20230821140450.ts, code is 11, comment is 0, blank is 0.
+.history/client/src/wails_20230821140456.ts, code is 11, comment is 0, blank is 0.
+.history/client/src/web_20230821083428.ts, code is 0, comment is 0, blank is 0.
+.history/client/src/web_20230821083439.ts, code is 1, comment is 0, blank is 0.
+.history/client/src/web_20230821083445.ts, code is 1, comment is 0, blank is 0.
+.history/client/src/web_20230821083449.ts, code is 1, comment is 0, blank is 0.
+.history/client/src/web_20230821083451.ts, code is 2, comment is 0, blank is 0.
+.history/client/src/web_20230821083500.ts, code is 2, comment is 0, blank is 0.
+.history/client/src/web_20230821093150.ts, code is 2, comment is 0, blank is 0.
+.history/client/vite.config_20230818143040.ts, code is 100, comment is 30, blank is 4.
+.history/client/vite.config_20230821091515.ts, code is 100, comment is 30, blank is 5.
+.history/client/vite.config_20230821091516.ts, code is 100, comment is 30, blank is 5.
+.history/client/vite.config_20230821091518.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821091519.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821091522.ts, code is 100, comment is 30, blank is 4.
+.history/client/vite.config_20230821091526.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821091528.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821091530.ts, code is 100, comment is 30, blank is 4.
+.history/client/vite.config_20230821091851.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821091856.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821091859.ts, code is 102, comment is 30, blank is 4.
+.history/client/vite.config_20230821091903.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821091905.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821091906.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092118.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092120.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092124.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092127.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092128.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092133.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092135.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092136.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092138.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821092355.ts, code is 105, comment is 31, blank is 4.
+.history/client/vite.config_20230821092402.ts, code is 103, comment is 30, blank is 4.
+.history/client/vite.config_20230821093252.ts, code is 100, comment is 30, blank is 4.
+.history/client/vite.config_20230821093436.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093442.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093445.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093447.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093450.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093451.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093453.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093503.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093507.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093511.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093541.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093543.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093545.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093546.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093548.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821093551.ts, code is 101, comment is 30, blank is 4.
+.history/client/vite.config_20230821211207.ts, code is 100, comment is 30, blank is 4.
+.history/client/vite.config_20230821211208.ts, code is 99, comment is 30, blank is 4.
+.history/client/vite.config_20230821211210.ts, code is 99, comment is 30, blank is 4.
+.history/client/vite.config_20230821211220.ts, code is 100, comment is 29, blank is 4.
+.history/client/vite.config_20230821211221.ts, code is 99, comment is 30, blank is 4.
+.history/client/vite.config_20230821211228.ts, code is 99, comment is 30, blank is 4.
+.history/server/pkg/relay_20230818143040.go, code is 124, comment is 16, blank is 15.
+.history/server/pkg/relay_20230821141655.go, code is 125, comment is 15, blank is 15.
+.history/server/pkg/relay_20230821204911.go, code is 126, comment is 15, blank is 15.
+.history/server/pkg/relay_20230821204915.go, code is 126, comment is 15, blank is 15.
+.history/server/pkg/relay_20230821204917.go, code is 126, comment is 15, blank is 15.
+.history/server/pkg/relay_20230821204920.go, code is 126, comment is 15, blank is 15.
+.history/wails/app_20230818143040.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182040.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182043.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182049.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182054.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182101.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182105.go, code is 38, comment is 5, blank is 8.
+.history/wails/app_20230818182111.go, code is 38, comment is 5, blank is 9.
+.history/wails/app_20230818182114.go, code is 38, comment is 5, blank is 9.
+.history/wails/app_20230818182119.go, code is 38, comment is 5, blank is 9.
+.history/wails/app_20230818182130.go, code is 40, comment is 5, blank is 9.
+.history/wails/app_20230818182136.go, code is 41, comment is 5, blank is 10.
+.history/wails/app_20230818182138.go, code is 41, comment is 5, blank is 10.
+.history/wails/app_20230818182142.go, code is 42, comment is 5, blank is 9.
+.history/wails/app_20230818182144.go, code is 43, comment is 5, blank is 10.
+.history/wails/app_20230818182158.go, code is 44, comment is 5, blank is 10.
+.history/wails/app_20230818182200.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230818182204.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230818182220.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230818182223.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230818182239.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821134731.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821134732.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821135735.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821135743.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821135750.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821135758.go, code is 45, comment is 5, blank is 9.
+.history/wails/app_20230821140652.go, code is 45, comment is 5, blank is 10.
+.history/wails/app_20230821140655.go, code is 46, comment is 5, blank is 9.
+.history/wails/go_20230818143040.mod, code is 122, comment is 93, blank is 6.
+.history/wails/go_20230818154255.mod, code is 124, comment is 93, blank is 6.
+.history/wails/go_20230818182016.mod, code is 125, comment is 96, blank is 6.
+.history/wails/go_20230821190348.mod, code is 126, comment is 96, blank is 6.
+.history/wails/go_20230821190349.mod, code is 126, comment is 96, blank is 6.
+.history/wails/go_20230821190351.mod, code is 125, comment is 96, blank is 6.
+.history/wails/main_20230821133524.go, code is 52, comment is 29, blank is 18.
+.history/wails/main_20230821141219.go, code is 52, comment is 29, blank is 19.
+.history/wails/main_20230821141223.go, code is 52, comment is 29, blank is 19.
+.history/wails/main_20230821141227.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821141230.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821141236.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821141251.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821141255.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821141256.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821141920.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141922.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141926.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141927.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141936.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141952.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141954.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141958.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821141959.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821142002.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821142003.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821142012.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821143159.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821143202.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821143204.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821143207.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821143228.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821191709.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821191710.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821191722.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821191935.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821192037.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821192038.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821192040.go, code is 54, comment is 29, blank is 19.
+.history/wails/main_20230821192542.go, code is 53, comment is 29, blank is 19.
+.history/wails/main_20230821192603.go, code is 53, comment is 29, blank is 19.
+.history/wails/wails_20230818143040.json, code is 15, comment is 0, blank is 0.
+.history/wails/wails_20230821084135.json, code is 16, comment is 0, blank is 0.
+.history/wails/wails_20230821084138.json, code is 16, comment is 0, blank is 0.
+.history/wails/wails_20230821084140.json, code is 16, comment is 0, blank is 0.
+.history/wails/wails_20230821084143.json, code is 16, comment is 0, blank is 0.
+.history/wails/wails_20230821084201.json, code is 16, comment is 0, blank is 0.
+client/.editorconfig, code is 15, comment is 0, blank is 4.
+client/.eslintignore, code is 14, comment is 0, blank is 0.
+client/.eslintrc.js, code is 79, comment is 1, blank is 2.
+client/.gitignore, code is 26, comment is 0, blank is 3.
+client/.npmrc, code is 4, comment is 1, blank is 0.
+client/.prettierignore, code is 3, comment is 8, blank is 0.
+client/.prettierrc, code is 14, comment is 0, blank is 0.
+client/components.d.ts, code is 20, comment is 3, blank is 2.
+client/doc/components.d.ts, code is 65, comment is 3, blank is 2.
+client/doc/doc/.vitepress/config.js, code is 41, comment is 0, blank is 1.
+client/doc/doc/index.md, code is 20, comment is 1, blank is 1.
+client/doc/doc/nav/group1/index.md, code is 6, comment is 0, blank is 1.
+client/doc/doc/nav/group1/控制台.md, code is 2, comment is 0, blank is 1.
+client/doc/doc/nav/room/tech.md, code is 22, comment is 0, blank is 5.
+client/doc/package.json, code is 27, comment is 0, blank is 1.
+client/index.html, code is 125, comment is 1, blank is 12.
+client/local.monibuca.com.key, code is 27, comment is 0, blank is 0.
+client/local.monibuca.com_bundle.crt, code is 66, comment is 0, blank is 0.
+client/package.json, code is 136, comment is 0, blank is 1.
+client/package.json.md5, code is 1, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/.eslintignore, code is 3, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/.eslintrc, code is 12, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/.gitignore, code is 3, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/package.json, code is 74, comment is 0, blank is 2.
+client/packages/vite-plugin-vue-inspector/README.md, code is 1, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/scripts/copy-overlay.ts, code is 8, comment is 0, blank is 2.
+client/packages/vite-plugin-vue-inspector/scripts/update-version.ts, code is 31, comment is 3, blank is 12.
+client/packages/vite-plugin-vue-inspector/src/compiler/index.ts, code is 1, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/src/compiler/template.ts, code is 78, comment is 1, blank is 14.
+client/packages/vite-plugin-vue-inspector/src/images/logo.png, it is a binary file.
+client/packages/vite-plugin-vue-inspector/src/index.ts, code is 110, comment is 33, blank is 15.
+client/packages/vite-plugin-vue-inspector/src/launch-editor.ts, code is 274, comment is 43, blank is 35.
+client/packages/vite-plugin-vue-inspector/src/load.js, code is 24, comment is 2, blank is 5.
+client/packages/vite-plugin-vue-inspector/src/middleware.ts, code is 36, comment is 0, blank is 2.
+client/packages/vite-plugin-vue-inspector/src/Overlay.vue, code is 229, comment is 2, blank is 15.
+client/packages/vite-plugin-vue-inspector/src/utils/index.ts, code is 46, comment is 2, blank is 12.
+client/packages/vite-plugin-vue-inspector/tsconfig.json, code is 11, comment is 0, blank is 0.
+client/packages/wailsjs/go/main/App.d.ts, code is 1, comment is 2, blank is 1.
+client/packages/wailsjs/go/main/App.js, code is 3, comment is 3, blank is 1.
+client/packages/wailsjs/runtime/package.json, code is 23, comment is 0, blank is 1.
+client/packages/wailsjs/runtime/runtime.d.ts, code is 68, comment is 114, blank is 53.
+client/packages/wailsjs/runtime/runtime.js, code is 145, comment is 9, blank is 48.
+client/patches/monaco-editor/index.js, code is 6, comment is 1, blank is 1.
+client/pnpm-lock.yaml, code is 10376, comment is 44, blank is 1483.
+client/pnpm-workspace.yaml, code is 2, comment is 4, blank is 0.
+client/postcss.config.js, code is 6, comment is 0, blank is 0.
+client/prettier.config.js, code is 14, comment is 0, blank is 0.
+client/public/favicon.ico, it is a binary file.
+client/public/guide.png, it is a binary file.
+client/public/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+client/public/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+client/public/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+client/public/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+client/public/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+client/public/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+client/public/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+client/README.md, code is 9, comment is 0, blank is 6.
+client/scripts/deploy-console.mjs, code is 5, comment is 2, blank is 1.
+client/scripts/deploy-doc.mjs, code is 5, comment is 1, blank is 1.
+client/src/api/fetch.ts, code is 44, comment is 4, blank is 3.
+client/src/api/instance/index.ts, code is 316, comment is 16, blank is 22.
+client/src/api/system/user.ts, code is 47, comment is 21, blank is 7.
+client/src/app.ts, code is 20, comment is 6, blank is 9.
+client/src/App.vue, code is 41, comment is 4, blank is 5.
+client/src/assets/fonts/aguazyuan-bold.ttf, it is a binary file.
+client/src/assets/fonts/aguazyuan-light.ttf, it is a binary file.
+client/src/assets/fonts/aguazyuan-regular.ttf, it is a binary file.
+client/src/assets/imgs/analysis.svg, code is 156, comment is 0, blank is 0.
+client/src/assets/imgs/Business.svg, code is 474, comment is 0, blank is 0.
+client/src/assets/imgs/Error.svg, code is 178, comment is 0, blank is 1.
+client/src/assets/imgs/exception/403.svg, code is 100, comment is 0, blank is 0.
+client/src/assets/imgs/exception/404.svg, code is 115, comment is 0, blank is 0.
+client/src/assets/imgs/exception/500.svg, code is 111, comment is 0, blank is 0.
+client/src/assets/imgs/exception/developing.svg, code is 133, comment is 0, blank is 0.
+client/src/assets/imgs/exception/load-error.svg, code is 178, comment is 0, blank is 0.
+client/src/assets/imgs/exception/nodata.svg, code is 106, comment is 0, blank is 0.
+client/src/assets/imgs/header-theme-dark.svg, code is 49, comment is 1, blank is 0.
+client/src/assets/imgs/login-bg.svg, code is 127, comment is 1, blank is 0.
+client/src/assets/imgs/logo.png, it is a binary file.
+client/src/assets/imgs/nav-horizontal-mix.svg, code is 5, comment is 0, blank is 0.
+client/src/assets/imgs/nav-horizontal.svg, code is 10, comment is 0, blank is 0.
+client/src/assets/imgs/nav-theme-dark.svg, code is 49, comment is 1, blank is 0.
+client/src/assets/imgs/nav-theme-light.svg, code is 49, comment is 1, blank is 0.
+client/src/assets/svg-icon/logo.svg, code is 5, comment is 0, blank is 0.
+client/src/components/Application/Application.vue, code is 38, comment is 0, blank is 2.
+client/src/components/Application/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/DialogContent/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/DialogContent/index.vue, code is 10, comment is 1, blank is 1.
+client/src/components/Editor/index.vue, code is 49, comment is 2, blank is 6.
+client/src/components/Form/index.ts, code is 4, comment is 0, blank is 0.
+client/src/components/Form/src/BasicForm.vue, code is 283, comment is 2, blank is 26.
+client/src/components/Form/src/helper.ts, code is 30, comment is 6, blank is 6.
+client/src/components/Form/src/hooks/useForm.ts, code is 68, comment is 0, blank is 16.
+client/src/components/Form/src/hooks/useFormContext.ts, code is 8, comment is 0, blank is 3.
+client/src/components/Form/src/hooks/useFormEvents.ts, code is 89, comment is 7, blank is 11.
+client/src/components/Form/src/hooks/useFormValues.ts, code is 48, comment is 3, blank is 3.
+client/src/components/Form/src/props.ts, code is 62, comment is 20, blank is 0.
+client/src/components/Form/src/types/form.ts, code is 53, comment is 0, blank is 5.
+client/src/components/Form/src/types/index.ts, code is 28, comment is 0, blank is 0.
+client/src/components/InstanceSelect/index.ts, code is 1, comment is 0, blank is 0.
+client/src/components/InstanceSelect/index.vue, code is 62, comment is 8, blank is 5.
+client/src/components/interval/index.ts, code is 1, comment is 0, blank is 0.
+client/src/components/interval/index.vue, code is 64, comment is 0, blank is 5.
+client/src/components/LoadingContent/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/LoadingContent/index.vue, code is 10, comment is 0, blank is 1.
+client/src/components/MessageContent/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/MessageContent/index.vue, code is 10, comment is 1, blank is 1.
+client/src/components/Modal/index.ts, code is 3, comment is 0, blank is 0.
+client/src/components/Modal/src/basicModal.vue, code is 100, comment is 0, blank is 16.
+client/src/components/Modal/src/hooks/useModal.ts, code is 49, comment is 0, blank is 5.
+client/src/components/Modal/src/props.ts, code is 28, comment is 1, blank is 1.
+client/src/components/Modal/src/type/index.ts, code is 10, comment is 6, blank is 3.
+client/src/components/SvgIcon/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/SvgIcon/SvgIcon.vue, code is 31, comment is 0, blank is 2.
+client/src/components/Table/index.ts, code is 4, comment is 0, blank is 0.
+client/src/components/Table/src/componentMap.ts, code is 35, comment is 0, blank is 6.
+client/src/components/Table/src/components/editable/CellComponent.ts, code is 42, comment is 0, blank is 5.
+client/src/components/Table/src/components/editable/EditableCell.vue, code is 350, comment is 12, blank is 55.
+client/src/components/Table/src/components/editable/helper.ts, code is 11, comment is 3, blank is 1.
+client/src/components/Table/src/components/editable/index.ts, code is 44, comment is 1, blank is 4.
+client/src/components/Table/src/components/settings/ColumnSetting.vue, code is 269, comment is 9, blank is 27.
+client/src/components/Table/src/components/TableAction.vue, code is 124, comment is 1, blank is 10.
+client/src/components/Table/src/const.ts, code is 8, comment is 4, blank is 2.
+client/src/components/Table/src/hooks/useColumns.ts, code is 138, comment is 6, blank is 17.
+client/src/components/Table/src/hooks/useDataSource.ts, code is 116, comment is 5, blank is 16.
+client/src/components/Table/src/hooks/useLoading.ts, code is 16, comment is 0, blank is 5.
+client/src/components/Table/src/hooks/usePagination.ts, code is 42, comment is 0, blank is 8.
+client/src/components/Table/src/hooks/useTableContext.ts, code is 17, comment is 0, blank is 5.
+client/src/components/Table/src/hooks/useWindowSizeFn.ts, code is 30, comment is 0, blank is 6.
+client/src/components/Table/src/props.ts, code is 50, comment is 2, blank is 0.
+client/src/components/Table/src/Table.vue, code is 274, comment is 7, blank is 40.
+client/src/components/Table/src/types/componentType.ts, code is 8, comment is 0, blank is 0.
+client/src/components/Table/src/types/pagination.ts, code is 8, comment is 0, blank is 0.
+client/src/components/Table/src/types/table.ts, code is 30, comment is 3, blank is 2.
+client/src/components/Table/src/types/tableAction.ts, code is 21, comment is 2, blank is 1.
+client/src/components/TimelineGraph.vue, code is 30, comment is 0, blank is 0.
+client/src/config/index.ts, code is 1, comment is 0, blank is 0.
+client/src/config/regexp.ts, code is 7, comment is 5, blank is 4.
+client/src/directives/clickOutside.ts, code is 75, comment is 1, blank is 9.
+client/src/directives/index.ts, code is 5, comment is 4, blank is 1.
+client/src/enums/business.ts, code is 11, comment is 6, blank is 5.
+client/src/enums/common.ts, code is 19, comment is 0, blank is 1.
+client/src/enums/index.ts, code is 2, comment is 0, blank is 0.
+client/src/hooks/business/index.ts, code is 4, comment is 0, blank is 0.
+client/src/hooks/business/useCountDown.ts, code is 35, comment is 11, blank is 6.
+client/src/hooks/business/useDesignSetting.ts, code is 13, comment is 0, blank is 5.
+client/src/hooks/business/useInstanceList.ts, code is 11, comment is 0, blank is 1.
+client/src/hooks/business/useProjectSetting.ts, code is 30, comment is 0, blank is 13.
+client/src/hooks/common/index.ts, code is 3, comment is 0, blank is 0.
+client/src/hooks/common/useApi.ts, code is 25, comment is 1, blank is 1.
+client/src/hooks/common/useBoolean.ts, code is 23, comment is 4, blank is 3.
+client/src/hooks/common/useLoading.ts, code is 9, comment is 0, blank is 2.
+client/src/hooks/index.ts, code is 2, comment is 0, blank is 0.
+client/src/layout/components/Footer/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Footer/index.vue, code is 47, comment is 1, blank is 7.
+client/src/layout/components/Header/components.ts, code is 30, comment is 0, blank is 1.
+client/src/layout/components/Header/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Header/index.vue, code is 422, comment is 30, blank is 61.
+client/src/layout/components/Header/ProjectSetting.vue, code is 222, comment is 0, blank is 29.
+client/src/layout/components/Main/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Main/index.vue, code is 44, comment is 1, blank is 5.
+client/src/layout/components/Menu/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Menu/index.vue, code is 136, comment is 17, blank is 18.
+client/src/layout/components/SideLogo/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/SideLogo/index.vue, code is 36, comment is 0, blank is 4.
+client/src/layout/components/TagsView/components.ts, code is 23, comment is 0, blank is 1.
+client/src/layout/components/TagsView/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/TagsView/index.vue, code is 564, comment is 34, blank is 66.
+client/src/layout/index.vue, code is 202, comment is 3, blank is 39.
+client/src/plugins/assets.ts, code is 4, comment is 1, blank is 1.
+client/src/plugins/index.ts, code is 2, comment is 0, blank is 0.
+client/src/plugins/naive.ts, code is 155, comment is 0, blank is 2.
+client/src/router/constant.ts, code is 84, comment is 2, blank is 10.
+client/src/router/guard/dynamic.ts, code is 34, comment is 2, blank is 6.
+client/src/router/guard/index.ts, code is 30, comment is 6, blank is 0.
+client/src/router/index.ts, code is 16, comment is 0, blank is 3.
+client/src/router/routes/about.ts, code is 32, comment is 0, blank is 2.
+client/src/router/routes/frame.ts, code is 4, comment is 44, blank is 3.
+client/src/router/routes/instance-detail.ts, code is 161, comment is 62, blank is 3.
+client/src/router/routes/instance-list.ts, code is 37, comment is 10, blank is 3.
+client/src/router/routes/setting.ts, code is 28, comment is 11, blank is 2.
+client/src/router/util.ts, code is 17, comment is 2, blank is 6.
+client/src/settings/designSetting.ts, code is 24, comment is 4, blank is 2.
+client/src/settings/index.ts, code is 2, comment is 0, blank is 0.
+client/src/settings/projectSetting.ts, code is 31, comment is 24, blank is 0.
+client/src/store/index.ts, code is 7, comment is 0, blank is 2.
+client/src/store/modules/asyncRoute.ts, code is 52, comment is 4, blank is 2.
+client/src/store/modules/designSetting.ts, code is 28, comment is 3, blank is 3.
+client/src/store/modules/index.ts, code is 5, comment is 0, blank is 0.
+client/src/store/modules/pluginConfig.ts, code is 24, comment is 0, blank is 0.
+client/src/store/modules/projectSetting.ts, code is 90, comment is 12, blank is 3.
+client/src/store/modules/tabsView.ts, code is 49, comment is 9, blank is 4.
+client/src/store/modules/user.ts, code is 69, comment is 3, blank is 3.
+client/src/styles/css/global.css, code is 7, comment is 0, blank is 1.
+client/src/styles/css/reset.css, code is 191, comment is 112, blank is 66.
+client/src/styles/css/transition.css, code is 65, comment is 6, blank is 5.
+client/src/styles/less/index.less, code is 1, comment is 0, blank is 0.
+client/src/styles/less/var.less, code is 4, comment is 0, blank is 0.
+client/src/utils/common/dom.ts, code is 126, comment is 17, blank is 22.
+client/src/utils/common/index.ts, code is 9, comment is 0, blank is 0.
+client/src/utils/common/is.ts, code is 59, comment is 40, blank is 19.
+client/src/utils/common/lodash.ts, code is 1, comment is 0, blank is 0.
+client/src/utils/common/merge.ts, code is 8, comment is 0, blank is 1.
+client/src/utils/common/props.ts, code is 8, comment is 1, blank is 3.
+client/src/utils/common/propTypes.ts, code is 29, comment is 0, blank is 4.
+client/src/utils/common/storage.ts, code is 66, comment is 49, blank is 12.
+client/src/utils/common/theme.ts, code is 13, comment is 12, blank is 1.
+client/src/utils/common/url.ts, code is 8, comment is 0, blank is 0.
+client/src/utils/index.ts, code is 4, comment is 0, blank is 0.
+client/src/utils/menu/get-children-router.ts, code is 17, comment is 2, blank is 1.
+client/src/utils/menu/index.ts, code is 3, comment is 0, blank is 0.
+client/src/utils/menu/mix-generate-menu.ts, code is 25, comment is 3, blank is 1.
+client/src/utils/menu/recur-generate-menu.ts, code is 18, comment is 5, blank is 1.
+client/src/utils/naive/index.ts, code is 2, comment is 0, blank is 0.
+client/src/utils/naive/render-icon.ts, code is 5, comment is 0, blank is 1.
+client/src/utils/naive/render-tag.ts, code is 16, comment is 0, blank is 1.
+client/src/utils/router/filter-router.ts, code is 9, comment is 0, blank is 1.
+client/src/utils/router/index.ts, code is 2, comment is 0, blank is 0.
+client/src/utils/router/is-root-router.ts, code is 3, comment is 0, blank is 0.
+client/src/views/about/index.vue, code is 9, comment is 0, blank is 2.
+client/src/views/exception/403.vue, code is 36, comment is 0, blank is 4.
+client/src/views/exception/404.vue, code is 36, comment is 0, blank is 4.
+client/src/views/exception/500.vue, code is 36, comment is 0, blank is 4.
+client/src/views/iframe/index.vue, code is 54, comment is 0, blank is 7.
+client/src/views/instance/detail/address/index.vue, code is 241, comment is 20, blank is 5.
+client/src/views/instance/detail/check.vue, code is 18, comment is 0, blank is 0.
+client/src/views/instance/detail/config/index.vue, code is 81, comment is 2, blank is 6.
+client/src/views/instance/detail/dashboard/console/console.vue, code is 193, comment is 1, blank is 3.
+client/src/views/instance/detail/gb28181/columns.ts, code is 145, comment is 0, blank is 3.
+client/src/views/instance/detail/gb28181/index.vue, code is 52, comment is 7, blank is 3.
+client/src/views/instance/detail/index.vue, code is 6, comment is 0, blank is 2.
+client/src/views/instance/detail/logrotate/index.vue, code is 120, comment is 1, blank is 4.
+client/src/views/instance/detail/monitor/detail.vue, code is 202, comment is 0, blank is 1.
+client/src/views/instance/detail/monitor/index.vue, code is 87, comment is 0, blank is 3.
+client/src/views/instance/detail/plugin-list/columns.ts, code is 26, comment is 0, blank is 2.
+client/src/views/instance/detail/plugin-list/index.vue, code is 173, comment is 2, blank is 16.
+client/src/views/instance/detail/pprof/index.vue, code is 28, comment is 0, blank is 0.
+client/src/views/instance/detail/pull/columns.ts, code is 25, comment is 0, blank is 0.
+client/src/views/instance/detail/pull/index.vue, code is 177, comment is 9, blank is 4.
+client/src/views/instance/detail/push/columns.ts, code is 25, comment is 0, blank is 0.
+client/src/views/instance/detail/push/index.vue, code is 170, comment is 9, blank is 4.
+client/src/views/instance/detail/record/index.vue, code is 221, comment is 5, blank is 1.
+client/src/views/instance/detail/room/index.vue, code is 313, comment is 24, blank is 0.
+client/src/views/instance/detail/room/mic.vue, code is 40, comment is 0, blank is 0.
+client/src/views/instance/detail/room/myself.vue, code is 146, comment is 20, blank is 3.
+client/src/views/instance/detail/room/user.vue, code is 88, comment is 5, blank is 0.
+client/src/views/instance/detail/stream-detail/index.vue, code is 179, comment is 0, blank is 5.
+client/src/views/instance/detail/stream-list/columns.ts, code is 38, comment is 0, blank is 0.
+client/src/views/instance/detail/stream-list/index.vue, code is 121, comment is 2, blank is 12.
+client/src/views/instance/detail/webrtc/index.vue, code is 164, comment is 0, blank is 0.
+client/src/views/instance/detail/webrtc/video.vue, code is 54, comment is 0, blank is 0.
+client/src/views/instance/list/columns.ts, code is 44, comment is 0, blank is 0.
+client/src/views/instance/list/index.vue, code is 210, comment is 63, blank is 19.
+client/src/views/login/index.vue, code is 194, comment is 8, blank is 22.
+client/src/views/password/index.vue, code is 134, comment is 0, blank is 18.
+client/src/views/redirect/index.vue, code is 21, comment is 0, blank is 1.
+client/src/views/register/index.vue, code is 211, comment is 0, blank is 24.
+client/src/views/setting/account.vue, code is 94, comment is 6, blank is 4.
+client/src/views/setting/BasicSetting.vue, code is 58, comment is 0, blank is 6.
+client/src/views/setting/SafetySetting.vue, code is 29, comment is 0, blank is 1.
+client/src/wails.ts, code is 2, comment is 9, blank is 0.
+client/src/web.ts, code is 2, comment is 0, blank is 0.
+client/stats.html, code is 134, comment is 3884, blank is 18.
+client/tailwind.config.js, code is 72, comment is 4, blank is 0.
+client/tsconfig.json, code is 38, comment is 0, blank is 1.
+client/turbo.json, code is 17, comment is 0, blank is 1.
+client/types/config.d.ts, code is 53, comment is 15, blank is 6.
+client/types/global.d.ts, code is 91, comment is 3, blank is 18.
+client/types/index.d.ts, code is 23, comment is 0, blank is 9.
+client/types/modules.d.ts, code is 9, comment is 0, blank is 1.
+client/types/utils.d.ts, code is 4, comment is 0, blank is 1.
+client/uno.config.ts, code is 67, comment is 0, blank is 1.
+client/vite.config.ts, code is 108, comment is 31, blank is 4.
+config.toml, code is 14, comment is 0, blank is 0.
+Dockerfile, code is 20, comment is 1, blank is 7.
+go.work, code is 5, comment is 0, blank is 1.
+go.work.sum, code is 215, comment is 0, blank is 0.
+registermailtxt, code is 2, comment is 0, blank is 0.
+resetpwdtxt, code is 2, comment is 0, blank is 0.
+server/.gitkeep, code is 0, comment is 0, blank is 0.
+server/config.toml, code is 24, comment is 0, blank is 0.
+server/console.monibuca.com.key, code is 27, comment is 3, blank is 0.
+server/console.monibuca.com_bundle.crt, code is 66, comment is 0, blank is 0.
+server/files/129830471170.png, it is a binary file.
+server/go.mod, code is 34, comment is 16, blank is 4.
+server/go.sum, code is 106, comment is 0, blank is 0.
+server/main.go, code is 8, comment is 0, blank is 4.
+server/nologin.go, code is 8, comment is 2, blank is 5.
+server/pkg/db.go, code is 23, comment is 0, blank is 7.
+server/pkg/default.toml, code is 11, comment is 0, blank is 0.
+server/pkg/instance.go, code is 73, comment is 1, blank is 17.
+server/pkg/mysqldb.go, code is 106, comment is 25, blank is 18.
+server/pkg/mysqltx.go, code is 14, comment is 0, blank is 5.
+server/pkg/pass.go, code is 21, comment is 0, blank is 6.
+server/pkg/quic.go, code is 88, comment is 0, blank is 14.
+server/pkg/relay.go, code is 126, comment is 15, blank is 15.
+server/pkg/server.go, code is 937, comment is 101, blank is 88.
+server/pkg/sessions/priovider.go, code is 195, comment is 27, blank is 47.
+server/pkg/sessions/session.go, code is 43, comment is 5, blank is 12.
+server/pkg/sqlite.go, code is 1, comment is 0, blank is 0.
+server/pkg/sqlitedb.go, code is 176, comment is 19, blank is 22.
+server/pkg/sqlitetx.go, code is 1, comment is 0, blank is 0.
+server/pkg/trial.go, code is 60, comment is 2, blank is 21.
+server/pkg/tx.go, code is 7, comment is 0, blank is 2.
+server/pkg/util/errorno.go, code is 42, comment is 8, blank is 9.
+server/pkg/util/linux.go, code is 6, comment is 1, blank is 6.
+server/pkg/util/logger.go, code is 60, comment is 8, blank is 19.
+server/pkg/util/mail.go, code is 67, comment is 8, blank is 13.
+server/pkg/util/mysql.go, code is 84, comment is 17, blank is 13.
+server/pkg/util/rand.go, code is 22, comment is 3, blank is 12.
+server/pkg/util/windows.go, code is 6, comment is 1, blank is 6.
+server/pkg/vip.go, code is 37, comment is 0, blank is 15.
+server/pkg/web/assets/404-54dd6499.svg, code is 115, comment is 0, blank is 0.
+server/pkg/web/assets/404-85aadbe0.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/404-98a63ab6.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/account-676726a7.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/account-ae1cea85.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/audiodec-28b192dd.wasm, it is a binary file.
+server/pkg/web/assets/check-f6cd52fd.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/console-273c503c.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/console-63580b23.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/detail-1c0b1406.js, code is 2, comment is 13, blank is 0.
+server/pkg/web/assets/detail-2e3b75cf.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-01aec832.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-0c31e1fa.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-17b6b441.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-1fe768c1.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-20ae1759.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-25067976.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-27e92d61.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-285462f6.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-3969454d.js, code is 9, comment is 1, blank is 2.
+server/pkg/web/assets/index-443e57dd.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-47485fbd.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-5b101bf5.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-5c1076ad.js, code is 1, comment is 1, blank is 0.
+server/pkg/web/assets/index-630fb8d5.js, code is 1, comment is 1, blank is 0.
+server/pkg/web/assets/index-66052f2f.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-68dd8937.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-79173d58.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-7ee9b66c.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-8ccdd8ca.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-8cfd36eb.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-993ef995.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-9a34cd8b.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-9bfc54b9.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-9ecb6cb2.js, code is 26, comment is 0, blank is 0.
+server/pkg/web/assets/index-a130a220.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-a1747f40.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-a71bb2bd.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-af533f62.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-b1aeb4fe.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-cd2bc06a.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-cf671c17.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-d257562b.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-d4b798b6.js, code is 3, comment is 14, blank is 0.
+server/pkg/web/assets/index-da06f36d.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-de28ae1e.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-eda49331.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-eead0945.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-f8933df2.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-f8c7f17f.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-fe18e8ea.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-fe795ef4.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-fe9309b6.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-febeebf5.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/LockClosedOutline-aa141746.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/login-bg-7b57ab51.svg, code is 127, comment is 1, blank is 0.
+server/pkg/web/assets/logo-44f27a9b.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/logo-678c7140.png, it is a binary file.
+server/pkg/web/assets/nav-horizontal-f3cbecb9.svg, code is 10, comment is 0, blank is 0.
+server/pkg/web/assets/nav-theme-dark-be6f2a3d.svg, code is 49, comment is 1, blank is 0.
+server/pkg/web/assets/nav-theme-light-43fdcab2.svg, code is 49, comment is 1, blank is 0.
+server/pkg/web/assets/PersonOutline-a27731eb.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/pluginConfig-bddccc63.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/TableAction-859c4e98.js, code is 2, comment is 5, blank is 0.
+server/pkg/web/assets/TableAction-ce36c622.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/useDesignSetting-4e44141c.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/vendor-1e70d1e5.js, code is 8, comment is 16, blank is 0.
+server/pkg/web/assets/videodec-9aaeada5.wasm, it is a binary file.
+server/pkg/web/assets/videodec_simd-c906c3fc.wasm, it is a binary file.
+server/pkg/web/assets/webrtc-b8715042.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/favicon.ico, it is a binary file.
+server/pkg/web/guide.png, it is a binary file.
+server/pkg/web/index.html, code is 1, comment is 0, blank is 0.
+server/pkg/web/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+server/pkg/web/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+server/pkg/web/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+server/pkg/web/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+server/pkg/web/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+server/pkg/web/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+server/pkg/wsv1.go, code is 103, comment is 14, blank is 12.
+server/registermailtxt, code is 2, comment is 0, blank is 0.
+server/resetpwdtxt, code is 2, comment is 0, blank is 0.
+server/server, it is a binary file.
+server/static/index.html, code is 48, comment is 0, blank is 7.
+server/static/static/build/css/modules/layer/default/icon-ext.png, it is a binary file.
+server/static/static/build/css/modules/layer/default/icon.png, it is a binary file.
+server/static/static/build/css/modules/layer/default/layer.css, code is 1, comment is 1, blank is 0.
+server/static/static/build/css/modules/layer/default/loading-0.gif, it is a binary file.
+server/static/static/build/css/modules/layer/default/loading-1.gif, it is a binary file.
+server/static/static/build/css/modules/layer/default/loading-2.gif, it is a binary file.
+server/static/static/build/lay/modules/jquery.js, code is 1, comment is 1, blank is 0.
+server/static/static/build/lay/modules/layer.js, code is 1, comment is 2, blank is 0.
+server/static/static/build/lay/modules/upload.js, code is 1, comment is 1, blank is 0.
+server/static/static/build/layui.css, code is 1, comment is 1, blank is 0.
+server/static/static/build/layui.js, code is 1, comment is 2, blank is 0.
+server/static/static/build/layui.mobile.css, code is 1, comment is 1, blank is 0.
+server/static/static/font/iconfont.eot, it is a binary file.
+server/static/static/font/iconfont.svg, code is 171, comment is 0, blank is 302.
+server/static/static/font/iconfont.ttf, it is a binary file.
+server/static/static/font/iconfont.woff, it is a binary file.
+server/static/upload.html, code is 58, comment is 0, blank is 2.
+server/vip.go, code is 8, comment is 2, blank is 5.
+server/web/assets/404-54dd6499.svg, code is 115, comment is 0, blank is 0.
+server/web/assets/404-85aadbe0.css, code is 1, comment is 0, blank is 0.
+server/web/assets/404-98a63ab6.js, code is 1, comment is 0, blank is 0.
+server/web/assets/account-676726a7.js, code is 1, comment is 0, blank is 0.
+server/web/assets/account-ae1cea85.css, code is 1, comment is 0, blank is 0.
+server/web/assets/audiodec-28b192dd.wasm, it is a binary file.
+server/web/assets/check-f6cd52fd.js, code is 1, comment is 0, blank is 0.
+server/web/assets/console-273c503c.css, code is 1, comment is 0, blank is 0.
+server/web/assets/console-63580b23.js, code is 1, comment is 0, blank is 0.
+server/web/assets/detail-1c0b1406.js, code is 2, comment is 13, blank is 0.
+server/web/assets/detail-2e3b75cf.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-01aec832.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-0c31e1fa.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-17b6b441.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-1fe768c1.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-20ae1759.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-25067976.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-27e92d61.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-285462f6.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-3969454d.js, code is 9, comment is 1, blank is 2.
+server/web/assets/index-443e57dd.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-47485fbd.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-5b101bf5.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-5c1076ad.js, code is 1, comment is 1, blank is 0.
+server/web/assets/index-630fb8d5.js, code is 1, comment is 1, blank is 0.
+server/web/assets/index-66052f2f.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-68dd8937.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-79173d58.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-7ee9b66c.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-8ccdd8ca.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-8cfd36eb.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-993ef995.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-9a34cd8b.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-9bfc54b9.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-9ecb6cb2.js, code is 26, comment is 0, blank is 0.
+server/web/assets/index-a130a220.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-a1747f40.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-a71bb2bd.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-af533f62.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-b1aeb4fe.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-cd2bc06a.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-cf671c17.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-d257562b.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-d4b798b6.js, code is 3, comment is 14, blank is 0.
+server/web/assets/index-da06f36d.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-de28ae1e.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-eda49331.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-eead0945.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-f8933df2.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-f8c7f17f.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-fe18e8ea.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-fe795ef4.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-fe9309b6.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-febeebf5.css, code is 1, comment is 0, blank is 0.
+server/web/assets/LockClosedOutline-aa141746.js, code is 1, comment is 0, blank is 0.
+server/web/assets/login-bg-7b57ab51.svg, code is 127, comment is 1, blank is 0.
+server/web/assets/logo-44f27a9b.js, code is 1, comment is 0, blank is 0.
+server/web/assets/logo-678c7140.png, it is a binary file.
+server/web/assets/nav-horizontal-f3cbecb9.svg, code is 10, comment is 0, blank is 0.
+server/web/assets/nav-theme-dark-be6f2a3d.svg, code is 49, comment is 1, blank is 0.
+server/web/assets/nav-theme-light-43fdcab2.svg, code is 49, comment is 1, blank is 0.
+server/web/assets/PersonOutline-a27731eb.js, code is 1, comment is 0, blank is 0.
+server/web/assets/pluginConfig-bddccc63.js, code is 1, comment is 0, blank is 0.
+server/web/assets/TableAction-859c4e98.js, code is 2, comment is 5, blank is 0.
+server/web/assets/TableAction-ce36c622.css, code is 1, comment is 0, blank is 0.
+server/web/assets/useDesignSetting-4e44141c.js, code is 1, comment is 0, blank is 0.
+server/web/assets/vendor-1e70d1e5.js, code is 8, comment is 16, blank is 0.
+server/web/assets/videodec-9aaeada5.wasm, it is a binary file.
+server/web/assets/videodec_simd-c906c3fc.wasm, it is a binary file.
+server/web/assets/webrtc-b8715042.js, code is 1, comment is 0, blank is 0.
+server/web/favicon.ico, it is a binary file.
+server/web/guide.png, it is a binary file.
+server/web/index.html, code is 1, comment is 0, blank is 0.
+server/web/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+server/web/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+server/web/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+server/web/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+server/web/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+server/web/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+server/web/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+wails/.gitignore, code is 3, comment is 0, blank is 0.
+wails/app.go, code is 46, comment is 5, blank is 9.
+wails/build/appicon.png, it is a binary file.
+wails/build/bin/console.app/Contents/Info.plist, code is 27, comment is 1, blank is 0.
+wails/build/bin/console.app/Contents/Resources/iconfile.icns, it is a binary file.
+wails/build/darwin/Info.dev.plist, code is 32, comment is 0, blank is 0.
+wails/build/darwin/Info.plist, code is 27, comment is 0, blank is 0.
+wails/build/README.md, code is 22, comment is 3, blank is 10.
+wails/build/windows/icon.ico, it is a binary file.
+wails/build/windows/info.json, code is 15, comment is 0, blank is 0.
+wails/build/windows/installer/project.nsi, code is 25, comment is 0, blank is 13.
+wails/build/windows/installer/wails_tools.nsh, code is 152, comment is 1, blank is 27.
+wails/build/windows/wails.exe.manifest, code is 15, comment is 0, blank is 0.
+wails/fatal/2023-08-21 21:16:05.log, code is 774, comment is 2, blank is 0.
+wails/fatal/latest.log, code is 0, comment is 0, blank is 0.
+wails/frontend/dist/assets/404-2b79a34d.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/404-54dd6499.svg, code is 115, comment is 0, blank is 0.
+wails/frontend/dist/assets/404-85aadbe0.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/account-ae1cea85.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/account-d54769f0.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/audiodec-28b192dd.wasm, it is a binary file.
+wails/frontend/dist/assets/check-82ea96a3.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/console-273c503c.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/console-42969821.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/detail-13c9f7e3.js, code is 2, comment is 13, blank is 0.
+wails/frontend/dist/assets/detail-2e3b75cf.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-01aec832.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-0ab8014b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-0c31e1fa.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-12bc2ddc.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-1713a9d9.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-1a6e1214.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-25067976.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-3ab5f8ea.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-443e57dd.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-46ac35df.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-4a1f3974.js, code is 1, comment is 1, blank is 0.
+wails/frontend/dist/assets/index-509cae9a.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-5b101bf5.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-5d81487c.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-692c06f6.js, code is 26, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-756d6bf3.js, code is 1, comment is 1, blank is 0.
+wails/frontend/dist/assets/index-7ee9b66c.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8253ff72.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8345e3af.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-86b392d1.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8ccdd8ca.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8cfd36eb.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-910326d9.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-9116df9d.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-99dce52b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-9a34cd8b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a130a220.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a1747f40.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a71bb2bd.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a9702bf5.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-ac1784e0.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-b29c7f2e.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-b56d76ec.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d257562b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d53e377d.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d8d95e70.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d9e975d9.js, code is 3, comment is 14, blank is 0.
+wails/frontend/dist/assets/index-da06f36d.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-de28ae1e.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-e81fcaac.js, code is 9, comment is 1, blank is 2.
+wails/frontend/dist/assets/index-f7d67c42.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-f8c7f17f.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-febeebf5.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/LockClosedOutline-aa141746.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/login-bg-7b57ab51.svg, code is 127, comment is 1, blank is 0.
+wails/frontend/dist/assets/logo-44f27a9b.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/logo-678c7140.png, it is a binary file.
+wails/frontend/dist/assets/nav-horizontal-f3cbecb9.svg, code is 10, comment is 0, blank is 0.
+wails/frontend/dist/assets/nav-theme-dark-be6f2a3d.svg, code is 49, comment is 1, blank is 0.
+wails/frontend/dist/assets/nav-theme-light-43fdcab2.svg, code is 49, comment is 1, blank is 0.
+wails/frontend/dist/assets/PersonOutline-a27731eb.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/pluginConfig-742e21a3.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/TableAction-2b9a9fdf.js, code is 2, comment is 5, blank is 0.
+wails/frontend/dist/assets/TableAction-ce36c622.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/useDesignSetting-aa6e52d3.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/useProjectSetting-3a1391ab.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/vendor-0767d979.js, code is 14, comment is 10, blank is 2.
+wails/frontend/dist/assets/videodec-9aaeada5.wasm, it is a binary file.
+wails/frontend/dist/assets/videodec_simd-c906c3fc.wasm, it is a binary file.
+wails/frontend/dist/assets/webrtc-b8715042.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/favicon.ico, it is a binary file.
+wails/frontend/dist/guide.png, it is a binary file.
+wails/frontend/dist/index.html, code is 4, comment is 0, blank is 0.
+wails/frontend/dist/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+wails/frontend/dist/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+wails/frontend/dist/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+wails/frontend/dist/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+wails/frontend/dist/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+wails/frontend/dist/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+wails/frontend/index.html, code is 13, comment is 0, blank is 1.
+wails/frontend/package.json, code is 21, comment is 0, blank is 0.
+wails/frontend/READ-THIS.md, code is 3, comment is 1, blank is 1.
+wails/frontend/README.md, code is 10, comment is 2, blank is 6.
+wails/frontend/src/App.vue, code is 19, comment is 0, blank is 2.
+wails/frontend/src/assets/fonts/nunito-v16-latin-regular.woff2, it is a binary file.
+wails/frontend/src/assets/fonts/OFL.txt, code is 75, comment is 1, blank is 18.
+wails/frontend/src/assets/images/logo-universal.png, it is a binary file.
+wails/frontend/src/components/HelloWorld.vue, code is 61, comment is 0, blank is 10.
+wails/frontend/src/main.ts, code is 3, comment is 0, blank is 1.
+wails/frontend/src/style.css, code is 23, comment is 0, blank is 3.
+wails/frontend/src/vite-env.d.ts, code is 5, comment is 1, blank is 1.
+wails/frontend/tsconfig.json, code is 28, comment is 0, blank is 2.
+wails/frontend/tsconfig.node.json, code is 10, comment is 0, blank is 1.
+wails/frontend/vite.config.ts, code is 5, comment is 1, blank is 1.
+wails/go.mod, code is 125, comment is 96, blank is 6.
+wails/go.sum, code is 506, comment is 4, blank is 0.
+wails/logs/2023-08-21T21.log, it is a binary file.
+wails/main.go, code is 53, comment is 29, blank is 19.
+wails/README.md, code is 12, comment is 2, blank is 7.
+wails/shutdown.sh, code is 1, comment is 0, blank is 0.
+wails/wails.json, code is 16, comment is 0, blank is 0.
+===============================================================================
+===============================================================================
+EXTENSION NAME : linecounter
+EXTENSION VERSION : 0.2.7
+-------------------------------------------------------------------------------
+count time : 2023-08-29 17:43:39
+count workspace : /Users/dexter/project/console
+total files : 614
+total code lines : 90901
+total comment lines : 16246
+total blank lines : 4273
+
+    statistics
+   |      extension|     total code|  total comment|    total blank|percent|
+   -------------------------------------------------------------------------
+   |          .toml|             49|              0|              0|  0.054|
+   |               |            135|             10|             14|   0.15|
+   |           .mod|            159|            112|             10|   0.17|
+   |            .go|           2421|            293|            421|    2.7|
+   |            .ts|           4708|            740|            562|    5.2|
+   |          .work|              5|              0|              1| 0.0055|
+   |          .html|            384|           3885|             40|   0.42|
+   |            .js|          58838|          10681|            610|     65|
+   |           .css|            355|            121|             75|   0.39|
+   |           .svg|           3066|             13|            303|    3.4|
+   |           .vue|           7723|            319|            646|    8.5|
+   |          .less|              5|              0|              0| 0.0055|
+   |            .sh|              1|              0|              0| 0.0011|
+   |           .key|             54|              3|              0|  0.059|
+   |           .crt|            132|              0|              0|   0.15|
+   |          .yaml|          10378|             48|           1483|     11|
+   |            .md|            107|              9|             38|   0.12|
+   |           .log|            774|              2|              0|   0.85|
+   |           .sum|            827|              4|              0|   0.91|
+   |          .json|            416|              0|             10|   0.46|
+   |           .md5|              1|              0|              0| 0.0011|
+   |           .mjs|             10|              3|              2|  0.011|
+   |         .plist|             86|              1|              0|  0.095|
+   |           .txt|             75|              1|             18|  0.083|
+   |      .manifest|             15|              0|              0|  0.017|
+   |           .nsi|             25|              0|             13|  0.028|
+   |           .nsh|            152|              1|             27|   0.17|
+   -------------------------------------------------------------------------
+.gitignore, code is 10, comment is 0, blank is 0.
+client/.editorconfig, code is 15, comment is 0, blank is 4.
+client/.eslintignore, code is 14, comment is 0, blank is 0.
+client/.eslintrc.js, code is 79, comment is 1, blank is 2.
+client/.gitignore, code is 26, comment is 0, blank is 3.
+client/.npmrc, code is 4, comment is 1, blank is 0.
+client/.prettierignore, code is 3, comment is 8, blank is 0.
+client/.prettierrc, code is 14, comment is 0, blank is 0.
+client/components.d.ts, code is 20, comment is 3, blank is 2.
+client/doc/components.d.ts, code is 65, comment is 3, blank is 2.
+client/doc/doc/.vitepress/config.js, code is 41, comment is 0, blank is 1.
+client/doc/doc/index.md, code is 20, comment is 1, blank is 1.
+client/doc/doc/nav/group1/index.md, code is 6, comment is 0, blank is 1.
+client/doc/doc/nav/group1/控制台.md, code is 2, comment is 0, blank is 1.
+client/doc/doc/nav/room/tech.md, code is 22, comment is 0, blank is 5.
+client/doc/package.json, code is 27, comment is 0, blank is 1.
+client/index.html, code is 125, comment is 1, blank is 12.
+client/local.monibuca.com.key, code is 27, comment is 0, blank is 0.
+client/local.monibuca.com_bundle.crt, code is 66, comment is 0, blank is 0.
+client/package.json, code is 136, comment is 0, blank is 1.
+client/package.json.md5, code is 1, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/.eslintignore, code is 3, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/.eslintrc, code is 12, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/.gitignore, code is 3, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/package.json, code is 74, comment is 0, blank is 2.
+client/packages/vite-plugin-vue-inspector/README.md, code is 1, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/scripts/copy-overlay.ts, code is 8, comment is 0, blank is 2.
+client/packages/vite-plugin-vue-inspector/scripts/update-version.ts, code is 31, comment is 3, blank is 12.
+client/packages/vite-plugin-vue-inspector/src/compiler/index.ts, code is 1, comment is 0, blank is 0.
+client/packages/vite-plugin-vue-inspector/src/compiler/template.ts, code is 78, comment is 1, blank is 14.
+client/packages/vite-plugin-vue-inspector/src/images/logo.png, it is a binary file.
+client/packages/vite-plugin-vue-inspector/src/index.ts, code is 110, comment is 33, blank is 15.
+client/packages/vite-plugin-vue-inspector/src/launch-editor.ts, code is 274, comment is 43, blank is 35.
+client/packages/vite-plugin-vue-inspector/src/load.js, code is 24, comment is 2, blank is 5.
+client/packages/vite-plugin-vue-inspector/src/middleware.ts, code is 36, comment is 0, blank is 2.
+client/packages/vite-plugin-vue-inspector/src/Overlay.vue, code is 229, comment is 2, blank is 15.
+client/packages/vite-plugin-vue-inspector/src/utils/index.ts, code is 46, comment is 2, blank is 12.
+client/packages/vite-plugin-vue-inspector/tsconfig.json, code is 11, comment is 0, blank is 0.
+client/packages/wailsjs/go/main/App.d.ts, code is 1, comment is 2, blank is 1.
+client/packages/wailsjs/go/main/App.js, code is 3, comment is 3, blank is 1.
+client/packages/wailsjs/runtime/package.json, code is 23, comment is 0, blank is 1.
+client/packages/wailsjs/runtime/runtime.d.ts, code is 68, comment is 114, blank is 53.
+client/packages/wailsjs/runtime/runtime.js, code is 145, comment is 9, blank is 48.
+client/patches/monaco-editor/index.js, code is 6, comment is 1, blank is 1.
+client/pnpm-lock.yaml, code is 10376, comment is 44, blank is 1483.
+client/pnpm-workspace.yaml, code is 2, comment is 4, blank is 0.
+client/postcss.config.js, code is 6, comment is 0, blank is 0.
+client/prettier.config.js, code is 14, comment is 0, blank is 0.
+client/public/favicon.ico, it is a binary file.
+client/public/guide.png, it is a binary file.
+client/public/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+client/public/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+client/public/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+client/public/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+client/public/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+client/public/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+client/public/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+client/README.md, code is 9, comment is 0, blank is 6.
+client/scripts/deploy-console.mjs, code is 5, comment is 2, blank is 1.
+client/scripts/deploy-doc.mjs, code is 5, comment is 1, blank is 1.
+client/src/api/fetch.ts, code is 44, comment is 4, blank is 3.
+client/src/api/instance/index.ts, code is 316, comment is 16, blank is 22.
+client/src/api/system/user.ts, code is 47, comment is 21, blank is 7.
+client/src/app.ts, code is 20, comment is 6, blank is 9.
+client/src/App.vue, code is 41, comment is 4, blank is 5.
+client/src/assets/fonts/aguazyuan-bold.ttf, it is a binary file.
+client/src/assets/fonts/aguazyuan-light.ttf, it is a binary file.
+client/src/assets/fonts/aguazyuan-regular.ttf, it is a binary file.
+client/src/assets/imgs/analysis.svg, code is 156, comment is 0, blank is 0.
+client/src/assets/imgs/Business.svg, code is 474, comment is 0, blank is 0.
+client/src/assets/imgs/Error.svg, code is 178, comment is 0, blank is 1.
+client/src/assets/imgs/exception/403.svg, code is 100, comment is 0, blank is 0.
+client/src/assets/imgs/exception/404.svg, code is 115, comment is 0, blank is 0.
+client/src/assets/imgs/exception/500.svg, code is 111, comment is 0, blank is 0.
+client/src/assets/imgs/exception/developing.svg, code is 133, comment is 0, blank is 0.
+client/src/assets/imgs/exception/load-error.svg, code is 178, comment is 0, blank is 0.
+client/src/assets/imgs/exception/nodata.svg, code is 106, comment is 0, blank is 0.
+client/src/assets/imgs/header-theme-dark.svg, code is 49, comment is 1, blank is 0.
+client/src/assets/imgs/login-bg.svg, code is 127, comment is 1, blank is 0.
+client/src/assets/imgs/logo.png, it is a binary file.
+client/src/assets/imgs/nav-horizontal-mix.svg, code is 5, comment is 0, blank is 0.
+client/src/assets/imgs/nav-horizontal.svg, code is 10, comment is 0, blank is 0.
+client/src/assets/imgs/nav-theme-dark.svg, code is 49, comment is 1, blank is 0.
+client/src/assets/imgs/nav-theme-light.svg, code is 49, comment is 1, blank is 0.
+client/src/assets/svg-icon/logo.svg, code is 5, comment is 0, blank is 0.
+client/src/components/Application/Application.vue, code is 38, comment is 0, blank is 2.
+client/src/components/Application/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/DialogContent/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/DialogContent/index.vue, code is 10, comment is 1, blank is 1.
+client/src/components/Editor/index.vue, code is 49, comment is 2, blank is 6.
+client/src/components/Form/index.ts, code is 4, comment is 0, blank is 0.
+client/src/components/Form/src/BasicForm.vue, code is 283, comment is 2, blank is 26.
+client/src/components/Form/src/helper.ts, code is 30, comment is 6, blank is 6.
+client/src/components/Form/src/hooks/useForm.ts, code is 68, comment is 0, blank is 16.
+client/src/components/Form/src/hooks/useFormContext.ts, code is 8, comment is 0, blank is 3.
+client/src/components/Form/src/hooks/useFormEvents.ts, code is 89, comment is 7, blank is 11.
+client/src/components/Form/src/hooks/useFormValues.ts, code is 48, comment is 3, blank is 3.
+client/src/components/Form/src/props.ts, code is 62, comment is 20, blank is 0.
+client/src/components/Form/src/types/form.ts, code is 53, comment is 0, blank is 5.
+client/src/components/Form/src/types/index.ts, code is 28, comment is 0, blank is 0.
+client/src/components/InstanceSelect/index.ts, code is 1, comment is 0, blank is 0.
+client/src/components/InstanceSelect/index.vue, code is 62, comment is 8, blank is 5.
+client/src/components/interval/index.ts, code is 1, comment is 0, blank is 0.
+client/src/components/interval/index.vue, code is 64, comment is 0, blank is 5.
+client/src/components/LoadingContent/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/LoadingContent/index.vue, code is 10, comment is 0, blank is 1.
+client/src/components/MessageContent/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/MessageContent/index.vue, code is 10, comment is 1, blank is 1.
+client/src/components/Modal/index.ts, code is 3, comment is 0, blank is 0.
+client/src/components/Modal/src/basicModal.vue, code is 100, comment is 0, blank is 16.
+client/src/components/Modal/src/hooks/useModal.ts, code is 49, comment is 0, blank is 5.
+client/src/components/Modal/src/props.ts, code is 28, comment is 1, blank is 1.
+client/src/components/Modal/src/type/index.ts, code is 10, comment is 6, blank is 3.
+client/src/components/SvgIcon/index.ts, code is 2, comment is 0, blank is 1.
+client/src/components/SvgIcon/SvgIcon.vue, code is 31, comment is 0, blank is 2.
+client/src/components/Table/index.ts, code is 4, comment is 0, blank is 0.
+client/src/components/Table/src/componentMap.ts, code is 35, comment is 0, blank is 6.
+client/src/components/Table/src/components/editable/CellComponent.ts, code is 42, comment is 0, blank is 5.
+client/src/components/Table/src/components/editable/EditableCell.vue, code is 350, comment is 12, blank is 55.
+client/src/components/Table/src/components/editable/helper.ts, code is 11, comment is 3, blank is 1.
+client/src/components/Table/src/components/editable/index.ts, code is 44, comment is 1, blank is 4.
+client/src/components/Table/src/components/settings/ColumnSetting.vue, code is 269, comment is 9, blank is 27.
+client/src/components/Table/src/components/TableAction.vue, code is 124, comment is 1, blank is 10.
+client/src/components/Table/src/const.ts, code is 8, comment is 4, blank is 2.
+client/src/components/Table/src/hooks/useColumns.ts, code is 138, comment is 6, blank is 17.
+client/src/components/Table/src/hooks/useDataSource.ts, code is 116, comment is 5, blank is 16.
+client/src/components/Table/src/hooks/useLoading.ts, code is 16, comment is 0, blank is 5.
+client/src/components/Table/src/hooks/usePagination.ts, code is 42, comment is 0, blank is 8.
+client/src/components/Table/src/hooks/useTableContext.ts, code is 17, comment is 0, blank is 5.
+client/src/components/Table/src/hooks/useWindowSizeFn.ts, code is 30, comment is 0, blank is 6.
+client/src/components/Table/src/props.ts, code is 50, comment is 2, blank is 0.
+client/src/components/Table/src/Table.vue, code is 274, comment is 7, blank is 40.
+client/src/components/Table/src/types/componentType.ts, code is 8, comment is 0, blank is 0.
+client/src/components/Table/src/types/pagination.ts, code is 8, comment is 0, blank is 0.
+client/src/components/Table/src/types/table.ts, code is 30, comment is 3, blank is 2.
+client/src/components/Table/src/types/tableAction.ts, code is 21, comment is 2, blank is 1.
+client/src/components/TimelineGraph.vue, code is 30, comment is 0, blank is 0.
+client/src/config/index.ts, code is 1, comment is 0, blank is 0.
+client/src/config/regexp.ts, code is 7, comment is 5, blank is 4.
+client/src/directives/clickOutside.ts, code is 75, comment is 1, blank is 9.
+client/src/directives/index.ts, code is 5, comment is 4, blank is 1.
+client/src/enums/business.ts, code is 11, comment is 6, blank is 5.
+client/src/enums/common.ts, code is 19, comment is 0, blank is 1.
+client/src/enums/index.ts, code is 2, comment is 0, blank is 0.
+client/src/hooks/business/index.ts, code is 4, comment is 0, blank is 0.
+client/src/hooks/business/useCountDown.ts, code is 35, comment is 11, blank is 6.
+client/src/hooks/business/useDesignSetting.ts, code is 13, comment is 0, blank is 5.
+client/src/hooks/business/useInstanceList.ts, code is 11, comment is 0, blank is 1.
+client/src/hooks/business/useProjectSetting.ts, code is 30, comment is 0, blank is 13.
+client/src/hooks/common/index.ts, code is 3, comment is 0, blank is 0.
+client/src/hooks/common/useApi.ts, code is 25, comment is 1, blank is 1.
+client/src/hooks/common/useBoolean.ts, code is 23, comment is 4, blank is 3.
+client/src/hooks/common/useLoading.ts, code is 9, comment is 0, blank is 2.
+client/src/hooks/index.ts, code is 2, comment is 0, blank is 0.
+client/src/layout/components/Footer/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Footer/index.vue, code is 47, comment is 1, blank is 7.
+client/src/layout/components/Header/components.ts, code is 30, comment is 0, blank is 1.
+client/src/layout/components/Header/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Header/index.vue, code is 422, comment is 30, blank is 61.
+client/src/layout/components/Header/ProjectSetting.vue, code is 222, comment is 0, blank is 29.
+client/src/layout/components/Main/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Main/index.vue, code is 44, comment is 1, blank is 5.
+client/src/layout/components/Menu/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/Menu/index.vue, code is 136, comment is 17, blank is 18.
+client/src/layout/components/SideLogo/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/SideLogo/index.vue, code is 36, comment is 0, blank is 4.
+client/src/layout/components/TagsView/components.ts, code is 23, comment is 0, blank is 1.
+client/src/layout/components/TagsView/index.ts, code is 2, comment is 0, blank is 1.
+client/src/layout/components/TagsView/index.vue, code is 564, comment is 34, blank is 66.
+client/src/layout/index.vue, code is 202, comment is 3, blank is 39.
+client/src/plugins/assets.ts, code is 4, comment is 1, blank is 1.
+client/src/plugins/index.ts, code is 2, comment is 0, blank is 0.
+client/src/plugins/naive.ts, code is 155, comment is 0, blank is 2.
+client/src/router/constant.ts, code is 84, comment is 2, blank is 10.
+client/src/router/guard/dynamic.ts, code is 34, comment is 2, blank is 6.
+client/src/router/guard/index.ts, code is 30, comment is 6, blank is 0.
+client/src/router/index.ts, code is 16, comment is 0, blank is 3.
+client/src/router/routes/about.ts, code is 32, comment is 0, blank is 2.
+client/src/router/routes/frame.ts, code is 4, comment is 44, blank is 3.
+client/src/router/routes/instance-detail.ts, code is 161, comment is 62, blank is 3.
+client/src/router/routes/instance-list.ts, code is 37, comment is 10, blank is 3.
+client/src/router/routes/setting.ts, code is 28, comment is 11, blank is 2.
+client/src/router/util.ts, code is 17, comment is 2, blank is 6.
+client/src/settings/designSetting.ts, code is 24, comment is 4, blank is 2.
+client/src/settings/index.ts, code is 2, comment is 0, blank is 0.
+client/src/settings/projectSetting.ts, code is 31, comment is 24, blank is 0.
+client/src/store/index.ts, code is 7, comment is 0, blank is 2.
+client/src/store/modules/asyncRoute.ts, code is 52, comment is 4, blank is 2.
+client/src/store/modules/designSetting.ts, code is 28, comment is 3, blank is 3.
+client/src/store/modules/index.ts, code is 5, comment is 0, blank is 0.
+client/src/store/modules/pluginConfig.ts, code is 24, comment is 0, blank is 0.
+client/src/store/modules/projectSetting.ts, code is 90, comment is 12, blank is 3.
+client/src/store/modules/tabsView.ts, code is 49, comment is 9, blank is 4.
+client/src/store/modules/user.ts, code is 69, comment is 3, blank is 3.
+client/src/styles/css/global.css, code is 7, comment is 0, blank is 1.
+client/src/styles/css/reset.css, code is 191, comment is 112, blank is 66.
+client/src/styles/css/transition.css, code is 65, comment is 6, blank is 5.
+client/src/styles/less/index.less, code is 1, comment is 0, blank is 0.
+client/src/styles/less/var.less, code is 4, comment is 0, blank is 0.
+client/src/utils/common/dom.ts, code is 126, comment is 17, blank is 22.
+client/src/utils/common/index.ts, code is 9, comment is 0, blank is 0.
+client/src/utils/common/is.ts, code is 59, comment is 40, blank is 19.
+client/src/utils/common/lodash.ts, code is 1, comment is 0, blank is 0.
+client/src/utils/common/merge.ts, code is 8, comment is 0, blank is 1.
+client/src/utils/common/props.ts, code is 8, comment is 1, blank is 3.
+client/src/utils/common/propTypes.ts, code is 29, comment is 0, blank is 4.
+client/src/utils/common/storage.ts, code is 66, comment is 49, blank is 12.
+client/src/utils/common/theme.ts, code is 13, comment is 12, blank is 1.
+client/src/utils/common/url.ts, code is 8, comment is 0, blank is 0.
+client/src/utils/index.ts, code is 4, comment is 0, blank is 0.
+client/src/utils/menu/get-children-router.ts, code is 17, comment is 2, blank is 1.
+client/src/utils/menu/index.ts, code is 3, comment is 0, blank is 0.
+client/src/utils/menu/mix-generate-menu.ts, code is 25, comment is 3, blank is 1.
+client/src/utils/menu/recur-generate-menu.ts, code is 18, comment is 5, blank is 1.
+client/src/utils/naive/index.ts, code is 2, comment is 0, blank is 0.
+client/src/utils/naive/render-icon.ts, code is 5, comment is 0, blank is 1.
+client/src/utils/naive/render-tag.ts, code is 16, comment is 0, blank is 1.
+client/src/utils/router/filter-router.ts, code is 9, comment is 0, blank is 1.
+client/src/utils/router/index.ts, code is 2, comment is 0, blank is 0.
+client/src/utils/router/is-root-router.ts, code is 3, comment is 0, blank is 0.
+client/src/views/about/index.vue, code is 9, comment is 0, blank is 2.
+client/src/views/exception/403.vue, code is 36, comment is 0, blank is 4.
+client/src/views/exception/404.vue, code is 36, comment is 0, blank is 4.
+client/src/views/exception/500.vue, code is 36, comment is 0, blank is 4.
+client/src/views/iframe/index.vue, code is 54, comment is 0, blank is 7.
+client/src/views/instance/detail/address/index.vue, code is 241, comment is 20, blank is 5.
+client/src/views/instance/detail/check.vue, code is 18, comment is 0, blank is 0.
+client/src/views/instance/detail/config/index.vue, code is 81, comment is 2, blank is 6.
+client/src/views/instance/detail/dashboard/console/console.vue, code is 193, comment is 1, blank is 3.
+client/src/views/instance/detail/gb28181/columns.ts, code is 145, comment is 0, blank is 3.
+client/src/views/instance/detail/gb28181/index.vue, code is 52, comment is 7, blank is 3.
+client/src/views/instance/detail/index.vue, code is 6, comment is 0, blank is 2.
+client/src/views/instance/detail/logrotate/index.vue, code is 120, comment is 1, blank is 4.
+client/src/views/instance/detail/monitor/detail.vue, code is 202, comment is 0, blank is 1.
+client/src/views/instance/detail/monitor/index.vue, code is 87, comment is 0, blank is 3.
+client/src/views/instance/detail/plugin-list/columns.ts, code is 26, comment is 0, blank is 2.
+client/src/views/instance/detail/plugin-list/index.vue, code is 173, comment is 2, blank is 16.
+client/src/views/instance/detail/pprof/index.vue, code is 28, comment is 0, blank is 0.
+client/src/views/instance/detail/pull/columns.ts, code is 25, comment is 0, blank is 0.
+client/src/views/instance/detail/pull/index.vue, code is 177, comment is 9, blank is 4.
+client/src/views/instance/detail/push/columns.ts, code is 25, comment is 0, blank is 0.
+client/src/views/instance/detail/push/index.vue, code is 170, comment is 9, blank is 4.
+client/src/views/instance/detail/record/index.vue, code is 221, comment is 5, blank is 1.
+client/src/views/instance/detail/room/index.vue, code is 313, comment is 24, blank is 0.
+client/src/views/instance/detail/room/mic.vue, code is 40, comment is 0, blank is 0.
+client/src/views/instance/detail/room/myself.vue, code is 146, comment is 20, blank is 3.
+client/src/views/instance/detail/room/user.vue, code is 88, comment is 5, blank is 0.
+client/src/views/instance/detail/stream-detail/index.vue, code is 179, comment is 0, blank is 5.
+client/src/views/instance/detail/stream-list/columns.ts, code is 38, comment is 0, blank is 0.
+client/src/views/instance/detail/stream-list/index.vue, code is 121, comment is 2, blank is 12.
+client/src/views/instance/detail/webrtc/index.vue, code is 164, comment is 0, blank is 0.
+client/src/views/instance/detail/webrtc/video.vue, code is 54, comment is 0, blank is 0.
+client/src/views/instance/list/columns.ts, code is 44, comment is 0, blank is 0.
+client/src/views/instance/list/index.vue, code is 210, comment is 63, blank is 19.
+client/src/views/login/index.vue, code is 194, comment is 8, blank is 22.
+client/src/views/password/index.vue, code is 134, comment is 0, blank is 18.
+client/src/views/redirect/index.vue, code is 21, comment is 0, blank is 1.
+client/src/views/register/index.vue, code is 211, comment is 0, blank is 24.
+client/src/views/setting/account.vue, code is 94, comment is 6, blank is 4.
+client/src/views/setting/BasicSetting.vue, code is 58, comment is 0, blank is 6.
+client/src/views/setting/SafetySetting.vue, code is 29, comment is 0, blank is 1.
+client/src/wails.ts, code is 2, comment is 9, blank is 0.
+client/src/web.ts, code is 2, comment is 0, blank is 0.
+client/stats.html, code is 134, comment is 3884, blank is 18.
+client/tailwind.config.js, code is 72, comment is 4, blank is 0.
+client/tsconfig.json, code is 38, comment is 0, blank is 1.
+client/turbo.json, code is 17, comment is 0, blank is 1.
+client/types/config.d.ts, code is 53, comment is 15, blank is 6.
+client/types/global.d.ts, code is 91, comment is 3, blank is 18.
+client/types/index.d.ts, code is 23, comment is 0, blank is 9.
+client/types/modules.d.ts, code is 9, comment is 0, blank is 1.
+client/types/utils.d.ts, code is 4, comment is 0, blank is 1.
+client/uno.config.ts, code is 67, comment is 0, blank is 1.
+client/vite.config.ts, code is 108, comment is 31, blank is 4.
+config.toml, code is 14, comment is 0, blank is 0.
+Dockerfile, code is 20, comment is 1, blank is 7.
+go.work, code is 5, comment is 0, blank is 1.
+go.work.sum, code is 215, comment is 0, blank is 0.
+registermailtxt, code is 2, comment is 0, blank is 0.
+resetpwdtxt, code is 2, comment is 0, blank is 0.
+server/.gitkeep, code is 0, comment is 0, blank is 0.
+server/config.toml, code is 24, comment is 0, blank is 0.
+server/console.monibuca.com.key, code is 27, comment is 3, blank is 0.
+server/console.monibuca.com_bundle.crt, code is 66, comment is 0, blank is 0.
+server/files/129830471170.png, it is a binary file.
+server/go.mod, code is 34, comment is 16, blank is 4.
+server/go.sum, code is 106, comment is 0, blank is 0.
+server/main.go, code is 8, comment is 0, blank is 4.
+server/nologin.go, code is 8, comment is 2, blank is 5.
+server/pkg/db.go, code is 23, comment is 0, blank is 7.
+server/pkg/default.toml, code is 11, comment is 0, blank is 0.
+server/pkg/instance.go, code is 73, comment is 1, blank is 17.
+server/pkg/mysqldb.go, code is 106, comment is 25, blank is 18.
+server/pkg/mysqltx.go, code is 14, comment is 0, blank is 5.
+server/pkg/pass.go, code is 21, comment is 0, blank is 6.
+server/pkg/quic.go, code is 88, comment is 0, blank is 14.
+server/pkg/relay.go, code is 126, comment is 15, blank is 15.
+server/pkg/server.go, code is 937, comment is 101, blank is 88.
+server/pkg/sessions/priovider.go, code is 195, comment is 27, blank is 47.
+server/pkg/sessions/session.go, code is 43, comment is 5, blank is 12.
+server/pkg/sqlite.go, code is 1, comment is 0, blank is 0.
+server/pkg/sqlitedb.go, code is 176, comment is 19, blank is 22.
+server/pkg/sqlitetx.go, code is 1, comment is 0, blank is 0.
+server/pkg/trial.go, code is 60, comment is 2, blank is 21.
+server/pkg/tx.go, code is 7, comment is 0, blank is 2.
+server/pkg/util/errorno.go, code is 42, comment is 8, blank is 9.
+server/pkg/util/linux.go, code is 6, comment is 1, blank is 6.
+server/pkg/util/logger.go, code is 60, comment is 8, blank is 19.
+server/pkg/util/mail.go, code is 67, comment is 8, blank is 13.
+server/pkg/util/mysql.go, code is 84, comment is 17, blank is 13.
+server/pkg/util/rand.go, code is 22, comment is 3, blank is 12.
+server/pkg/util/windows.go, code is 6, comment is 1, blank is 6.
+server/pkg/vip.go, code is 37, comment is 0, blank is 15.
+server/pkg/web/assets/404-54dd6499.svg, code is 115, comment is 0, blank is 0.
+server/pkg/web/assets/404-85aadbe0.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/404-98a63ab6.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/account-676726a7.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/account-ae1cea85.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/audiodec-28b192dd.wasm, it is a binary file.
+server/pkg/web/assets/check-f6cd52fd.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/console-273c503c.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/console-63580b23.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/detail-1c0b1406.js, code is 2, comment is 13, blank is 0.
+server/pkg/web/assets/detail-2e3b75cf.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-01aec832.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-0c31e1fa.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-17b6b441.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-1fe768c1.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-20ae1759.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-25067976.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-27e92d61.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-285462f6.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-3969454d.js, code is 9, comment is 1, blank is 2.
+server/pkg/web/assets/index-443e57dd.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-47485fbd.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-5b101bf5.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-5c1076ad.js, code is 1, comment is 1, blank is 0.
+server/pkg/web/assets/index-630fb8d5.js, code is 1, comment is 1, blank is 0.
+server/pkg/web/assets/index-66052f2f.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-68dd8937.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-79173d58.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-7ee9b66c.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-8ccdd8ca.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-8cfd36eb.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-993ef995.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-9a34cd8b.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-9bfc54b9.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-9ecb6cb2.js, code is 26, comment is 0, blank is 0.
+server/pkg/web/assets/index-a130a220.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-a1747f40.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-a71bb2bd.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-af533f62.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-b1aeb4fe.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-cd2bc06a.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-cf671c17.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-d257562b.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-d4b798b6.js, code is 3, comment is 14, blank is 0.
+server/pkg/web/assets/index-da06f36d.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-de28ae1e.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-eda49331.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-eead0945.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-f8933df2.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-f8c7f17f.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-fe18e8ea.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-fe795ef4.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-fe9309b6.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/index-febeebf5.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/LockClosedOutline-aa141746.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/login-bg-7b57ab51.svg, code is 127, comment is 1, blank is 0.
+server/pkg/web/assets/logo-44f27a9b.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/logo-678c7140.png, it is a binary file.
+server/pkg/web/assets/nav-horizontal-f3cbecb9.svg, code is 10, comment is 0, blank is 0.
+server/pkg/web/assets/nav-theme-dark-be6f2a3d.svg, code is 49, comment is 1, blank is 0.
+server/pkg/web/assets/nav-theme-light-43fdcab2.svg, code is 49, comment is 1, blank is 0.
+server/pkg/web/assets/PersonOutline-a27731eb.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/pluginConfig-bddccc63.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/TableAction-859c4e98.js, code is 2, comment is 5, blank is 0.
+server/pkg/web/assets/TableAction-ce36c622.css, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/useDesignSetting-4e44141c.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/assets/vendor-1e70d1e5.js, code is 8, comment is 16, blank is 0.
+server/pkg/web/assets/videodec-9aaeada5.wasm, it is a binary file.
+server/pkg/web/assets/videodec_simd-c906c3fc.wasm, it is a binary file.
+server/pkg/web/assets/webrtc-b8715042.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/favicon.ico, it is a binary file.
+server/pkg/web/guide.png, it is a binary file.
+server/pkg/web/index.html, code is 1, comment is 0, blank is 0.
+server/pkg/web/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+server/pkg/web/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+server/pkg/web/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+server/pkg/web/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+server/pkg/web/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+server/pkg/web/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+server/pkg/web/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+server/pkg/wsv1.go, code is 103, comment is 14, blank is 12.
+server/registermailtxt, code is 2, comment is 0, blank is 0.
+server/resetpwdtxt, code is 2, comment is 0, blank is 0.
+server/server, it is a binary file.
+server/static/index.html, code is 48, comment is 0, blank is 7.
+server/static/static/build/css/modules/layer/default/icon-ext.png, it is a binary file.
+server/static/static/build/css/modules/layer/default/icon.png, it is a binary file.
+server/static/static/build/css/modules/layer/default/layer.css, code is 1, comment is 1, blank is 0.
+server/static/static/build/css/modules/layer/default/loading-0.gif, it is a binary file.
+server/static/static/build/css/modules/layer/default/loading-1.gif, it is a binary file.
+server/static/static/build/css/modules/layer/default/loading-2.gif, it is a binary file.
+server/static/static/build/lay/modules/jquery.js, code is 1, comment is 1, blank is 0.
+server/static/static/build/lay/modules/layer.js, code is 1, comment is 2, blank is 0.
+server/static/static/build/lay/modules/upload.js, code is 1, comment is 1, blank is 0.
+server/static/static/build/layui.css, code is 1, comment is 1, blank is 0.
+server/static/static/build/layui.js, code is 1, comment is 2, blank is 0.
+server/static/static/build/layui.mobile.css, code is 1, comment is 1, blank is 0.
+server/static/static/font/iconfont.eot, it is a binary file.
+server/static/static/font/iconfont.svg, code is 171, comment is 0, blank is 302.
+server/static/static/font/iconfont.ttf, it is a binary file.
+server/static/static/font/iconfont.woff, it is a binary file.
+server/static/upload.html, code is 58, comment is 0, blank is 2.
+server/vip.go, code is 8, comment is 2, blank is 5.
+server/web/assets/404-54dd6499.svg, code is 115, comment is 0, blank is 0.
+server/web/assets/404-85aadbe0.css, code is 1, comment is 0, blank is 0.
+server/web/assets/404-98a63ab6.js, code is 1, comment is 0, blank is 0.
+server/web/assets/account-676726a7.js, code is 1, comment is 0, blank is 0.
+server/web/assets/account-ae1cea85.css, code is 1, comment is 0, blank is 0.
+server/web/assets/audiodec-28b192dd.wasm, it is a binary file.
+server/web/assets/check-f6cd52fd.js, code is 1, comment is 0, blank is 0.
+server/web/assets/console-273c503c.css, code is 1, comment is 0, blank is 0.
+server/web/assets/console-63580b23.js, code is 1, comment is 0, blank is 0.
+server/web/assets/detail-1c0b1406.js, code is 2, comment is 13, blank is 0.
+server/web/assets/detail-2e3b75cf.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-01aec832.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-0c31e1fa.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-17b6b441.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-1fe768c1.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-20ae1759.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-25067976.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-27e92d61.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-285462f6.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-3969454d.js, code is 9, comment is 1, blank is 2.
+server/web/assets/index-443e57dd.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-47485fbd.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-5b101bf5.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-5c1076ad.js, code is 1, comment is 1, blank is 0.
+server/web/assets/index-630fb8d5.js, code is 1, comment is 1, blank is 0.
+server/web/assets/index-66052f2f.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-68dd8937.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-79173d58.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-7ee9b66c.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-8ccdd8ca.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-8cfd36eb.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-993ef995.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-9a34cd8b.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-9bfc54b9.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-9ecb6cb2.js, code is 26, comment is 0, blank is 0.
+server/web/assets/index-a130a220.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-a1747f40.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-a71bb2bd.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-af533f62.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-b1aeb4fe.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-cd2bc06a.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-cf671c17.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-d257562b.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-d4b798b6.js, code is 3, comment is 14, blank is 0.
+server/web/assets/index-da06f36d.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-de28ae1e.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-eda49331.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-eead0945.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-f8933df2.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-f8c7f17f.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-fe18e8ea.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-fe795ef4.js, code is 1, comment is 0, blank is 0.
+server/web/assets/index-fe9309b6.css, code is 1, comment is 0, blank is 0.
+server/web/assets/index-febeebf5.css, code is 1, comment is 0, blank is 0.
+server/web/assets/LockClosedOutline-aa141746.js, code is 1, comment is 0, blank is 0.
+server/web/assets/login-bg-7b57ab51.svg, code is 127, comment is 1, blank is 0.
+server/web/assets/logo-44f27a9b.js, code is 1, comment is 0, blank is 0.
+server/web/assets/logo-678c7140.png, it is a binary file.
+server/web/assets/nav-horizontal-f3cbecb9.svg, code is 10, comment is 0, blank is 0.
+server/web/assets/nav-theme-dark-be6f2a3d.svg, code is 49, comment is 1, blank is 0.
+server/web/assets/nav-theme-light-43fdcab2.svg, code is 49, comment is 1, blank is 0.
+server/web/assets/PersonOutline-a27731eb.js, code is 1, comment is 0, blank is 0.
+server/web/assets/pluginConfig-bddccc63.js, code is 1, comment is 0, blank is 0.
+server/web/assets/TableAction-859c4e98.js, code is 2, comment is 5, blank is 0.
+server/web/assets/TableAction-ce36c622.css, code is 1, comment is 0, blank is 0.
+server/web/assets/useDesignSetting-4e44141c.js, code is 1, comment is 0, blank is 0.
+server/web/assets/vendor-1e70d1e5.js, code is 8, comment is 16, blank is 0.
+server/web/assets/videodec-9aaeada5.wasm, it is a binary file.
+server/web/assets/videodec_simd-c906c3fc.wasm, it is a binary file.
+server/web/assets/webrtc-b8715042.js, code is 1, comment is 0, blank is 0.
+server/web/favicon.ico, it is a binary file.
+server/web/guide.png, it is a binary file.
+server/web/index.html, code is 1, comment is 0, blank is 0.
+server/web/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+server/web/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+server/web/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+server/web/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+server/web/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+server/web/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+server/web/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+wails/.gitignore, code is 3, comment is 0, blank is 0.
+wails/app.go, code is 46, comment is 5, blank is 9.
+wails/build/appicon.png, it is a binary file.
+wails/build/bin/console.app/Contents/Info.plist, code is 27, comment is 1, blank is 0.
+wails/build/bin/console.app/Contents/Resources/iconfile.icns, it is a binary file.
+wails/build/darwin/Info.dev.plist, code is 32, comment is 0, blank is 0.
+wails/build/darwin/Info.plist, code is 27, comment is 0, blank is 0.
+wails/build/README.md, code is 22, comment is 3, blank is 10.
+wails/build/windows/icon.ico, it is a binary file.
+wails/build/windows/info.json, code is 15, comment is 0, blank is 0.
+wails/build/windows/installer/project.nsi, code is 25, comment is 0, blank is 13.
+wails/build/windows/installer/wails_tools.nsh, code is 152, comment is 1, blank is 27.
+wails/build/windows/wails.exe.manifest, code is 15, comment is 0, blank is 0.
+wails/fatal/2023-08-21 21:16:05.log, code is 774, comment is 2, blank is 0.
+wails/fatal/latest.log, code is 0, comment is 0, blank is 0.
+wails/frontend/dist/assets/404-2b79a34d.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/404-54dd6499.svg, code is 115, comment is 0, blank is 0.
+wails/frontend/dist/assets/404-85aadbe0.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/account-ae1cea85.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/account-d54769f0.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/audiodec-28b192dd.wasm, it is a binary file.
+wails/frontend/dist/assets/check-82ea96a3.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/console-273c503c.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/console-42969821.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/detail-13c9f7e3.js, code is 2, comment is 13, blank is 0.
+wails/frontend/dist/assets/detail-2e3b75cf.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-01aec832.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-0ab8014b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-0c31e1fa.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-12bc2ddc.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-1713a9d9.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-1a6e1214.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-25067976.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-3ab5f8ea.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-443e57dd.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-46ac35df.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-4a1f3974.js, code is 1, comment is 1, blank is 0.
+wails/frontend/dist/assets/index-509cae9a.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-5b101bf5.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-5d81487c.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-692c06f6.js, code is 26, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-756d6bf3.js, code is 1, comment is 1, blank is 0.
+wails/frontend/dist/assets/index-7ee9b66c.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8253ff72.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8345e3af.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-86b392d1.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8ccdd8ca.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-8cfd36eb.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-910326d9.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-9116df9d.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-99dce52b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-9a34cd8b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a130a220.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a1747f40.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a71bb2bd.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-a9702bf5.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-ac1784e0.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-b29c7f2e.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-b56d76ec.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d257562b.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d53e377d.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d8d95e70.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-d9e975d9.js, code is 3, comment is 14, blank is 0.
+wails/frontend/dist/assets/index-da06f36d.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-de28ae1e.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-e81fcaac.js, code is 9, comment is 1, blank is 2.
+wails/frontend/dist/assets/index-f7d67c42.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-f8c7f17f.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/index-febeebf5.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/LockClosedOutline-aa141746.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/login-bg-7b57ab51.svg, code is 127, comment is 1, blank is 0.
+wails/frontend/dist/assets/logo-44f27a9b.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/logo-678c7140.png, it is a binary file.
+wails/frontend/dist/assets/nav-horizontal-f3cbecb9.svg, code is 10, comment is 0, blank is 0.
+wails/frontend/dist/assets/nav-theme-dark-be6f2a3d.svg, code is 49, comment is 1, blank is 0.
+wails/frontend/dist/assets/nav-theme-light-43fdcab2.svg, code is 49, comment is 1, blank is 0.
+wails/frontend/dist/assets/PersonOutline-a27731eb.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/pluginConfig-742e21a3.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/TableAction-2b9a9fdf.js, code is 2, comment is 5, blank is 0.
+wails/frontend/dist/assets/TableAction-ce36c622.css, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/useDesignSetting-aa6e52d3.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/useProjectSetting-3a1391ab.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/assets/vendor-0767d979.js, code is 14, comment is 10, blank is 2.
+wails/frontend/dist/assets/videodec-9aaeada5.wasm, it is a binary file.
+wails/frontend/dist/assets/videodec_simd-c906c3fc.wasm, it is a binary file.
+wails/frontend/dist/assets/webrtc-b8715042.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/favicon.ico, it is a binary file.
+wails/frontend/dist/guide.png, it is a binary file.
+wails/frontend/dist/index.html, code is 4, comment is 0, blank is 0.
+wails/frontend/dist/static/js/naive-ui.js, code is 2, comment is 9, blank is 0.
+wails/frontend/dist/static/js/vue-demi.js, code is 109, comment is 3, blank is 1.
+wails/frontend/dist/static/js/vue-demi.min.js, code is 1, comment is 0, blank is 0.
+wails/frontend/dist/static/js/vue-router.js, code is 2458, comment is 832, blank is 32.
+wails/frontend/dist/static/js/vue-router.min.js, code is 1, comment is 5, blank is 0.
+wails/frontend/dist/static/js/vue.js, code is 11975, comment is 1778, blank is 103.
+wails/frontend/dist/static/js/vue.min.js, code is 1, comment is 0, blank is 0.
+wails/frontend/index.html, code is 13, comment is 0, blank is 1.
+wails/frontend/package.json, code is 21, comment is 0, blank is 0.
+wails/frontend/READ-THIS.md, code is 3, comment is 1, blank is 1.
+wails/frontend/README.md, code is 10, comment is 2, blank is 6.
+wails/frontend/src/App.vue, code is 19, comment is 0, blank is 2.
+wails/frontend/src/assets/fonts/nunito-v16-latin-regular.woff2, it is a binary file.
+wails/frontend/src/assets/fonts/OFL.txt, code is 75, comment is 1, blank is 18.
+wails/frontend/src/assets/images/logo-universal.png, it is a binary file.
+wails/frontend/src/components/HelloWorld.vue, code is 61, comment is 0, blank is 10.
+wails/frontend/src/main.ts, code is 3, comment is 0, blank is 1.
+wails/frontend/src/style.css, code is 23, comment is 0, blank is 3.
+wails/frontend/src/vite-env.d.ts, code is 5, comment is 1, blank is 1.
+wails/frontend/tsconfig.json, code is 28, comment is 0, blank is 2.
+wails/frontend/tsconfig.node.json, code is 10, comment is 0, blank is 1.
+wails/frontend/vite.config.ts, code is 5, comment is 1, blank is 1.
+wails/go.mod, code is 125, comment is 96, blank is 6.
+wails/go.sum, code is 506, comment is 4, blank is 0.
+wails/logs/2023-08-21T21.log, it is a binary file.
+wails/main.go, code is 53, comment is 29, blank is 19.
+wails/README.md, code is 12, comment is 2, blank is 7.
+wails/shutdown.sh, code is 1, comment is 0, blank is 0.
+wails/wails.json, code is 16, comment is 0, blank is 0.
+===============================================================================

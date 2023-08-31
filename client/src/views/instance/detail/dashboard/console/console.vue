@@ -17,7 +17,10 @@
               <div>
                 版本号： <span class="text-1xl">{{ Version }}</span>
               </div>
-              <div>启动时间： <n-time :time="new Date(StartTime)" type="relative" /></div>
+              <div>
+                启动时间：
+                <n-time :time="StartTime" type="relative" />
+              </div>
             </div>
           </div>
         </NCard>
@@ -130,7 +133,8 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
   import { useRoute, onBeforeRouteLeave } from 'vue-router'
-  import { getSysInfo } from '@/api/instance'
+  import { getSysInfo, getInstanceSummarySSE } from '@/api/instance'
+  import Interval from '@/components/interval/index.vue'
   import TimelineGraph from '@/components/TimelineGraph.vue'
   const loading = ref(true)
   const summary = ref({})
@@ -142,7 +146,7 @@
   const HardDiskUsage = ref('')
   const MemoryUsage = ref('')
   const Version = ref('')
-  const StartTime = ref('')
+  const StartTime = ref(new Date())
   const tlds = ref<number[]>([])
   const tldsStream = ref<number[]>([])
   const tldsNetWorkSent = ref<number[]>([])
@@ -161,9 +165,9 @@
   let es: EventSource
   onMounted(async () => {
     const info = await getSysInfo(id)
-    StartTime.value = info.StartTime
+    StartTime.value = new Date(info.StartTime)
     Version.value = info.Version
-    es = new EventSource('/api/summary?m7sid=' + id)
+    es = getInstanceSummarySSE(id)
     es.onmessage = tick
   })
   onBeforeRouteLeave(() => {
@@ -171,6 +175,7 @@
   })
   async function tick(event) {
     const r = JSON.parse(event.data)
+    // const r = await getInstanceSummary(id)
     tlds.value = [r.CPUUsage || 0, r.HardDisk?.Usage || 0, r.Memory?.Usage || 0]
     tldsStream.value = [r.Streams?.length || 0]
     summary.value = r

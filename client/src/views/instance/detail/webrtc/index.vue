@@ -15,6 +15,7 @@
 <script lang="ts" setup>
   import { onMounted, reactive, ref } from 'vue'
   import Video from './video.vue'
+  import { getInstanceSummarySSE } from '@/api/instance'
   import { onBeforeRouteLeave, useRoute } from 'vue-router'
   import { usePluginConfigStore } from '@/store/modules/pluginConfig'
   import { DemuxEvent, FlvDemuxer } from 'jv4-demuxer'
@@ -27,6 +28,7 @@
     VideoDecoderEvent,
     VideoDecoderInterface
   } from 'jv4-decoder/src/types'
+  import { prefix } from '@/api/fetch'
   let signalChannel: RTCDataChannel
   let es: EventSource
   const videoList = reactive<Record<string, WebRTCStream>>({})
@@ -39,7 +41,7 @@
   configStore.getConfig(params.id as string, 'WebRTC').catch((err) => {
     noPlugin.value = true
   })
-  const conn = new WebRTCConnection('m7s/webrtc/batch', {
+  const conn = new WebRTCConnection(prefix + '/webrtc/batch', {
     requestInit: {
       headers: {
         m7sid: params.id as string
@@ -100,7 +102,7 @@
       }
     }
     signalChannel.onopen = async () => {
-      es = new EventSource('/api/summary?m7sid=' + params.id)
+      es = getInstanceSummarySSE(params.id)
       es.onmessage = tick
     }
     pc.ondatachannel = async (evt) => {

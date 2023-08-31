@@ -5,7 +5,7 @@
   "frontend:dir": "../client",
   "wailsjsdir": "../client/packages",
   "frontend:install": "pnpm install",
-  "frontend:build": "npm run build:wails",
+  "frontend:build": "npm run build:embed",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
   "devServer": "localhost:4000",

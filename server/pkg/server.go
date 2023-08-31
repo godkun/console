@@ -1081,6 +1081,7 @@ func clearTransaction(tx Transaction, w http.ResponseWriter) {
 // CORS 允许跨域调用/**
 func CORS(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 	origin := r.Header["Origin"]
 	if len(origin) == 0 {
 		w.Header().Set("Access-Control-Allow-Origin", "*")

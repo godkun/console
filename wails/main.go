@@ -3,9 +3,7 @@ package main
 import (
 	"embed"
 	"fmt"
-	"io"
 	"net/http"
-	"strings"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -25,7 +23,7 @@ func main() {
 		Width:  1500,
 		Height: 768,
 		AssetServer: &assetserver.Options{
-			Assets:  assets,
+			Assets:  nil,
 			Handler: NewFileLoader(),
 		},
 		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
@@ -49,53 +47,27 @@ func NewFileLoader() *FileLoader {
 }
 
 func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	// req.RequestURI = strings.Replace(req.RequestURI, "wails://wails/", "http://localhost:9999/", -1)
-	// req.Host = "localhost:9999"
-	// resp, err := http.DefaultClient.Do(req)
+	res.Write([]byte(`<script>location.href="http://localhost:9999/web/index.html"</script>`))
+	// http.Redirect(res, req, "http://localhost:9999/web/index.html", http.StatusFound)
 	fmt.Println(req.RequestURI)
-	// resp, err := http.Get("http://localhost:9999/web/index.html")
-	// if err != nil {
-	// 	println(err.Error())
+	// requestedFilename := strings.TrimPrefix(req.URL.Path, "/")
+	// if strings.HasPrefix(requestedFilename, "api/") || strings.HasPrefix(requestedFilename, "m7s/") {
+	// 	query := req.URL.RawQuery
+	// 	if query != "" {
+	// 		query = "?" + query
+	// 	}
+	// 	newReq, _ := http.NewRequestWithContext(req.Context(), req.Method, "http://localhost:9999/"+requestedFilename+query, req.Body)
+	// 	newReq.Header = req.Header.Clone()
+	// 	resp, err := http.DefaultClient.Do(newReq)
+	// 	fmt.Println("request server:", requestedFilename+query)
+	// 	if err != nil {
+	// 		fmt.Println(err.Error())
+	// 		return
+	// 	}
+	// 	for k, v := range resp.Header {
+	// 		res.Header().Set(k, v[0])
+	// 	}
+	// 	io.Copy(res, resp.Body)
 	// 	return
 	// }
-	// for k, v := range resp.Header {
-	// 	res.Header().Set(k, v[0])
-	// }
-	// io.Copy(res, resp.Body)
-
-	// var err error
-	requestedFilename := strings.TrimPrefix(req.URL.Path, "/")
-	// requestedFilename = strings.TrimPrefix(requestedFilename, "/")
-	if strings.HasPrefix(requestedFilename, "api/") || strings.HasPrefix(requestedFilename, "m7s/") {
-		query := req.URL.RawQuery
-		if query != "" {
-			query = "?" + query
-		}
-		newReq, _ := http.NewRequestWithContext(req.Context(), req.Method, "http://localhost:9999/"+requestedFilename+query, req.Body)
-		newReq.Header = req.Header.Clone()
-		resp, err := http.DefaultClient.Do(newReq)
-		fmt.Println("request server:", requestedFilename+query)
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-		for k, v := range resp.Header {
-			res.Header().Set(k, v[0])
-		}
-		io.Copy(res, resp.Body)
-		return
-	}
-	// println("Requesting file:", requestedFilename)
-	// if requestedFilename == "" {
-	// 	requestedFilename = "index.html"
-	// }
-	// requestedFilename = "frontend/dist/" + requestedFilename
-	// fileData, err := assets.ReadFile(requestedFilename)
-	// if err != nil {
-	// 	println("Error:", err.Error())
-	// 	res.WriteHeader(http.StatusBadRequest)
-	// 	res.Write([]byte(fmt.Sprintf("Could not load file %s", requestedFilename)))
-	// }
-
-	// res.Write(fileData)
 }

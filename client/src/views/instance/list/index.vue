@@ -230,11 +230,12 @@
         id
       }
     })
+    console.log(page.href)
     const { isSaas } = useProjectSetting()
     if (isSaas.value) {
       window.open(page.href, '_blank')
     } else {
-      window.location.href = page.href
+      location.href = page.href
     }
   }
 

@@ -119,16 +119,23 @@
 
       // 点击菜单
       function clickMenuItem(key: string) {
-        if (/http(s)?:/.test(key)) {
-          window.open(key)
-        } else {
-          router.push({
-            name: key,
-            query: {
-              id: currentRoute.query.id
-            }
-          })
-        }
+        // if (/http(s)?:/.test(key)) {
+        //   window.open(key)
+        // } else {
+        router.push({
+          name: key,
+          query: {
+            id: currentRoute.query.id
+          }
+        })
+        // const page = router.resolve({
+        //   name: key,
+        //   query: {
+        //     id: currentRoute.query.id
+        //   }
+        // })
+        // location.href = page.href
+        // }
         emit('clickMenuItem' as any, key)
       }
 
