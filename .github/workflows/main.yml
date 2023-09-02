@@ -45,7 +45,8 @@ jobs:
       #   working-directory: client
 
       - name: wails build
-        uses: dAppServer/wails-build-action@v2            
+        # uses: dAppServer/wails-build-action@v2            
+        uses: ./wails_action    
         with:
           app-working-directory: ./wails
           build-name: ${{ matrix.output }}
