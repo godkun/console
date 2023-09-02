@@ -40,8 +40,8 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-      - run: npm install && npm run build
+          node-version: 16
+      - run: npm install && npm run build:embed
         working-directory: client
       - uses: dAppServer/wails-build-action@v2
         with:
