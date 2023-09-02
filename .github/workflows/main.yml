@@ -33,7 +33,7 @@ jobs:
             platform: linux/amd64
             output: console-linux
     runs-on: ${{ matrix.os }}
-     defaults:
+    defaults:
       run:
         working-directory: ./wails
     steps:
