@@ -33,6 +33,9 @@ jobs:
             platform: linux/amd64
             output: console-linux
     runs-on: ${{ matrix.os }}
+     defaults:
+      run:
+        working-directory: ./wails
     steps:
       - uses: actions/checkout@v3
         with:
@@ -43,9 +46,7 @@ jobs:
       #     node-version: 16
       # - run: npm install && npm run build:embed
       #   working-directory: client
-      - name: cd wails
-        run: cd wails
-        
+
       - name: wails build
         uses: dAppServer/wails-build-action@v2
         with:
