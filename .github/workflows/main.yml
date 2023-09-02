@@ -22,16 +22,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
-            platform: windows/amd64
-            output: console.exe
+          # - os: windows-latest
+          #   platform: windows/amd64
+          #   output: console.exe
           - os: macos-latest
             platform: darwin/universal
-            # wails bug, mac 的 output file 不生效, 先用这个保证能用
             output: console
-          - os: ubuntu-latest
-            platform: linux/amd64
-            output: console-linux
+          # - os: ubuntu-latest
+          #   platform: linux/amd64
+          #   output: console-linux
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -46,7 +45,7 @@ jobs:
 
       - name: wails build
         # uses: dAppServer/wails-build-action@v2            
-        uses: dwdcth/wails-build-action@v2.0.2
+        uses: dwdcth/wails-build-action@v2.0.3
         with:
           app-working-directory: ./wails
           build-name: ${{ matrix.output }}
@@ -58,6 +57,7 @@ jobs:
         if: runner.os == 'macOS'
         shell: bash
         run: |
+          cd wails
           rm -rf ./build/bin/${{ matrix.output }}.app.zip
           ditto -c -k --keepParent ./build/bin/${{matrix.output}}.app ./build/bin/${{matrix.output}}.app.zip
           rm -rf ./build/bin/${{ matrix.output }}.app
@@ -66,7 +66,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: target
-          path: build/bin/*
+          path: wails/build/bin/*
 
   collect-release:
     name: Collect and release
