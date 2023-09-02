@@ -46,7 +46,7 @@ jobs:
 
       - name: wails build
         # uses: dAppServer/wails-build-action@v2            
-        uses: dwdcth/wails-build-action
+        uses: dwdcth/wails-build-action@v2
         with:
           app-working-directory: ./wails
           build-name: ${{ matrix.output }}
