@@ -11,7 +11,7 @@ jobs:
       - name: create file
         run: |
           mkdir releases
-          touch a.txt b.txt
+          touch releases/a.txt releases/b.txt
       - name: Upload file to bucket
         uses: koraykoska/s3-upload-github-action@master
         env:
