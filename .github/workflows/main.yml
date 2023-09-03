@@ -63,7 +63,7 @@ jobs:
       #     rm -rf ./build/bin/${{ matrix.output }}.app
 
       - name: upload atrifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: target
           path: wails/build/bin/*
