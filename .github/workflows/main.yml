@@ -28,9 +28,9 @@ jobs:
           - os: macos-latest
             platform: darwin/universal
             output: console
-          - os: ubuntu-latest
-            platform: linux/amd64
-            output: console-linux
+          # - os: ubuntu-latest
+          #   platform: linux/amd64
+          #   output: console-linux
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -109,11 +109,10 @@ jobs:
           ls -al 
           rm -rf console-amd64-installer.exe
           rm -rf console.pkg
-          cp console.app.zip console_mac_amd64.zip
-          cp console.app.zip console_mac_arm64.zip
+          cp console.app.zip console_mac.zip
           zip console_windows_amd64.zip console.exe
-          zip console_linux_amd64.zip console-linux
-          rm  -rf console_linux console.exe console.app.zip
+          # zip console_linux_amd64.zip console-linux
+          rm  -rf console-linux console.exe console.app.zip console.app
           ls -al
 
 
