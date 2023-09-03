@@ -114,6 +114,7 @@ jobs:
           zip console_windows_amd64.zip console.exe
           zip console_linux_amd64.zip console-linux
           rm  -rf console_linux console.exe console.app.zip
+          ls -al
 
 
       # release assets
@@ -126,11 +127,12 @@ jobs:
           body_path: ${{ env.commit_messages_path }}
 
       - name: scp
-        uses: mdallasanta/ssh-scp-deploy@v1.2.0
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: console.monibuca.com
-          user: root
+          username: root
           key: ${{ secrets.REMOTE_SERVER_SSH_KEY }}
-          local: "target/*"
-          remote: /usr/local/nginx/html/mb/dist/download
-          scp_options: -v       
+          port: 22
+          source: "target/*"
+          target: /usr/local/nginx/html/mb/dist/download
+          strip_components: 1

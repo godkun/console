@@ -19,3 +19,4 @@ jobs:
         port: 22
         source: "tests/a.txt,tests/b.txt"
         target: /usr/local/nginx/html/mb/dist/download
+        strip_components: 1
