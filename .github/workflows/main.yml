@@ -22,15 +22,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - os: windows-latest
-          #   platform: windows/amd64
-          #   output: console.exe
+          - os: windows-latest
+            platform: windows/amd64
+            output: console.exe
           - os: macos-latest
             platform: darwin/universal
             output: console
-          # - os: ubuntu-latest
-          #   platform: linux/amd64
-          #   output: console-linux
+          - os: ubuntu-latest
+            platform: linux/amd64
+            output: console-linux
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -53,14 +53,14 @@ jobs:
           go-version: 1.20.x
           package: false
           
-      - name: macos act
-        if: runner.os == 'macOS'
-        shell: bash
-        run: |
-          cd wails
-          rm -rf ./build/bin/${{ matrix.output }}.app.zip
-          ditto -c -k --keepParent ./build/bin/${{matrix.output}}.app ./build/bin/${{matrix.output}}.app.zip
-          rm -rf ./build/bin/${{ matrix.output }}.app
+      # - name: macos act
+      #   if: runner.os == 'macOS'
+      #   shell: bash
+      #   run: |
+      #     cd wails
+      #     rm -rf ./build/bin/${{ matrix.output }}.app.zip
+      #     ditto -c -k --keepParent ./build/bin/${{matrix.output}}.app ./build/bin/${{matrix.output}}.app.zip
+      #     rm -rf ./build/bin/${{ matrix.output }}.app
 
       - name: upload atrifact
         uses: actions/upload-artifact@v2
@@ -124,3 +124,11 @@ jobs:
         with:
           files: target/*
           body_path: ${{ env.commit_messages_path }}
+
+      - name: scp
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: console.monibuca.com
+          key : ${{ secrets.REMOTE_SERVER_SSH_KEY }}
+          source: "target/*"
+          target: /usr/local/nginx/html/mb/dist/download    
