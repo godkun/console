@@ -88,7 +88,7 @@ jobs:
           previous_tag=$(git describe --abbrev=0 --tags ${previous_commit})
           
           # List commits between the previous and current tag
-          commit_messages=$(git log --pretty=format:"- [%s](https://github.com/{{ github.repository }}/commit/%H)" ${previous_tag}..${current_tag})
+          commit_messages=$(git log --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${previous_tag}..${current_tag})
 
           # Save commit messages to an output file
           echo "$commit_messages" > commits.txt
@@ -126,9 +126,11 @@ jobs:
           body_path: ${{ env.commit_messages_path }}
 
       - name: scp
-        uses: appleboy/scp-action@v0.1.4
+        uses: mdallasanta/ssh-scp-deploy@v1.2.0
         with:
           host: console.monibuca.com
-          key : ${{ secrets.REMOTE_SERVER_SSH_KEY }}
-          source: "target/*"
-          target: /usr/local/nginx/html/mb/dist/download    
+          user: root
+          key: ${{ secrets.REMOTE_SERVER_SSH_KEY }}
+          local: "target/*"
+          remote: /usr/local/nginx/html/mb/dist/download
+          scp_options: -v       
