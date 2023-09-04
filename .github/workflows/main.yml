@@ -52,6 +52,8 @@ jobs:
           build-platform: ${{ matrix.platform }}
           go-version: 1.20.x
           package: false
+          package-macos-exec: true
+          package-macos-app: false
           
       # - name: macos act
       #   if: runner.os == 'macOS'
@@ -108,10 +110,10 @@ jobs:
         run: |
           ls -al
           # cp console.app.zip console_mac.zip
-          cp console.app/Contents/MacOS/console console_mac  
+          # cp console.app/Contents/MacOS/console console_mac  
           zip console_windows_amd64.zip console.exe
           # zip console_linux_amd64.zip console-linux
-          zip console_mac.zip console_mac
+          # zip console_mac.zip console_mac
           rm  -rf console-linux console.exe console.app.zip console.app console.pkg console-amd64-installer.exe console_mac
           ls -al
 
