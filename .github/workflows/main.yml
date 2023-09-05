@@ -106,8 +106,9 @@ jobs:
           path: target
       
       - name: rename   
-        working-directory: target
+        # working-directory: target
         run: |
+          cd target
           ls -al
           # cp console.app.zip console_mac.zip
           # cp console.app/Contents/MacOS/console console_mac  
@@ -115,7 +116,7 @@ jobs:
           # zip console_linux_amd64.zip console-linux
           # zip console_mac.zip console_mac
           rm  -rf console-linux console.exe console.app.zip console.app console.pkg console-amd64-installer.exe console_mac
-          ls -al
+          cd .. && mv target bin && ls -al
 
 
       # release assets
@@ -141,7 +142,7 @@ jobs:
       - name: Upload file to bucket
         uses: koraykoska/s3-upload-github-action@master
         env:
-          FILE: ./target/
+          FILE: ./bin/
           S3_ENDPOINT:  ${{ secrets.S3_API }}
           S3_BUCKET: monibuca
           S3_ACCESS_KEY_ID: ${{ secrets.S3_ID }}
