@@ -126,7 +126,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: target/*
+          files: bin/*
           body_path: ${{ env.commit_messages_path }}
 
       # - name: scp
