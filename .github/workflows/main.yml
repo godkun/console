@@ -85,12 +85,13 @@ jobs:
           # Get current tag
           current_tag=$(git describe --tags --abbrev=0)
           
-          # Get previous tag (latest one before the current one)
-          previous_commit=$(git rev-list --tags --skip=1 --max-count=1)
-          previous_tag=$(git describe --abbrev=0 --tags ${previous_commit})
+          # # Get previous tag (latest one before the current one)
+          # previous_commit=$(git rev-list --tags --skip=1 --max-count=1)
+          # previous_tag=$(git describe --abbrev=0 --tags ${previous_commit})
           
-          # List commits between the previous and current tag
-          commit_messages=$(git log --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${previous_tag}..${current_tag})
+          # # List commits between the previous and current tag
+          # commit_messages=$(git log --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${previous_tag}..${current_tag})
+          commit_messages=$(git log -n 3 --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${current_tag})
 
           # Save commit messages to an output file
           echo "$commit_messages" > commits.txt
