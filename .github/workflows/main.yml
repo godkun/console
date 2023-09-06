@@ -146,5 +146,6 @@ jobs:
           FILE: bin/
           S3_ENDPOINT:  ${{ secrets.R2_DOMAIN }}
           S3_BUCKET: monibuca
+          S3_PREFIX: .
           S3_ACCESS_KEY_ID: ${{ secrets.R2_KEY }}
           S3_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET }}
