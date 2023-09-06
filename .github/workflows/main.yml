@@ -85,12 +85,13 @@ jobs:
           # Get current tag
           current_tag=$(git describe --tags --abbrev=0)
           
-          # Get previous tag (latest one before the current one)
-          previous_commit=$(git rev-list --tags --skip=1 --max-count=1)
-          previous_tag=$(git describe --abbrev=0 --tags ${previous_commit})
+          # # Get previous tag (latest one before the current one)
+          # previous_commit=$(git rev-list --tags --skip=1 --max-count=1)
+          # previous_tag=$(git describe --abbrev=0 --tags ${previous_commit})
           
-          # List commits between the previous and current tag
-          commit_messages=$(git log --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${previous_tag}..${current_tag})
+          # # List commits between the previous and current tag
+          # commit_messages=$(git log --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${previous_tag}..${current_tag})
+          commit_messages=$(git log -n 3 --pretty=format:"- [%s](https://github.com/${{ github.repository }}/commit/%H)" ${current_tag})
 
           # Save commit messages to an output file
           echo "$commit_messages" > commits.txt
@@ -116,7 +117,7 @@ jobs:
           # zip console_linux_amd64.zip console-linux
           # zip console_mac.zip console_mac
           rm  -rf console-linux console.exe console.app.zip console.app console.pkg console-amd64-installer.exe console_mac
-          cd .. && mv target bin && ls -al
+          cd .. && mv target bin && ls -al bin
 
 
       # release assets
@@ -125,7 +126,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: target/*
+          files: bin/*
           body_path: ${{ env.commit_messages_path }}
 
       # - name: scp
@@ -139,11 +140,21 @@ jobs:
       #     target: /usr/local/nginx/html/mb/dist/download
       #     strip_components: 1
 
-      - name: Upload file to bucket
-        uses: koraykoska/s3-upload-github-action@master
+      # - name: Upload file to bucket
+      #   uses: koraykoska/s3-upload-github-action@master
+      #   env:
+      #     FILE: bin/
+      #     S3_ENDPOINT:  ${{ secrets.R2_DOMAIN }}
+      #     S3_BUCKET: monibuca
+      #     S3_PREFIX: .
+      #     S3_ACCESS_KEY_ID: ${{ secrets.R2_KEY }}
+      #     S3_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET }}
+      - uses: jakejarvis/s3-sync-action@master
+        # with:
+        #   args: --acl public-read --follow-symlinks --delete
         env:
-          FILE: ./bin/
-          S3_ENDPOINT:  ${{ secrets.S3_API }}
-          S3_BUCKET: monibuca
-          S3_ACCESS_KEY_ID: ${{ secrets.S3_ID }}
-          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET }}
+          AWS_S3_ENDPOINT: ${{ secrets.R2_DOMAIN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET }}
+          AWS_S3_BUCKET: monibuca
+          SOURCE_DIR: bin
