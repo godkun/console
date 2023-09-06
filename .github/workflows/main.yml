@@ -153,7 +153,7 @@ jobs:
         # with:
         #   args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_ENDPOINT: ${{ secrets.R2_DOMAIN }}
+          AWS_S3_ENDPOINT: https://${{ secrets.R2_DOMAIN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET }}
           AWS_S3_BUCKET: monibuca
