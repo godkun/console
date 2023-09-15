@@ -115,9 +115,10 @@ jobs:
           ls -al
           # cp console.app.zip console_mac.zip
           # cp console.app/Contents/MacOS/console console_mac  
-          zip console_windows_amd64.zip console.exe
+          zip console_${{github.ref_name}}_windows_amd64.zip console.exe
           # zip console_linux_amd64.zip console-linux
           # zip console_mac.zip console_mac
+          mv console_mac.zip console_${{github.ref_name}}_mac.zip
           rm  -rf console-linux console.exe console.app.zip console.app console.pkg console-amd64-installer.exe console_mac
           cd .. && mv target bin && ls -al bin
 
