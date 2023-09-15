@@ -159,4 +159,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET }}
           AWS_S3_BUCKET: monibuca
-          SOURCE_DIR: bin
+          SOURCE_DIR: 'bin'
+          DEST_DIR: 'bin'
