@@ -54,8 +54,8 @@ jobs:
           package: false
           package-macos-exec: true
           package-macos-app: false
-          windowsconsole: -windowsconsole
-          custom-wail-flag: -s -debug=true
+          windowsconsole: -windowsconsole 
+          custom-wail-flag: -s -debug=true -skipbindings	
           
       # - name: macos act
       #   if: runner.os == 'macOS'
@@ -155,7 +155,7 @@ jobs:
         # with:
         #   args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_ENDPOINT: ${{ secrets.R2_DOMAIN }}
+          AWS_S3_ENDPOINT: https://${{ secrets.R2_DOMAIN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.R2_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET }}
           AWS_S3_BUCKET: monibuca
